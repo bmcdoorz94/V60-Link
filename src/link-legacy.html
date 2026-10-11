@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>V60 Link</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* V60 Link: direct OBD-II link over Bluetooth LE (ELM327-type adapters). Same workshop look as V60 Garage. */
+:root {
+  --bg: #0e1418; --panel: #151e24; --panel2: #1c2830; --ink: #e7eef2; --muted: #8c9eab; --line: #27363f;
+  --accent: #f0a63a; --accent-ink: #1b1204; --teal: #52c7b8;
+  --ok: #74d097; --ok-bg: #16301f; --warn: #f0a63a; --warn-bg: #3a2d12; --bad: #ff7d66; --bad-bg: #40201a; --none-bg: #222f37;
+  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #eef1f3; --panel: #fbfcfd; --panel2: #e6ebef; --ink: #1b2a36; --muted: #546673; --line: #c7d1d8;
+    --accent: #a8650a; --accent-ink: #ffffff; --teal: #0f7c70;
+    --ok: #2f6b3f; --ok-bg: #d9ead9; --warn: #8a5a00; --warn-bg: #f6e7c4; --bad: #a3321f; --bad-bg: #f4d7d1; --none-bg: #e2e7eb; color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #eef1f3; --panel: #fbfcfd; --panel2: #e6ebef; --ink: #1b2a36; --muted: #546673; --line: #c7d1d8;
+  --accent: #a8650a; --accent-ink: #ffffff; --teal: #0f7c70;
+  --ok: #2f6b3f; --ok-bg: #d9ead9; --warn: #8a5a00; --warn-bg: #f6e7c4; --bad: #a3321f; --bad-bg: #f4d7d1; --none-bg: #e2e7eb; color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.55; padding: 18px 16px 56px; }
+main { max-width: 860px; margin-inline: auto; display: flex; flex-direction: column; gap: 22px; }
+[hidden] { display: none !important; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; margin: 0; letter-spacing: 0.01em; }
+h1 { font-size: clamp(38px, 9vw, 56px); line-height: 0.95; text-transform: uppercase; }
+h2 { font-size: 24px; text-transform: uppercase; }
+h3 { font-size: 18px; }
+p { margin: 0; max-width: 66ch; }
+a { color: var(--accent); }
+.eyebrow { font-family: var(--font-data); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.lede { color: var(--muted); }
+section { display: flex; flex-direction: column; gap: 12px; }
+.card { border: 1px solid var(--line); background: var(--panel); border-radius: 4px; padding: 14px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+button { font: inherit; font-weight: 600; cursor: pointer; border-radius: 3px; padding: 10px 16px; background: var(--accent); color: var(--accent-ink); border: 1px solid var(--accent); min-height: 44px; }
+button.quiet { background: transparent; color: var(--ink); border-color: var(--line); font-weight: 500; }
+button.danger { background: var(--bad); border-color: var(--bad); color: #fff; }
+button:disabled { opacity: 0.45; cursor: not-allowed; }
+button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+input[type="text"] { font: inherit; font-family: var(--font-data); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 3px; padding: 9px 10px; width: 10em; }
+.status { font-family: var(--font-data); font-size: 12.5px; color: var(--muted); }
+.conn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-data); font-size: 13px; }
+.conn i { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); display: inline-block; }
+.conn.on i { background: var(--ok); }
+.conn.busy i { background: var(--warn); }
+.note { border-left: 4px solid var(--warn); background: var(--warn-bg); padding: 11px 14px; border-radius: 0 4px 4px 0; }
+.note.bad { border-left-color: var(--bad); background: var(--bad-bg); }
+.note.calm { border-left-color: var(--teal); background: var(--panel2); }
+.pill { display: inline-block; font-family: var(--font-data); font-size: 11px; padding: 2px 8px; border-radius: 99px; white-space: nowrap; }
+.pill.ok { background: var(--ok-bg); color: var(--ok); }
+.pill.watch { background: var(--warn-bg); color: var(--warn); }
+.pill.bad { background: var(--bad-bg); color: var(--bad); }
+.pill.info { background: var(--none-bg); color: var(--muted); }
+.list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.list li { border: 1px solid var(--line); border-radius: 4px; background: var(--panel); padding: 10px 12px; display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; align-items: start; }
+.list li .d { grid-column: 2; color: var(--muted); font-size: 13.5px; }
+.code { font-family: var(--font-data); font-weight: 500; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.tile { border: 1px solid var(--line); border-radius: 4px; background: var(--panel); padding: 10px 12px; min-width: 0; }
+.tile .k { font-family: var(--font-data); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+.tile .v { font-family: var(--font-display); font-size: 32px; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.tile .u { font-family: var(--font-data); font-size: 12px; color: var(--muted); margin-left: 4px; }
+.picks { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+.picks label { display: inline-flex; gap: 6px; align-items: center; font-size: 14px; }
+.picks label.na { opacity: 0.45; }
+.mon { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 6px; }
+.mon div { display: flex; justify-content: space-between; gap: 8px; border: 1px solid var(--line); border-radius: 3px; padding: 6px 10px; background: var(--panel); font-size: 14px; }
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 4px 16px; font-size: 14px; }
+.kv dt { color: var(--muted); font-family: var(--font-data); font-size: 12.5px; }
+.kv dd { margin: 0; font-family: var(--font-data); }
+.checks label { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; }
+.checks input { margin-top: 4px; width: 18px; height: 18px; flex: none; }
+pre.log { margin: 0; max-height: 260px; overflow: auto; font-family: var(--font-data); font-size: 12px; background: var(--panel2); border: 1px solid var(--line); border-radius: 4px; padding: 10px; white-space: pre-wrap; word-break: break-all; }
+details summary { cursor: pointer; font-weight: 600; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">Companion to V60 Garage</div>
+    <h1>V60 Link</h1>
+    <p class="lede" style="margin-top:8px">Talks to your car through a Bluetooth LE OBD-II adapter. It can read codes, freeze frames and emissions readiness, record live data, and clear codes with safeguards. The results export to V60 Garage.</p>
+  </header>
+
+  <section class="card" aria-labelledby="h-conn">
+    <h2 id="h-conn">Connect</h2>
+    <div class="row">
+      <span class="conn" id="conn" role="status"><i></i><span id="connText">Not connected</span></span>
+    </div>
+    <div id="noBt" class="note" hidden></div>
+    <div class="row">
+      <button type="button" id="btnConnect">Connect adapter</button>
+      <button type="button" class="quiet" id="btnDemo">Try with a simulated car</button>
+      <button type="button" class="quiet" id="btnDisconnect" disabled>Disconnect</button>
+    </div>
+    <details>
+      <summary>Before you connect</summary>
+      <ol style="margin:8px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:4px">
+        <li>Plug the adapter into the OBD-II port under the dashboard on the driver's side.</li>
+        <li>Turn the ignition on. The engine can be off to read codes, but it must be running for live data.</li>
+        <li>Do not pair the adapter in your phone's Bluetooth settings. This page finds it directly.</li>
+        <li>Tap Connect and pick the adapter from the list. Its name is often OBDII, OBDBLE, IOS-Vlink, OBDLink CX or similar.</li>
+        <li>Close any other OBD app first, because only one app can talk to the adapter at a time.</li>
+        <li>OBDLink CX: it accepts a new pairing only during the first 5 minutes after it powers up. If it does not show up, unplug it, plug it back in, and connect right away.</li>
+      </ol>
+    </details>
+  </section>
+
+  <section class="card" aria-labelledby="h-scan">
+    <h2 id="h-scan">Health check</h2>
+    <p class="lede">Reads the VIN, the check-engine light, stored, pending and permanent codes from every module that answers, the freeze frame, and emissions readiness. Engine off with ignition on is fine.</p>
+    <div class="row"><button type="button" id="btnScan" disabled>Run health check</button><span class="status" id="scanStatus"></span></div>
+    <div id="scanOut" hidden>
+      <h3 style="margin-top:6px">Summary</h3>
+      <ul class="list" id="summary"></ul>
+      <h3>Codes</h3>
+      <ul class="list" id="codes"></ul>
+      <h3>Freeze frame</h3>
+      <p class="lede" style="font-size:14px">A snapshot the engine computer saved at the moment the first code set.</p>
+      <dl class="kv" id="freeze"></dl>
+      <h3>Emissions readiness</h3>
+      <p class="lede" style="font-size:14px">Self-tests the computer runs during normal driving. A monitor that is "not ready" has not finished since codes were last cleared or the battery was disconnected.</p>
+      <div class="mon" id="monitors"></div>
+      <dl class="kv" id="since"></dl>
+      <div class="row">
+        <button type="button" id="btnReport">Save report for V60 Garage</button>
+        <button type="button" class="quiet" id="btnShareReport" hidden>Share report</button>
+        <span class="status" id="reportStatus"></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="h-live">
+    <h2 id="h-live">Live data</h2>
+    <p class="lede">Pick channels, start recording, and drive. Fewer channels give a faster update rate. The recording saves as a CSV that V60 Garage's Data lab reads directly. Have a passenger run it, or set it up before you drive.</p>
+    <div class="picks" id="picks" role="group" aria-label="Channels to record"></div>
+    <div class="row">
+      <button type="button" id="btnLive" disabled>Start recording</button>
+      <button type="button" class="quiet" id="btnCsv" disabled>Save CSV</button>
+      <button type="button" class="quiet" id="btnShareCsv" hidden>Share CSV</button>
+      <span class="status" id="liveStatus"></span>
+    </div>
+    <div class="tiles" id="tiles"></div>
+  </section>
+
+  <section class="card" aria-labelledby="h-clear">
+    <h2 id="h-clear">Clear codes</h2>
+    <div class="note bad">Clearing codes turns the light off, but it does not fix anything. It also erases the freeze frame and resets every readiness monitor to "not ready." Until you drive enough for the monitors to finish, the car can fail a Texas emissions inspection. If the fault is still there, the light comes back.</div>
+    <p class="lede">Unlocks only after a health check in this session, so the codes and freeze frame are saved first.</p>
+    <div class="checks" id="clearChecks">
+      <label><input type="checkbox" id="ck1" disabled> <span>I saved the health-check report (the Save report button ticks this automatically).</span></label>
+      <label><input type="checkbox" id="ck2" disabled> <span>I know what caused the code, or I fixed it and want to confirm the repair.</span></label>
+      <label><input type="checkbox" id="ck3" disabled> <span>I am not within about a week of an emissions inspection.</span></label>
+      <label><input type="checkbox" id="ck4" disabled> <span>The engine is off and the ignition is on. The page checks this before it sends the command.</span></label>
+    </div>
+    <div class="row">
+      <label for="clearWord" class="status">Type CLEAR to confirm</label>
+      <input type="text" id="clearWord" autocomplete="off" autocapitalize="characters" disabled>
+      <button type="button" class="danger" id="btnClear" disabled>Clear codes</button>
+    </div>
+    <span class="status" id="clearStatus"></span>
+  </section>
+
+  <section class="card" aria-labelledby="h-log">
+    <details>
+      <summary id="h-log">Adapter conversation</summary>
+      <p class="lede" style="margin:8px 0">Every command sent and every reply, for troubleshooting.</p>
+      <pre class="log" id="log"></pre>
+      <div class="row" style="margin-top:8px"><button type="button" class="quiet" id="btnCopyLog">Copy log</button></div>
+    </details>
+  </section>
+
+  <section class="card">
+    <h2>Limits</h2>
+    <ul style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px">
+      <li>This page uses standard OBD-II only: engine and emissions data, plus codes from any module that answers the standard request. Airbag, ABS, climate and body modules use Volvo's own diagnostics, which need Volvo's tools.</li>
+      <li>It needs an adapter that speaks Bluetooth LE. Classic-Bluetooth adapters do not appear on iPhone or in web browsers.</li>
+      <li>It works in Bluefy on iPhone, and in Chrome or Edge on Android, Windows, Mac and ChromeOS. Safari cannot use Bluetooth from a web page.</li>
+      <li>It does not change module settings, software or engine tuning.</li>
+      <li>The emissions verdict applies the federal readiness rule (40 CFR 85.2222). The inspection station's result is the one that counts.</li>
+    </ul>
+  </section>
+</main>
+<script>
+(function () {
+  "use strict";
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function hex2(n) { return (n < 16 ? "0" : "") + n.toString(16).toUpperCase(); }
+  function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  function isNum(x) { return typeof x === "number" && isFinite(x); }
+
+  /* ---------------- log ---------------- */
+  var logLines = [];
+  function log(dir, text) {
+    logLines.push(new Date().toISOString().slice(11, 23) + " " + dir + " " + String(text).replace(/\r/g, "\\r").replace(/\n/g, "\\n"));
+    if (logLines.length > 400) logLines.shift();
+    $("log").textContent = logLines.join("\n");
+  }
+
+  /* ---------------- transports ---------------- */
+  /* Full 128-bit UUIDs: Bluefy does not accept the 16-bit short forms. FFF0 is the OBDLink CX UART service (notify FFF1, write FFF2). */
+  function u16(x) { return "0000" + x + "-0000-1000-8000-00805f9b34fb"; }
+  var KNOWN_SERVICES = [u16("fff0"), u16("ffe0"), u16("18f0"), u16("ffe5"), "e7810a71-73ae-499d-8c15-faa9aef0c3f2"];
+  function BleTransport() {
+    var self = this, rx = "", waiter = null, dev = null, txChar = null, rxChar = null, useWWR = false;
+    var enc = new TextEncoder(), dec = new TextDecoder();
+    function onNotify(ev) {
+      rx += dec.decode(ev.target.value);
+      if (waiter && rx.indexOf(">") >= 0) { var out = rx.slice(0, rx.indexOf(">")); rx = rx.slice(rx.indexOf(">") + 1); var w = waiter; waiter = null; w.resolve(out); }
+    }
+    self.name = "";
+    self.open = function () {
+      return navigator.bluetooth.requestDevice({ acceptAllDevices: true, optionalServices: KNOWN_SERVICES }).then(function (d) {
+        dev = d; self.name = d.name || "adapter";
+        d.addEventListener("gattserverdisconnected", function () { if (self.onclose) self.onclose(); });
+        return d.gatt.connect();
+      }).then(function (server) { return server.getPrimaryServices(); }).then(function (services) {
+        var jobs = services.map(function (s) { return s.getCharacteristics().then(function (cs) { return { s: s, cs: cs }; }, function () { return { s: s, cs: [] }; }); });
+        return Promise.all(jobs);
+      }).then(function (groups) {
+        var best = null;
+        groups.sort(function (a, b) { return (String(b.s.uuid).indexOf("fff0") === 4) - (String(a.s.uuid).indexOf("fff0") === 4); });
+        groups.forEach(function (g) {
+          var n = g.cs.filter(function (c) { return c.properties.notify || c.properties.indicate; })[0];
+          var w = g.cs.filter(function (c) { return c.properties.write || c.properties.writeWithoutResponse; })[0];
+          if (n && w && !best) best = { n: n, w: w };
+        });
+        if (!best) throw new Error("Connected, but this device does not offer a serial data channel this page recognizes. It may not be an OBD adapter, or it may be a Classic-Bluetooth model.");
+        rxChar = best.n; txChar = best.w; useWWR = !best.w.properties.write && best.w.properties.writeWithoutResponse;
+        rxChar.addEventListener("characteristicvaluechanged", onNotify);
+        return rxChar.startNotifications();
+      });
+    };
+    self.send = function (cmd, timeoutMs) {
+      rx = "";
+      return new Promise(function (resolve, reject) {
+        var timer = setTimeout(function () { waiter = null; reject(new Error("timeout")); }, timeoutMs || 4000);
+        waiter = { resolve: function (v) { clearTimeout(timer); resolve(v); } };
+        var bytes = enc.encode(cmd + "\r"), chunks = [];
+        for (var i = 0; i < bytes.length; i += 20) chunks.push(bytes.slice(i, i + 20));
+        chunks.reduce(function (p, c) { return p.then(function () { return useWWR ? txChar.writeValueWithoutResponse(c) : (txChar.writeValueWithResponse ? txChar.writeValueWithResponse(c) : txChar.writeValue(c)); }); }, Promise.resolve())
+          .catch(function (e) { clearTimeout(timer); waiter = null; reject(e); });
+      });
+    };
+    self.close = function () { try { if (dev && dev.gatt.connected) dev.gatt.disconnect(); } catch (e) {} };
+  }
+
+  /* Simulated 2016 V60 T5 for learning the page without a car. CAN 11-bit, headers on. */
+  function SimTransport() {
+    var self = this, t0 = Date.now(), headers = false, engineOn = true, cleared = false;
+    var stored = ["0171"], pending = ["0420"], permanent = ["0171"];
+    self.name = "Simulated V60";
+    self.engine = function (on) { engineOn = on; };
+    function sec() { return (Date.now() - t0) / 1000; }
+    function frame(hdr, bytes) {
+      var out = [];
+      if (bytes.length <= 7) out.push([bytes.length].concat(bytes));
+      else {
+        out.push([0x10 | (bytes.length >> 8), bytes.length & 255].concat(bytes.slice(0, 6)));
+        for (var i = 6, sn = 1; i < bytes.length; i += 7, sn++) out.push([0x20 | (sn & 15)].concat(bytes.slice(i, i + 7)));
+      }
+      return out.map(function (f) { while (f.length < 8) f.push(0); return (headers ? hdr + " " : "") + f.map(hex2).join(" "); }).join("\r");
+    }
+    function dtcBytes(list) { var b = []; list.forEach(function (c) { var v = parseInt(c, 16); b.push(v >> 8, v & 255); }); return b; }
+    function val(pid) {
+      var s = sec(), warm = Math.min(1, s / 300), spd = engineOn ? Math.max(0, 50 + 30 * Math.sin(s / 25)) : 0, rpm = engineOn ? (spd < 1 ? 760 : 1400 + spd * 18) : 0;
+      switch (pid) {
+        case 0x04: return [Math.round((engineOn ? 25 + spd / 4 : 0) * 2.55)];
+        case 0x05: return [Math.round(30 + 58 * warm + 40)];
+        case 0x06: return [Math.round(128 + (Math.random() * 6 - 3) * 1.28)];
+        case 0x07: return [Math.round(128 + 6.3 * 1.28)];
+        case 0x0B: return [Math.round(engineOn ? 35 + spd * 0.8 : 99)];
+        case 0x0C: var r = Math.round(rpm * 4); return [r >> 8, r & 255];
+        case 0x0D: return [Math.round(spd)];
+        case 0x0F: return [40 + 31];
+        case 0x10: var m = Math.round((engineOn ? 3 + spd / 4 : 0) * 100); return [m >> 8, m & 255];
+        case 0x11: return [Math.round((engineOn ? 14 + spd / 5 : 0) * 2.55)];
+        case 0x2F: return [Math.round(0.62 * 255)];
+        case 0x33: return [99];
+        case 0x42: var v = Math.round((engineOn ? 14.1 + Math.random() * 0.1 : 12.5) * 1000); return [v >> 8, v & 255];
+        case 0x46: return [40 + 29];
+        case 0x5C: return [Math.round(40 + 25 + 70 * warm)];
+        case 0x01: var a = (cleared ? 0 : 0x80) | (cleared ? 0 : stored.length); var b = 0x07 | (cleared ? 0x00 : 0x00); var c = 0x01 | 0x04 | 0x20 | 0x40 | 0x80; var d = cleared ? (0x01 | 0x04 | 0x20 | 0x40 | 0x80) : 0x04; return [a, b, c, d];
+        case 0x21: return cleared ? [0, 0] : [0, 85];
+        case 0x30: return [cleared ? 0 : 12];
+        case 0x31: return cleared ? [0, 0] : [1, 44];
+        case 0x4E: return cleared ? [0, 0] : [3, 200];
+      }
+      return null;
+    }
+    var SUP = [0x01, 0x04, 0x05, 0x06, 0x07, 0x0B, 0x0C, 0x0D, 0x0F, 0x10, 0x11, 0x1F, 0x20, 0x21, 0x2F, 0x30, 0x31, 0x33, 0x40, 0x42, 0x46, 0x4E, 0x5C];
+    function supMask(base) { var m = [0, 0, 0, 0]; SUP.forEach(function (p) { if (p > base && p <= base + 32) { var i = p - base - 1; m[i >> 3] |= 0x80 >> (i & 7); } }); return m; }
+    self.open = function () { return sleep(400); };
+    self.close = function () {};
+    self.send = function (cmd) {
+      var c = cmd.replace(/\s/g, "").toUpperCase(), out;
+      if (/^AT/.test(c)) {
+        if (c === "ATZ" || c === "ATI") out = "ELM327 v1.5";
+        else if (c === "ATDPN") out = "A6";
+        else if (c === "ATRV") out = engineOn ? "14.1V" : "12.5V";
+        else { if (c === "ATH1") headers = true; if (c === "ATH0") headers = false; out = "OK"; }
+      } else if (/^01(00|20|40)$/.test(c)) { var base = parseInt(c.slice(2), 16); out = frame("7E8", [0x41, base].concat(supMask(base))) + (base === 0 ? "\r" + frame("7E9", [0x41, 0, 0x80, 0, 0, 0]) : ""); }
+      else if (/^01[0-9A-F]{2}$/.test(c)) { var pid = parseInt(c.slice(2), 16), v = val(pid); out = v ? frame("7E8", [0x41, pid].concat(v)) : "NO DATA"; }
+      else if (c === "03") out = frame("7E8", [0x43, cleared ? 0 : stored.length].concat(cleared ? [] : dtcBytes(stored))) + "\r" + frame("7E9", [0x43, 0]);
+      else if (c === "07") out = frame("7E8", [0x47, cleared ? 0 : pending.length].concat(cleared ? [] : dtcBytes(pending))) + "\r" + frame("7E9", cleared ? [0x47, 0] : [0x47, 1].concat(dtcBytes(["0700"])));
+      else if (c === "0A") out = frame("7E8", [0x4A, permanent.length].concat(dtcBytes(permanent)));
+      else if (c === "0902") { var vin = "YV1612FH0G0000000"; out = frame("7E8", [0x49, 0x02, 0x01].concat(vin.split("").map(function (ch) { return ch.charCodeAt(0); }))); }
+      else if (c === "020200") out = cleared ? frame("7E8", [0x42, 0x02, 0x00, 0, 0]) : frame("7E8", [0x42, 0x02, 0x00, 0x01, 0x71]);
+      else if (/^02[0-9A-F]{2}00$/.test(c)) { var fp = parseInt(c.slice(2, 4), 16), fv = { 0x04: [80], 0x05: [128], 0x06: [150], 0x07: [137], 0x0B: [40], 0x0C: [0x0B, 0xE0], 0x0D: [0], 0x11: [36] }[fp]; out = (!cleared && fv) ? frame("7E8", [0x42, fp, 0x00].concat(fv)) : "NO DATA"; }
+      else if (c === "04") { if (engineOn) out = frame("7E8", [0x7F, 0x04, 0x22]); else { cleared = true; stored = []; pending = []; out = frame("7E8", [0x44]) + "\r" + frame("7E9", [0x44]); } }
+      else out = "?";
+      return sleep(25 + Math.random() * 25).then(function () { return out + "\r\r"; });
+    };
+  }
+
+  /* ---------------- ELM327 + ISO-TP parsing ---------------- */
+  var link = null, busy = Promise.resolve(), protoCAN = true;
+  function cmd(c, timeout) {
+    var p = busy.then(function () {
+      if (!link) throw new Error("Not connected");
+      log(">", c);
+      return link.send(c, timeout).then(function (r) { log("<", r.trim()); return r; });
+    });
+    busy = p.catch(function () {});
+    return p;
+  }
+  var ERR_RE = /NO DATA|UNABLE TO CONNECT|CAN ERROR|BUS ERROR|BUS BUSY|STOPPED|ERROR|FB ERROR|DATA ERROR|^\?$/i;
+  function parseResponse(raw) {
+    var lines = String(raw).split(/[\r\n]+/).map(function (l) { return l.trim(); }).filter(function (l) { return l && !/^(SEARCHING|BUS INIT|>|OK$)/i.test(l); });
+    var ecus = {}, partial = {}, errors = [];
+    lines.forEach(function (l) {
+      if (ERR_RE.test(l)) { errors.push(l); return; }
+      l = l.replace(/^[0-9A-F]:\s*/i, "");
+      var tok = l.split(/\s+/), hdr, bytes;
+      if (/^[0-9A-F]{3}$/i.test(tok[0])) { hdr = tok[0].toUpperCase(); bytes = tok.slice(1); }
+      else if (tok.length >= 5 && /^18$/i.test(tok[0]) && /^DA$/i.test(tok[1])) { hdr = tok.slice(0, 4).join("").toUpperCase(); bytes = tok.slice(4); }
+      else if (tok.length === 1 && /^[0-9A-F]{6,}$/i.test(tok[0])) { hdr = "ECU"; bytes = tok[0].match(/../g); }
+      else { hdr = "ECU"; bytes = tok; }
+      bytes = bytes.filter(function (b) { return /^[0-9A-F]{2}$/i.test(b); }).map(function (b) { return parseInt(b, 16); });
+      if (!bytes.length) return;
+      if (hdr === "ECU") { (ecus[hdr] = ecus[hdr] || []).push(bytes); return; }
+      var type = bytes[0] >> 4;
+      if (type === 0) { (ecus[hdr] = ecus[hdr] || []).push(bytes.slice(1, 1 + (bytes[0] & 15))); }
+      else if (type === 1) { partial[hdr] = { len: ((bytes[0] & 15) << 8) | bytes[1], data: bytes.slice(2) }; }
+      else if (type === 2 && partial[hdr]) {
+        var pt = partial[hdr]; pt.data = pt.data.concat(bytes.slice(1));
+        if (pt.data.length >= pt.len) { (ecus[hdr] = ecus[hdr] || []).push(pt.data.slice(0, pt.len)); delete partial[hdr]; }
+      }
+    });
+    Object.keys(partial).forEach(function (h) { (ecus[h] = ecus[h] || []).push(partial[h].data); });
+    return { ecus: ecus, errors: errors };
+  }
+  /* returns [{ecu, data}] for payloads whose first byte is the positive reply to `mode` */
+  function query(c, timeout) {
+    var mode = parseInt(c.slice(0, 2), 16);
+    return cmd(c, timeout).then(function (raw) {
+      var r = parseResponse(raw), out = [];
+      Object.keys(r.ecus).forEach(function (h) { r.ecus[h].forEach(function (p) { if (p[0] === mode + 0x40) out.push({ ecu: h, data: p }); else if (p[0] === 0x7F && p[1] === mode) out.push({ ecu: h, neg: p[2] }); }); });
+      return out;
+    });
+  }
+  var ECU_NAMES = { "7E8": "Engine", "7E9": "Transmission", "7EA": "Module 7EA", "7EB": "Module 7EB", "ECU": "Engine" };
+  function ecuName(h) { return ECU_NAMES[h] || ("Module " + h); }
+
+  function decodeDTC(a, b) {
+    var L = "PCBU".charAt(a >> 6);
+    return L + ((a >> 4) & 3) + (a & 15).toString(16).toUpperCase() + hex2(b);
+  }
+  function dtcsFrom(payloads) {
+    var out = [];
+    payloads.forEach(function (p) {
+      if (!p.data) return;
+      var d = p.data.slice(1);
+      if (protoCAN) d = d.slice(1);
+      for (var i = 0; i + 1 < d.length; i += 2) { if (d[i] === 0 && d[i + 1] === 0) continue; out.push({ code: decodeDTC(d[i], d[i + 1]), ecu: p.ecu }); }
+    });
+    return out;
+  }
+
+  /* ---------------- PIDs ---------------- */
+  var PIDS = [
+    { pid: 0x0C, n: "Engine RPM", col: "Engine RPM (rpm)", u: "rpm", f: function (A, B) { return (256 * A + B) / 4; }, d: 0, on: true },
+    { pid: 0x05, n: "Coolant temp", col: "Engine coolant temperature (°C)", u: "°C", f: function (A) { return A - 40; }, d: 0, on: true, us: "F" },
+    { pid: 0x0D, n: "Speed", col: "Vehicle speed (km/h)", u: "km/h", f: function (A) { return A; }, d: 0, on: true, us: "mph" },
+    { pid: 0x07, n: "Long-term fuel trim", col: "Long term fuel trim bank 1 (%)", u: "%", f: function (A) { return (A - 128) * 100 / 128; }, d: 1, on: true },
+    { pid: 0x06, n: "Short-term fuel trim", col: "Short term fuel trim bank 1 (%)", u: "%", f: function (A) { return (A - 128) * 100 / 128; }, d: 1, on: true },
+    { pid: 0x42, n: "Module voltage", col: "Control module voltage (V)", u: "V", f: function (A, B) { return (256 * A + B) / 1000; }, d: 2, on: true },
+    { pid: 0x0B, n: "Intake pressure", col: "Intake manifold absolute pressure (kPa)", u: "kPa", f: function (A) { return A; }, d: 0, on: true },
+    { pid: 0x10, n: "Air flow (MAF)", col: "Mass air flow rate (g/s)", u: "g/s", f: function (A, B) { return (256 * A + B) / 100; }, d: 1, on: true },
+    { pid: 0x04, n: "Engine load", col: "Calculated engine load (%)", u: "%", f: function (A) { return A * 100 / 255; }, d: 0, on: false },
+    { pid: 0x11, n: "Throttle", col: "Throttle position (%)", u: "%", f: function (A) { return A * 100 / 255; }, d: 0, on: false },
+    { pid: 0x0F, n: "Intake air temp", col: "Intake air temperature (°C)", u: "°C", f: function (A) { return A - 40; }, d: 0, on: false, us: "F" },
+    { pid: 0x5C, n: "Oil temp", col: "Engine oil temperature (°C)", u: "°C", f: function (A) { return A - 40; }, d: 0, on: false, us: "F" },
+    { pid: 0x46, n: "Outside air temp", col: "Ambient air temperature (°C)", u: "°C", f: function (A) { return A - 40; }, d: 0, on: false, us: "F" },
+    { pid: 0x33, n: "Barometric pressure", col: "Barometric pressure (kPa)", u: "kPa", f: function (A) { return A; }, d: 0, on: false },
+    { pid: 0x2F, n: "Fuel level", col: "Fuel level (%)", u: "%", f: function (A) { return A * 100 / 255; }, d: 0, on: false }
+  ];
+  var supported = null;
+  function pidSupported(pid) { return !supported || supported[pid]; }
+  function readSupported() {
+    supported = {};
+    var bases = [0x00, 0x20, 0x40];
+    return bases.reduce(function (p, base) {
+      return p.then(function (go) {
+        if (!go) return false;
+        return query("01" + hex2(base)).then(function (res) {
+          var more = false;
+          res.forEach(function (r) { if (!r.data || r.data[1] !== base) return; for (var i = 0; i < 32; i++) { if (r.data[2 + (i >> 3)] & (0x80 >> (i & 7))) { supported[base + i + 1] = true; if (base + i + 1 === base + 0x20) more = true; } } });
+          return more;
+        });
+      });
+    }, Promise.resolve(true));
+  }
+  function readPid(pid) {
+    return query("01" + hex2(pid)).then(function (res) {
+      var r = res.filter(function (x) { return x.data && x.data[1] === pid; });
+      var e = r.filter(function (x) { return x.ecu === "7E8" || x.ecu === "ECU"; })[0] || r[0];
+      return e ? e.data.slice(2) : null;
+    });
+  }
+
+  /* ---------------- connection ---------------- */
+  function setConn(state, text) { $("conn").className = "conn " + state; $("connText").textContent = text; }
+  function enable(on) {
+    $("btnScan").disabled = !on; $("btnLive").disabled = !on; $("btnDisconnect").disabled = !on;
+    $("btnConnect").disabled = on; $("btnDemo").disabled = on;
+  }
+  function initElm() {
+    var seq = [["ATZ", 6000], ["ATE0"], ["ATL0"], ["ATS1"], ["ATH1"], ["ATCAF1"], ["ATAT1"], ["ATSP0"]];
+    return seq.reduce(function (p, s) { return p.then(function () { return cmd(s[0], s[1]).catch(function () {}); }).then(function () { return sleep(60); }); }, Promise.resolve())
+      .then(function () { return query("0100", 12000); })
+      .then(function (r) { if (!r.length) throw new Error("The adapter answered but the car did not. Check that the ignition is on."); return cmd("ATDPN").catch(function () { return "A6"; }); })
+      .then(function (p) { var n = parseInt(String(p).replace(/[^0-9A-C]/gi, "").replace(/^A/i, ""), 16); protoCAN = !isFinite(n) || n >= 6; return readSupported(); });
+  }
+  function connect(transport) {
+    link = transport;
+    setConn("busy", "Connecting...");
+    transport.onclose = function () { link = null; enable(false); setConn("", "Disconnected"); stopLive(); };
+    return transport.open().then(function () { setConn("busy", "Talking to the car..."); return initElm(); }).then(function () {
+      setConn("on", "Connected to " + transport.name + (protoCAN ? " (CAN)" : ""));
+      enable(true); renderPicks();
+    }).catch(function (e) {
+      try { transport.close(); } catch (x) {}
+      link = null; enable(false);
+      var msg = e && e.name === "NotFoundError" ? "No adapter chosen." : (e && e.name === "SecurityError" ? "This page is not allowed to use Bluetooth here. Open it directly in Bluefy, Chrome or Edge, not inside another app's preview." : ((e && e.message) || "Could not connect."));
+      if (e && e.message === "timeout") msg = "The adapter stopped answering. Unplug it, plug it back in, and try again.";
+      setConn("", msg);
+    });
+  }
+  $("btnConnect").addEventListener("click", function () {
+    if (!navigator.bluetooth) return;
+    connect(new BleTransport());
+  });
+  $("btnDemo").addEventListener("click", function () { connect(new SimTransport()); });
+  $("btnDisconnect").addEventListener("click", function () { stopLive(); if (link) link.close(); link = null; enable(false); setConn("", "Disconnected"); });
+
+  (function checkSupport() {
+    var n = $("noBt"), ua = navigator.userAgent || "";
+    if (navigator.bluetooth) { if (navigator.bluetooth.getAvailability) navigator.bluetooth.getAvailability().then(function (a) { if (!a) { n.hidden = false; n.textContent = "Bluetooth looks turned off or unavailable on this device."; } }).catch(function () {}); return; }
+    n.hidden = false; $("btnConnect").disabled = true;
+    if (/iPhone|iPad|iPod/.test(ua)) n.innerHTML = "On iPhone, Bluetooth from a web page only works in the free <b>Bluefy</b> browser from the App Store. Open this page there. The simulated car below works in any browser.";
+    else n.textContent = "This browser cannot use Bluetooth from a web page. Use Chrome or Edge on Android, Windows, Mac or ChromeOS. The simulated car below works anywhere.";
+  })();
+
+  /* ---------------- health check ---------------- */
+  var report = null;
+  var MON_CONT = [["Misfire", 0], ["Fuel system", 1], ["Components", 2]];
+  var MON_SPARK = [["Catalyst", 0], ["Heated catalyst", 1], ["Evaporative system", 2], ["Secondary air", 3], ["A/C refrigerant", 4], ["Oxygen sensor", 5], ["Oxygen sensor heater", 6], ["EGR / VVT", 7]];
+  var FF = [[0x04, "Engine load", function (A) { return Math.round(A * 100 / 255) + " %"; }], [0x05, "Coolant", function (A) { return (A - 40) + " °C / " + Math.round((A - 40) * 1.8 + 32) + " °F"; }],
+    [0x06, "Short-term trim", function (A) { return ((A - 128) * 100 / 128).toFixed(1) + " %"; }], [0x07, "Long-term trim", function (A) { return ((A - 128) * 100 / 128).toFixed(1) + " %"; }],
+    [0x0B, "Intake pressure", function (A) { return A + " kPa"; }], [0x0C, "RPM", function (A, B) { return Math.round((256 * A + B) / 4) + " rpm"; }],
+    [0x0D, "Speed", function (A) { return A + " km/h / " + Math.round(A * 0.621371) + " mph"; }], [0x11, "Throttle", function (A) { return Math.round(A * 100 / 255) + " %"; }]];
+  function runScan() {
+    var R = { date: new Date().toISOString(), adapter: link.name, codes: [], vin: null, mil: null, monitors: [], freeze: null, since: {} };
+    $("btnScan").disabled = true; $("scanStatus").textContent = "Reading VIN...";
+    return query("0902", 6000).then(function (res) {
+      var p = res.filter(function (x) { return x.data; })[0];
+      if (p) { var s = p.data.slice(3).filter(function (b) { return b >= 0x30 && b <= 0x5A; }).map(function (b) { return String.fromCharCode(b); }).join(""); if (s.length >= 17) R.vin = s.slice(-17); }
+    }).catch(function () {}).then(function () {
+      $("scanStatus").textContent = "Reading light and readiness...";
+      return query("0101");
+    }).then(function (res) {
+      var p = res.filter(function (x) { return x.data && x.data[1] === 0x01 && (x.ecu === "7E8" || x.ecu === "ECU"); })[0] || res.filter(function (x) { return x.data; })[0];
+      if (p) {
+        var A = p.data[2], B = p.data[3], C = p.data[4], D = p.data[5];
+        R.mil = !!(A & 0x80); R.count = A & 0x7F; R.diesel = !!(B & 0x08);
+        MON_CONT.forEach(function (m) { if (B & (1 << m[1])) R.monitors.push({ n: m[0], ready: !(B & (0x10 << m[1])) }); });
+        if (!R.diesel) MON_SPARK.forEach(function (m) { if (C & (1 << m[1])) R.monitors.push({ n: m[0], ready: !(D & (1 << m[1])) }); });
+      }
+      $("scanStatus").textContent = "Reading codes...";
+      var kinds = [["03", "stored"], ["07", "pending"], ["0A", "permanent"]];
+      return kinds.reduce(function (pp, k) { return pp.then(function () { return query(k[0], 6000).then(function (res2) { dtcsFrom(res2).forEach(function (d) { R.codes.push({ code: d.code, kind: k[1], ecu: ecuName(d.ecu) }); }); }).catch(function () {}); }); }, Promise.resolve());
+    }).then(function () {
+      $("scanStatus").textContent = "Reading freeze frame...";
+      return query("020200").then(function (res) {
+        var p = res.filter(function (x) { return x.data && x.data.length >= 5; })[0];
+        if (!p || (p.data[3] === 0 && p.data[4] === 0)) return;
+        R.freeze = { dtc: decodeDTC(p.data[3], p.data[4]), values: [] };
+        return FF.reduce(function (pp, f) {
+          if (!pidSupported(f[0])) return pp;
+          return pp.then(function () { return query("02" + hex2(f[0]) + "00").then(function (r2) { var q = r2.filter(function (x) { return x.data && x.data[1] === f[0]; })[0]; if (q) R.freeze.values.push([f[1], f[2](q.data[3], q.data[4])]); }).catch(function () {}); });
+        }, Promise.resolve());
+      }).catch(function () {});
+    }).then(function () {
+      $("scanStatus").textContent = "Reading history counters...";
+      var counters = [[0x31, "distSinceClear", function (d) { return 256 * d[0] + d[1]; }], [0x30, "warmupsSinceClear", function (d) { return d[0]; }], [0x21, "distWithMil", function (d) { return 256 * d[0] + d[1]; }], [0x4E, "minSinceClear", function (d) { return 256 * d[0] + d[1]; }]];
+      return counters.reduce(function (pp, c) { if (!pidSupported(c[0])) return pp; return pp.then(function () { return readPid(c[0]).then(function (d) { if (d) R.since[c[1]] = c[2](d); }).catch(function () {}); }); }, Promise.resolve());
+    }).then(function () {
+      report = R; renderReport(); $("scanStatus").textContent = "Done " + new Date().toLocaleTimeString();
+      armClear();
+    }).catch(function (e) { $("scanStatus").textContent = "Stopped: " + ((e && e.message) || e); })
+      .then(function () { $("btnScan").disabled = !link; });
+  }
+  var CODE_HINTS = { P0171: "System too lean, bank 1", P0172: "System too rich, bank 1", P0420: "Catalyst efficiency below threshold, bank 1", P0300: "Random or multiple misfire", P0301: "Misfire, cylinder 1", P0302: "Misfire, cylinder 2", P0303: "Misfire, cylinder 3", P0304: "Misfire, cylinder 4", P0700: "Transmission control system fault requested the light", P0128: "Coolant below thermostat regulating temperature", P0455: "Evaporative system large leak", P0456: "Evaporative system very small leak", P0442: "Evaporative system small leak", P0011: "Intake camshaft timing over-advanced, bank 1", P0016: "Crank and cam position correlation, bank 1", P0101: "Air flow sensor range or performance", P0299: "Turbo underboost", P0507: "Idle speed higher than expected", P2187: "Lean at idle, bank 1", P0141: "Downstream oxygen sensor heater circuit" };
+  function renderReport() {
+    var R = report; $("scanOut").hidden = false;
+    var stored = R.codes.filter(function (c) { return c.kind === "stored"; }).length, pend = R.codes.filter(function (c) { return c.kind === "pending"; }).length;
+    var notReady = R.monitors.filter(function (m) { return !m.ready; }).length;
+    var s = [];
+    s.push(R.mil ? ["bad", "Check-engine light is ON", "The engine computer reports " + (R.count || 0) + " emissions-related code" + (R.count === 1 ? "" : "s") + " behind it."] : ["ok", "Check-engine light is off", ""]);
+    s.push(stored + pend ? [stored ? "bad" : "watch", stored + " stored and " + pend + " pending code" + (stored + pend === 1 ? "" : "s"), "Pending means seen once but not confirmed. It may set the light if it repeats."] : ["ok", "No stored or pending codes", ""]);
+    if (R.monitors.length) s.push(notReady ? ["watch", notReady + " of " + R.monitors.length + " readiness monitors not ready", "Normal for a few days after codes are cleared or the battery is disconnected. Mixed driving completes them."] : ["ok", "All " + R.monitors.length + " readiness monitors are ready", ""]);
+    if (R.monitors.length || R.mil != null) {
+      var fail = R.mil || notReady > 1;
+      s.push(fail ? ["bad", "Emissions inspection: likely FAIL right now", (R.mil ? "The check-engine light is on with a stored code. " : "") + (notReady > 1 ? notReady + " monitors are not ready, and federal rules allow at most one on a 2001 or newer car. " : "") + "Fix the cause, then drive normally until the monitors finish before testing."] : ["ok", "Emissions inspection: readiness looks passable", "No light, and " + (notReady ? "only one monitor" : "no monitors") + " not ready (the federal limit for 2001 and newer cars is one). This is a readiness check, not a full test."]);
+    }
+    if (R.vin) s.push(["info", "VIN " + R.vin, "Check open recalls for this VIN at nhtsa.gov/recalls."]);
+    $("summary").innerHTML = s.map(function (x) { return '<li><span class="pill ' + x[0] + '">' + ({ ok: "Good", watch: "Watch", bad: "Act", info: "Info" })[x[0]] + "</span><b>" + esc(x[1]) + "</b>" + (x[2] ? '<span class="d">' + (x[0] === "info" ? 'Check open recalls for this VIN at <a href="https://www.nhtsa.gov/recalls" target="_blank" rel="noopener">nhtsa.gov/recalls</a>.' : esc(x[2])) + "</span>" : "") + "</li>"; }).join("");
+    $("codes").innerHTML = R.codes.length ? R.codes.map(function (c) {
+      var lvl = c.kind === "pending" ? "watch" : "bad";
+      return '<li><span class="pill ' + lvl + '">' + esc(c.kind) + '</span><span><span class="code">' + esc(c.code) + "</span> · " + esc(c.ecu) + '</span><span class="d">' + esc(CODE_HINTS[c.code] || "Look this code up in V60 Garage's Diagnose tab.") + (c.kind === "permanent" ? " Permanent codes cannot be cleared with a tool. They erase themselves after the car confirms the fix over several drives." : "") + "</span></li>";
+    }).join("") : '<li><span class="pill ok">None</span><span>No codes reported by any module that answered.</span></li>';
+    $("freeze").innerHTML = R.freeze ? "<dt>Triggered by</dt><dd>" + esc(R.freeze.dtc) + "</dd>" + R.freeze.values.map(function (v) { return "<dt>" + esc(v[0]) + "</dt><dd>" + esc(v[1]) + "</dd>"; }).join("") : "<dt>None</dt><dd>No freeze frame stored.</dd>";
+    $("monitors").innerHTML = R.monitors.length ? R.monitors.map(function (m) { return "<div><span>" + esc(m.n) + '</span><span class="pill ' + (m.ready ? "ok" : "watch") + '">' + (m.ready ? "ready" : "not ready") + "</span></div>"; }).join("") : '<div><span>No readiness data returned</span></div>';
+    var sv = R.since, rows = [];
+    if (isNum(sv.distSinceClear)) rows.push(["Since codes cleared", Math.round(sv.distSinceClear * 0.621371) + " mi" + (isNum(sv.warmupsSinceClear) ? ", " + sv.warmupsSinceClear + " warm-ups" : "")]);
+    if (isNum(sv.distWithMil)) rows.push(["Driven with light on", Math.round(sv.distWithMil * 0.621371) + " mi"]);
+    $("since").innerHTML = rows.map(function (r) { return "<dt>" + esc(r[0]) + "</dt><dd>" + esc(r[1]) + "</dd>"; }).join("");
+  }
+  $("btnScan").addEventListener("click", runScan);
+
+  /* ---------------- export helpers ---------------- */
+  function fileFor(name, text, type) { return new File([text], name, { type: type }); }
+  function download(name, text, type) {
+    var url = URL.createObjectURL(new Blob([text], { type: type })), a = document.createElement("a");
+    a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+  }
+  function canShareFiles() { try { return !!(navigator.canShare && navigator.canShare({ files: [fileFor("x.txt", "x", "text/plain")] })); } catch (e) { return false; } }
+  function share(name, text, type) { return navigator.share({ files: [fileFor(name, text, type)], title: name }); }
+  function stamp() { var d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0") + "_" + String(d.getHours()).padStart(2, "0") + String(d.getMinutes()).padStart(2, "0"); }
+  function reportJSON() {
+    var r = JSON.parse(JSON.stringify(report)); delete r.vin;
+    return JSON.stringify({ source: "v60-link", version: 1, report: r }, null, 2);
+  }
+  $("btnReport").addEventListener("click", function () {
+    if (!report) return;
+    download("v60-health-" + stamp() + ".json", reportJSON(), "application/json");
+    $("reportStatus").textContent = "Saved. In V60 Garage, load it in Diagnose, under Import a V60 Link report.";
+    $("ck1").checked = true; armClear();
+  });
+  if (canShareFiles()) { $("btnShareReport").hidden = false; $("btnShareCsv").hidden = false; }
+  $("btnShareReport").addEventListener("click", function () { if (!report) return; share("v60-health-" + stamp() + ".json", reportJSON(), "application/json").then(function () { $("ck1").checked = true; armClear(); }).catch(function () {}); });
+
+  /* ---------------- live data ---------------- */
+  var live = { on: false, rows: [], t0: 0, sel: {} };
+  PIDS.forEach(function (p) { live.sel[p.pid] = p.on; });
+  function renderPicks() {
+    $("picks").innerHTML = PIDS.map(function (p) {
+      var ok = pidSupported(p.pid);
+      return '<label class="' + (ok ? "" : "na") + '"><input type="checkbox" data-pid="' + p.pid + '"' + (live.sel[p.pid] && ok ? " checked" : "") + (ok ? "" : " disabled") + "> " + esc(p.n) + (ok ? "" : " (not supported)") + "</label>";
+    }).join("");
+    $("tiles").innerHTML = PIDS.filter(function (p) { return live.sel[p.pid] && pidSupported(p.pid); }).map(function (p) { return '<div class="tile"><div class="k">' + esc(p.n) + '</div><div><span class="v" id="tv' + p.pid + '">--</span><span class="u">' + esc(p.us === "F" ? "°F" : (p.us === "mph" ? "mph" : p.u)) + "</span></div></div>"; }).join("");
+  }
+  $("picks").addEventListener("change", function (e) { var pid = +e.target.getAttribute("data-pid"); if (pid) { live.sel[pid] = e.target.checked; if (!live.on) renderPicks(); } });
+  function shown(p, v) { if (p.us === "F") return Math.round(v * 1.8 + 32); if (p.us === "mph") return Math.round(v * 0.621371); return v.toFixed(p.d); }
+  function stopLive() { live.on = false; $("btnLive").textContent = "Start recording"; }
+  function loop() {
+    var pids = PIDS.filter(function (p) { return live.sel[p.pid] && pidSupported(p.pid); });
+    if (!pids.length) { stopLive(); $("liveStatus").textContent = "Pick at least one supported channel."; return; }
+    (function pass() {
+      if (!live.on || !link) { stopLive(); return; }
+      var row = { t: (Date.now() - live.t0) / 1000 };
+      pids.reduce(function (p, pd) { return p.then(function () { if (!live.on) return; return readPid(pd.pid).then(function (d) { if (d) { var v = pd.f(d[0], d[1]); row[pd.pid] = v; var el = $("tv" + pd.pid); if (el) el.textContent = shown(pd, v); } }).catch(function () {}); }); }, Promise.resolve())
+        .then(function () {
+          live.rows.push(row);
+          var dur = row.t, rate = live.rows.length / Math.max(dur, 0.1);
+          $("liveStatus").textContent = live.rows.length + " samples, " + Math.floor(dur / 60) + ":" + String(Math.floor(dur % 60)).padStart(2, "0") + ", " + rate.toFixed(1) + " per second";
+          $("btnCsv").disabled = live.rows.length < 5;
+          if (live.rows.length > 30000) { stopLive(); $("liveStatus").textContent += ". Stopped at the 30,000-sample limit. Save the CSV."; return; }
+          setTimeout(pass, 0);
+        });
+    })();
+  }
+  $("btnLive").addEventListener("click", function () {
+    if (live.on) { stopLive(); return; }
+    if (live.rows.length && !window.__keepRows) live.rows = [];
+    renderPicks(); live.on = true; live.t0 = Date.now(); $("btnLive").textContent = "Stop recording"; $("btnCsv").disabled = true; loop();
+  });
+  function csv() {
+    var used = PIDS.filter(function (p) { return live.rows.some(function (r) { return isNum(r[p.pid]); }); });
+    var lines = ["Time (s)," + used.map(function (p) { return p.col; }).join(",")];
+    live.rows.forEach(function (r) { lines.push(r.t.toFixed(2) + "," + used.map(function (p) { return isNum(r[p.pid]) ? +r[p.pid].toFixed(3) : ""; }).join(",")); });
+    return lines.join("\n");
+  }
+  $("btnCsv").addEventListener("click", function () { download("v60-log-" + stamp() + ".csv", csv(), "text/csv"); });
+  $("btnShareCsv").addEventListener("click", function () { if (live.rows.length >= 5) share("v60-log-" + stamp() + ".csv", csv(), "text/csv").catch(function () {}); });
+
+  /* ---------------- clear codes ---------------- */
+  function armClear() {
+    var ready = !!(report && link);
+    ["ck1", "ck2", "ck3", "ck4"].forEach(function (id) { $(id).disabled = !ready || id === "ck1"; });
+    var all = ready && ["ck1", "ck2", "ck3", "ck4"].every(function (id) { return $(id).checked; });
+    $("clearWord").disabled = !all;
+    $("btnClear").disabled = !(all && $("clearWord").value.trim().toUpperCase() === "CLEAR");
+  }
+  ["ck2", "ck3", "ck4"].forEach(function (id) { $(id).addEventListener("change", armClear); });
+  $("clearWord").addEventListener("input", armClear);
+  $("btnClear").addEventListener("click", function () {
+    $("btnClear").disabled = true; $("clearStatus").textContent = "Checking that the engine is off...";
+    stopLive();
+    readPid(0x0C).then(function (d) {
+      var rpm = d ? (256 * d[0] + d[1]) / 4 : 0;
+      if (rpm > 50) throw new Error("The engine is running (" + Math.round(rpm) + " rpm). Turn it off, leave the ignition on, and try again.");
+      $("clearStatus").textContent = "Sending clear command...";
+      return query("04", 8000);
+    }).then(function (res) {
+      var okE = res.filter(function (r) { return r.data; }).map(function (r) { return ecuName(r.ecu); });
+      var neg = res.filter(function (r) { return r.neg != null; });
+      if (!okE.length) throw new Error(neg.length ? "The car refused the request (code " + hex2(neg[0].neg) + "). Usually that means the engine is running or the conditions are not right." : "No module confirmed the clear.");
+      $("clearStatus").textContent = "Cleared by: " + okE.join(", ") + ". Running a new health check...";
+      $("clearWord").value = ""; ["ck2", "ck3", "ck4"].forEach(function (id) { $(id).checked = false; });
+      return sleep(800).then(runScan).then(function () { $("clearStatus").textContent = "Cleared by " + okE.join(", ") + ". Readiness now shows what still has to rerun. Drive normally, with a mix of city and highway, over the next few days."; });
+    }).catch(function (e) { $("clearStatus").textContent = (e && e.message) || "Clear failed."; armClear(); });
+  });
+
+  $("btnCopyLog").addEventListener("click", function () { try { navigator.clipboard.writeText(logLines.join("\n")); } catch (e) {} });
+
+  window.__link = { parseResponse: parseResponse, dtcsFrom: dtcsFrom, decodeDTC: decodeDTC, SimTransport: SimTransport, csv: csv, live: live, getReport: function () { return report; }, sim: function () { return link; } };
+})();
+</script>
+</body>
+</html>

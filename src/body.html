@@ -1,0 +1,524 @@
+
+
+<div class="updatebar" id="updateBar" hidden role="status"><span>A new version of V60 Garage is ready.</span><button type="button">Refresh</button></div>
+<main>
+  <header class="cockpit">
+    <div class="ident">
+      <h1>V60 Garage</h1>
+      <p class="sub">2016 V60 T5 Premier, B4204T11 2.0 turbo, front-wheel drive</p>
+    </div>
+    <div class="instruments">
+      <button type="button" class="gauge" data-jump="tab:health" aria-label="Health score, open Health">
+        <svg viewBox="0 0 120 74" aria-hidden="true"><path class="g-track" d="M12 66 A48 48 0 0 1 108 66"/><path class="g-fill" id="gFill" d="M12 66 A48 48 0 0 1 108 66" pathLength="100"/><g class="g-ticks"><line x1="12" y1="66" x2="20" y2="66"/><line x1="60" y1="18" x2="60" y2="26"/><line x1="108" y1="66" x2="100" y2="66"/><line x1="26" y1="32" x2="31.7" y2="37.7"/><line x1="94" y1="32" x2="88.3" y2="37.7"/></g></svg>
+        <span class="g-val" id="hudScore">--</span><span class="g-lab">Health</span>
+      </button>
+      <button type="button" class="rankchip" data-jump="tab:academy" aria-label="Rank, open Academy"><span class="rk" id="hudRank">Lv 1</span><span class="rn" id="hudRankName">Passenger</span></button>
+      <label class="odo"><span>Odometer</span><span class="odo-in"><input id="odo" type="number" inputmode="numeric" min="0" step="1" placeholder="95000"><i>mi</i></span></label>
+    </div>
+    <p class="status savest" id="saveStatus" role="status">Loading your saved data</p>
+  </header>
+  <nav class="rail" id="rail" aria-label="Sections"></nav>
+  <nav class="subnav" id="subnav" role="tablist" aria-label="Pages in this section"></nav>
+
+  <!-- ACADEMY -->
+  <div class="panel" id="p-academy">
+    <section>
+      <h2>Academy</h2>
+      <p class="lede">Learn the car from zero by playing through it. Short lessons with quizzes, real checks at the car, and shop jobs where you diagnose a customer's problem.</p>
+    </section>
+    <div id="acadBody" style="display:flex;flex-direction:column;gap:18px"></div>
+  </div>
+
+  <!-- ENGINE BAY -->
+  <div class="panel" id="p-engine" hidden>
+    <section>
+      <h2>Engine bay</h2>
+      <p class="lede">A top-down map of your engine bay, with the front bumper at the top and the driver side on the left. Solid parts sit where Volvo's manual puts them. Dashed parts with a question mark are definitely on your car, but their exact position is not confirmed. Pin them on your own photo to make the map exact.</p>
+      <div class="row seg" id="ebMode" role="group" aria-label="View"></div>
+    </section>
+    <div class="ebwrap">
+      <div class="ebmain">
+        <div id="ebStage" class="ebstage"></div>
+        <div id="ebPhotoTools" class="row" hidden>
+          <div class="field"><label for="ebPhotoSel">Photo</label><select id="ebPhotoSel"></select></div>
+          <div class="field"><label for="ebPinSel">Pin a part</label><select id="ebPinSel"></select></div>
+          <button type="button" class="quiet" id="ebUnpin">Remove selected pin</button>
+          <p class="status" id="ebPinHelp"></p>
+        </div>
+        <div class="toggles" id="ebLayers" role="group" aria-label="Overlay layers"></div>
+      </div>
+      <aside class="ebside">
+        <div class="row"><button type="button" id="ebGameBtn">Play: find it</button></div>
+        <div id="ebGame"></div>
+        <div id="ebInfo" class="ebinfo"></div>
+        <div id="ebLayerInfo"></div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- BAY -->
+  <div class="panel" id="p-bay" hidden>
+    <section>
+      <h2>The bay</h2>
+      <p class="lede">Pick a system to see its parts, what wears out, and how to check it. Rate each part as you inspect it and the pins turn into a heat map of the whole car. Ratings stay on this page and feed the Health tab.</p>
+      <div class="row">
+        <div class="field"><label for="overlay">Pin colors show</label>
+          <select id="overlay"><option value="cond">Condition you rated</option><option value="maint">Service intervals</option></select>
+        </div>
+        <div class="legend" aria-label="Pin color legend"><span><i style="background:var(--ok)"></i>Good</span><span><i style="background:var(--warn)"></i>Watch</span><span><i style="background:var(--bad)"></i>Act</span><span><i style="background:var(--none)"></i>Unrated</span></div>
+      </div>
+      <div class="bay" id="bayDiagram"></div>
+      <div class="sysrow" id="sysRow" role="group" aria-label="Systems"></div>
+    </section>
+    <section id="sysDetail"></section>
+    <div class="note"><b>Safety.</b> Support the car on jack stands, never a jack alone. Leave airbags, high-pressure fuel lines and anything on the brake hydraulics you are not sure about to a shop. "Easy" means driveway and basic tools, "Moderate" means hand tools and patience, "Shop" means special tools or safety systems.</div>
+  </div>
+
+  <!-- DIAGNOSE -->
+  <div class="panel" id="p-diag" hidden>
+    <section>
+      <h2>Quick symptom lookup</h2>
+      <p class="lede">Pick what you notice for the usual suspects, cheapest checks first. For a step-by-step diagnosis that asks questions, use <button type="button" class="quiet" data-jump="tab:trouble">Troubleshoot</button>.</p>
+      <div class="field" style="max-width:26em"><label for="symSel">What is it doing?</label><select id="symSel"></select></div>
+      <div id="symOut"></div>
+    </section>
+    <section>
+      <h2>Trouble code lookup</h2>
+      <p class="lede">Type an OBD-II code from a scanner. The meaning comes from the standard definitions; the causes are the common ones, not a diagnosis.</p>
+      <div class="field" style="max-width:16em"><label for="codeIn">Code</label><input id="codeIn" class="mono" type="text" maxlength="5" placeholder="P0128" autocomplete="off" spellcheck="false"></div>
+      <div id="codeOut"></div>
+    </section>
+    <section>
+      <h2>Code log</h2>
+      <form id="codeForm" class="row" autocomplete="off">
+        <div class="field"><label for="clCode">Code</label><input id="clCode" class="mono" type="text" maxlength="5" required style="width:7em"></div>
+        <div class="field"><label for="clDate">Date</label><input id="clDate" type="date" required></div>
+        <div class="field"><label for="clMiles">Odometer</label><input id="clMiles" type="number" inputmode="numeric" min="0" step="1"></div>
+        <div class="field"><label for="clState">State</label><select id="clState"><option value="active">Active</option><option value="cleared">Cleared, may return</option><option value="resolved">Fixed</option></select></div>
+        <div class="field" style="flex:1 1 14em"><label for="clNote">Notes</label><input id="clNote" class="wide" type="text" maxlength="200"></div>
+        <button type="submit">Add code</button>
+      </form>
+      <div class="scroll"><table><thead><tr><th>Code</th><th>Meaning</th><th class="num">Date</th><th class="num">Miles</th><th>State</th><th></th></tr></thead><tbody id="codeBody"></tbody></table></div>
+      <div class="row"><div class="field"><label for="linkFile">Import a V60 Link report (.json)</label><input id="linkFile" type="file" accept=".json,application/json"></div><span class="status" id="linkStatus" role="status"></span></div>
+      <div id="lastScan"></div>
+    </section>
+    <div class="note calm"><b>What a generic scanner covers.</b> A basic OBD-II adapter reads engine and emissions codes. Airbag, ABS, transmission detail and Volvo-specific codes usually need Volvo-aware software such as the dealer's VIDA or a capable aftermarket tool.</div>
+  </div>
+
+  <!-- DATA LAB -->
+  <div class="panel" id="p-lab" hidden>
+    <section>
+      <h2>Data lab</h2>
+      <p class="lede">Load a log from a scanner app and the lab checks warm-up, fuel trims, charging, idle and boost, then charts every channel on a shared time axis. This page cannot talk to the car's port itself, so the car-to-page link is an exported file.</p>
+      <details class="card">
+        <summary><b>How to get a log from the car</b></summary>
+        <div class="pbody">
+          <ol>
+            <li>Plug a Bluetooth or Wi-Fi ELM327-type OBD-II adapter into the port under the dash.</li>
+            <li>Use a scanner app that records data to a file, such as Car Scanner, Torque or OBD Fusion, and log at least coolant temperature, RPM, speed, fuel trims, battery voltage and intake pressure.</li>
+            <li>Drive a normal mix: cold start, some city, some steady highway, and one firm acceleration if safe.</li>
+            <li>Export the log as CSV and load it below. Both one-column-per-channel files and files with PID and VALUE columns are read. If a channel is missed, the mapping step lets you pick the column.</li>
+          </ol>
+          <p class="lede">Logging is read-only. Nothing here writes to the car or tunes the engine.</p>
+        </div>
+      </details>
+      <div class="row">
+        <div class="field"><label for="labFile">Scanner log (.csv)</label><input id="labFile" type="file" accept=".csv,.txt,text/csv,text/plain"></div>
+        <button type="button" class="quiet" id="labDemo">Load demo drive</button>
+        <div class="field"><label for="tempU">Temperature in file</label><select id="tempU"><option value="auto">Auto</option><option value="C">Celsius</option><option value="F">Fahrenheit</option></select></div>
+        <div class="field"><label for="speedU">Speed in file</label><select id="speedU"><option value="auto">Auto</option><option value="kph">km/h</option><option value="mph">mph</option></select></div>
+      </div>
+      <p class="status" id="labStatus">No log loaded yet.</p>
+    </section>
+    <section id="labBody" hidden>
+      <div class="note" id="demoNote" hidden><b>Demo data.</b> This drive is generated by the page to show the tools. It is not from your car and cannot be saved to your records.</div>
+      <h3>Channel mapping</h3>
+      <div class="map" id="mapGrid"></div>
+      <h3>Findings</h3>
+      <ul class="finds" id="finds"></ul>
+      <h3>Channel statistics</h3>
+      <div class="scroll"><table><thead><tr><th>Channel</th><th class="num">Min</th><th class="num">Mean</th><th class="num">Max</th><th class="num">5th to 95th</th></tr></thead><tbody id="statBody"></tbody></table></div>
+      <div class="row"><button type="button" id="saveRun">Save this run to my records</button><span class="status" id="runStatus"></span></div>
+      <h3>Traces</h3>
+      <div class="toggles" id="toggles" role="group" aria-label="Channels to chart"></div>
+      <div id="charts" style="display:flex;flex-direction:column;gap:10px"></div>
+    </section>
+    <section>
+      <h2>Saved runs</h2>
+      <p class="lede">Save a run after each log to see how coolant warm-up, fuel trims, charging and idle change over weeks. A drift matters more than any single number.</p>
+      <div class="scroll"><table><thead><tr><th class="num">Date</th><th class="num">Miles</th><th class="num">Minutes</th><th class="num">Coolant max</th><th class="num">Warm-up</th><th class="num">LTFT</th><th class="num">STFT</th><th class="num">Volts</th><th class="num">Idle rpm</th><th class="num">Flags</th><th></th></tr></thead><tbody id="runBody"></tbody></table></div>
+      <h3>Drift against your baseline</h3>
+      <p class="lede">Your baseline is the median of your earlier saved runs, so the page compares the car with itself rather than with a generic spec. It needs at least three saved runs. Warm-up time depends on outside temperature, so compare runs from similar weather.</p>
+      <ul class="finds" id="driftFinds"></ul>
+      <div class="sparks" id="sparks"></div>
+    </section>
+  </div>
+
+  <!-- HEALTH -->
+  <div class="panel" id="p-health" hidden>
+    <section>
+      <h2>Health</h2>
+      <p class="lede">A prioritizer built from what you have entered: service status, part ratings, active codes, oil use and your latest saved run. It ranks your to-do list and is not a diagnosis. Inputs you have not entered are left out, and the page says how many it used.</p>
+      <div class="score card" id="scoreCard"></div>
+    </section>
+    <section>
+      <h2>Fix first</h2>
+      <ul class="actions" id="actions"></ul>
+    </section>
+    <section>
+      <h2>Next 12 months</h2>
+      <p class="lede">What is due or likely, with national price ranges researched in October 2026. Tick items in or out to build your own budget. Austin quotes will differ, so treat these as a starting point for calling shops.</p>
+      <div class="row"><div class="field"><label for="budMpy">Miles you drive per year</label><input id="budMpy" type="number" inputmode="numeric" min="500" step="500" value="5000"></div><button type="button" class="quiet" id="budReset">Reset picks</button></div>
+      <div id="budTotal"></div>
+      <div class="scroll"><table class="budget"><thead><tr><th>Item</th><th class="num">Shop</th><th class="num">DIY</th></tr></thead><tbody id="budBody"></tbody></table></div>
+    </section>
+    <section id="askBox" hidden>
+      <h2>Ask about my car</h2>
+      <p class="lede">Claude reads the summary of your records (service status, low-rated parts and notes, active codes, oil rate, latest run) and answers your question. It cannot see the car, so treat the answer as a lead to check.</p>
+      <div class="field"><label for="askQ">Question</label><textarea id="askQ" placeholder="What should I do first, and what can I do myself?"></textarea></div>
+      <div class="row"><button type="button" id="askGo">Ask</button><button type="button" class="quiet" id="askStop" hidden>Stop</button><span class="status" id="askStatus"></span></div>
+      <div class="answer" id="askOut" aria-live="polite">The answer shows here.</div>
+    </section>
+    <section>
+      <h2>Back up and restore</h2>
+      <div class="row">
+        <button type="button" class="quiet" id="exportBtn">Download backup</button>
+        <div class="field"><label for="importFile">Restore from backup (.json)</label><input id="importFile" type="file" accept=".json,application/json"></div>
+        <button type="button" class="quiet" id="importGo" hidden>Replace my data with this file</button>
+        <span class="status" id="backupStatus"></span>
+      </div>
+    </section>
+  </div>
+
+  <!-- RECORDS -->
+  <div class="panel" id="p-records" hidden>
+    <section class="card remind">
+      <h3>Reminders</h3>
+      <p class="lede">Put the checks on your calendar, so the car reminds you instead of you remembering it. Each button saves a calendar file. Open it on your iPhone to add it.</p>
+      <div class="row">
+        <button type="button" id="icsMonthly">Monthly 10-minute check</button>
+        <button type="button" class="quiet" id="icsDue">Next due services</button>
+        <span class="status" id="icsStatus" role="status"></span>
+      </div>
+    </section>
+    <section id="due">
+      <h2>What's due</h2>
+      <p class="lede">Each item compares the last record against its interval. Items tagged "verify" have sources that disagree, so confirm them against your owner's manual or a Volvo dealer.</p>
+      <div class="scroll"><table><thead><tr><th>Item</th><th class="num">Interval</th><th>Last done</th><th>Status</th></tr></thead><tbody id="dueBody"></tbody></table></div>
+    </section>
+    <section id="log">
+      <h2>Service log</h2>
+      <form id="logForm" class="row" autocomplete="off">
+        <div class="field"><label for="logDate">Date</label><input id="logDate" type="date" required></div>
+        <div class="field"><label for="logMiles">Odometer</label><input id="logMiles" type="number" inputmode="numeric" min="0" step="1" required></div>
+        <div class="field"><label for="logItem">Work done</label><select id="logItem"></select></div>
+        <div class="field" style="flex:1 1 14em"><label for="logNote">Notes (shop, parts, cost)</label><input id="logNote" class="wide" type="text" maxlength="200"></div>
+        <button type="submit">Add entry</button>
+      </form>
+      <div class="scroll"><table><thead><tr><th>Date</th><th class="num">Miles</th><th>Work</th><th>Notes</th><th></th></tr></thead><tbody id="logBody"></tbody></table></div>
+    </section>
+    <section id="oil">
+      <h2>Oil watch</h2>
+      <p class="lede">Early 2015 and 2016 Drive-E engines are known for burning oil, and Volvo's warranty process asks for a documented consumption test. A running record of oil-level checks gives you that paper trail and shows the trend early.</p>
+      <form id="oilForm" class="row" autocomplete="off">
+        <div class="field"><label for="oilDate">Date</label><input id="oilDate" type="date" required></div>
+        <div class="field"><label for="oilMiles">Odometer</label><input id="oilMiles" type="number" inputmode="numeric" min="0" step="1" required></div>
+        <div class="field"><label for="oilQts">Quarts added (0 if none)</label><input id="oilQts" type="number" inputmode="decimal" min="0" step="0.25" value="0" required></div>
+        <button type="submit">Add check</button>
+      </form>
+      <div class="card" id="oilReadout" style="display:flex;flex-wrap:wrap;gap:8px 28px;align-items:baseline"></div>
+      <div class="scroll"><table><thead><tr><th>Date</th><th class="num">Miles</th><th class="num">Quarts added</th><th></th></tr></thead><tbody id="oilBody"></tbody></table></div>
+      <p class="lede">The rate counts quarts added after your first check, divided by the miles since it. Start the log right after an oil change, when the level reads full.</p>
+    </section>
+  </div>
+
+  <!-- SIMULATOR -->
+  <div class="panel" id="p-sim" hidden>
+    <section>
+      <h2>Fault simulator</h2>
+      <p class="lede">Break the car on purpose and watch what the data does. The dashed line is a healthy V60 on the same drive, and the solid line is the car with your faults dialed in. Once your adapter arrives, your real logs will look familiar.</p>
+      <div class="row seg" role="group" aria-label="Mode"><button type="button" class="quiet" id="simModeS" aria-pressed="true">Sandbox</button><button type="button" class="quiet" id="simModeM" aria-pressed="false">Mystery car</button><span class="status" id="simScore"></span></div>
+    </section>
+    <section id="simControls" class="card">
+      <div class="row">
+        <div class="field"><label for="simRoute">Route</label><select id="simRoute"><option value="mixed">Mixed drive</option><option value="city">City stop-and-go</option><option value="highway">Highway with a merge</option><option value="traffic">Traffic jam, hot afternoon</option></select></div>
+        <div class="field" style="flex:1 1 14em"><label for="simAmb">Outside temperature <span id="simAmbV">24 °C / 75 °F</span></label><input type="range" id="simAmb" min="0" max="40" step="1" value="24"></div>
+        <button type="button" class="quiet" id="simReset">Reset to healthy</button>
+      </div>
+      <div class="faults" id="simFaults"></div>
+    </section>
+    <section id="simMystery" class="card" hidden>
+      <div id="simQ"></div>
+      <div class="row"><button type="button" id="simGuess">Lock in answer</button><button type="button" class="quiet" id="simHint">Show healthy reference (hint)</button><button type="button" class="quiet" id="simNext">New mystery car</button><span class="status" id="simRes" role="status"></span></div>
+      <div id="simReveal" hidden></div>
+    </section>
+    <section>
+      <div class="slegend"><span><i class="lg base"></i>Healthy V60</span><span><i class="lg now"></i>This car</span></div>
+      <div class="toggles" id="simShow" role="group" aria-label="Channels to chart"></div>
+      <div id="simCharts" style="display:flex;flex-direction:column;gap:10px"></div>
+      <h3>What the analyzer flags</h3>
+      <p class="lede" style="font-size:14px">These come from the same checks the Data lab runs on your real logs.</p>
+      <ul class="finds" id="simFinds"></ul>
+      <div id="simWhy" style="display:flex;flex-direction:column;gap:8px"></div>
+      <div class="row"><button type="button" class="quiet" id="simToLab">Open this drive in the Data lab</button></div>
+    </section>
+  </div>
+
+  <!-- MY V60 -->
+  <div class="panel" id="p-my" hidden>
+    <section>
+      <h2>My V60</h2>
+      <p class="lede">Facts about this exact car, decoded from its VIN through NHTSA. The VIN itself is not stored on this page.</p>
+      <dl class="kv" id="buildBody"></dl>
+    </section>
+    <section>
+      <h3>Spec sheet</h3>
+      <p class="lede">From Volvo's 2016 V60 US owner's manual and maintenance schedule. If something you find on the car or in Volvo's service information differs, record it under "Verified data for my car" below.</p>
+      <div class="specs" id="specSheet"></div>
+      <h4>Volvo's maintenance schedule for your engine</h4>
+      <ul class="sched" id="schedBody"></ul>
+    </section>
+    <section>
+      <h3>Safety recalls for 2016 V60s</h3>
+      <p class="lede">Each recall covers a range of cars, so some may not apply to yours, and some may already have been fixed. Check your VIN at <a href="https://www.nhtsa.gov/recalls" target="_blank" rel="noopener">nhtsa.gov/recalls</a> or call Volvo at 1-800-458-1552, then set each status. Open recalls are repaired free at any Volvo dealer.</p>
+      <ul class="finds" id="recallList"></ul>
+    </section>
+    <section>
+      <h3>Photo inspections</h3>
+      <p class="lede">Take a photo and Claude reviews it: tire date codes, tread, brake pads, fluid levels, leaks, warning lights. Photos are saved privately with this page and build a timeline for each part. A photo review is a second opinion, not an inspection.</p>
+      <div id="phTake" class="card" hidden>
+        <div class="row">
+          <div class="field"><label for="phKind">What is it?</label><select id="phKind"></select></div>
+          <div class="field"><label for="phPart">Part</label><select id="phPart"></select></div>
+          <div class="field" style="flex:1 1 14em"><label for="phNote">Note (optional)</label><input id="phNote" type="text" maxlength="200" class="wide"></div>
+        </div>
+        <div class="row">
+          <label class="filebtn"><input id="phFile" type="file" accept="image/*"><span>Take or choose a photo</span></label>
+          <span class="status" id="phStatus" role="status"></span>
+        </div>
+        <img id="phPreview" alt="Photo being reviewed" hidden style="max-width:min(100%,360px);border-radius:8px">
+      </div>
+      <p class="status" id="phNoStore" hidden>Photo storage is not available in this view. Open the page in Claude while signed in to take photos.</p>
+      <div class="row"><div class="field"><label for="phFilter">Show</label><select id="phFilter"></select></div></div>
+      <div class="phgrid" id="phGallery"></div>
+    </section>
+    <section>
+      <h3>Verified data for my car</h3>
+      <p class="lede">Exact numbers from Volvo's service information, a shop invoice or a part label. They take priority over every generic value on this page.</p>
+      <form id="specForm" class="row" autocomplete="off">
+        <div class="field"><label for="spK">What</label><input id="spK" type="text" maxlength="80" required placeholder="Wheel bolt torque"></div>
+        <div class="field"><label for="spV">Value</label><input id="spV" type="text" maxlength="120" required placeholder="140 Nm"></div>
+        <div class="field"><label for="spS">Source</label><input id="spS" type="text" maxlength="80" placeholder="Volvo service info"></div>
+        <button type="submit">Add</button>
+      </form>
+      <div class="scroll"><table><thead><tr><th>What</th><th>Value</th><th>Source</th><th class="num">Added</th><th></th></tr></thead><tbody id="specBody"></tbody></table></div>
+    </section>
+  </div>
+
+  <!-- UNLOCKS -->
+  <div class="panel" id="p-unlocks" hidden>
+    <section>
+      <h2>Unlocks</h2>
+      <p class="lede">Everything this page cannot do by itself, mapped to a real way to get it done, with cost, effort and risk. Researched October 2026. Prices change, and items marked "verify" could not be confirmed.</p>
+    </section>
+
+    <section>
+      <h3>1. Talk to the car live from your iPhone</h3>
+      <p>iPhones cannot use classic-Bluetooth adapters, and Safari cannot use Bluetooth from a web page at all. Three routes work, from easiest to most custom.</p>
+      <div class="cols">
+        <div class="card"><span class="pill ok">Easiest</span><h4>Adapter plus Car Scanner app</h4><p>Car Scanner ELM OBD2 reads and clears codes, freeze frames, emissions readiness, Mode 06 test results and live data, and exports CSV logs that the Data lab reads. Pro is $7.99 one-time. A recording saves when you tap Disconnect, so don't force-quit mid-drive.</p></div>
+        <div class="card"><span class="pill info">Custom</span><h4>V60 Link in Bluefy</h4><p>The companion page built for this garage. It runs in the free Bluefy browser with an OBDLink CX and exports reports and logs that import here. It has been tested against a simulated car only, so expect some first-connection troubleshooting. It needs to be hosted at a web address (see the note at the bottom).</p></div>
+        <div class="card"><span class="pill watch">New, untested</span><h4>iOSWebBLE Safari extension</h4><p>A free extension for iOS 26.2 and later that claims to add web Bluetooth to Safari. If it works, V60 Link would run in Safari too. It has not been tried here.</p></div>
+      </div>
+      <div class="scroll"><table>
+        <thead><tr><th>Adapter</th><th class="num">Price</th><th>Works on iPhone</th><th>Works with V60 Link</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><b>OBDLink CX</b></td><td class="num">$79.95</td><td>Yes, Bluetooth LE</td><td>Yes. Its data channel is documented.</td><td>Best match for V60 Link. Was listed out of stock at OBDLink when checked. Pairs only in the first 5 minutes after power-up.</td></tr>
+          <tr><td><b>Veepeak OBDCheck BLE+</b></td><td class="num">$41.99</td><td>Yes, Bluetooth LE</td><td>Probably <span class="tag verify">verify</span></td><td>Good value for scanner apps. The plain BLE version is $31.99.</td></tr>
+          <tr><td><b>Vgate iCar Pro</b></td><td class="num">~$25–33</td><td>Yes (BLE version)</td><td>Probably <span class="tag verify">verify</span></td><td>Car Scanner recommends the newer iCar Pro 2S. Update older firmware.</td></tr>
+          <tr><td><b>OBDLink MX+</b></td><td class="num">$139.95</td><td>Yes (Apple MFi)</td><td>No, it has no BLE radio</td><td>Fastest with apps, but it cannot talk to a web page.</td></tr>
+        </tbody>
+      </table></div>
+      <p class="status">Pick: an OBDLink CX if you want V60 Link. A Veepeak BLE+ with Car Scanner if you want the cheapest reliable start.</p>
+    </section>
+
+    <section>
+      <h3>2. Clear codes without wrecking your inspection</h3>
+      <ul class="plain">
+        <li>Texas dropped safety inspections for personal cars on January 1, 2025, but <b>Travis County still requires an emissions test</b>.</li>
+        <li>The test reads the readiness monitors. A 2001 or newer car may have <b>at most one</b> monitor not ready. Any check-engine light with a stored code fails.</li>
+        <li>Clearing codes, or disconnecting the battery, resets every monitor. A generic way to complete them: a cold start, stop-and-go driving up to about 30 mph, then 5 to 7 minutes at a steady 55 mph, repeated over a few days. Some evaporative-system tests need the car to sit about 8 hours first. A Volvo-specific drive cycle could not be confirmed.</li>
+        <li>Before an inspection, run a health check in V60 Link or Car Scanner and confirm readiness first.</li>
+      </ul>
+      <div class="note">Clearing is for confirming a repair, not for hiding a fault. Texas makes manipulating an emissions test result an offense.</div>
+    </section>
+
+    <section>
+      <h3>3. Read airbag, ABS, climate and body modules, plus Volvo-only data</h3>
+      <p>Phone apps reach the engine (and often the transmission) through standard OBD-II. None of the major iOS apps offers Volvo enhanced diagnostics: OBD Fusion and the OBDLink app do not list Volvo. Owners have reported a Car Scanner "Volvo 2010+" profile showing oil level and transmission temperature, but mostly on diesel cars and Android. Whether it works on your T5 is unconfirmed, and it costs nothing to try. <span class="tag verify">verify</span></p>
+      <div class="scroll"><table>
+        <thead><tr><th>Route</th><th>What it takes</th><th class="num">Cost</th></tr></thead>
+        <tbody>
+          <tr><td><b>Volvo VIDA, diagnostics tier</b></td><td>A personal account with a North American VIN, a Volvo DiCE interface, and a Windows 11 <b>Pro</b> PC (Intel i5 from late 2017 or newer, 16 GB RAM). Reads every module. It cannot run from an iPhone.</td><td class="num">$48.15 / 3 days<br><small>plus about $500 for a genuine DiCE, plus a required bulletin fee</small></td></tr>
+          <tr><td><b>Independent Volvo specialist</b></td><td>A shop with VIDA does a full-module scan.</td><td class="num">Shop rate <span class="tag verify">verify</span></td></tr>
+        </tbody>
+      </table></div>
+      <p class="status">For a one-off problem in a non-engine system, a specialist's scan will almost always cost less than buying DiCE and a qualifying PC.</p>
+    </section>
+
+    <section>
+      <h3>4. Software updates and module settings</h3>
+      <p>VIDA's top tier adds software downloads: $73.14 for 3 days, and each download is bought separately on top. A 3-day pass runs 72 hours straight and cannot be paused. Third-party J2534 interfaces can flash emissions modules only, so DiCE is still needed for the rest. The other route is a Volvo dealer, whose price for a software update could not be found. <span class="tag verify">verify</span></p>
+    </section>
+
+    <section>
+      <h3>5. More power</h3>
+      <p>The only factory-backed option is <b>Polestar Performance Optimization</b>, built for exactly your car: V60 T5 Drive-E FWD automatic, 2016. A Volvo dealer installs it in about an hour.</p>
+      <div class="scroll"><table>
+        <thead><tr><th></th><th class="num">Stock</th><th class="num">Polestar</th></tr></thead>
+        <tbody>
+          <tr><td>Peak power</td><td class="num">242 hp</td><td class="num">250 hp</td></tr>
+          <tr><td>Mid-range power</td><td class="num">197 hp</td><td class="num">218 hp</td></tr>
+          <tr><td>Torque</td><td class="num">258 lb-ft</td><td class="num">295 lb-ft</td></tr>
+          <tr><td>0–60 mph</td><td class="num">6.4 s</td><td class="num">6.3 s</td></tr>
+        </tbody>
+      </table></div>
+      <ul class="plain">
+        <li>Volvo states it does not affect the factory warranty or service intervals, and that it keeps certified emissions and fuel figures. The warranty point matters little at this age, but the emissions point matters for inspection.</li>
+        <li>The US price and whether dealers still sell it in 2026 could not be confirmed. Call a dealer and ask for article number 31459463. For reference, UK owners paid £700–800 in 2019. <span class="tag verify">verify</span></li>
+        <li>No emissions-legal aftermarket tune for the Drive-E T5 was found. Changing engine calibration counts as emissions tampering under the Clean Air Act, and Texas fines disabling emissions systems. Civil enforcement continues even though federal criminal prosecutions were scaled back in 2026.</li>
+      </ul>
+      <p class="status">The honest take: the gain is mostly mid-range torque, and 0–60 drops by a tenth. For this car's age and oil-consumption history, maintenance buys more than tuning.</p>
+    </section>
+
+    <section>
+      <h3>6. Recalls and the paper trail</h3>
+      <p>Look up open safety recalls by VIN at <a href="https://www.nhtsa.gov/recalls" target="_blank" rel="noopener">nhtsa.gov/recalls</a>. Repairs are free at a Volvo dealer. The lookup does not list recalls already repaired. The Academy's Recall check mission walks through it.</p>
+    </section>
+
+    <section>
+      <h3>Still impossible, honestly</h3>
+      <ul class="plain">
+        <li>Any web page, this one included, changing engine calibration or module coding.</li>
+        <li>Volvo's dealer software running on an iPhone.</li>
+        <li>Clearing a <i>permanent</i> code. Only the car's own self-test after a real fix clears it.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h3>Hosting V60 Link</h3>
+      <p>V60 Link is live at <a href="https://bmcdoorz94.github.io/V60-Link/" target="_blank" rel="noopener">bmcdoorz94.github.io/V60-Link</a>. On iPhone, open that address in the free Bluefy browser, because Safari cannot use Bluetooth. The simulated car mode works in any browser for practice.</p>
+    </section>
+
+    <section>
+      <h3>Sources</h3>
+      <ul class="plain src">
+        <li><a href="https://www.obdlink.com/products/obdlink-cx/" target="_blank" rel="noopener">OBDLink CX product page</a> · <a href="https://support.obdlink.com/support/solutions/articles/43000746707-obdlink-cx-adapter-notes" target="_blank" rel="noopener">OBDLink CX adapter notes</a> · <a href="https://scantool.net/obdlink-mxp/" target="_blank" rel="noopener">OBDLink MX+</a></li>
+        <li><a href="https://veepeak.com/products/obdcheck-ble-plus" target="_blank" rel="noopener">Veepeak OBDCheck BLE+</a> · <a href="https://www.carscanner.info/choosing-obdii-adapter/" target="_blank" rel="noopener">Car Scanner: choosing an adapter</a> · <a href="https://www.carscanner.info/records/" target="_blank" rel="noopener">Car Scanner: data recording</a></li>
+        <li><a href="https://apps.apple.com/us/app/car-scanner-elm-obd2/id1259933623" target="_blank" rel="noopener">Car Scanner on the App Store</a> · <a href="https://www.obdsoftware.net/software/obdfusion" target="_blank" rel="noopener">OBD Fusion</a> · <a href="https://apps.apple.com/us/app/obdlink/id879636351" target="_blank" rel="noopener">OBDLink app</a></li>
+        <li><a href="https://apps.apple.com/app/id1492822055" target="_blank" rel="noopener">Bluefy</a> · <a href="https://caniuse.com/web-bluetooth" target="_blank" rel="noopener">caniuse: Web Bluetooth</a> · <a href="https://apps.apple.com/us/app/ioswebble/id6761301368" target="_blank" rel="noopener">iOSWebBLE</a></li>
+        <li><a href="https://www.volvotechinfo.com/vida" target="_blank" rel="noopener">Volvo VIDA</a> · <a href="https://www.volvotechinfo.com/vida/computer-requirements" target="_blank" rel="noopener">VIDA computer requirements</a> · <a href="https://www.matthewsvolvosite.com/what-is-vida/" target="_blank" rel="noopener">Matthews Volvo Site: what is VIDA</a></li>
+        <li><a href="https://engineered-api.polestar.com/optimisations/v60-t5-drive-e-fwd-automatic-2016/productSheet?market=us" target="_blank" rel="noopener">Polestar optimization sheet, 2016 V60 T5 Drive-E</a> · <a href="https://volvocars.com/en-ca/l/polestar-optimization" target="_blank" rel="noopener">Volvo Canada: Polestar optimization</a></li>
+        <li><a href="https://www.epa.gov/node/226161" target="_blank" rel="noopener">EPA: tampering</a> · <a href="https://texas.public.law/statutes/tex._transp._code_section_547.605" target="_blank" rel="noopener">Tex. Transp. Code §547.605</a> · <a href="https://texas.public.law/statutes/tex._transp._code_section_548.6035" target="_blank" rel="noopener">§548.6035</a></li>
+        <li><a href="https://www.dps.texas.gov/news/icymi-vehicle-safety-inspection-changes-take-effect-january-2025" target="_blank" rel="noopener">Texas DPS: inspection changes 2025</a> · <a href="https://www.customsmobile.com/regulations/title40_chapterI-i24_part85_subpartW_section85.2222" target="_blank" rel="noopener">40 CFR 85.2222</a> · <a href="https://www.aa1car.com/library/us50326.htm" target="_blank" rel="noopener">AA1Car: readiness monitors</a></li>
+        <li><a href="https://www.volvocars.com/us/support/car/v60/2016/article/527f24d2b96b2c38c0a801e8000aafe8" target="_blank" rel="noopener">Volvo: checking oil, 2016 V60</a> · <a href="https://www.volvocars.com/us/support/car/v60/2016/article/f2de677bb96926f2c0a801e801c6ec9e" target="_blank" rel="noopener">Volvo: opening the hood, 2016 V60</a> · <a href="https://www.volvocars.com/lb/support/car/v60/2014/article/d3c1ac5ac4f2c44dc0a801e800026d36/" target="_blank" rel="noopener">Volvo: brake fluid</a></li>
+      </ul>
+    </section>
+
+  </div>
+
+  <!-- LEARN -->
+  <div class="panel" id="p-learn" hidden>
+    <section>
+      <h2>How it works</h2>
+      <p class="lede">The T5 is a small four-cylinder that uses a turbocharger to make the power of a bigger engine. The path air and oil take explains most of what goes wrong and why the maintenance list looks the way it does.</p>
+      <div class="diagram">
+        <svg viewBox="0 0 720 210" role="img" aria-label="Diagram of the intake air path, exhaust path and crankcase ventilation loop of a turbocharged four-cylinder engine">
+          <defs>
+            <marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L8 4 L0 8 z" class="head"/></marker>
+            <marker id="ahb" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L8 4 L0 8 z" class="headb"/></marker>
+          </defs>
+          <rect class="box" x="10" y="40" width="110" height="44" rx="3"/><text x="65" y="66" text-anchor="middle">Air filter</text>
+          <rect class="box" x="150" y="40" width="110" height="44" rx="3"/><text x="205" y="66" text-anchor="middle">Compressor</text>
+          <rect class="box" x="290" y="40" width="110" height="44" rx="3"/><text x="345" y="66" text-anchor="middle">Intercooler</text>
+          <rect class="box" x="430" y="40" width="110" height="44" rx="3"/><text x="485" y="66" text-anchor="middle">Throttle</text>
+          <rect class="engine" x="570" y="40" width="130" height="144" rx="3"/>
+          <text x="635" y="104" text-anchor="middle">Engine</text><text x="635" y="122" text-anchor="middle">4 cylinders</text><text x="635" y="152" text-anchor="middle" class="lab-b">crankcase</text>
+          <rect class="box" x="150" y="140" width="110" height="44" rx="3"/><text x="205" y="166" text-anchor="middle">Turbine</text>
+          <rect class="box" x="10" y="140" width="110" height="44" rx="3"/><text x="65" y="166" text-anchor="middle">Exhaust out</text>
+          <line class="flow" x1="120" y1="62" x2="148" y2="62" marker-end="url(#ah)"/>
+          <line class="flow" x1="260" y1="62" x2="288" y2="62" marker-end="url(#ah)"/>
+          <line class="flow" x1="400" y1="62" x2="428" y2="62" marker-end="url(#ah)"/>
+          <line class="flow" x1="540" y1="62" x2="568" y2="62" marker-end="url(#ah)"/>
+          <line class="flow" x1="570" y1="162" x2="262" y2="162" marker-end="url(#ah)"/>
+          <line class="flow" x1="150" y1="162" x2="122" y2="162" marker-end="url(#ah)"/>
+          <line class="shaft" x1="205" y1="84" x2="205" y2="140"/>
+          <text x="215" y="116">shared shaft</text>
+          <path class="pcv" d="M635 40 V14 H134 V58" marker-end="url(#ahb)"/>
+          <text x="385" y="30" text-anchor="middle" class="lab-b">PCV: crankcase vapors return to the intake</text>
+          <text x="410" y="182" text-anchor="middle">hot exhaust spins the turbine</text>
+        </svg>
+      </div>
+      <div class="cols">
+        <div><h3>Air in</h3><p>Air passes the filter, gets squeezed by the compressor, and is cooled in the intercooler so it packs more oxygen. The throttle meters it into the cylinders.</p></div>
+        <div><h3>Exhaust out</h3><p>Exhaust spins the turbine, which drives the compressor on a shared shaft. The turbine runs very hot and is lubricated by engine oil, so oil level and quality matter more on a turbo engine.</p></div>
+        <div><h3>Crankcase ventilation</h3><p>Some combustion gas always slips past the piston rings. The PCV system pulls those vapors back into the intake to be burned. If it clogs, crankcase pressure rises and oil can be pushed out of seals or drawn into the intake.</p></div>
+        <div><h3>Oil</h3><p>Oil lubricates, cools the pistons and feeds the turbo. Spec for your car, per Volvo's 2016 US manual: full synthetic ACEA A5/B5 SAE 5W-30, or Volvo's 0W-20 (VCC RBS0-2AE), such as Castrol Edge Professional. 6.2 US quarts (5.9 L) with the filter.</p></div>
+        <div><h3>Cooling</h3><p>The thermostat decides when coolant starts flowing through the radiator. Brake fluid absorbs moisture over time, which is why it is replaced on a calendar and not by miles.</p></div>
+        <div><h3>Automatic transmission</h3><p>An Aisin 8-speed. Volvo's published documents list no scheduled fluid change for normal driving, and some independent shops service it anyway. Use the exact fluid your gearbox variant needs and ask a dealer to confirm it by VIN.</p></div>
+      </div>
+    </section>
+    <section>
+      <h2>Known trouble</h2>
+      <div class="note"><b>Oil consumption is the big one.</b> Volvo issued service bulletins and extended-warranty programs for excessive oil consumption on 2015 and 2016 Drive-E engines, with a repair that replaces pistons and piston rings. The extended coverage was limited to 8 years from delivery or 100,000 miles, so on a 2016 it may already have run out. I could not confirm from the public bulletins whether your exact engine is on the covered list. Ask Volvo customer care or a dealer to check eligibility by VIN, mention your oil log, and ask about goodwill coverage.</div>
+      <div class="cols">
+        <div><h3>Clogged PCV</h3><p>One owner review describes oil burning at 110,000 miles traced to a clogged PCV system. That is a single account, not a failure rate, but it is a cheap thing to have inspected.</p></div>
+        <div><h3>Thermostat</h3><p>Owner comments on Consumer Reports and Edmunds mention thermostat failures. The same Edmunds reviewer says it is costly mainly because the intake has to come off. Anecdotal.</p></div>
+        <div><h3>Low oil warning</h3><p>A Volvo service bulletin covers a low oil level message on 2015 and 2016 Drive-E cars and points to piston and ring replacement when consumption stays high. If it appears, check the oil level in the instrument cluster right away and log it.</p></div>
+      </div>
+    </section>
+    <section>
+      <h2>What this page can and cannot do</h2>
+      <div class="cols">
+        <div><h3>Can</h3><p>Track service and part condition, rank what to fix first, look up codes, analyze exported scanner logs, keep a trend of saved runs, and answer questions about your records.</p></div>
+        <div><h3>Cannot, on its own</h3><p>Connect to the OBD port directly, since Bluetooth and USB are blocked inside pages like this. The companion page V60 Link does that part: live data, codes, readiness and guarded code clearing. Changing software or tuning the engine needs Volvo's or a tuner's tools. The Unlocks tab maps every one of these to a real route.</p><p><button type="button" class="quiet" data-jump="tab:unlocks">Open Unlocks</button></p></div>
+      </div>
+    </section>
+    <section>
+      <h2>Glossary</h2>
+      <dl class="gloss">
+        <dt>Drive-E</dt><dd>Volvo's family name for its newer 4-cylinder engines. Yours is the 2.0 L turbo petrol.</dd>
+        <dt>Turbocharger</dt><dd>A pump driven by exhaust gas that forces extra air into the engine.</dd>
+        <dt>Intercooler</dt><dd>A small radiator for the compressed air, since squeezing air heats it.</dd>
+        <dt>PCV</dt><dd>Positive crankcase ventilation. Routes crankcase vapors back into the intake.</dd>
+        <dt>Piston rings</dt><dd>Seals around each piston that keep combustion gas in and oil out of the cylinder.</dd>
+        <dt>Fuel trim</dt><dd>How much the engine computer adds or removes fuel to hit the right mixture. Short-term (STFT) reacts fast, long-term (LTFT) is the learned correction.</dd>
+        <dt>MAF</dt><dd>Mass air flow sensor. Measures air entering the engine.</dd>
+        <dt>MAP</dt><dd>Manifold absolute pressure. Intake pressure, which rises above outside air pressure under boost.</dd>
+        <dt>Thermostat</dt><dd>A valve that holds coolant back until the engine is warm.</dd>
+        <dt>ATF</dt><dd>Automatic transmission fluid.</dd>
+        <dt>OBD-II</dt><dd>The standard diagnostic port under the dash.</dd>
+        <dt>VIDA</dt><dd>Volvo's dealer software for service intervals, bulletins and procedures. Volvo's own sheets treat it as the primary source for intervals.</dd>
+        <dt>TSB</dt><dd>Technical service bulletin. A manufacturer notice to dealers about a known problem and its fix. Not the same as a recall.</dd>
+        <dt>Extended warranty program</dt><dd>Coverage a manufacturer adds for a specific known defect after the normal warranty ends, usually with its own time and mileage limits.</dd>
+      </dl>
+    </section>
+    <section id="sources">
+      <h2>Sources</h2>
+      <ul class="src">
+        <li><a href="https://volvocars.com/uk/support/car/v60/15w17/article/3b599b62f78d1b3ac0a801e80197d148" target="_blank" rel="noopener">Volvo: engine oil grade and volume (V60)</a></li>
+        <li><a href="https://vehicle.firestonecompleteautocare.com/volvo/v60/2016/maintenance/" target="_blank" rel="noopener">Firestone: 2016 V60 maintenance schedule, checks every 10,000 miles</a></li>
+        <li><a href="https://uk.haynes.com/pages/maintenance-plans-car-volvo-s60-v60-2011-2018" target="_blank" rel="noopener">Haynes: Volvo S60/V60 2011-2018 maintenance plans</a></li>
+        <li><a href="https://uk.haynes.com/pages/maintenance-plans-car-volvo-s60-v60" target="_blank" rel="noopener">Haynes: typical intervals for coolant and brake pads</a></li>
+        <li><a href="https://static.nhtsa.gov/odi/tsbs/2023/MC-10242508-9999.pdf" target="_blank" rel="noopener">Volvo extended warranty P10186, 4-cylinder oil consumption (NHTSA)</a></li>
+        <li><a href="https://static.nhtsa.gov/odi/tsbs/2016/SB-10075244-5448.pdf" target="_blank" rel="noopener">Volvo bulletin: Drive-E low oil level message (NHTSA)</a></li>
+        <li><a href="https://www.fcpeuro.com/blog/how-to-service-volvo-p2-p3-spa-xc90-s60-v70-automatic-transmission" target="_blank" rel="noopener">FCP Euro: servicing the Aisin automatic (a parts seller's view)</a></li>
+        <li><a href="https://www.volvocars.com/au/support/car/v60/article/b51abbf67feb476ec0a8015139ecc710/" target="_blank" rel="noopener">Volvo: transmission fluid specifications (later V60 generation)</a></li>
+        <li><a href="https://www.edmunds.com/volvo/v60/2015/consumer-reviews/" target="_blank" rel="noopener">Edmunds: 2015 V60 owner reviews</a></li>
+        <li><a href="https://www.carcomplaints.com/Volvo/S60/2015/engine/engine.shtml" target="_blank" rel="noopener">CarComplaints: 2015 S60 engine owner reports</a></li>
+      </ul>
+      <p class="lede">Part descriptions, code meanings, symptom lists and data-lab thresholds are general automotive knowledge, not Volvo-specific specs. Service intervals marked "verify" differ between sources, and some come from other model years or from UK plans in kilometers, converted here. Volvo's dealer system is the final word for your VIN.</p>
+    </section>
+  </div>
+</main>
+

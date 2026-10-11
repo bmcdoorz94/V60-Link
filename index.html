@@ -2,655 +2,574 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>V60 Link</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<style>
-/* V60 Link: direct OBD-II link over Bluetooth LE (ELM327-type adapters). Same workshop look as V60 Garage. */
-:root {
-  --bg: #0e1418; --panel: #151e24; --panel2: #1c2830; --ink: #e7eef2; --muted: #8c9eab; --line: #27363f;
-  --accent: #f0a63a; --accent-ink: #1b1204; --teal: #52c7b8;
-  --ok: #74d097; --ok-bg: #16301f; --warn: #f0a63a; --warn-bg: #3a2d12; --bad: #ff7d66; --bad-bg: #40201a; --none-bg: #222f37;
-  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
-  --font-body: "IBM Plex Sans", system-ui, sans-serif;
-  --font-data: "IBM Plex Mono", ui-monospace, monospace;
-  color-scheme: dark;
-}
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) {
-    --bg: #eef1f3; --panel: #fbfcfd; --panel2: #e6ebef; --ink: #1b2a36; --muted: #546673; --line: #c7d1d8;
-    --accent: #a8650a; --accent-ink: #ffffff; --teal: #0f7c70;
-    --ok: #2f6b3f; --ok-bg: #d9ead9; --warn: #8a5a00; --warn-bg: #f6e7c4; --bad: #a3321f; --bad-bg: #f4d7d1; --none-bg: #e2e7eb; color-scheme: light;
-  }
-}
-:root[data-theme="light"] {
-  --bg: #eef1f3; --panel: #fbfcfd; --panel2: #e6ebef; --ink: #1b2a36; --muted: #546673; --line: #c7d1d8;
-  --accent: #a8650a; --accent-ink: #ffffff; --teal: #0f7c70;
-  --ok: #2f6b3f; --ok-bg: #d9ead9; --warn: #8a5a00; --warn-bg: #f6e7c4; --bad: #a3321f; --bad-bg: #f4d7d1; --none-bg: #e2e7eb; color-scheme: light;
-}
-* { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
-body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.55; padding: 18px 16px 56px; }
-main { max-width: 860px; margin-inline: auto; display: flex; flex-direction: column; gap: 22px; }
-[hidden] { display: none !important; }
-h1, h2, h3 { font-family: var(--font-display); font-weight: 600; margin: 0; letter-spacing: 0.01em; }
-h1 { font-size: clamp(38px, 9vw, 56px); line-height: 0.95; text-transform: uppercase; }
-h2 { font-size: 24px; text-transform: uppercase; }
-h3 { font-size: 18px; }
-p { margin: 0; max-width: 66ch; }
-a { color: var(--accent); }
-.eyebrow { font-family: var(--font-data); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-.lede { color: var(--muted); }
-section { display: flex; flex-direction: column; gap: 12px; }
-.card { border: 1px solid var(--line); background: var(--panel); border-radius: 4px; padding: 14px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
-.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-button { font: inherit; font-weight: 600; cursor: pointer; border-radius: 3px; padding: 10px 16px; background: var(--accent); color: var(--accent-ink); border: 1px solid var(--accent); min-height: 44px; }
-button.quiet { background: transparent; color: var(--ink); border-color: var(--line); font-weight: 500; }
-button.danger { background: var(--bad); border-color: var(--bad); color: #fff; }
-button:disabled { opacity: 0.45; cursor: not-allowed; }
-button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-input[type="text"] { font: inherit; font-family: var(--font-data); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 3px; padding: 9px 10px; width: 10em; }
-.status { font-family: var(--font-data); font-size: 12.5px; color: var(--muted); }
-.conn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-data); font-size: 13px; }
-.conn i { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); display: inline-block; }
-.conn.on i { background: var(--ok); }
-.conn.busy i { background: var(--warn); }
-.note { border-left: 4px solid var(--warn); background: var(--warn-bg); padding: 11px 14px; border-radius: 0 4px 4px 0; }
-.note.bad { border-left-color: var(--bad); background: var(--bad-bg); }
-.note.calm { border-left-color: var(--teal); background: var(--panel2); }
-.pill { display: inline-block; font-family: var(--font-data); font-size: 11px; padding: 2px 8px; border-radius: 99px; white-space: nowrap; }
-.pill.ok { background: var(--ok-bg); color: var(--ok); }
-.pill.watch { background: var(--warn-bg); color: var(--warn); }
-.pill.bad { background: var(--bad-bg); color: var(--bad); }
-.pill.info { background: var(--none-bg); color: var(--muted); }
-.list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
-.list li { border: 1px solid var(--line); border-radius: 4px; background: var(--panel); padding: 10px 12px; display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; align-items: start; }
-.list li .d { grid-column: 2; color: var(--muted); font-size: 13.5px; }
-.code { font-family: var(--font-data); font-weight: 500; }
-.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
-.tile { border: 1px solid var(--line); border-radius: 4px; background: var(--panel); padding: 10px 12px; min-width: 0; }
-.tile .k { font-family: var(--font-data); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
-.tile .v { font-family: var(--font-display); font-size: 32px; line-height: 1.05; font-variant-numeric: tabular-nums; }
-.tile .u { font-family: var(--font-data); font-size: 12px; color: var(--muted); margin-left: 4px; }
-.picks { display: flex; flex-wrap: wrap; gap: 6px 14px; }
-.picks label { display: inline-flex; gap: 6px; align-items: center; font-size: 14px; }
-.picks label.na { opacity: 0.45; }
-.mon { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 6px; }
-.mon div { display: flex; justify-content: space-between; gap: 8px; border: 1px solid var(--line); border-radius: 3px; padding: 6px 10px; background: var(--panel); font-size: 14px; }
-.kv { display: grid; grid-template-columns: auto 1fr; gap: 4px 16px; font-size: 14px; }
-.kv dt { color: var(--muted); font-family: var(--font-data); font-size: 12.5px; }
-.kv dd { margin: 0; font-family: var(--font-data); }
-.checks label { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; }
-.checks input { margin-top: 4px; width: 18px; height: 18px; flex: none; }
-pre.log { margin: 0; max-height: 260px; overflow: auto; font-family: var(--font-data); font-size: 12px; background: var(--panel2); border: 1px solid var(--line); border-radius: 4px; padding: 10px; white-space: pre-wrap; word-break: break-all; }
-details summary { cursor: pointer; font-weight: 600; }
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>V60 Garage</title>
+<meta name="description" content="A workshop, classroom and logbook for one 2016 Volvo V60 T5.">
+<meta name="theme-color" content="#13232e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="V60 Garage">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira:wdth,wght@75..125,400..800&family=Atkinson+Hyperlegible+Next:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="app.css?v=53ec1a57">
 </head>
 <body>
+
+
+<div class="updatebar" id="updateBar" hidden role="status"><span>A new version of V60 Garage is ready.</span><button type="button">Refresh</button></div>
 <main>
-  <header>
-    <div class="eyebrow">Companion to V60 Garage</div>
-    <h1>V60 Link</h1>
-    <p class="lede" style="margin-top:8px">Talks to your car through a Bluetooth LE OBD-II adapter. It can read codes, freeze frames and emissions readiness, record live data, and clear codes with safeguards. The results export to V60 Garage.</p>
+  <header class="cockpit">
+    <div class="ident">
+      <h1>V60 Garage</h1>
+      <p class="sub">2016 V60 T5 Premier, B4204T11 2.0 turbo, front-wheel drive</p>
+    </div>
+    <div class="instruments">
+      <button type="button" class="gauge" data-jump="tab:health" aria-label="Health score, open Health">
+        <svg viewBox="0 0 120 74" aria-hidden="true"><path class="g-track" d="M12 66 A48 48 0 0 1 108 66"/><path class="g-fill" id="gFill" d="M12 66 A48 48 0 0 1 108 66" pathLength="100"/><g class="g-ticks"><line x1="12" y1="66" x2="20" y2="66"/><line x1="60" y1="18" x2="60" y2="26"/><line x1="108" y1="66" x2="100" y2="66"/><line x1="26" y1="32" x2="31.7" y2="37.7"/><line x1="94" y1="32" x2="88.3" y2="37.7"/></g></svg>
+        <span class="g-val" id="hudScore">--</span><span class="g-lab">Health</span>
+      </button>
+      <button type="button" class="rankchip" data-jump="tab:academy" aria-label="Rank, open Academy"><span class="rk" id="hudRank">Lv 1</span><span class="rn" id="hudRankName">Passenger</span></button>
+      <label class="odo"><span>Odometer</span><span class="odo-in"><input id="odo" type="number" inputmode="numeric" min="0" step="1" placeholder="95000"><i>mi</i></span></label>
+    </div>
+    <p class="status savest" id="saveStatus" role="status">Loading your saved data</p>
   </header>
+  <nav class="rail" id="rail" aria-label="Sections"></nav>
+  <nav class="subnav" id="subnav" role="tablist" aria-label="Pages in this section"></nav>
 
-  <section class="card" aria-labelledby="h-conn">
-    <h2 id="h-conn">Connect</h2>
-    <div class="row">
-      <span class="conn" id="conn" role="status"><i></i><span id="connText">Not connected</span></span>
-    </div>
-    <div id="noBt" class="note" hidden></div>
-    <div class="row">
-      <button type="button" id="btnConnect">Connect adapter</button>
-      <button type="button" class="quiet" id="btnDemo">Try with a simulated car</button>
-      <button type="button" class="quiet" id="btnDisconnect" disabled>Disconnect</button>
-    </div>
-    <details>
-      <summary>Before you connect</summary>
-      <ol style="margin:8px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:4px">
-        <li>Plug the adapter into the OBD-II port under the dashboard on the driver's side.</li>
-        <li>Turn the ignition on. The engine can be off to read codes, but it must be running for live data.</li>
-        <li>Do not pair the adapter in your phone's Bluetooth settings. This page finds it directly.</li>
-        <li>Tap Connect and pick the adapter from the list. Its name is often OBDII, OBDBLE, IOS-Vlink, OBDLink CX or similar.</li>
-        <li>Close any other OBD app first, because only one app can talk to the adapter at a time.</li>
-        <li>OBDLink CX: it accepts a new pairing only during the first 5 minutes after it powers up. If it does not show up, unplug it, plug it back in, and connect right away.</li>
-      </ol>
-    </details>
-  </section>
+  <!-- ACADEMY -->
+  <div class="panel" id="p-academy">
+    <section>
+      <h2>Academy</h2>
+      <p class="lede">Learn the car from zero by playing through it. Short lessons with quizzes, real checks at the car, and shop jobs where you diagnose a customer's problem.</p>
+    </section>
+    <div id="acadBody" style="display:flex;flex-direction:column;gap:18px"></div>
+  </div>
 
-  <section class="card" aria-labelledby="h-scan">
-    <h2 id="h-scan">Health check</h2>
-    <p class="lede">Reads the VIN, the check-engine light, stored, pending and permanent codes from every module that answers, the freeze frame, and emissions readiness. Engine off with ignition on is fine.</p>
-    <div class="row"><button type="button" id="btnScan" disabled>Run health check</button><span class="status" id="scanStatus"></span></div>
-    <div id="scanOut" hidden>
-      <h3 style="margin-top:6px">Summary</h3>
-      <ul class="list" id="summary"></ul>
-      <h3>Codes</h3>
-      <ul class="list" id="codes"></ul>
-      <h3>Freeze frame</h3>
-      <p class="lede" style="font-size:14px">A snapshot the engine computer saved at the moment the first code set.</p>
-      <dl class="kv" id="freeze"></dl>
-      <h3>Emissions readiness</h3>
-      <p class="lede" style="font-size:14px">Self-tests the computer runs during normal driving. A monitor that is "not ready" has not finished since codes were last cleared or the battery was disconnected.</p>
-      <div class="mon" id="monitors"></div>
-      <dl class="kv" id="since"></dl>
-      <div class="row">
-        <button type="button" id="btnReport">Save report for V60 Garage</button>
-        <button type="button" class="quiet" id="btnShareReport" hidden>Share report</button>
-        <span class="status" id="reportStatus"></span>
+  <!-- ENGINE BAY -->
+  <div class="panel" id="p-engine" hidden>
+    <section>
+      <h2>Engine bay</h2>
+      <p class="lede">A top-down map of your engine bay, with the front bumper at the top and the driver side on the left. Solid parts sit where Volvo's manual puts them. Dashed parts with a question mark are definitely on your car, but their exact position is not confirmed. Pin them on your own photo to make the map exact.</p>
+      <div class="row seg" id="ebMode" role="group" aria-label="View"></div>
+    </section>
+    <div class="ebwrap">
+      <div class="ebmain">
+        <div id="ebStage" class="ebstage"></div>
+        <div id="ebPhotoTools" class="row" hidden>
+          <div class="field"><label for="ebPhotoSel">Photo</label><select id="ebPhotoSel"></select></div>
+          <div class="field"><label for="ebPinSel">Pin a part</label><select id="ebPinSel"></select></div>
+          <button type="button" class="quiet" id="ebUnpin">Remove selected pin</button>
+          <p class="status" id="ebPinHelp"></p>
+        </div>
+        <div class="toggles" id="ebLayers" role="group" aria-label="Overlay layers"></div>
       </div>
+      <aside class="ebside">
+        <div class="row"><button type="button" id="ebGameBtn">Play: find it</button></div>
+        <div id="ebGame"></div>
+        <div id="ebInfo" class="ebinfo"></div>
+        <div id="ebLayerInfo"></div>
+      </aside>
     </div>
-  </section>
+  </div>
 
-  <section class="card" aria-labelledby="h-live">
-    <h2 id="h-live">Live data</h2>
-    <p class="lede">Pick channels, start recording, and drive. Fewer channels give a faster update rate. The recording saves as a CSV that V60 Garage's Data lab reads directly. Have a passenger run it, or set it up before you drive.</p>
-    <div class="picks" id="picks" role="group" aria-label="Channels to record"></div>
-    <div class="row">
-      <button type="button" id="btnLive" disabled>Start recording</button>
-      <button type="button" class="quiet" id="btnCsv" disabled>Save CSV</button>
-      <button type="button" class="quiet" id="btnShareCsv" hidden>Share CSV</button>
-      <span class="status" id="liveStatus"></span>
-    </div>
-    <div class="tiles" id="tiles"></div>
-  </section>
+  <!-- BAY -->
+  <div class="panel" id="p-bay" hidden>
+    <section>
+      <h2>The bay</h2>
+      <p class="lede">Pick a system to see its parts, what wears out, and how to check it. Rate each part as you inspect it and the pins turn into a heat map of the whole car. Ratings stay on this page and feed the Health tab.</p>
+      <div class="row">
+        <div class="field"><label for="overlay">Pin colors show</label>
+          <select id="overlay"><option value="cond">Condition you rated</option><option value="maint">Service intervals</option></select>
+        </div>
+        <div class="legend" aria-label="Pin color legend"><span><i style="background:var(--ok)"></i>Good</span><span><i style="background:var(--warn)"></i>Watch</span><span><i style="background:var(--bad)"></i>Act</span><span><i style="background:var(--none)"></i>Unrated</span></div>
+      </div>
+      <div class="bay" id="bayDiagram"></div>
+      <div class="sysrow" id="sysRow" role="group" aria-label="Systems"></div>
+    </section>
+    <section id="sysDetail"></section>
+    <div class="note"><b>Safety.</b> Support the car on jack stands, never a jack alone. Leave airbags, high-pressure fuel lines and anything on the brake hydraulics you are not sure about to a shop. "Easy" means driveway and basic tools, "Moderate" means hand tools and patience, "Shop" means special tools or safety systems.</div>
+  </div>
 
-  <section class="card" aria-labelledby="h-clear">
-    <h2 id="h-clear">Clear codes</h2>
-    <div class="note bad">Clearing codes turns the light off, but it does not fix anything. It also erases the freeze frame and resets every readiness monitor to "not ready." Until you drive enough for the monitors to finish, the car can fail a Texas emissions inspection. If the fault is still there, the light comes back.</div>
-    <p class="lede">Unlocks only after a health check in this session, so the codes and freeze frame are saved first.</p>
-    <div class="checks" id="clearChecks">
-      <label><input type="checkbox" id="ck1" disabled> <span>I saved the health-check report (the Save report button ticks this automatically).</span></label>
-      <label><input type="checkbox" id="ck2" disabled> <span>I know what caused the code, or I fixed it and want to confirm the repair.</span></label>
-      <label><input type="checkbox" id="ck3" disabled> <span>I am not within about a week of an emissions inspection.</span></label>
-      <label><input type="checkbox" id="ck4" disabled> <span>The engine is off and the ignition is on. The page checks this before it sends the command.</span></label>
-    </div>
-    <div class="row">
-      <label for="clearWord" class="status">Type CLEAR to confirm</label>
-      <input type="text" id="clearWord" autocomplete="off" autocapitalize="characters" disabled>
-      <button type="button" class="danger" id="btnClear" disabled>Clear codes</button>
-    </div>
-    <span class="status" id="clearStatus"></span>
-  </section>
+  <!-- DIAGNOSE -->
+  <div class="panel" id="p-diag" hidden>
+    <section>
+      <h2>Quick symptom lookup</h2>
+      <p class="lede">Pick what you notice for the usual suspects, cheapest checks first. For a step-by-step diagnosis that asks questions, use <button type="button" class="quiet" data-jump="tab:trouble">Troubleshoot</button>.</p>
+      <div class="field" style="max-width:26em"><label for="symSel">What is it doing?</label><select id="symSel"></select></div>
+      <div id="symOut"></div>
+    </section>
+    <section>
+      <h2>Trouble code lookup</h2>
+      <p class="lede">Type an OBD-II code from a scanner. The meaning comes from the standard definitions; the causes are the common ones, not a diagnosis.</p>
+      <div class="field" style="max-width:16em"><label for="codeIn">Code</label><input id="codeIn" class="mono" type="text" maxlength="5" placeholder="P0128" autocomplete="off" spellcheck="false"></div>
+      <div id="codeOut"></div>
+    </section>
+    <section>
+      <h2>Code log</h2>
+      <form id="codeForm" class="row" autocomplete="off">
+        <div class="field"><label for="clCode">Code</label><input id="clCode" class="mono" type="text" maxlength="5" required style="width:7em"></div>
+        <div class="field"><label for="clDate">Date</label><input id="clDate" type="date" required></div>
+        <div class="field"><label for="clMiles">Odometer</label><input id="clMiles" type="number" inputmode="numeric" min="0" step="1"></div>
+        <div class="field"><label for="clState">State</label><select id="clState"><option value="active">Active</option><option value="cleared">Cleared, may return</option><option value="resolved">Fixed</option></select></div>
+        <div class="field" style="flex:1 1 14em"><label for="clNote">Notes</label><input id="clNote" class="wide" type="text" maxlength="200"></div>
+        <button type="submit">Add code</button>
+      </form>
+      <div class="scroll"><table><thead><tr><th>Code</th><th>Meaning</th><th class="num">Date</th><th class="num">Miles</th><th>State</th><th></th></tr></thead><tbody id="codeBody"></tbody></table></div>
+      <div class="row"><div class="field"><label for="linkFile">Import a V60 Link report (.json)</label><input id="linkFile" type="file" accept=".json,application/json"></div><span class="status" id="linkStatus" role="status"></span></div>
+      <div id="lastScan"></div>
+    </section>
+    <div class="note calm"><b>What a generic scanner covers.</b> A basic OBD-II adapter reads engine and emissions codes. Airbag, ABS, transmission detail and Volvo-specific codes usually need Volvo-aware software such as the dealer's VIDA or a capable aftermarket tool.</div>
+  </div>
 
-  <section class="card" aria-labelledby="h-log">
-    <details>
-      <summary id="h-log">Adapter conversation</summary>
-      <p class="lede" style="margin:8px 0">Every command sent and every reply, for troubleshooting.</p>
-      <pre class="log" id="log"></pre>
-      <div class="row" style="margin-top:8px"><button type="button" class="quiet" id="btnCopyLog">Copy log</button></div>
-    </details>
-  </section>
+  <!-- DATA LAB -->
+  <div class="panel" id="p-lab" hidden>
+    <section>
+      <h2>Data lab</h2>
+      <p class="lede">Load a log from a scanner app and the lab checks warm-up, fuel trims, charging, idle and boost, then charts every channel on a shared time axis. This page cannot talk to the car's port itself, so the car-to-page link is an exported file.</p>
+      <details class="card">
+        <summary><b>How to get a log from the car</b></summary>
+        <div class="pbody">
+          <ol>
+            <li>Plug a Bluetooth or Wi-Fi ELM327-type OBD-II adapter into the port under the dash.</li>
+            <li>Use a scanner app that records data to a file, such as Car Scanner, Torque or OBD Fusion, and log at least coolant temperature, RPM, speed, fuel trims, battery voltage and intake pressure.</li>
+            <li>Drive a normal mix: cold start, some city, some steady highway, and one firm acceleration if safe.</li>
+            <li>Export the log as CSV and load it below. Both one-column-per-channel files and files with PID and VALUE columns are read. If a channel is missed, the mapping step lets you pick the column.</li>
+          </ol>
+          <p class="lede">Logging is read-only. Nothing here writes to the car or tunes the engine.</p>
+        </div>
+      </details>
+      <div class="row">
+        <div class="field"><label for="labFile">Scanner log (.csv)</label><input id="labFile" type="file" accept=".csv,.txt,text/csv,text/plain"></div>
+        <button type="button" class="quiet" id="labDemo">Load demo drive</button>
+        <div class="field"><label for="tempU">Temperature in file</label><select id="tempU"><option value="auto">Auto</option><option value="C">Celsius</option><option value="F">Fahrenheit</option></select></div>
+        <div class="field"><label for="speedU">Speed in file</label><select id="speedU"><option value="auto">Auto</option><option value="kph">km/h</option><option value="mph">mph</option></select></div>
+      </div>
+      <p class="status" id="labStatus">No log loaded yet.</p>
+    </section>
+    <section id="labBody" hidden>
+      <div class="note" id="demoNote" hidden><b>Demo data.</b> This drive is generated by the page to show the tools. It is not from your car and cannot be saved to your records.</div>
+      <h3>Channel mapping</h3>
+      <div class="map" id="mapGrid"></div>
+      <h3>Findings</h3>
+      <ul class="finds" id="finds"></ul>
+      <h3>Channel statistics</h3>
+      <div class="scroll"><table><thead><tr><th>Channel</th><th class="num">Min</th><th class="num">Mean</th><th class="num">Max</th><th class="num">5th to 95th</th></tr></thead><tbody id="statBody"></tbody></table></div>
+      <div class="row"><button type="button" id="saveRun">Save this run to my records</button><span class="status" id="runStatus"></span></div>
+      <h3>Traces</h3>
+      <div class="toggles" id="toggles" role="group" aria-label="Channels to chart"></div>
+      <div id="charts" style="display:flex;flex-direction:column;gap:10px"></div>
+    </section>
+    <section>
+      <h2>Saved runs</h2>
+      <p class="lede">Save a run after each log to see how coolant warm-up, fuel trims, charging and idle change over weeks. A drift matters more than any single number.</p>
+      <div class="scroll"><table><thead><tr><th class="num">Date</th><th class="num">Miles</th><th class="num">Minutes</th><th class="num">Coolant max</th><th class="num">Warm-up</th><th class="num">LTFT</th><th class="num">STFT</th><th class="num">Volts</th><th class="num">Idle rpm</th><th class="num">Flags</th><th></th></tr></thead><tbody id="runBody"></tbody></table></div>
+      <h3>Drift against your baseline</h3>
+      <p class="lede">Your baseline is the median of your earlier saved runs, so the page compares the car with itself rather than with a generic spec. It needs at least three saved runs. Warm-up time depends on outside temperature, so compare runs from similar weather.</p>
+      <ul class="finds" id="driftFinds"></ul>
+      <div class="sparks" id="sparks"></div>
+    </section>
+  </div>
 
-  <section class="card">
-    <h2>Limits</h2>
-    <ul style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px">
-      <li>This page uses standard OBD-II only: engine and emissions data, plus codes from any module that answers the standard request. Airbag, ABS, climate and body modules use Volvo's own diagnostics, which need Volvo's tools.</li>
-      <li>It needs an adapter that speaks Bluetooth LE. Classic-Bluetooth adapters do not appear on iPhone or in web browsers.</li>
-      <li>It works in Bluefy on iPhone, and in Chrome or Edge on Android, Windows, Mac and ChromeOS. Safari cannot use Bluetooth from a web page.</li>
-      <li>It does not change module settings, software or engine tuning.</li>
-      <li>The emissions verdict applies the federal readiness rule (40 CFR 85.2222). The inspection station's result is the one that counts.</li>
-    </ul>
-  </section>
+  <!-- HEALTH -->
+  <div class="panel" id="p-health" hidden>
+    <section>
+      <h2>Health</h2>
+      <p class="lede">A prioritizer built from what you have entered: service status, part ratings, active codes, oil use and your latest saved run. It ranks your to-do list and is not a diagnosis. Inputs you have not entered are left out, and the page says how many it used.</p>
+      <div class="score card" id="scoreCard"></div>
+    </section>
+    <section>
+      <h2>Fix first</h2>
+      <ul class="actions" id="actions"></ul>
+    </section>
+    <section>
+      <h2>Next 12 months</h2>
+      <p class="lede">What is due or likely, with national price ranges researched in October 2026. Tick items in or out to build your own budget. Austin quotes will differ, so treat these as a starting point for calling shops.</p>
+      <div class="row"><div class="field"><label for="budMpy">Miles you drive per year</label><input id="budMpy" type="number" inputmode="numeric" min="500" step="500" value="5000"></div><button type="button" class="quiet" id="budReset">Reset picks</button></div>
+      <div id="budTotal"></div>
+      <div class="scroll"><table class="budget"><thead><tr><th>Item</th><th class="num">Shop</th><th class="num">DIY</th></tr></thead><tbody id="budBody"></tbody></table></div>
+    </section>
+    <section id="askBox" hidden>
+      <h2>Ask about my car</h2>
+      <p class="lede">Claude reads the summary of your records (service status, low-rated parts and notes, active codes, oil rate, latest run) and answers your question. It cannot see the car, so treat the answer as a lead to check.</p>
+      <div class="field"><label for="askQ">Question</label><textarea id="askQ" placeholder="What should I do first, and what can I do myself?"></textarea></div>
+      <div class="row"><button type="button" id="askGo">Ask</button><button type="button" class="quiet" id="askStop" hidden>Stop</button><span class="status" id="askStatus"></span></div>
+      <div class="answer" id="askOut" aria-live="polite">The answer shows here.</div>
+    </section>
+    <section>
+      <h2>Back up and restore</h2>
+      <div class="row">
+        <button type="button" class="quiet" id="exportBtn">Download backup</button>
+        <div class="field"><label for="importFile">Restore from backup (.json)</label><input id="importFile" type="file" accept=".json,application/json"></div>
+        <button type="button" class="quiet" id="importGo" hidden>Replace my data with this file</button>
+        <span class="status" id="backupStatus"></span>
+      </div>
+    </section>
+  </div>
+
+  <!-- RECORDS -->
+  <div class="panel" id="p-records" hidden>
+    <section class="card remind">
+      <h3>Reminders</h3>
+      <p class="lede">Put the checks on your calendar, so the car reminds you instead of you remembering it. Each button saves a calendar file. Open it on your iPhone to add it.</p>
+      <div class="row">
+        <button type="button" id="icsMonthly">Monthly 10-minute check</button>
+        <button type="button" class="quiet" id="icsDue">Next due services</button>
+        <span class="status" id="icsStatus" role="status"></span>
+      </div>
+    </section>
+    <section id="due">
+      <h2>What's due</h2>
+      <p class="lede">Each item compares the last record against its interval. Items tagged "verify" have sources that disagree, so confirm them against your owner's manual or a Volvo dealer.</p>
+      <div class="scroll"><table><thead><tr><th>Item</th><th class="num">Interval</th><th>Last done</th><th>Status</th></tr></thead><tbody id="dueBody"></tbody></table></div>
+    </section>
+    <section id="log">
+      <h2>Service log</h2>
+      <form id="logForm" class="row" autocomplete="off">
+        <div class="field"><label for="logDate">Date</label><input id="logDate" type="date" required></div>
+        <div class="field"><label for="logMiles">Odometer</label><input id="logMiles" type="number" inputmode="numeric" min="0" step="1" required></div>
+        <div class="field"><label for="logItem">Work done</label><select id="logItem"></select></div>
+        <div class="field" style="flex:1 1 14em"><label for="logNote">Notes (shop, parts, cost)</label><input id="logNote" class="wide" type="text" maxlength="200"></div>
+        <button type="submit">Add entry</button>
+      </form>
+      <div class="scroll"><table><thead><tr><th>Date</th><th class="num">Miles</th><th>Work</th><th>Notes</th><th></th></tr></thead><tbody id="logBody"></tbody></table></div>
+    </section>
+    <section id="oil">
+      <h2>Oil watch</h2>
+      <p class="lede">Early 2015 and 2016 Drive-E engines are known for burning oil, and Volvo's warranty process asks for a documented consumption test. A running record of oil-level checks gives you that paper trail and shows the trend early.</p>
+      <form id="oilForm" class="row" autocomplete="off">
+        <div class="field"><label for="oilDate">Date</label><input id="oilDate" type="date" required></div>
+        <div class="field"><label for="oilMiles">Odometer</label><input id="oilMiles" type="number" inputmode="numeric" min="0" step="1" required></div>
+        <div class="field"><label for="oilQts">Quarts added (0 if none)</label><input id="oilQts" type="number" inputmode="decimal" min="0" step="0.25" value="0" required></div>
+        <button type="submit">Add check</button>
+      </form>
+      <div class="card" id="oilReadout" style="display:flex;flex-wrap:wrap;gap:8px 28px;align-items:baseline"></div>
+      <div class="scroll"><table><thead><tr><th>Date</th><th class="num">Miles</th><th class="num">Quarts added</th><th></th></tr></thead><tbody id="oilBody"></tbody></table></div>
+      <p class="lede">The rate counts quarts added after your first check, divided by the miles since it. Start the log right after an oil change, when the level reads full.</p>
+    </section>
+  </div>
+
+  <!-- SIMULATOR -->
+  <div class="panel" id="p-sim" hidden>
+    <section>
+      <h2>Fault simulator</h2>
+      <p class="lede">Break the car on purpose and watch what the data does. The dashed line is a healthy V60 on the same drive, and the solid line is the car with your faults dialed in. Once your adapter arrives, your real logs will look familiar.</p>
+      <div class="row seg" role="group" aria-label="Mode"><button type="button" class="quiet" id="simModeS" aria-pressed="true">Sandbox</button><button type="button" class="quiet" id="simModeM" aria-pressed="false">Mystery car</button><span class="status" id="simScore"></span></div>
+    </section>
+    <section id="simControls" class="card">
+      <div class="row">
+        <div class="field"><label for="simRoute">Route</label><select id="simRoute"><option value="mixed">Mixed drive</option><option value="city">City stop-and-go</option><option value="highway">Highway with a merge</option><option value="traffic">Traffic jam, hot afternoon</option></select></div>
+        <div class="field" style="flex:1 1 14em"><label for="simAmb">Outside temperature <span id="simAmbV">24 °C / 75 °F</span></label><input type="range" id="simAmb" min="0" max="40" step="1" value="24"></div>
+        <button type="button" class="quiet" id="simReset">Reset to healthy</button>
+      </div>
+      <div class="faults" id="simFaults"></div>
+    </section>
+    <section id="simMystery" class="card" hidden>
+      <div id="simQ"></div>
+      <div class="row"><button type="button" id="simGuess">Lock in answer</button><button type="button" class="quiet" id="simHint">Show healthy reference (hint)</button><button type="button" class="quiet" id="simNext">New mystery car</button><span class="status" id="simRes" role="status"></span></div>
+      <div id="simReveal" hidden></div>
+    </section>
+    <section>
+      <div class="slegend"><span><i class="lg base"></i>Healthy V60</span><span><i class="lg now"></i>This car</span></div>
+      <div class="toggles" id="simShow" role="group" aria-label="Channels to chart"></div>
+      <div id="simCharts" style="display:flex;flex-direction:column;gap:10px"></div>
+      <h3>What the analyzer flags</h3>
+      <p class="lede" style="font-size:14px">These come from the same checks the Data lab runs on your real logs.</p>
+      <ul class="finds" id="simFinds"></ul>
+      <div id="simWhy" style="display:flex;flex-direction:column;gap:8px"></div>
+      <div class="row"><button type="button" class="quiet" id="simToLab">Open this drive in the Data lab</button></div>
+    </section>
+  </div>
+
+  <!-- MY V60 -->
+  <div class="panel" id="p-my" hidden>
+    <section>
+      <h2>My V60</h2>
+      <p class="lede">Facts about this exact car, decoded from its VIN through NHTSA. The VIN itself is not stored on this page.</p>
+      <dl class="kv" id="buildBody"></dl>
+    </section>
+    <section>
+      <h3>Spec sheet</h3>
+      <p class="lede">From Volvo's 2016 V60 US owner's manual and maintenance schedule. If something you find on the car or in Volvo's service information differs, record it under "Verified data for my car" below.</p>
+      <div class="specs" id="specSheet"></div>
+      <h4>Volvo's maintenance schedule for your engine</h4>
+      <ul class="sched" id="schedBody"></ul>
+    </section>
+    <section>
+      <h3>Safety recalls for 2016 V60s</h3>
+      <p class="lede">Each recall covers a range of cars, so some may not apply to yours, and some may already have been fixed. Check your VIN at <a href="https://www.nhtsa.gov/recalls" target="_blank" rel="noopener">nhtsa.gov/recalls</a> or call Volvo at 1-800-458-1552, then set each status. Open recalls are repaired free at any Volvo dealer.</p>
+      <ul class="finds" id="recallList"></ul>
+    </section>
+    <section>
+      <h3>Photo inspections</h3>
+      <p class="lede">Take a photo and Claude reviews it: tire date codes, tread, brake pads, fluid levels, leaks, warning lights. Photos are saved privately with this page and build a timeline for each part. A photo review is a second opinion, not an inspection.</p>
+      <div id="phTake" class="card" hidden>
+        <div class="row">
+          <div class="field"><label for="phKind">What is it?</label><select id="phKind"></select></div>
+          <div class="field"><label for="phPart">Part</label><select id="phPart"></select></div>
+          <div class="field" style="flex:1 1 14em"><label for="phNote">Note (optional)</label><input id="phNote" type="text" maxlength="200" class="wide"></div>
+        </div>
+        <div class="row">
+          <label class="filebtn"><input id="phFile" type="file" accept="image/*"><span>Take or choose a photo</span></label>
+          <span class="status" id="phStatus" role="status"></span>
+        </div>
+        <img id="phPreview" alt="Photo being reviewed" hidden style="max-width:min(100%,360px);border-radius:8px">
+      </div>
+      <p class="status" id="phNoStore" hidden>Photo storage is not available in this view. Open the page in Claude while signed in to take photos.</p>
+      <div class="row"><div class="field"><label for="phFilter">Show</label><select id="phFilter"></select></div></div>
+      <div class="phgrid" id="phGallery"></div>
+    </section>
+    <section>
+      <h3>Verified data for my car</h3>
+      <p class="lede">Exact numbers from Volvo's service information, a shop invoice or a part label. They take priority over every generic value on this page.</p>
+      <form id="specForm" class="row" autocomplete="off">
+        <div class="field"><label for="spK">What</label><input id="spK" type="text" maxlength="80" required placeholder="Wheel bolt torque"></div>
+        <div class="field"><label for="spV">Value</label><input id="spV" type="text" maxlength="120" required placeholder="140 Nm"></div>
+        <div class="field"><label for="spS">Source</label><input id="spS" type="text" maxlength="80" placeholder="Volvo service info"></div>
+        <button type="submit">Add</button>
+      </form>
+      <div class="scroll"><table><thead><tr><th>What</th><th>Value</th><th>Source</th><th class="num">Added</th><th></th></tr></thead><tbody id="specBody"></tbody></table></div>
+    </section>
+  </div>
+
+  <!-- UNLOCKS -->
+  <div class="panel" id="p-unlocks" hidden>
+    <section>
+      <h2>Unlocks</h2>
+      <p class="lede">Everything this page cannot do by itself, mapped to a real way to get it done, with cost, effort and risk. Researched October 2026. Prices change, and items marked "verify" could not be confirmed.</p>
+    </section>
+
+    <section>
+      <h3>1. Talk to the car live from your iPhone</h3>
+      <p>iPhones cannot use classic-Bluetooth adapters, and Safari cannot use Bluetooth from a web page at all. Three routes work, from easiest to most custom.</p>
+      <div class="cols">
+        <div class="card"><span class="pill ok">Easiest</span><h4>Adapter plus Car Scanner app</h4><p>Car Scanner ELM OBD2 reads and clears codes, freeze frames, emissions readiness, Mode 06 test results and live data, and exports CSV logs that the Data lab reads. Pro is $7.99 one-time. A recording saves when you tap Disconnect, so don't force-quit mid-drive.</p></div>
+        <div class="card"><span class="pill info">Custom</span><h4>V60 Link in Bluefy</h4><p>The companion page built for this garage. It runs in the free Bluefy browser with an OBDLink CX and exports reports and logs that import here. It has been tested against a simulated car only, so expect some first-connection troubleshooting. It needs to be hosted at a web address (see the note at the bottom).</p></div>
+        <div class="card"><span class="pill watch">New, untested</span><h4>iOSWebBLE Safari extension</h4><p>A free extension for iOS 26.2 and later that claims to add web Bluetooth to Safari. If it works, V60 Link would run in Safari too. It has not been tried here.</p></div>
+      </div>
+      <div class="scroll"><table>
+        <thead><tr><th>Adapter</th><th class="num">Price</th><th>Works on iPhone</th><th>Works with V60 Link</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><b>OBDLink CX</b></td><td class="num">$79.95</td><td>Yes, Bluetooth LE</td><td>Yes. Its data channel is documented.</td><td>Best match for V60 Link. Was listed out of stock at OBDLink when checked. Pairs only in the first 5 minutes after power-up.</td></tr>
+          <tr><td><b>Veepeak OBDCheck BLE+</b></td><td class="num">$41.99</td><td>Yes, Bluetooth LE</td><td>Probably <span class="tag verify">verify</span></td><td>Good value for scanner apps. The plain BLE version is $31.99.</td></tr>
+          <tr><td><b>Vgate iCar Pro</b></td><td class="num">~$25–33</td><td>Yes (BLE version)</td><td>Probably <span class="tag verify">verify</span></td><td>Car Scanner recommends the newer iCar Pro 2S. Update older firmware.</td></tr>
+          <tr><td><b>OBDLink MX+</b></td><td class="num">$139.95</td><td>Yes (Apple MFi)</td><td>No, it has no BLE radio</td><td>Fastest with apps, but it cannot talk to a web page.</td></tr>
+        </tbody>
+      </table></div>
+      <p class="status">Pick: an OBDLink CX if you want V60 Link. A Veepeak BLE+ with Car Scanner if you want the cheapest reliable start.</p>
+    </section>
+
+    <section>
+      <h3>2. Clear codes without wrecking your inspection</h3>
+      <ul class="plain">
+        <li>Texas dropped safety inspections for personal cars on January 1, 2025, but <b>Travis County still requires an emissions test</b>.</li>
+        <li>The test reads the readiness monitors. A 2001 or newer car may have <b>at most one</b> monitor not ready. Any check-engine light with a stored code fails.</li>
+        <li>Clearing codes, or disconnecting the battery, resets every monitor. A generic way to complete them: a cold start, stop-and-go driving up to about 30 mph, then 5 to 7 minutes at a steady 55 mph, repeated over a few days. Some evaporative-system tests need the car to sit about 8 hours first. A Volvo-specific drive cycle could not be confirmed.</li>
+        <li>Before an inspection, run a health check in V60 Link or Car Scanner and confirm readiness first.</li>
+      </ul>
+      <div class="note">Clearing is for confirming a repair, not for hiding a fault. Texas makes manipulating an emissions test result an offense.</div>
+    </section>
+
+    <section>
+      <h3>3. Read airbag, ABS, climate and body modules, plus Volvo-only data</h3>
+      <p>Phone apps reach the engine (and often the transmission) through standard OBD-II. None of the major iOS apps offers Volvo enhanced diagnostics: OBD Fusion and the OBDLink app do not list Volvo. Owners have reported a Car Scanner "Volvo 2010+" profile showing oil level and transmission temperature, but mostly on diesel cars and Android. Whether it works on your T5 is unconfirmed, and it costs nothing to try. <span class="tag verify">verify</span></p>
+      <div class="scroll"><table>
+        <thead><tr><th>Route</th><th>What it takes</th><th class="num">Cost</th></tr></thead>
+        <tbody>
+          <tr><td><b>Volvo VIDA, diagnostics tier</b></td><td>A personal account with a North American VIN, a Volvo DiCE interface, and a Windows 11 <b>Pro</b> PC (Intel i5 from late 2017 or newer, 16 GB RAM). Reads every module. It cannot run from an iPhone.</td><td class="num">$48.15 / 3 days<br><small>plus about $500 for a genuine DiCE, plus a required bulletin fee</small></td></tr>
+          <tr><td><b>Independent Volvo specialist</b></td><td>A shop with VIDA does a full-module scan.</td><td class="num">Shop rate <span class="tag verify">verify</span></td></tr>
+        </tbody>
+      </table></div>
+      <p class="status">For a one-off problem in a non-engine system, a specialist's scan will almost always cost less than buying DiCE and a qualifying PC.</p>
+    </section>
+
+    <section>
+      <h3>4. Software updates and module settings</h3>
+      <p>VIDA's top tier adds software downloads: $73.14 for 3 days, and each download is bought separately on top. A 3-day pass runs 72 hours straight and cannot be paused. Third-party J2534 interfaces can flash emissions modules only, so DiCE is still needed for the rest. The other route is a Volvo dealer, whose price for a software update could not be found. <span class="tag verify">verify</span></p>
+    </section>
+
+    <section>
+      <h3>5. More power</h3>
+      <p>The only factory-backed option is <b>Polestar Performance Optimization</b>, built for exactly your car: V60 T5 Drive-E FWD automatic, 2016. A Volvo dealer installs it in about an hour.</p>
+      <div class="scroll"><table>
+        <thead><tr><th></th><th class="num">Stock</th><th class="num">Polestar</th></tr></thead>
+        <tbody>
+          <tr><td>Peak power</td><td class="num">242 hp</td><td class="num">250 hp</td></tr>
+          <tr><td>Mid-range power</td><td class="num">197 hp</td><td class="num">218 hp</td></tr>
+          <tr><td>Torque</td><td class="num">258 lb-ft</td><td class="num">295 lb-ft</td></tr>
+          <tr><td>0–60 mph</td><td class="num">6.4 s</td><td class="num">6.3 s</td></tr>
+        </tbody>
+      </table></div>
+      <ul class="plain">
+        <li>Volvo states it does not affect the factory warranty or service intervals, and that it keeps certified emissions and fuel figures. The warranty point matters little at this age, but the emissions point matters for inspection.</li>
+        <li>The US price and whether dealers still sell it in 2026 could not be confirmed. Call a dealer and ask for article number 31459463. For reference, UK owners paid £700–800 in 2019. <span class="tag verify">verify</span></li>
+        <li>No emissions-legal aftermarket tune for the Drive-E T5 was found. Changing engine calibration counts as emissions tampering under the Clean Air Act, and Texas fines disabling emissions systems. Civil enforcement continues even though federal criminal prosecutions were scaled back in 2026.</li>
+      </ul>
+      <p class="status">The honest take: the gain is mostly mid-range torque, and 0–60 drops by a tenth. For this car's age and oil-consumption history, maintenance buys more than tuning.</p>
+    </section>
+
+    <section>
+      <h3>6. Recalls and the paper trail</h3>
+      <p>Look up open safety recalls by VIN at <a href="https://www.nhtsa.gov/recalls" target="_blank" rel="noopener">nhtsa.gov/recalls</a>. Repairs are free at a Volvo dealer. The lookup does not list recalls already repaired. The Academy's Recall check mission walks through it.</p>
+    </section>
+
+    <section>
+      <h3>Still impossible, honestly</h3>
+      <ul class="plain">
+        <li>Any web page, this one included, changing engine calibration or module coding.</li>
+        <li>Volvo's dealer software running on an iPhone.</li>
+        <li>Clearing a <i>permanent</i> code. Only the car's own self-test after a real fix clears it.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h3>Hosting V60 Link</h3>
+      <p>V60 Link is live at <a href="https://bmcdoorz94.github.io/V60-Link/" target="_blank" rel="noopener">bmcdoorz94.github.io/V60-Link</a>. On iPhone, open that address in the free Bluefy browser, because Safari cannot use Bluetooth. The simulated car mode works in any browser for practice.</p>
+    </section>
+
+    <section>
+      <h3>Sources</h3>
+      <ul class="plain src">
+        <li><a href="https://www.obdlink.com/products/obdlink-cx/" target="_blank" rel="noopener">OBDLink CX product page</a> · <a href="https://support.obdlink.com/support/solutions/articles/43000746707-obdlink-cx-adapter-notes" target="_blank" rel="noopener">OBDLink CX adapter notes</a> · <a href="https://scantool.net/obdlink-mxp/" target="_blank" rel="noopener">OBDLink MX+</a></li>
+        <li><a href="https://veepeak.com/products/obdcheck-ble-plus" target="_blank" rel="noopener">Veepeak OBDCheck BLE+</a> · <a href="https://www.carscanner.info/choosing-obdii-adapter/" target="_blank" rel="noopener">Car Scanner: choosing an adapter</a> · <a href="https://www.carscanner.info/records/" target="_blank" rel="noopener">Car Scanner: data recording</a></li>
+        <li><a href="https://apps.apple.com/us/app/car-scanner-elm-obd2/id1259933623" target="_blank" rel="noopener">Car Scanner on the App Store</a> · <a href="https://www.obdsoftware.net/software/obdfusion" target="_blank" rel="noopener">OBD Fusion</a> · <a href="https://apps.apple.com/us/app/obdlink/id879636351" target="_blank" rel="noopener">OBDLink app</a></li>
+        <li><a href="https://apps.apple.com/app/id1492822055" target="_blank" rel="noopener">Bluefy</a> · <a href="https://caniuse.com/web-bluetooth" target="_blank" rel="noopener">caniuse: Web Bluetooth</a> · <a href="https://apps.apple.com/us/app/ioswebble/id6761301368" target="_blank" rel="noopener">iOSWebBLE</a></li>
+        <li><a href="https://www.volvotechinfo.com/vida" target="_blank" rel="noopener">Volvo VIDA</a> · <a href="https://www.volvotechinfo.com/vida/computer-requirements" target="_blank" rel="noopener">VIDA computer requirements</a> · <a href="https://www.matthewsvolvosite.com/what-is-vida/" target="_blank" rel="noopener">Matthews Volvo Site: what is VIDA</a></li>
+        <li><a href="https://engineered-api.polestar.com/optimisations/v60-t5-drive-e-fwd-automatic-2016/productSheet?market=us" target="_blank" rel="noopener">Polestar optimization sheet, 2016 V60 T5 Drive-E</a> · <a href="https://volvocars.com/en-ca/l/polestar-optimization" target="_blank" rel="noopener">Volvo Canada: Polestar optimization</a></li>
+        <li><a href="https://www.epa.gov/node/226161" target="_blank" rel="noopener">EPA: tampering</a> · <a href="https://texas.public.law/statutes/tex._transp._code_section_547.605" target="_blank" rel="noopener">Tex. Transp. Code §547.605</a> · <a href="https://texas.public.law/statutes/tex._transp._code_section_548.6035" target="_blank" rel="noopener">§548.6035</a></li>
+        <li><a href="https://www.dps.texas.gov/news/icymi-vehicle-safety-inspection-changes-take-effect-january-2025" target="_blank" rel="noopener">Texas DPS: inspection changes 2025</a> · <a href="https://www.customsmobile.com/regulations/title40_chapterI-i24_part85_subpartW_section85.2222" target="_blank" rel="noopener">40 CFR 85.2222</a> · <a href="https://www.aa1car.com/library/us50326.htm" target="_blank" rel="noopener">AA1Car: readiness monitors</a></li>
+        <li><a href="https://www.volvocars.com/us/support/car/v60/2016/article/527f24d2b96b2c38c0a801e8000aafe8" target="_blank" rel="noopener">Volvo: checking oil, 2016 V60</a> · <a href="https://www.volvocars.com/us/support/car/v60/2016/article/f2de677bb96926f2c0a801e801c6ec9e" target="_blank" rel="noopener">Volvo: opening the hood, 2016 V60</a> · <a href="https://www.volvocars.com/lb/support/car/v60/2014/article/d3c1ac5ac4f2c44dc0a801e800026d36/" target="_blank" rel="noopener">Volvo: brake fluid</a></li>
+      </ul>
+    </section>
+
+  </div>
+
+  <!-- LEARN -->
+  <div class="panel" id="p-learn" hidden>
+    <section>
+      <h2>How it works</h2>
+      <p class="lede">The T5 is a small four-cylinder that uses a turbocharger to make the power of a bigger engine. The path air and oil take explains most of what goes wrong and why the maintenance list looks the way it does.</p>
+      <div class="diagram">
+        <svg viewBox="0 0 720 210" role="img" aria-label="Diagram of the intake air path, exhaust path and crankcase ventilation loop of a turbocharged four-cylinder engine">
+          <defs>
+            <marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L8 4 L0 8 z" class="head"/></marker>
+            <marker id="ahb" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L8 4 L0 8 z" class="headb"/></marker>
+          </defs>
+          <rect class="box" x="10" y="40" width="110" height="44" rx="3"/><text x="65" y="66" text-anchor="middle">Air filter</text>
+          <rect class="box" x="150" y="40" width="110" height="44" rx="3"/><text x="205" y="66" text-anchor="middle">Compressor</text>
+          <rect class="box" x="290" y="40" width="110" height="44" rx="3"/><text x="345" y="66" text-anchor="middle">Intercooler</text>
+          <rect class="box" x="430" y="40" width="110" height="44" rx="3"/><text x="485" y="66" text-anchor="middle">Throttle</text>
+          <rect class="engine" x="570" y="40" width="130" height="144" rx="3"/>
+          <text x="635" y="104" text-anchor="middle">Engine</text><text x="635" y="122" text-anchor="middle">4 cylinders</text><text x="635" y="152" text-anchor="middle" class="lab-b">crankcase</text>
+          <rect class="box" x="150" y="140" width="110" height="44" rx="3"/><text x="205" y="166" text-anchor="middle">Turbine</text>
+          <rect class="box" x="10" y="140" width="110" height="44" rx="3"/><text x="65" y="166" text-anchor="middle">Exhaust out</text>
+          <line class="flow" x1="120" y1="62" x2="148" y2="62" marker-end="url(#ah)"/>
+          <line class="flow" x1="260" y1="62" x2="288" y2="62" marker-end="url(#ah)"/>
+          <line class="flow" x1="400" y1="62" x2="428" y2="62" marker-end="url(#ah)"/>
+          <line class="flow" x1="540" y1="62" x2="568" y2="62" marker-end="url(#ah)"/>
+          <line class="flow" x1="570" y1="162" x2="262" y2="162" marker-end="url(#ah)"/>
+          <line class="flow" x1="150" y1="162" x2="122" y2="162" marker-end="url(#ah)"/>
+          <line class="shaft" x1="205" y1="84" x2="205" y2="140"/>
+          <text x="215" y="116">shared shaft</text>
+          <path class="pcv" d="M635 40 V14 H134 V58" marker-end="url(#ahb)"/>
+          <text x="385" y="30" text-anchor="middle" class="lab-b">PCV: crankcase vapors return to the intake</text>
+          <text x="410" y="182" text-anchor="middle">hot exhaust spins the turbine</text>
+        </svg>
+      </div>
+      <div class="cols">
+        <div><h3>Air in</h3><p>Air passes the filter, gets squeezed by the compressor, and is cooled in the intercooler so it packs more oxygen. The throttle meters it into the cylinders.</p></div>
+        <div><h3>Exhaust out</h3><p>Exhaust spins the turbine, which drives the compressor on a shared shaft. The turbine runs very hot and is lubricated by engine oil, so oil level and quality matter more on a turbo engine.</p></div>
+        <div><h3>Crankcase ventilation</h3><p>Some combustion gas always slips past the piston rings. The PCV system pulls those vapors back into the intake to be burned. If it clogs, crankcase pressure rises and oil can be pushed out of seals or drawn into the intake.</p></div>
+        <div><h3>Oil</h3><p>Oil lubricates, cools the pistons and feeds the turbo. Spec for your car, per Volvo's 2016 US manual: full synthetic ACEA A5/B5 SAE 5W-30, or Volvo's 0W-20 (VCC RBS0-2AE), such as Castrol Edge Professional. 6.2 US quarts (5.9 L) with the filter.</p></div>
+        <div><h3>Cooling</h3><p>The thermostat decides when coolant starts flowing through the radiator. Brake fluid absorbs moisture over time, which is why it is replaced on a calendar and not by miles.</p></div>
+        <div><h3>Automatic transmission</h3><p>An Aisin 8-speed. Volvo's published documents list no scheduled fluid change for normal driving, and some independent shops service it anyway. Use the exact fluid your gearbox variant needs and ask a dealer to confirm it by VIN.</p></div>
+      </div>
+    </section>
+    <section>
+      <h2>Known trouble</h2>
+      <div class="note"><b>Oil consumption is the big one.</b> Volvo issued service bulletins and extended-warranty programs for excessive oil consumption on 2015 and 2016 Drive-E engines, with a repair that replaces pistons and piston rings. The extended coverage was limited to 8 years from delivery or 100,000 miles, so on a 2016 it may already have run out. I could not confirm from the public bulletins whether your exact engine is on the covered list. Ask Volvo customer care or a dealer to check eligibility by VIN, mention your oil log, and ask about goodwill coverage.</div>
+      <div class="cols">
+        <div><h3>Clogged PCV</h3><p>One owner review describes oil burning at 110,000 miles traced to a clogged PCV system. That is a single account, not a failure rate, but it is a cheap thing to have inspected.</p></div>
+        <div><h3>Thermostat</h3><p>Owner comments on Consumer Reports and Edmunds mention thermostat failures. The same Edmunds reviewer says it is costly mainly because the intake has to come off. Anecdotal.</p></div>
+        <div><h3>Low oil warning</h3><p>A Volvo service bulletin covers a low oil level message on 2015 and 2016 Drive-E cars and points to piston and ring replacement when consumption stays high. If it appears, check the oil level in the instrument cluster right away and log it.</p></div>
+      </div>
+    </section>
+    <section>
+      <h2>What this page can and cannot do</h2>
+      <div class="cols">
+        <div><h3>Can</h3><p>Track service and part condition, rank what to fix first, look up codes, analyze exported scanner logs, keep a trend of saved runs, and answer questions about your records.</p></div>
+        <div><h3>Cannot, on its own</h3><p>Connect to the OBD port directly, since Bluetooth and USB are blocked inside pages like this. The companion page V60 Link does that part: live data, codes, readiness and guarded code clearing. Changing software or tuning the engine needs Volvo's or a tuner's tools. The Unlocks tab maps every one of these to a real route.</p><p><button type="button" class="quiet" data-jump="tab:unlocks">Open Unlocks</button></p></div>
+      </div>
+    </section>
+    <section>
+      <h2>Glossary</h2>
+      <dl class="gloss">
+        <dt>Drive-E</dt><dd>Volvo's family name for its newer 4-cylinder engines. Yours is the 2.0 L turbo petrol.</dd>
+        <dt>Turbocharger</dt><dd>A pump driven by exhaust gas that forces extra air into the engine.</dd>
+        <dt>Intercooler</dt><dd>A small radiator for the compressed air, since squeezing air heats it.</dd>
+        <dt>PCV</dt><dd>Positive crankcase ventilation. Routes crankcase vapors back into the intake.</dd>
+        <dt>Piston rings</dt><dd>Seals around each piston that keep combustion gas in and oil out of the cylinder.</dd>
+        <dt>Fuel trim</dt><dd>How much the engine computer adds or removes fuel to hit the right mixture. Short-term (STFT) reacts fast, long-term (LTFT) is the learned correction.</dd>
+        <dt>MAF</dt><dd>Mass air flow sensor. Measures air entering the engine.</dd>
+        <dt>MAP</dt><dd>Manifold absolute pressure. Intake pressure, which rises above outside air pressure under boost.</dd>
+        <dt>Thermostat</dt><dd>A valve that holds coolant back until the engine is warm.</dd>
+        <dt>ATF</dt><dd>Automatic transmission fluid.</dd>
+        <dt>OBD-II</dt><dd>The standard diagnostic port under the dash.</dd>
+        <dt>VIDA</dt><dd>Volvo's dealer software for service intervals, bulletins and procedures. Volvo's own sheets treat it as the primary source for intervals.</dd>
+        <dt>TSB</dt><dd>Technical service bulletin. A manufacturer notice to dealers about a known problem and its fix. Not the same as a recall.</dd>
+        <dt>Extended warranty program</dt><dd>Coverage a manufacturer adds for a specific known defect after the normal warranty ends, usually with its own time and mileage limits.</dd>
+      </dl>
+    </section>
+    <section id="sources">
+      <h2>Sources</h2>
+      <ul class="src">
+        <li><a href="https://volvocars.com/uk/support/car/v60/15w17/article/3b599b62f78d1b3ac0a801e80197d148" target="_blank" rel="noopener">Volvo: engine oil grade and volume (V60)</a></li>
+        <li><a href="https://vehicle.firestonecompleteautocare.com/volvo/v60/2016/maintenance/" target="_blank" rel="noopener">Firestone: 2016 V60 maintenance schedule, checks every 10,000 miles</a></li>
+        <li><a href="https://uk.haynes.com/pages/maintenance-plans-car-volvo-s60-v60-2011-2018" target="_blank" rel="noopener">Haynes: Volvo S60/V60 2011-2018 maintenance plans</a></li>
+        <li><a href="https://uk.haynes.com/pages/maintenance-plans-car-volvo-s60-v60" target="_blank" rel="noopener">Haynes: typical intervals for coolant and brake pads</a></li>
+        <li><a href="https://static.nhtsa.gov/odi/tsbs/2023/MC-10242508-9999.pdf" target="_blank" rel="noopener">Volvo extended warranty P10186, 4-cylinder oil consumption (NHTSA)</a></li>
+        <li><a href="https://static.nhtsa.gov/odi/tsbs/2016/SB-10075244-5448.pdf" target="_blank" rel="noopener">Volvo bulletin: Drive-E low oil level message (NHTSA)</a></li>
+        <li><a href="https://www.fcpeuro.com/blog/how-to-service-volvo-p2-p3-spa-xc90-s60-v70-automatic-transmission" target="_blank" rel="noopener">FCP Euro: servicing the Aisin automatic (a parts seller's view)</a></li>
+        <li><a href="https://www.volvocars.com/au/support/car/v60/article/b51abbf67feb476ec0a8015139ecc710/" target="_blank" rel="noopener">Volvo: transmission fluid specifications (later V60 generation)</a></li>
+        <li><a href="https://www.edmunds.com/volvo/v60/2015/consumer-reviews/" target="_blank" rel="noopener">Edmunds: 2015 V60 owner reviews</a></li>
+        <li><a href="https://www.carcomplaints.com/Volvo/S60/2015/engine/engine.shtml" target="_blank" rel="noopener">CarComplaints: 2015 S60 engine owner reports</a></li>
+      </ul>
+      <p class="lede">Part descriptions, code meanings, symptom lists and data-lab thresholds are general automotive knowledge, not Volvo-specific specs. Service intervals marked "verify" differ between sources, and some come from other model years or from UK plans in kilometers, converted here. Volvo's dealer system is the final word for your VIN.</p>
+    </section>
+  </div>
 </main>
+
+
+<script>window.V60_VERSION="2026.10.10-1919-53ec1a57";</script>
+<script src="js/data/articles.js?v=53ec1a57"></script>
+<script src="js/data/facts.js?v=53ec1a57"></script>
+<script src="js/modules/today.js?v=53ec1a57"></script>
+<script src="js/modules/kb.js?v=53ec1a57"></script>
+<script src="js/modules/cards.js?v=53ec1a57"></script>
+<script src="js/modules/exam.js?v=53ec1a57"></script>
+<script src="js/modules/story.js?v=53ec1a57"></script>
+<script src="js/modules/fuel.js?v=53ec1a57"></script>
+<script src="js/modules/glovebox.js?v=53ec1a57"></script>
+<script src="js/modules/diy.js?v=53ec1a57"></script>
+<script src="js/modules/trees.js?v=53ec1a57"></script>
+<script src="js/modules/bulletins.js?v=53ec1a57"></script>
+<script src="js/modules/upgrades.js?v=53ec1a57"></script>
+<script src="js/modules/live.js?v=53ec1a57"></script>
+<script src="js/modules/extras.js?v=53ec1a57"></script>
+<script src="js/core.js?v=53ec1a57"></script>
 <script>
-(function () {
-  "use strict";
-  function $(id) { return document.getElementById(id); }
-  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
-  function hex2(n) { return (n < 16 ? "0" : "") + n.toString(16).toUpperCase(); }
-  function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
-  function isNum(x) { return typeof x === "number" && isFinite(x); }
-
-  /* ---------------- log ---------------- */
-  var logLines = [];
-  function log(dir, text) {
-    logLines.push(new Date().toISOString().slice(11, 23) + " " + dir + " " + String(text).replace(/\r/g, "\\r").replace(/\n/g, "\\n"));
-    if (logLines.length > 400) logLines.shift();
-    $("log").textContent = logLines.join("\n");
-  }
-
-  /* ---------------- transports ---------------- */
-  /* Full 128-bit UUIDs: Bluefy does not accept the 16-bit short forms. FFF0 is the OBDLink CX UART service (notify FFF1, write FFF2). */
-  function u16(x) { return "0000" + x + "-0000-1000-8000-00805f9b34fb"; }
-  var KNOWN_SERVICES = [u16("fff0"), u16("ffe0"), u16("18f0"), u16("ffe5"), "e7810a71-73ae-499d-8c15-faa9aef0c3f2"];
-  function BleTransport() {
-    var self = this, rx = "", waiter = null, dev = null, txChar = null, rxChar = null, useWWR = false;
-    var enc = new TextEncoder(), dec = new TextDecoder();
-    function onNotify(ev) {
-      rx += dec.decode(ev.target.value);
-      if (waiter && rx.indexOf(">") >= 0) { var out = rx.slice(0, rx.indexOf(">")); rx = rx.slice(rx.indexOf(">") + 1); var w = waiter; waiter = null; w.resolve(out); }
-    }
-    self.name = "";
-    self.open = function () {
-      return navigator.bluetooth.requestDevice({ acceptAllDevices: true, optionalServices: KNOWN_SERVICES }).then(function (d) {
-        dev = d; self.name = d.name || "adapter";
-        d.addEventListener("gattserverdisconnected", function () { if (self.onclose) self.onclose(); });
-        return d.gatt.connect();
-      }).then(function (server) { return server.getPrimaryServices(); }).then(function (services) {
-        var jobs = services.map(function (s) { return s.getCharacteristics().then(function (cs) { return { s: s, cs: cs }; }, function () { return { s: s, cs: [] }; }); });
-        return Promise.all(jobs);
-      }).then(function (groups) {
-        var best = null;
-        groups.sort(function (a, b) { return (String(b.s.uuid).indexOf("fff0") === 4) - (String(a.s.uuid).indexOf("fff0") === 4); });
-        groups.forEach(function (g) {
-          var n = g.cs.filter(function (c) { return c.properties.notify || c.properties.indicate; })[0];
-          var w = g.cs.filter(function (c) { return c.properties.write || c.properties.writeWithoutResponse; })[0];
-          if (n && w && !best) best = { n: n, w: w };
-        });
-        if (!best) throw new Error("Connected, but this device does not offer a serial data channel this page recognizes. It may not be an OBD adapter, or it may be a Classic-Bluetooth model.");
-        rxChar = best.n; txChar = best.w; useWWR = !best.w.properties.write && best.w.properties.writeWithoutResponse;
-        rxChar.addEventListener("characteristicvaluechanged", onNotify);
-        return rxChar.startNotifications();
-      });
-    };
-    self.send = function (cmd, timeoutMs) {
-      rx = "";
-      return new Promise(function (resolve, reject) {
-        var timer = setTimeout(function () { waiter = null; reject(new Error("timeout")); }, timeoutMs || 4000);
-        waiter = { resolve: function (v) { clearTimeout(timer); resolve(v); } };
-        var bytes = enc.encode(cmd + "\r"), chunks = [];
-        for (var i = 0; i < bytes.length; i += 20) chunks.push(bytes.slice(i, i + 20));
-        chunks.reduce(function (p, c) { return p.then(function () { return useWWR ? txChar.writeValueWithoutResponse(c) : (txChar.writeValueWithResponse ? txChar.writeValueWithResponse(c) : txChar.writeValue(c)); }); }, Promise.resolve())
-          .catch(function (e) { clearTimeout(timer); waiter = null; reject(e); });
-      });
-    };
-    self.close = function () { try { if (dev && dev.gatt.connected) dev.gatt.disconnect(); } catch (e) {} };
-  }
-
-  /* Simulated 2016 V60 T5 for learning the page without a car. CAN 11-bit, headers on. */
-  function SimTransport() {
-    var self = this, t0 = Date.now(), headers = false, engineOn = true, cleared = false;
-    var stored = ["0171"], pending = ["0420"], permanent = ["0171"];
-    self.name = "Simulated V60";
-    self.engine = function (on) { engineOn = on; };
-    function sec() { return (Date.now() - t0) / 1000; }
-    function frame(hdr, bytes) {
-      var out = [];
-      if (bytes.length <= 7) out.push([bytes.length].concat(bytes));
-      else {
-        out.push([0x10 | (bytes.length >> 8), bytes.length & 255].concat(bytes.slice(0, 6)));
-        for (var i = 6, sn = 1; i < bytes.length; i += 7, sn++) out.push([0x20 | (sn & 15)].concat(bytes.slice(i, i + 7)));
-      }
-      return out.map(function (f) { while (f.length < 8) f.push(0); return (headers ? hdr + " " : "") + f.map(hex2).join(" "); }).join("\r");
-    }
-    function dtcBytes(list) { var b = []; list.forEach(function (c) { var v = parseInt(c, 16); b.push(v >> 8, v & 255); }); return b; }
-    function val(pid) {
-      var s = sec(), warm = Math.min(1, s / 300), spd = engineOn ? Math.max(0, 50 + 30 * Math.sin(s / 25)) : 0, rpm = engineOn ? (spd < 1 ? 760 : 1400 + spd * 18) : 0;
-      switch (pid) {
-        case 0x04: return [Math.round((engineOn ? 25 + spd / 4 : 0) * 2.55)];
-        case 0x05: return [Math.round(30 + 58 * warm + 40)];
-        case 0x06: return [Math.round(128 + (Math.random() * 6 - 3) * 1.28)];
-        case 0x07: return [Math.round(128 + 6.3 * 1.28)];
-        case 0x0B: return [Math.round(engineOn ? 35 + spd * 0.8 : 99)];
-        case 0x0C: var r = Math.round(rpm * 4); return [r >> 8, r & 255];
-        case 0x0D: return [Math.round(spd)];
-        case 0x0F: return [40 + 31];
-        case 0x10: var m = Math.round((engineOn ? 3 + spd / 4 : 0) * 100); return [m >> 8, m & 255];
-        case 0x11: return [Math.round((engineOn ? 14 + spd / 5 : 0) * 2.55)];
-        case 0x2F: return [Math.round(0.62 * 255)];
-        case 0x33: return [99];
-        case 0x42: var v = Math.round((engineOn ? 14.1 + Math.random() * 0.1 : 12.5) * 1000); return [v >> 8, v & 255];
-        case 0x46: return [40 + 29];
-        case 0x5C: return [Math.round(40 + 25 + 70 * warm)];
-        case 0x01: var a = (cleared ? 0 : 0x80) | (cleared ? 0 : stored.length); var b = 0x07 | (cleared ? 0x00 : 0x00); var c = 0x01 | 0x04 | 0x20 | 0x40 | 0x80; var d = cleared ? (0x01 | 0x04 | 0x20 | 0x40 | 0x80) : 0x04; return [a, b, c, d];
-        case 0x21: return cleared ? [0, 0] : [0, 85];
-        case 0x30: return [cleared ? 0 : 12];
-        case 0x31: return cleared ? [0, 0] : [1, 44];
-        case 0x4E: return cleared ? [0, 0] : [3, 200];
-      }
-      return null;
-    }
-    var SUP = [0x01, 0x04, 0x05, 0x06, 0x07, 0x0B, 0x0C, 0x0D, 0x0F, 0x10, 0x11, 0x1F, 0x20, 0x21, 0x2F, 0x30, 0x31, 0x33, 0x40, 0x42, 0x46, 0x4E, 0x5C];
-    function supMask(base) { var m = [0, 0, 0, 0]; SUP.forEach(function (p) { if (p > base && p <= base + 32) { var i = p - base - 1; m[i >> 3] |= 0x80 >> (i & 7); } }); return m; }
-    self.open = function () { return sleep(400); };
-    self.close = function () {};
-    self.send = function (cmd) {
-      var c = cmd.replace(/\s/g, "").toUpperCase(), out;
-      if (/^AT/.test(c)) {
-        if (c === "ATZ" || c === "ATI") out = "ELM327 v1.5";
-        else if (c === "ATDPN") out = "A6";
-        else if (c === "ATRV") out = engineOn ? "14.1V" : "12.5V";
-        else { if (c === "ATH1") headers = true; if (c === "ATH0") headers = false; out = "OK"; }
-      } else if (/^01(00|20|40)$/.test(c)) { var base = parseInt(c.slice(2), 16); out = frame("7E8", [0x41, base].concat(supMask(base))) + (base === 0 ? "\r" + frame("7E9", [0x41, 0, 0x80, 0, 0, 0]) : ""); }
-      else if (/^01[0-9A-F]{2}$/.test(c)) { var pid = parseInt(c.slice(2), 16), v = val(pid); out = v ? frame("7E8", [0x41, pid].concat(v)) : "NO DATA"; }
-      else if (c === "03") out = frame("7E8", [0x43, cleared ? 0 : stored.length].concat(cleared ? [] : dtcBytes(stored))) + "\r" + frame("7E9", [0x43, 0]);
-      else if (c === "07") out = frame("7E8", [0x47, cleared ? 0 : pending.length].concat(cleared ? [] : dtcBytes(pending))) + "\r" + frame("7E9", cleared ? [0x47, 0] : [0x47, 1].concat(dtcBytes(["0700"])));
-      else if (c === "0A") out = frame("7E8", [0x4A, permanent.length].concat(dtcBytes(permanent)));
-      else if (c === "0902") { var vin = "YV1612FH0G0000000"; out = frame("7E8", [0x49, 0x02, 0x01].concat(vin.split("").map(function (ch) { return ch.charCodeAt(0); }))); }
-      else if (c === "020200") out = cleared ? frame("7E8", [0x42, 0x02, 0x00, 0, 0]) : frame("7E8", [0x42, 0x02, 0x00, 0x01, 0x71]);
-      else if (/^02[0-9A-F]{2}00$/.test(c)) { var fp = parseInt(c.slice(2, 4), 16), fv = { 0x04: [80], 0x05: [128], 0x06: [150], 0x07: [137], 0x0B: [40], 0x0C: [0x0B, 0xE0], 0x0D: [0], 0x11: [36] }[fp]; out = (!cleared && fv) ? frame("7E8", [0x42, fp, 0x00].concat(fv)) : "NO DATA"; }
-      else if (c === "04") { if (engineOn) out = frame("7E8", [0x7F, 0x04, 0x22]); else { cleared = true; stored = []; pending = []; out = frame("7E8", [0x44]) + "\r" + frame("7E9", [0x44]); } }
-      else out = "?";
-      return sleep(25 + Math.random() * 25).then(function () { return out + "\r\r"; });
-    };
-  }
-
-  /* ---------------- ELM327 + ISO-TP parsing ---------------- */
-  var link = null, busy = Promise.resolve(), protoCAN = true;
-  function cmd(c, timeout) {
-    var p = busy.then(function () {
-      if (!link) throw new Error("Not connected");
-      log(">", c);
-      return link.send(c, timeout).then(function (r) { log("<", r.trim()); return r; });
-    });
-    busy = p.catch(function () {});
-    return p;
-  }
-  var ERR_RE = /NO DATA|UNABLE TO CONNECT|CAN ERROR|BUS ERROR|BUS BUSY|STOPPED|ERROR|FB ERROR|DATA ERROR|^\?$/i;
-  function parseResponse(raw) {
-    var lines = String(raw).split(/[\r\n]+/).map(function (l) { return l.trim(); }).filter(function (l) { return l && !/^(SEARCHING|BUS INIT|>|OK$)/i.test(l); });
-    var ecus = {}, partial = {}, errors = [];
-    lines.forEach(function (l) {
-      if (ERR_RE.test(l)) { errors.push(l); return; }
-      l = l.replace(/^[0-9A-F]:\s*/i, "");
-      var tok = l.split(/\s+/), hdr, bytes;
-      if (/^[0-9A-F]{3}$/i.test(tok[0])) { hdr = tok[0].toUpperCase(); bytes = tok.slice(1); }
-      else if (tok.length >= 5 && /^18$/i.test(tok[0]) && /^DA$/i.test(tok[1])) { hdr = tok.slice(0, 4).join("").toUpperCase(); bytes = tok.slice(4); }
-      else if (tok.length === 1 && /^[0-9A-F]{6,}$/i.test(tok[0])) { hdr = "ECU"; bytes = tok[0].match(/../g); }
-      else { hdr = "ECU"; bytes = tok; }
-      bytes = bytes.filter(function (b) { return /^[0-9A-F]{2}$/i.test(b); }).map(function (b) { return parseInt(b, 16); });
-      if (!bytes.length) return;
-      if (hdr === "ECU") { (ecus[hdr] = ecus[hdr] || []).push(bytes); return; }
-      var type = bytes[0] >> 4;
-      if (type === 0) { (ecus[hdr] = ecus[hdr] || []).push(bytes.slice(1, 1 + (bytes[0] & 15))); }
-      else if (type === 1) { partial[hdr] = { len: ((bytes[0] & 15) << 8) | bytes[1], data: bytes.slice(2) }; }
-      else if (type === 2 && partial[hdr]) {
-        var pt = partial[hdr]; pt.data = pt.data.concat(bytes.slice(1));
-        if (pt.data.length >= pt.len) { (ecus[hdr] = ecus[hdr] || []).push(pt.data.slice(0, pt.len)); delete partial[hdr]; }
-      }
-    });
-    Object.keys(partial).forEach(function (h) { (ecus[h] = ecus[h] || []).push(partial[h].data); });
-    return { ecus: ecus, errors: errors };
-  }
-  /* returns [{ecu, data}] for payloads whose first byte is the positive reply to `mode` */
-  function query(c, timeout) {
-    var mode = parseInt(c.slice(0, 2), 16);
-    return cmd(c, timeout).then(function (raw) {
-      var r = parseResponse(raw), out = [];
-      Object.keys(r.ecus).forEach(function (h) { r.ecus[h].forEach(function (p) { if (p[0] === mode + 0x40) out.push({ ecu: h, data: p }); else if (p[0] === 0x7F && p[1] === mode) out.push({ ecu: h, neg: p[2] }); }); });
-      return out;
-    });
-  }
-  var ECU_NAMES = { "7E8": "Engine", "7E9": "Transmission", "7EA": "Module 7EA", "7EB": "Module 7EB", "ECU": "Engine" };
-  function ecuName(h) { return ECU_NAMES[h] || ("Module " + h); }
-
-  function decodeDTC(a, b) {
-    var L = "PCBU".charAt(a >> 6);
-    return L + ((a >> 4) & 3) + (a & 15).toString(16).toUpperCase() + hex2(b);
-  }
-  function dtcsFrom(payloads) {
-    var out = [];
-    payloads.forEach(function (p) {
-      if (!p.data) return;
-      var d = p.data.slice(1);
-      if (protoCAN) d = d.slice(1);
-      for (var i = 0; i + 1 < d.length; i += 2) { if (d[i] === 0 && d[i + 1] === 0) continue; out.push({ code: decodeDTC(d[i], d[i + 1]), ecu: p.ecu }); }
-    });
-    return out;
-  }
-
-  /* ---------------- PIDs ---------------- */
-  var PIDS = [
-    { pid: 0x0C, n: "Engine RPM", col: "Engine RPM (rpm)", u: "rpm", f: function (A, B) { return (256 * A + B) / 4; }, d: 0, on: true },
-    { pid: 0x05, n: "Coolant temp", col: "Engine coolant temperature (°C)", u: "°C", f: function (A) { return A - 40; }, d: 0, on: true, us: "F" },
-    { pid: 0x0D, n: "Speed", col: "Vehicle speed (km/h)", u: "km/h", f: function (A) { return A; }, d: 0, on: true, us: "mph" },
-    { pid: 0x07, n: "Long-term fuel trim", col: "Long term fuel trim bank 1 (%)", u: "%", f: function (A) { return (A - 128) * 100 / 128; }, d: 1, on: true },
-    { pid: 0x06, n: "Short-term fuel trim", col: "Short term fuel trim bank 1 (%)", u: "%", f: function (A) { return (A - 128) * 100 / 128; }, d: 1, on: true },
-    { pid: 0x42, n: "Module voltage", col: "Control module voltage (V)", u: "V", f: function (A, B) { return (256 * A + B) / 1000; }, d: 2, on: true },
-    { pid: 0x0B, n: "Intake pressure", col: "Intake manifold absolute pressure (kPa)", u: "kPa", f: function (A) { return A; }, d: 0, on: true },
-    { pid: 0x10, n: "Air flow (MAF)", col: "Mass air flow rate (g/s)", u: "g/s", f: function (A, B) { return (256 * A + B) / 100; }, d: 1, on: true },
-    { pid: 0x04, n: "Engine load", col: "Calculated engine load (%)", u: "%", f: function (A) { return A * 100 / 255; }, d: 0, on: false },
-    { pid: 0x11, n: "Throttle", col: "Throttle position (%)", u: "%", f: function (A) { return A * 100 / 255; }, d: 0, on: false },
-    { pid: 0x0F, n: "Intake air temp", col: "Intake air temperature (°C)", u: "°C", f: function (A) { return A - 40; }, d: 0, on: false, us: "F" },
-    { pid: 0x5C, n: "Oil temp", col: "Engine oil temperature (°C)", u: "°C", f: function (A) { return A - 40; }, d: 0, on: false, us: "F" },
-    { pid: 0x46, n: "Outside air temp", col: "Ambient air temperature (°C)", u: "°C", f: function (A) { return A - 40; }, d: 0, on: false, us: "F" },
-    { pid: 0x33, n: "Barometric pressure", col: "Barometric pressure (kPa)", u: "kPa", f: function (A) { return A; }, d: 0, on: false },
-    { pid: 0x2F, n: "Fuel level", col: "Fuel level (%)", u: "%", f: function (A) { return A * 100 / 255; }, d: 0, on: false }
-  ];
-  var supported = null;
-  function pidSupported(pid) { return !supported || supported[pid]; }
-  function readSupported() {
-    supported = {};
-    var bases = [0x00, 0x20, 0x40];
-    return bases.reduce(function (p, base) {
-      return p.then(function (go) {
-        if (!go) return false;
-        return query("01" + hex2(base)).then(function (res) {
-          var more = false;
-          res.forEach(function (r) { if (!r.data || r.data[1] !== base) return; for (var i = 0; i < 32; i++) { if (r.data[2 + (i >> 3)] & (0x80 >> (i & 7))) { supported[base + i + 1] = true; if (base + i + 1 === base + 0x20) more = true; } } });
-          return more;
-        });
-      });
-    }, Promise.resolve(true));
-  }
-  function readPid(pid) {
-    return query("01" + hex2(pid)).then(function (res) {
-      var r = res.filter(function (x) { return x.data && x.data[1] === pid; });
-      var e = r.filter(function (x) { return x.ecu === "7E8" || x.ecu === "ECU"; })[0] || r[0];
-      return e ? e.data.slice(2) : null;
-    });
-  }
-
-  /* ---------------- connection ---------------- */
-  function setConn(state, text) { $("conn").className = "conn " + state; $("connText").textContent = text; }
-  function enable(on) {
-    $("btnScan").disabled = !on; $("btnLive").disabled = !on; $("btnDisconnect").disabled = !on;
-    $("btnConnect").disabled = on; $("btnDemo").disabled = on;
-  }
-  function initElm() {
-    var seq = [["ATZ", 6000], ["ATE0"], ["ATL0"], ["ATS1"], ["ATH1"], ["ATCAF1"], ["ATAT1"], ["ATSP0"]];
-    return seq.reduce(function (p, s) { return p.then(function () { return cmd(s[0], s[1]).catch(function () {}); }).then(function () { return sleep(60); }); }, Promise.resolve())
-      .then(function () { return query("0100", 12000); })
-      .then(function (r) { if (!r.length) throw new Error("The adapter answered but the car did not. Check that the ignition is on."); return cmd("ATDPN").catch(function () { return "A6"; }); })
-      .then(function (p) { var n = parseInt(String(p).replace(/[^0-9A-C]/gi, "").replace(/^A/i, ""), 16); protoCAN = !isFinite(n) || n >= 6; return readSupported(); });
-  }
-  function connect(transport) {
-    link = transport;
-    setConn("busy", "Connecting...");
-    transport.onclose = function () { link = null; enable(false); setConn("", "Disconnected"); stopLive(); };
-    return transport.open().then(function () { setConn("busy", "Talking to the car..."); return initElm(); }).then(function () {
-      setConn("on", "Connected to " + transport.name + (protoCAN ? " (CAN)" : ""));
-      enable(true); renderPicks();
-    }).catch(function (e) {
-      try { transport.close(); } catch (x) {}
-      link = null; enable(false);
-      var msg = e && e.name === "NotFoundError" ? "No adapter chosen." : (e && e.name === "SecurityError" ? "This page is not allowed to use Bluetooth here. Open it directly in Bluefy, Chrome or Edge, not inside another app's preview." : ((e && e.message) || "Could not connect."));
-      if (e && e.message === "timeout") msg = "The adapter stopped answering. Unplug it, plug it back in, and try again.";
-      setConn("", msg);
-    });
-  }
-  $("btnConnect").addEventListener("click", function () {
-    if (!navigator.bluetooth) return;
-    connect(new BleTransport());
+if ("serviceWorker" in navigator && location.protocol === "https:") {
+  navigator.serviceWorker.register("sw.js").then(function (reg) {
+    function offer(w) { var b = document.getElementById("updateBar"); if (!b) return; b.hidden = false; b.querySelector("button").onclick = function () { w.postMessage("skip"); }; }
+    if (reg.waiting && navigator.serviceWorker.controller) offer(reg.waiting);
+    reg.addEventListener("updatefound", function () { var w = reg.installing; w.addEventListener("statechange", function () { if (w.state === "installed" && navigator.serviceWorker.controller) offer(w); }); });
+    setInterval(function () { reg.update().catch(function () {}); }, 30 * 60 * 1000);
   });
-  $("btnDemo").addEventListener("click", function () { connect(new SimTransport()); });
-  $("btnDisconnect").addEventListener("click", function () { stopLive(); if (link) link.close(); link = null; enable(false); setConn("", "Disconnected"); });
-
-  (function checkSupport() {
-    var n = $("noBt"), ua = navigator.userAgent || "";
-    if (navigator.bluetooth) { if (navigator.bluetooth.getAvailability) navigator.bluetooth.getAvailability().then(function (a) { if (!a) { n.hidden = false; n.textContent = "Bluetooth looks turned off or unavailable on this device."; } }).catch(function () {}); return; }
-    n.hidden = false; $("btnConnect").disabled = true;
-    if (/iPhone|iPad|iPod/.test(ua)) n.innerHTML = "On iPhone, Bluetooth from a web page only works in the free <b>Bluefy</b> browser from the App Store. Open this page there. The simulated car below works in any browser.";
-    else n.textContent = "This browser cannot use Bluetooth from a web page. Use Chrome or Edge on Android, Windows, Mac or ChromeOS. The simulated car below works anywhere.";
-  })();
-
-  /* ---------------- health check ---------------- */
-  var report = null;
-  var MON_CONT = [["Misfire", 0], ["Fuel system", 1], ["Components", 2]];
-  var MON_SPARK = [["Catalyst", 0], ["Heated catalyst", 1], ["Evaporative system", 2], ["Secondary air", 3], ["A/C refrigerant", 4], ["Oxygen sensor", 5], ["Oxygen sensor heater", 6], ["EGR / VVT", 7]];
-  var FF = [[0x04, "Engine load", function (A) { return Math.round(A * 100 / 255) + " %"; }], [0x05, "Coolant", function (A) { return (A - 40) + " °C / " + Math.round((A - 40) * 1.8 + 32) + " °F"; }],
-    [0x06, "Short-term trim", function (A) { return ((A - 128) * 100 / 128).toFixed(1) + " %"; }], [0x07, "Long-term trim", function (A) { return ((A - 128) * 100 / 128).toFixed(1) + " %"; }],
-    [0x0B, "Intake pressure", function (A) { return A + " kPa"; }], [0x0C, "RPM", function (A, B) { return Math.round((256 * A + B) / 4) + " rpm"; }],
-    [0x0D, "Speed", function (A) { return A + " km/h / " + Math.round(A * 0.621371) + " mph"; }], [0x11, "Throttle", function (A) { return Math.round(A * 100 / 255) + " %"; }]];
-  function runScan() {
-    var R = { date: new Date().toISOString(), adapter: link.name, codes: [], vin: null, mil: null, monitors: [], freeze: null, since: {} };
-    $("btnScan").disabled = true; $("scanStatus").textContent = "Reading VIN...";
-    return query("0902", 6000).then(function (res) {
-      var p = res.filter(function (x) { return x.data; })[0];
-      if (p) { var s = p.data.slice(3).filter(function (b) { return b >= 0x30 && b <= 0x5A; }).map(function (b) { return String.fromCharCode(b); }).join(""); if (s.length >= 17) R.vin = s.slice(-17); }
-    }).catch(function () {}).then(function () {
-      $("scanStatus").textContent = "Reading light and readiness...";
-      return query("0101");
-    }).then(function (res) {
-      var p = res.filter(function (x) { return x.data && x.data[1] === 0x01 && (x.ecu === "7E8" || x.ecu === "ECU"); })[0] || res.filter(function (x) { return x.data; })[0];
-      if (p) {
-        var A = p.data[2], B = p.data[3], C = p.data[4], D = p.data[5];
-        R.mil = !!(A & 0x80); R.count = A & 0x7F; R.diesel = !!(B & 0x08);
-        MON_CONT.forEach(function (m) { if (B & (1 << m[1])) R.monitors.push({ n: m[0], ready: !(B & (0x10 << m[1])) }); });
-        if (!R.diesel) MON_SPARK.forEach(function (m) { if (C & (1 << m[1])) R.monitors.push({ n: m[0], ready: !(D & (1 << m[1])) }); });
-      }
-      $("scanStatus").textContent = "Reading codes...";
-      var kinds = [["03", "stored"], ["07", "pending"], ["0A", "permanent"]];
-      return kinds.reduce(function (pp, k) { return pp.then(function () { return query(k[0], 6000).then(function (res2) { dtcsFrom(res2).forEach(function (d) { R.codes.push({ code: d.code, kind: k[1], ecu: ecuName(d.ecu) }); }); }).catch(function () {}); }); }, Promise.resolve());
-    }).then(function () {
-      $("scanStatus").textContent = "Reading freeze frame...";
-      return query("020200").then(function (res) {
-        var p = res.filter(function (x) { return x.data && x.data.length >= 5; })[0];
-        if (!p || (p.data[3] === 0 && p.data[4] === 0)) return;
-        R.freeze = { dtc: decodeDTC(p.data[3], p.data[4]), values: [] };
-        return FF.reduce(function (pp, f) {
-          if (!pidSupported(f[0])) return pp;
-          return pp.then(function () { return query("02" + hex2(f[0]) + "00").then(function (r2) { var q = r2.filter(function (x) { return x.data && x.data[1] === f[0]; })[0]; if (q) R.freeze.values.push([f[1], f[2](q.data[3], q.data[4])]); }).catch(function () {}); });
-        }, Promise.resolve());
-      }).catch(function () {});
-    }).then(function () {
-      $("scanStatus").textContent = "Reading history counters...";
-      var counters = [[0x31, "distSinceClear", function (d) { return 256 * d[0] + d[1]; }], [0x30, "warmupsSinceClear", function (d) { return d[0]; }], [0x21, "distWithMil", function (d) { return 256 * d[0] + d[1]; }], [0x4E, "minSinceClear", function (d) { return 256 * d[0] + d[1]; }]];
-      return counters.reduce(function (pp, c) { if (!pidSupported(c[0])) return pp; return pp.then(function () { return readPid(c[0]).then(function (d) { if (d) R.since[c[1]] = c[2](d); }).catch(function () {}); }); }, Promise.resolve());
-    }).then(function () {
-      report = R; renderReport(); $("scanStatus").textContent = "Done " + new Date().toLocaleTimeString();
-      armClear();
-    }).catch(function (e) { $("scanStatus").textContent = "Stopped: " + ((e && e.message) || e); })
-      .then(function () { $("btnScan").disabled = !link; });
-  }
-  var CODE_HINTS = { P0171: "System too lean, bank 1", P0172: "System too rich, bank 1", P0420: "Catalyst efficiency below threshold, bank 1", P0300: "Random or multiple misfire", P0301: "Misfire, cylinder 1", P0302: "Misfire, cylinder 2", P0303: "Misfire, cylinder 3", P0304: "Misfire, cylinder 4", P0700: "Transmission control system fault requested the light", P0128: "Coolant below thermostat regulating temperature", P0455: "Evaporative system large leak", P0456: "Evaporative system very small leak", P0442: "Evaporative system small leak", P0011: "Intake camshaft timing over-advanced, bank 1", P0016: "Crank and cam position correlation, bank 1", P0101: "Air flow sensor range or performance", P0299: "Turbo underboost", P0507: "Idle speed higher than expected", P2187: "Lean at idle, bank 1", P0141: "Downstream oxygen sensor heater circuit" };
-  function renderReport() {
-    var R = report; $("scanOut").hidden = false;
-    var stored = R.codes.filter(function (c) { return c.kind === "stored"; }).length, pend = R.codes.filter(function (c) { return c.kind === "pending"; }).length;
-    var notReady = R.monitors.filter(function (m) { return !m.ready; }).length;
-    var s = [];
-    s.push(R.mil ? ["bad", "Check-engine light is ON", "The engine computer reports " + (R.count || 0) + " emissions-related code" + (R.count === 1 ? "" : "s") + " behind it."] : ["ok", "Check-engine light is off", ""]);
-    s.push(stored + pend ? [stored ? "bad" : "watch", stored + " stored and " + pend + " pending code" + (stored + pend === 1 ? "" : "s"), "Pending means seen once but not confirmed. It may set the light if it repeats."] : ["ok", "No stored or pending codes", ""]);
-    if (R.monitors.length) s.push(notReady ? ["watch", notReady + " of " + R.monitors.length + " readiness monitors not ready", "Normal for a few days after codes are cleared or the battery is disconnected. Mixed driving completes them."] : ["ok", "All " + R.monitors.length + " readiness monitors are ready", ""]);
-    if (R.monitors.length || R.mil != null) {
-      var fail = R.mil || notReady > 1;
-      s.push(fail ? ["bad", "Emissions inspection: likely FAIL right now", (R.mil ? "The check-engine light is on with a stored code. " : "") + (notReady > 1 ? notReady + " monitors are not ready, and federal rules allow at most one on a 2001 or newer car. " : "") + "Fix the cause, then drive normally until the monitors finish before testing."] : ["ok", "Emissions inspection: readiness looks passable", "No light, and " + (notReady ? "only one monitor" : "no monitors") + " not ready (the federal limit for 2001 and newer cars is one). This is a readiness check, not a full test."]);
-    }
-    if (R.vin) s.push(["info", "VIN " + R.vin, "Check open recalls for this VIN at nhtsa.gov/recalls."]);
-    $("summary").innerHTML = s.map(function (x) { return '<li><span class="pill ' + x[0] + '">' + ({ ok: "Good", watch: "Watch", bad: "Act", info: "Info" })[x[0]] + "</span><b>" + esc(x[1]) + "</b>" + (x[2] ? '<span class="d">' + (x[0] === "info" ? 'Check open recalls for this VIN at <a href="https://www.nhtsa.gov/recalls" target="_blank" rel="noopener">nhtsa.gov/recalls</a>.' : esc(x[2])) + "</span>" : "") + "</li>"; }).join("");
-    $("codes").innerHTML = R.codes.length ? R.codes.map(function (c) {
-      var lvl = c.kind === "pending" ? "watch" : "bad";
-      return '<li><span class="pill ' + lvl + '">' + esc(c.kind) + '</span><span><span class="code">' + esc(c.code) + "</span> · " + esc(c.ecu) + '</span><span class="d">' + esc(CODE_HINTS[c.code] || "Look this code up in V60 Garage's Diagnose tab.") + (c.kind === "permanent" ? " Permanent codes cannot be cleared with a tool. They erase themselves after the car confirms the fix over several drives." : "") + "</span></li>";
-    }).join("") : '<li><span class="pill ok">None</span><span>No codes reported by any module that answered.</span></li>';
-    $("freeze").innerHTML = R.freeze ? "<dt>Triggered by</dt><dd>" + esc(R.freeze.dtc) + "</dd>" + R.freeze.values.map(function (v) { return "<dt>" + esc(v[0]) + "</dt><dd>" + esc(v[1]) + "</dd>"; }).join("") : "<dt>None</dt><dd>No freeze frame stored.</dd>";
-    $("monitors").innerHTML = R.monitors.length ? R.monitors.map(function (m) { return "<div><span>" + esc(m.n) + '</span><span class="pill ' + (m.ready ? "ok" : "watch") + '">' + (m.ready ? "ready" : "not ready") + "</span></div>"; }).join("") : '<div><span>No readiness data returned</span></div>';
-    var sv = R.since, rows = [];
-    if (isNum(sv.distSinceClear)) rows.push(["Since codes cleared", Math.round(sv.distSinceClear * 0.621371) + " mi" + (isNum(sv.warmupsSinceClear) ? ", " + sv.warmupsSinceClear + " warm-ups" : "")]);
-    if (isNum(sv.distWithMil)) rows.push(["Driven with light on", Math.round(sv.distWithMil * 0.621371) + " mi"]);
-    $("since").innerHTML = rows.map(function (r) { return "<dt>" + esc(r[0]) + "</dt><dd>" + esc(r[1]) + "</dd>"; }).join("");
-  }
-  $("btnScan").addEventListener("click", runScan);
-
-  /* ---------------- export helpers ---------------- */
-  function fileFor(name, text, type) { return new File([text], name, { type: type }); }
-  function download(name, text, type) {
-    var url = URL.createObjectURL(new Blob([text], { type: type })), a = document.createElement("a");
-    a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
-  }
-  function canShareFiles() { try { return !!(navigator.canShare && navigator.canShare({ files: [fileFor("x.txt", "x", "text/plain")] })); } catch (e) { return false; } }
-  function share(name, text, type) { return navigator.share({ files: [fileFor(name, text, type)], title: name }); }
-  function stamp() { var d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0") + "_" + String(d.getHours()).padStart(2, "0") + String(d.getMinutes()).padStart(2, "0"); }
-  function reportJSON() {
-    var r = JSON.parse(JSON.stringify(report)); delete r.vin;
-    return JSON.stringify({ source: "v60-link", version: 1, report: r }, null, 2);
-  }
-  $("btnReport").addEventListener("click", function () {
-    if (!report) return;
-    download("v60-health-" + stamp() + ".json", reportJSON(), "application/json");
-    $("reportStatus").textContent = "Saved. In V60 Garage, load it in Diagnose, under Import a V60 Link report.";
-    $("ck1").checked = true; armClear();
-  });
-  if (canShareFiles()) { $("btnShareReport").hidden = false; $("btnShareCsv").hidden = false; }
-  $("btnShareReport").addEventListener("click", function () { if (!report) return; share("v60-health-" + stamp() + ".json", reportJSON(), "application/json").then(function () { $("ck1").checked = true; armClear(); }).catch(function () {}); });
-
-  /* ---------------- live data ---------------- */
-  var live = { on: false, rows: [], t0: 0, sel: {} };
-  PIDS.forEach(function (p) { live.sel[p.pid] = p.on; });
-  function renderPicks() {
-    $("picks").innerHTML = PIDS.map(function (p) {
-      var ok = pidSupported(p.pid);
-      return '<label class="' + (ok ? "" : "na") + '"><input type="checkbox" data-pid="' + p.pid + '"' + (live.sel[p.pid] && ok ? " checked" : "") + (ok ? "" : " disabled") + "> " + esc(p.n) + (ok ? "" : " (not supported)") + "</label>";
-    }).join("");
-    $("tiles").innerHTML = PIDS.filter(function (p) { return live.sel[p.pid] && pidSupported(p.pid); }).map(function (p) { return '<div class="tile"><div class="k">' + esc(p.n) + '</div><div><span class="v" id="tv' + p.pid + '">--</span><span class="u">' + esc(p.us === "F" ? "°F" : (p.us === "mph" ? "mph" : p.u)) + "</span></div></div>"; }).join("");
-  }
-  $("picks").addEventListener("change", function (e) { var pid = +e.target.getAttribute("data-pid"); if (pid) { live.sel[pid] = e.target.checked; if (!live.on) renderPicks(); } });
-  function shown(p, v) { if (p.us === "F") return Math.round(v * 1.8 + 32); if (p.us === "mph") return Math.round(v * 0.621371); return v.toFixed(p.d); }
-  function stopLive() { live.on = false; $("btnLive").textContent = "Start recording"; }
-  function loop() {
-    var pids = PIDS.filter(function (p) { return live.sel[p.pid] && pidSupported(p.pid); });
-    if (!pids.length) { stopLive(); $("liveStatus").textContent = "Pick at least one supported channel."; return; }
-    (function pass() {
-      if (!live.on || !link) { stopLive(); return; }
-      var row = { t: (Date.now() - live.t0) / 1000 };
-      pids.reduce(function (p, pd) { return p.then(function () { if (!live.on) return; return readPid(pd.pid).then(function (d) { if (d) { var v = pd.f(d[0], d[1]); row[pd.pid] = v; var el = $("tv" + pd.pid); if (el) el.textContent = shown(pd, v); } }).catch(function () {}); }); }, Promise.resolve())
-        .then(function () {
-          live.rows.push(row);
-          var dur = row.t, rate = live.rows.length / Math.max(dur, 0.1);
-          $("liveStatus").textContent = live.rows.length + " samples, " + Math.floor(dur / 60) + ":" + String(Math.floor(dur % 60)).padStart(2, "0") + ", " + rate.toFixed(1) + " per second";
-          $("btnCsv").disabled = live.rows.length < 5;
-          if (live.rows.length > 30000) { stopLive(); $("liveStatus").textContent += ". Stopped at the 30,000-sample limit. Save the CSV."; return; }
-          setTimeout(pass, 0);
-        });
-    })();
-  }
-  $("btnLive").addEventListener("click", function () {
-    if (live.on) { stopLive(); return; }
-    if (live.rows.length && !window.__keepRows) live.rows = [];
-    renderPicks(); live.on = true; live.t0 = Date.now(); $("btnLive").textContent = "Stop recording"; $("btnCsv").disabled = true; loop();
-  });
-  function csv() {
-    var used = PIDS.filter(function (p) { return live.rows.some(function (r) { return isNum(r[p.pid]); }); });
-    var lines = ["Time (s)," + used.map(function (p) { return p.col; }).join(",")];
-    live.rows.forEach(function (r) { lines.push(r.t.toFixed(2) + "," + used.map(function (p) { return isNum(r[p.pid]) ? +r[p.pid].toFixed(3) : ""; }).join(",")); });
-    return lines.join("\n");
-  }
-  $("btnCsv").addEventListener("click", function () { download("v60-log-" + stamp() + ".csv", csv(), "text/csv"); });
-  $("btnShareCsv").addEventListener("click", function () { if (live.rows.length >= 5) share("v60-log-" + stamp() + ".csv", csv(), "text/csv").catch(function () {}); });
-
-  /* ---------------- clear codes ---------------- */
-  function armClear() {
-    var ready = !!(report && link);
-    ["ck1", "ck2", "ck3", "ck4"].forEach(function (id) { $(id).disabled = !ready || id === "ck1"; });
-    var all = ready && ["ck1", "ck2", "ck3", "ck4"].every(function (id) { return $(id).checked; });
-    $("clearWord").disabled = !all;
-    $("btnClear").disabled = !(all && $("clearWord").value.trim().toUpperCase() === "CLEAR");
-  }
-  ["ck2", "ck3", "ck4"].forEach(function (id) { $(id).addEventListener("change", armClear); });
-  $("clearWord").addEventListener("input", armClear);
-  $("btnClear").addEventListener("click", function () {
-    $("btnClear").disabled = true; $("clearStatus").textContent = "Checking that the engine is off...";
-    stopLive();
-    readPid(0x0C).then(function (d) {
-      var rpm = d ? (256 * d[0] + d[1]) / 4 : 0;
-      if (rpm > 50) throw new Error("The engine is running (" + Math.round(rpm) + " rpm). Turn it off, leave the ignition on, and try again.");
-      $("clearStatus").textContent = "Sending clear command...";
-      return query("04", 8000);
-    }).then(function (res) {
-      var okE = res.filter(function (r) { return r.data; }).map(function (r) { return ecuName(r.ecu); });
-      var neg = res.filter(function (r) { return r.neg != null; });
-      if (!okE.length) throw new Error(neg.length ? "The car refused the request (code " + hex2(neg[0].neg) + "). Usually that means the engine is running or the conditions are not right." : "No module confirmed the clear.");
-      $("clearStatus").textContent = "Cleared by: " + okE.join(", ") + ". Running a new health check...";
-      $("clearWord").value = ""; ["ck2", "ck3", "ck4"].forEach(function (id) { $(id).checked = false; });
-      return sleep(800).then(runScan).then(function () { $("clearStatus").textContent = "Cleared by " + okE.join(", ") + ". Readiness now shows what still has to rerun. Drive normally, with a mix of city and highway, over the next few days."; });
-    }).catch(function (e) { $("clearStatus").textContent = (e && e.message) || "Clear failed."; armClear(); });
-  });
-
-  $("btnCopyLog").addEventListener("click", function () { try { navigator.clipboard.writeText(logLines.join("\n")); } catch (e) {} });
-
-  window.__link = { parseResponse: parseResponse, dtcsFrom: dtcsFrom, decodeDTC: decodeDTC, SimTransport: SimTransport, csv: csv, live: live, getReport: function () { return report; }, sim: function () { return link; } };
-})();
+  var reloaded = false;
+  navigator.serviceWorker.addEventListener("controllerchange", function () { if (reloaded) return; reloaded = true; location.reload(); });
+}
 </script>
 </body>
 </html>
