@@ -281,7 +281,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .cockpit .ident { grid-area: id; min-width: 0; }
 .cockpit .sub { color: var(--muted); font-size: 14px; margin-top: 6px; }
 .instruments { grid-area: inst; display: flex; gap: 10px; align-items: stretch; }
-.savest { grid-area: st; font-size: 12.5px; }
+.savest { grid-area: st; font-size: 12.5px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin: 0; }
+.syncchip { font: inherit; font-weight: 700; color: var(--ink); background: transparent; border: 1px solid var(--line, rgba(127,127,127,.35)); border-radius: 999px; padding: 4px 10px; min-height: 30px; cursor: pointer; }
+.syncchip.on { border-color: transparent; padding-left: 0; font-weight: 600; color: inherit; }
 .gauge { position: relative; width: 116px; height: 78px; padding: 0; background: var(--panel); color: var(--ink); border: 1px solid var(--line); border-radius: var(--r-md); display: block; }
 .gauge svg { position: absolute; inset: 6px 8px auto; width: calc(100% - 16px); height: auto; overflow: visible; }
 .gauge .g-track { fill: none; stroke: var(--panel2); stroke-width: 9; stroke-linecap: round; }

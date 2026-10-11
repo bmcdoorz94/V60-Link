@@ -95,7 +95,14 @@
       });
     }, Promise.resolve()).then(function () { API.renderAll(); }).catch(function () {});
   }
+  function chip() {
+    var c = document.getElementById("syncChip"); if (!c || !API) return;
+    if (!API.localMode || !API.localMode()) { c.hidden = true; return; }
+    var m = meta(), isOn = !!(m.token && m.repo); c.hidden = false;
+    c.classList.toggle("on", isOn); c.textContent = isOn ? "Sync: on" : "Sync: off · Set up";
+  }
   function renderBox() {
+    chip();
     var box = document.getElementById("syncBox"); if (!box || !API) return;
     var m = meta(), esc = API.esc;
     if (!API.localMode()) { box.innerHTML = '<p class="status">This copy (inside Claude) saves to your Claude account and can\'t reach GitHub, so it can\'t join sync. Use the Home Screen app for synced progress.</p>'; return; }
@@ -142,7 +149,9 @@
       });
       document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") pull(); });
       window.addEventListener("online", function () { pull(); });
+      setTimeout(chip, 0);
       setTimeout(function () { if (on()) pull(); }, 1500);
-    }
+    },
+    refresh: function () { chip(); }
   });
 })();
