@@ -6,15 +6,17 @@ Living tracker. Update it at the end of every work session: move finished items 
 Story case board shipped. 24 tabs across Today, Learn, Car, Check and Data. Tests pass on phone, desktop and dark.
 
 ## Next
+- [ ] Auto-read uploads with privacy redaction (on-device OCR in Bluefy, black out VIN/plate/name/address/phone/card before saving or syncing). Full spec in docs/HANDOFF_STATE.md, step 2.
+- [ ] Close the feature-audit gaps listed in docs/HANDOFF_STATE.md, step 3 (86 of ~150 cards, missing DIY cards, interactive diagrams, Mode 06, resale tracker, and more).
 - [ ] Ask Kyle for his build month (door-pillar label) and the other backlog questions below.
 - [ ] First real-car test of Live link in Bluefy once the adapter arrives.
 - [ ] Story polish after Kyle uses it: more cutscene art per case, and an "Evidence" photo attachment per case.
 
 ## Backlog
-- [ ] Kyle: create the private repo `v60-garage-data` and a fine-grained token (Contents read/write, that repo only), then turn on sync on each device.
+- [x] Kyle: sync set up in Bluefy (2026-10-11).
 - [ ] Build month from the door-pillar label (asked 2026-10-10; drives bulletin applicability).
 - [ ] Engine bay photo to calibrate the bay map to the real car.
-- [ ] Monthly reminder for oil level and tire pressure (needs a scheduled task or calendar file; the calendar .ics export already exists).
+- [x] Monthly reminder for oil level and tire pressure (iPhone Reminders, from 2026-11-01).
 - [ ] Import the recent oil change receipt and any others.
 - [ ] Confirm whether the OBDLink CX has been ordered, then test Live link on the real car in Bluefy.
 - [ ] Ask whether any service contract or extended warranty came with the car.
