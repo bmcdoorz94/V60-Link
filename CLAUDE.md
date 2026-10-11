@@ -44,3 +44,12 @@ Read `docs/ROADMAP.md` before starting. It holds the backlog, the decisions so f
 - Phone first: 390 px wide with no sideways scroll. Bottom bar on phone, side rail on desktop.
 - With every feature, re-check that its screen isn't crowded. Move secondary material into `<details>`, and prefer one clear next action per card.
 - Toggle groups use `.seg` with `aria-pressed`. Pills are `ok`, `watch`, `concern`/`bad`, and `info`/`none`.
+
+## Claude ↔ Gemini handoff protocol
+Kyle alternates between Claude and Gemini when usage limits hit. Neither AI can talk to the other, so state moves through one Markdown file.
+- **"Initiate Handoff Protocol"** means: stop development immediately and produce the handoff:
+  1. Rewrite `docs/HANDOFF_STATE.md` with three sections: `## 1. Current Active Objective`, `## 2. Immediate Next Steps` (precise, prioritized), and `## 3. Pending Logic & Blockers` (errors, hardware test parameters, design choices under evaluation).
+  2. Run `python3 tools/handoff.py`. It writes `HANDOFF.md` (gitignored) with those sections plus `## 4. Complete Codebase`: every source file in full, copied byte for byte by the script (never typed out by hand, so nothing is truncated or replaced with placeholders), plus a manifest with SHA-256 prefixes and the icons in base64.
+  3. Commit and push the source changes, then send `HANDOFF.md` to Kyle as a downloadable file.
+- Build outputs (root `index.html`, `js/`, `sw.js`, `link.html`, `dist-artifact/`) are deliberately left out. `tools/build.py` regenerates them from `src/`, and the GitHub Action `.github/workflows/build.yml` runs that build on every push to `src/` or `tools/`.
+- **Receiving a handoff back** (Kyle uploads a .md from Gemini): run `python3 tools/apply_handoff.py <file> --dry-run`, review it, then run without `--dry-run`. It writes every `### \`path\`` + code block as a full-file replacement, refuses build outputs and paths outside the repo, handles `## Deleted files`, writes sections 1–3 to `docs/HANDOFF_STATE.md`, and prints any `## Edits to apply` (find-and-replace edits for files too large to return whole, such as core.js) for you to apply. Then build, run the tests, review the diff for accuracy problems and placeholders, and commit.
