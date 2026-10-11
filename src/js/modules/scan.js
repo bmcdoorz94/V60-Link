@@ -60,7 +60,7 @@
   var MASKED = /(?:[X*•#]{4}[ -]?){1,3}\d{4}\b|\b(?:ending|ends)\s+(?:in\s+)?\d{4}\b|\b(?:visa|mastercard|amex|discover)\b\W{0,3}[X*\d][X*\d -]{3,}/gi;
   var VIN = /\b[A-Z0-9]{17}\b/gi;
   var LABEL = /\b(?:customer(?:\s*name)?|cust\.?|name|bill(?:ed)?\s+to|sold\s+to|ship\s+to|owner|insured|driver|plate|lic(?:ense)?(?:\s*(?:plate|no\.?|number|#))?|tag\s*(?:no\.?|#)|vin|policy(?:\s*(?:no\.?|number|#))?|acct\.?(?:\s*(?:no\.?|#))?|account(?:\s*(?:no\.?|number|#))?|member(?:\s*id)?|card(?:\s*(?:no\.?|number|#))?|phone|tel|cell|e-?mail|address|addr)\b\s*[:#.]?/gi;
-  var KIND_NAME = { vin: "VIN", phone: "phone number", email: "email address", card: "card number", address: "address", label: "word after a label", mine: "word on your hide list", hand: "hidden by you" };
+  var KIND_NAME = { vin: "VIN", phone: "phone number", email: "email address", card: "card number", address: "address", label: "word after a label", mine: "word on your hide list", hand: "hidden by you", shop: "shop detail" };
 
   function luhn(d) { var s = 0, alt = false; for (var i = d.length - 1; i >= 0; i--) { var n = +d[i]; if (alt) { n *= 2; if (n > 9) n -= 9; } s += n; alt = !alt; } return s % 10 === 0; }
   function vinLike(t) { var digits = (t.match(/\d/g) || []).length, letters = (t.match(/[A-Z]/gi) || []).length; return digits >= 3 && letters >= 2; }
@@ -74,7 +74,14 @@
     return list.map(function (s) { return String(s).trim(); }).filter(function (s) { return s.length >= 3; });
   }
   /* lines: [{words:[{text,bbox:{x0,y0,x1,y1}}]}] -> boxes [{x0,y0,x1,y1,kind,redact,words:[li,wi]}] */
-  function detect(lines, mine) {
+  /* On a receipt, the shop's own name, address, phone and email sit in the header above the customer block.
+     Kyle's choice (2026-10-11): leave the shop's details visible. They are outlined, so one tap hides them. */
+  var CUSTOMER = /\b(customer|cust\.?|name|bill(?:ed)?\s+to|sold\s+to|ship\s+to|owner|insured|driver|vin|plate|lic(?:ense)?|policy|acct|account|member|card)\b/i;
+  function shopHeader(lines) {
+    for (var i = 0; i < lines.length; i++) if (CUSTOMER.test((lines[i].words || []).map(function (w) { return w.text; }).join(" "))) return i;
+    return Math.min(6, Math.ceil(lines.length * 0.3));
+  }
+  function detect(lines, mine, opt) {
     var marks = {}; /* "li:wi" -> kind */
     function markSpan(li, offs, a, b, kind) { offs.forEach(function (o, wi) { if (o[1] > a && o[0] < b && !marks[li + ":" + wi]) marks[li + ":" + wi] = kind; }); }
     lines.forEach(function (ln, li) {
@@ -102,9 +109,11 @@
         else if (lines[li + 1]) { var nw = lines[li + 1].words || [], n = Math.min(nw.length, 6); for (var k = 0; k < n; k++) if (!marks[(li + 1) + ":" + k]) marks[(li + 1) + ":" + k] = "label"; }
       }
     });
+    var head = opt && opt.receipt ? shopHeader(lines) : 0;
     return Object.keys(marks).map(function (key) {
-      var p = key.split(":"), w = lines[+p[0]].words[+p[1]], b = w.bbox;
-      return { x0: b.x0 - PAD, y0: b.y0 - PAD, x1: b.x1 + PAD, y1: b.y1 + PAD, kind: marks[key], redact: true, li: +p[0], wi: +p[1] };
+      var p = key.split(":"), w = lines[+p[0]].words[+p[1]], b = w.bbox, kind = marks[key];
+      var shop = +p[0] < head && (kind === "phone" || kind === "email" || kind === "address" || kind === "label");
+      return { x0: b.x0 - PAD, y0: b.y0 - PAD, x1: b.x1 + PAD, y1: b.y1 + PAD, kind: shop ? "shop" : kind, redact: !shop, li: +p[0], wi: +p[1] };
     });
   }
   function redactedText(lines, boxes) {
@@ -193,7 +202,7 @@
     $("scanMineSave").addEventListener("click", function () {
       var v = $("scanMine").value.split("\n").map(function (x) { return x.trim(); }).filter(Boolean).slice(0, 40);
       try { localStorage.setItem(PRIVATE_KEY, JSON.stringify(v)); } catch (e) {}
-      if (S && S.lines) { var keep = S.boxes.filter(function (b) { return b.kind === "hand"; }); S.boxes = detect(S.lines, privateWords()).concat(keep); draw(); summary(); }
+      if (S && S.lines) { var keep = S.boxes.filter(function (b) { return b.kind === "hand"; }); S.boxes = detect(S.lines, privateWords(), { receipt: S.kind === "receipt" }).concat(keep); draw(); summary(); }
       $("scanMsg").textContent = "List saved on this device.";
     });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && S && !$("scanOv").hidden) finish(null); });
@@ -225,7 +234,7 @@
     S.boxes.forEach(function (b) { if (b.redact) n[b.kind] = (n[b.kind] || 0) + 1; else shown++; });
     var PL = { vin: "VINs", phone: "phone numbers", email: "email addresses", card: "card numbers", address: "address words", label: "words after a label", mine: "words on your hide list", hand: "hidden by you" };
     var parts = Object.keys(n).map(function (k) { return n[k] + " " + (n[k] > 1 ? PL[k] : KIND_NAME[k]); });
-    $("scanFound").innerHTML = S.lines ? '<p><b>' + (parts.length ? "Hidden: " + esc(parts.join(", ")) : "Nothing personal found") + "</b>" + (shown ? '<span class="status"> · ' + shown + " shown on purpose</span>" : "") + "</p>" : "";
+    $("scanFound").innerHTML = S.lines ? '<p><b>' + (parts.length ? "Hidden: " + esc(parts.join(", ")) : "Nothing personal found") + "</b>" + (shown ? '<span class="status"> · ' + (S.boxes.some(function (b) { return b.kind === "shop" && !b.redact; }) ? "the shop's own details are left visible (outlined); tap to hide them" : shown + " shown on purpose") + "</span>" : "") + "</p>" : "";
     $("scanUndo").hidden = !S.boxes.some(function (b) { return b.kind === "hand"; });
     if (S.lines) { S.text = redactedText(S.lines, S.boxes); }
   }
@@ -308,11 +317,11 @@
           ocr(base).then(function (data) {
             if (S !== me) return;
             S.lines = linesOf(data);
-            S.boxes = detect(S.lines, privateWords()).concat(S.boxes.filter(function (b) { return b.kind === "hand"; }));
             var raw = S.lines.map(function (l) { return (l.words || []).map(function (w) { return w.text; }).join(" "); }).join("\n");
-            summary();
             var auto = classify(raw);
             if (S.kind === "photo" && auto !== "photo") S.kind = auto;
+            S.boxes = detect(S.lines, privateWords(), { receipt: S.kind === "receipt" }).concat(S.boxes.filter(function (b) { return b.kind === "hand"; }));
+            summary();
             S.fields = parse(raw, S.text, S.kind);
             $("scanKind").textContent = KIND_TITLE[S.kind] || "Photo";
             draw(); fieldsUI();

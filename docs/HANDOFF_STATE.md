@@ -26,7 +26,7 @@ State of the app when this handoff was written (all pushed to `main`, tests pass
 - A fresh `HANDOFF.md` is rebuilt on every push by `.github/workflows/handoff.yml` and kept on the `handoff` branch.
 
 ## 2. Immediate Next Steps
-1. **Ask Kyle these.** Scanning shipped with the proposed defaults below; adjust it to his answers. Also ask whether the VIN and plate he types in Glovebox should stay in the synced data: they currently sync to his private repo.
+1. **Answered 2026-10-11.** Shop details stay visible on receipts (`shopHeader()` in scan.js: lines above the first customer-type label are the shop's). Always confirm before saving. Glovebox VIN and plate keep syncing (no preference). No API-key AI read (no preference). The original questions are below for reference.
    - Which uploads should be read: service receipts, the door-pillar label, registration, insurance card, inspection report, dash or warning-light photos, story proof photos? All of them, or a subset?
    - What counts as personal information to black out? Proposed default: VIN, license plate, his name, street address, phone numbers, email addresses, card and account numbers, signatures. Anything else (for example the shop's own name and phone, which are useful and not his)?
    - Save automatically, or show "Here's what I read" and save with one tap? Proposed default: read automatically, pre-fill everything, one tap to confirm, low-confidence fields marked unconfirmed.

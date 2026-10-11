@@ -27,8 +27,12 @@ const srv = http.createServer((q, r) => {
     const lines = ["Customer: Jordan Sample", "VIN 1HGBH41JXMN109186", "Call (512) 555-0142", "Visa 4111 1111 1111 1111", "1234 Example Ln", "Austin, TX 78701", "Oil & filter change 49.99", "Part 31330050 qty 1"].map(L);
     const boxes = S._detect(lines, ["Sample"]);
     const hid = {}; boxes.slice().sort((x, y) => x.li - y.li || x.wi - y.wi).forEach(b => { hid[b.li] = (hid[b.li] || []).concat(lines[b.li].words[b.wi].text); });
+    const rc = ["Lakeline Auto Care", "8200 Example Pkwy", "Austin, TX 78750", "(512) 555-0199", "Customer: Jordan Sample", "1234 Example Ln", "Phone: (512) 555-0142"].map(L);
+    const rb = S._detect(rc, [], { receipt: true }), shown = {}, hidden = {};
+    rb.forEach(b => { (b.redact ? hidden : shown)[b.li] = 1; });
+    const shop = { shown: Object.keys(shown).join(","), hidden: Object.keys(hidden).join(",") };
     const door = S._parse("MFD BY VOLVO CAR CORPORATION 11/15 GVWR 2390 KG", "", S._classify("MFD BY VOLVO CAR CORPORATION 11/15 GVWR"));
-    return { hid, door, cls: S._classify("REPAIR ORDER ... TOTAL 12.00") };
+    return { hid, door, shop, cls: S._classify("REPAIR ORDER ... TOTAL 12.00") };
   });
   ok((unit.hid[0] || []).join(" ") === "Jordan Sample", "name after Customer: hidden");
   ok((unit.hid[1] || []).indexOf("1HGBH41JXMN109186") >= 0, "VIN hidden");
@@ -39,6 +43,7 @@ const srv = http.createServer((q, r) => {
   ok(!unit.hid[7], "part number left visible");
   ok(unit.door.build === "2015-11", "door label build month decoded (" + unit.door.build + ")");
   ok(unit.cls === "receipt", "receipt classified");
+  ok(unit.shop.shown === "1,2,3" && unit.shop.hidden === "4,5,6", "shop header visible, customer block hidden (" + JSON.stringify(unit.shop) + ")");
 
   /* 2. full run: synthetic receipt photo through Glovebox */
   const png = await p.evaluate(() => {
