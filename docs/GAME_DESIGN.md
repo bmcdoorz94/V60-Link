@@ -11,6 +11,31 @@ The app is a real-life game about one car. The main story, "The As-Is File", dri
 - **Training is the how-to library behind the cases.** It used to be a separate "Academy" tab, which made it look like a second story. It is no longer in the menu. A step's **Lesson** button opens the matching lesson, which shows "Training for <case>" and a **Back to the case** button. Finishing the lesson ticks that step automatically.
 - To browse every lesson, Story has a **Training library** link (with a count of lessons done).
 
+## Guided mode (guide.js): strong help at first, then it lets go
+- **Five areas, each with its own level:**
+  - under the hood (Safe to Touch, The Thirst, First Wrench)
+  - the adapter (The Signal, Baseline)
+  - records and papers (The Belt, The Paper Trail)
+  - tires (The Light That Won't Go Out)
+  - reading data (Sixth Sense)
+- **Level 0, Guided.** The next objective shows **Start**, which opens a full-screen walkthrough:
+  - It first asks "Are you at the car right now?" once a day. When the answer is no, steps that need the car are skipped in favor of ones that don't.
+  - Each screen shows one step, with why it matters, how to do it, and one big action: open the lesson, do it in the app, or Done for steps only the owner can confirm. "Show me where" opens the engine bay map.
+  - Hands-on steps first need a four-item safety check, from the owner's manual rules already in Safe to Touch.
+  - **I'm stuck** works as a ladder: a hint, then the lesson and the map, then "Can't do it now" (log a known risk) or "Show a different step".
+  - Leaving to do a step in the app leaves a pill that leads back. When the step is done, the next screen starts with what was just finished.
+- **Level 1, Assisted.** The case board as usual, with a "Walk me through it" button.
+- **Level 2, On your own.** No extra prompting.
+- **Levels rise from proof, not time.** Each counts as one point in its area:
+  - a step finished in the walkthrough without "I'm stuck"
+  - a right answer in a case debrief
+  - an oil check, record, receipt, real scan or saved drive logged without being led there
+
+  Level 1 needs 4 points and level 2 needs 10. Closed cases count 3 each, so existing progress starts at the right level.
+- **Levels drop** after two stuck steps in a row in an area, or after 45+ days away. A long gap also brings a "Welcome back" recap on Today.
+- **Every change is announced on Today by Lars,** with a **Keep guiding me** button that pins that area to guided (Kyle chose "just do it", 2026-10-11).
+- **While any area is guided, a newly opened tab shows a one-line intro once.** The **Guide me** button in the header always opens the walkthrough.
+
 ## Cases (main story)
 Each case has:
 - a **briefing**: why it matters on this car, time, cost, tools, the risk if skipped, and sources

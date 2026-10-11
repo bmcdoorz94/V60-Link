@@ -34,6 +34,7 @@ Story case board shipped. 24 tabs across Today, Learn, Car, Check and Data. Test
   - Contents of TJ30087
 
 ## Decisions
+- 2026-10-11: Guided mode (Kyle's answers): full-screen walkthrough (Claude's pick), levels change without asking but are announced with an undo, guidance fades per area (Claude's pick), no read-aloud needed in the walkthrough.
 - 2026-10-11 (scanner, Kyle's answers): the shop's own name, address and phone stay visible on receipts (outlined, one tap hides them); always confirm before saving; Glovebox VIN and plate keep syncing to the private repo (no preference); on-device reading only, no API-key AI read (no preference, so the simpler option).
 - 2026-10-11: Kyle uses Bluefy for everything (not the Home Screen app) so he never switches browsers. Sync to `v60-garage-data` is on; the token expires Dec 10 2026. A header Sync chip opens the setup directly.
 - 2026-10-11: The Academy and the Story looked like two competing stories. The Academy is now "Training": hidden from the menu, opened from a case step's Lesson button, with a Back to the case button and a Training library link in Story.
@@ -54,6 +55,7 @@ Story case board shipped. 24 tabs across Today, Learn, Car, Check and Data. Test
 - VIN, plate and chassis number never go in the repo. They may only be typed into the app's local storage.
 
 ## Done
+- 2026-10-11: On-device photo reading with redaction (scan.js) and guided mode (guide.js), each with its own test.
 - 2026-10-11: Academy merged into Story as Training (Lesson buttons, Back to the case, Training library link). Trailer v3: a canvas cinematic with synthesized sound and a sport-wagon silhouette.
 - 2026-10-11: Sync through a private GitHub repo (sync.js; tests/sync.js mocks the GitHub API), skill tree with perks (skills.js), Timeline, proof photos, garage map, car pulse strip, swipeable Today, Listen buttons, Drive mode, cold-open teaser, backup nudge, a backup export that works outside Claude (share sheet or download), the teaser trailer rewrite, and a monthly iPhone reminder.
 - 2026-10-11: Trailer (Claude artifact "V60 Garage Trailer") and presentation deck ("V60 Garage", Slides). Backup and restore reachable from Story, then Options, at any stage. The app asks the browser for persistent storage.

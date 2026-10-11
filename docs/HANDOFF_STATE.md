@@ -25,6 +25,10 @@ State of the app when this handoff was written (all pushed to `main`, tests pass
 - **Kyle uses Bluefy only** (GitHub Pages copy, no switching browsers). Claude-powered features (`api.sample()`: receipt reader, Ask with Claude, photo review) only work inside the Claude artifact, so **in Bluefy they are unavailable**. Anything that "reads" an upload in Bluefy must run on the device.
 - A fresh `HANDOFF.md` is rebuilt on every push by `.github/workflows/handoff.yml` and kept on the `handoff` branch.
 
+**Guided mode is also built** (2026-10-11): `src/js/modules/guide.js`. It gives a full-screen walkthrough at first, then fades per area as Kyle shows he can do the steps. The full rules are in GAME_DESIGN.md under "Guided mode", and `tests/guide.js` covers it. Follow-ups:
+- tune the thresholds (4 and 10 points) after Kyle uses it
+- give the welcome-back recap scene art
+
 ## 2. Immediate Next Steps
 1. **Answered 2026-10-11.** Shop details stay visible on receipts (`shopHeader()` in scan.js: lines above the first customer-type label are the shop's). Always confirm before saving. Glovebox VIN and plate keep syncing (no preference). No API-key AI read (no preference). The original questions are below for reference.
    - Which uploads should be read: service receipts, the door-pillar label, registration, insurance card, inspection report, dash or warning-light photos, story proof photos? All of them, or a subset?
