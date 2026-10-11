@@ -5,7 +5,7 @@
       what: "Your size is 215/50R17. Tires in that size from the research: Michelin CrossClimate 2, Michelin Primacy Tour A/S, Continental PureContact LS, Pirelli P7 AS Plus 3. Live prices were not checked.",
       why: "Tires are the single biggest change to braking and wet grip. Your car's tire monitor compares wheel speeds, so Volvo's bulletin TJ29818 wants all four within 5% rolling circumference: mismatched or unevenly worn tires can keep the warning on.",
       qs: [["Any tire is over 6 years old (DOT code), the age Volvo's manual gives for replacement", 3], ["Tread is at 4/32 in or less, or wear is uneven", 3], ["The four tires are not the same brand and model", 2], ["The tire pressure light keeps coming back after a correct calibration", 1]],
-      base: 0, src: [["Volvo TSB TJ29818", "https://static.nhtsa.gov/odi/tsbs/2019/MC-10165233-9999.pdf"]], go: [["Tire check in the Academy", "tab:academy"]] },
+      base: 0, src: [["Volvo TSB TJ29818", "https://static.nhtsa.gov/odi/tsbs/2019/MC-10165233-9999.pdf"]], go: [["Tire check training", "tab:academy"]] },
     { id: "dashcam", t: "Dash camera", cat: "Protection", lo: null, hi: null, costNote: "prices not researched here", diff: "Plug-in: 15 min. Hardwired: shop or careful DIY", rev: "Fully reversible",
       what: "Start with one that plugs into the 12 V socket: no wiring. Hardwiring through a fuse tap allows parking mode, which draws from the battery while the car sits.",
       why: "Evidence after a crash or a dispute. Texas has no dash cam exemption: Transportation Code 547.613 bans anything on the windshield that obstructs the driver's view, so mount it behind the rear-view mirror.",

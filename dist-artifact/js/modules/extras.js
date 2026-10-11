@@ -3,7 +3,7 @@
   function mods(api, id) { return api.mod(id) || {}; }
   function doneCount(api, chapterIdx) { var c = api.CHAPTERS[chapterIdx]; if (!c) return 0; var A = api.acad(); return c.missions.filter(function (m) { return A.done[m.id] && A.done[m.id].outcome !== "skip"; }).length; }
   var ACH = [
-    ["hood", "First look", "Open the hood for the first time (Academy).", function (a) { return !!a.acad().done["m-hood"]; }],
+    ["hood", "First look", "Open the hood for the first time (Training).", function (a) { return !!a.acad().done["m-hood"]; }],
     ["oilwatch", "Oil watcher", "Log three oil level checks.", function (a) { return (a.state.oil || []).length >= 3; }],
     ["psi", "Pressure perfect", "Record all four tire pressures.", function (a) { return !!a.acad().done["m-psi"]; }],
     ["history", "Paper trail", "Log three past services.", function (a) { return a.state.log.length >= 3; }],
@@ -19,7 +19,7 @@
     ["detective", "Detective", "Solve five mystery cars in the simulator.", function (a) { var s = a.acad().sim; return !!(s && s.correct >= 5); }],
     ["fuel", "Range finder", "Log five fill-ups.", function (a) { return (mods(a, "fuel").fills || []).length >= 5; }],
     ["receipts", "Archivist", "Add three receipts.", function (a) { return (mods(a, "glove").receipts || []).length >= 3; }],
-    ["academy", "Graduate", "Finish every Academy chapter.", function (a) { return a.CHAPTERS.every(function (c, i) { return doneCount(a, i) >= c.missions.length; }); }],
+    ["academy", "Graduate", "Finish every training chapter.", function (a) { return a.CHAPTERS.every(function (c, i) { return doneCount(a, i) >= c.missions.length; }); }],
     ["season", "Ready for the season", "Complete a seasonal checklist.", function (a) { var s = mods(a, "extras").season || {}; return Object.keys(s).some(function (k) { return s[k] && s[k].complete; }); }]
   ];
   function earned(api) { return ACH.filter(function (x) { try { return x[3](api); } catch (e) { return false; } }); }

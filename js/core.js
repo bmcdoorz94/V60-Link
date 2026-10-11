@@ -1331,7 +1331,8 @@
   function renderMission(m) {
     if (!m) { aui.view = "home"; return renderAcademy(); }
     var A = acad(), st = A.done[m.id], q = A.quiz[m.id];
-    var html = '<div class="row"><button type="button" class="quiet" data-acad="home">Back to Academy</button><span class="status">' + ({ learn: "Learn", field: "Field mission", log: "Log" })[m.type] + " · " + m.xp + " XP · about " + m.min + " min</span></div>";
+    var fc = window.V60_FROMCASE;
+    var html = '<div class="row">' + (fc ? '<button type="button" data-jump="case:' + esc(fc.id) + '">Back to the case: ' + esc(fc.t) + "</button>" : '<button type="button" class="quiet" data-acad="home">All training</button>') + '<span class="status">' + (fc ? "Training for " + esc(fc.t) + " · " : "") + ({ learn: "Lesson", field: "Field mission", log: "Log" })[m.type] + " · " + m.xp + " XP · about " + m.min + " min</span></div>";
     html += "<h2>" + esc(m.title) + "</h2>";
     if (m.need) html += '<p><b>You need:</b> ' + esc(m.need) + "</p>";
     (m.body || []).forEach(function (p) { html += "<p>" + esc(p) + "</p>"; });
@@ -1402,7 +1403,7 @@
     if (!j) { aui.view = "home"; return renderAcademy(); }
     var picks = aui.jobPicks[j.id] || {}, spent = 0, res = acad().jobs[j.id];
     j.checks.forEach(function (c, i) { if (picks[i]) spent += c[1]; });
-    var html = '<div class="row"><button type="button" class="quiet" data-acad="home">Back to Academy</button><span class="status">Shop job · up to ' + j.xp + " XP</span></div><h2>" + esc(j.title) + "</h2>";
+    var html = '<div class="row"><button type="button" class="quiet" data-acad="home">All training</button><span class="status">Shop job · up to ' + j.xp + " XP</span></div><h2>" + esc(j.title) + "</h2>";
     html += '<div class="note calm"><b>Customer says:</b> ' + esc(j.complaint) + "</div>";
     html += '<h4>Inspect</h4><p class="lede">Each check costs shop time. Clock: <b>' + spent + " min</b>. Par is " + j.best + " minutes.</p>";
     html += '<ul class="mlist">' + j.checks.map(function (c, i) { return "<li>" + (picks[i] ? '<div class="found"><b>' + esc(c[0]) + '</b><span class="status"> · ' + c[1] + " min</span><p>" + esc(c[2]) + "</p></div>" : '<button type="button" class="mbtn" data-check="' + j.id + ":" + i + '"><span class="pill none">' + c[1] + ' min</span><span class="mt">' + esc(c[0]) + "</span></button>") + "</li>"; }).join("") + "</ul>";
@@ -1973,7 +1974,7 @@
   /* tab entries: [id, label, hidden-unless-active] ; modules add their own tabs with section + order */
   var SECTIONS = [
     { id: "today", n: "Today", tabs: [] },
-    { id: "learn", n: "Learn", tabs: [["academy", "Academy", 10], ["learn", "Reference", 80, true], ["unlocks", "Unlocks", 90, true]] },
+    { id: "learn", n: "Learn", tabs: [["academy", "Training", 10, true], ["learn", "Reference", 80, true], ["unlocks", "Unlocks", 90, true]] },
     { id: "car", n: "Car", tabs: [["engine", "Engine bay", 10], ["bay", "Whole car", 20], ["my", "My V60", 30]] },
     { id: "check", n: "Check", tabs: [["health", "Health", 10], ["records", "Service log", 20], ["diag", "Diagnose", 30]] },
     { id: "data", n: "Data", tabs: [["lab", "Data lab", 20], ["sim", "Simulator", 30]] }

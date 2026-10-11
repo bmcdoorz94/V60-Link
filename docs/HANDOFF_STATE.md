@@ -5,20 +5,22 @@ Shipped on 2026-10-11:
 - Timeline view and proof photos in Story.
 - Garage map on Today, the header pulse strip and Listen buttons (`src/js/modules/ui.js`).
 - Drive mode in Live link, the first-launch cold open, the backup nudge, and a backup export that works outside Claude.
-- The trailer was rewritten as a 40-second mystery teaser (a Claude artifact, not in the repo).
+- The trailer is a 46-second canvas cinematic with synthesized sound (a Claude artifact, not in the repo).
+- The Academy became "Training": hidden from the nav; story steps open lessons with `data-from="<caseId>"`, which sets `window.V60_FROMCASE` so the lesson shows "Back to the case".
 - A monthly iPhone reminder for the oil and tire check was created in Kyle's Reminders app.
 
 The waiting item is Kyle's sync setup: create the private repo `v60-garage-data` and a fine-grained token (that repo only, Contents read and write), then paste both in Story, then Options, on each device.
 
 ## 2. Immediate Next Steps
-1. Get Kyle's reaction after he plays the opening (prologue, Safe to Touch, The Signal with his real OBDLink CX in Bluefy). Ask whether the pace of reveals feels right.
-2. Ask Kyle for his build month from the driver's door-pillar label. It closes a Paper Trail step.
-3. Possible next additions:
+1. Get Kyle's reaction to the Story + Training merge and the new trailer.
+2. Get Kyle's reaction after he plays the opening (prologue, Safe to Touch, The Signal with his real OBDLink CX in Bluefy). Ask whether the pace of reveals feels right.
+3. Ask Kyle for his build month from the driver's door-pillar label. It closes a Paper Trail step.
+4. Possible next additions:
    - more scene art per case
    - an evidence photo per case
    - a Codebook entry for each Volvo-specific code he actually sees
    - a "previously on" recap scene when he returns after a long break
-4. After any change: build, run all three tests, check the screenshots, and update ROADMAP.md, GAME_DESIGN.md and this file.
+5. After any change: build, run all three tests, check the screenshots, and update ROADMAP.md, GAME_DESIGN.md and this file.
 
 ## 3. Pending Logic & Blockers
 - **Gate logic** (story.js):

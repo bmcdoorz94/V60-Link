@@ -6,6 +6,11 @@ The app is a real-life game about one car. The main story, "The As-Is File", dri
 - Visible: **Today** (home), **Story**, the **Ask** bar (offline answers about the car), and the red **Something's wrong with the car** button. The button is always there and goes straight to the right troubleshooting guide, whatever the story progress.
 - The prologue scene introduces the car (bought as-is, no records), the adapter (a box that speaks the car's language), and Lars, a fictional retired Volvo tech who narrates. Every fact he states is sourced elsewhere in the app.
 
+## Story and Training
+- **Story is the only place you play.** Each case says what to do on the real car and in what order.
+- **Training is the how-to library behind the cases.** It used to be a separate "Academy" tab, which made it look like a second story. It is no longer in the menu. A step's **Lesson** button opens the matching lesson, which shows "Training for <case>" and a **Back to the case** button. Finishing the lesson ticks that step automatically.
+- To browse every lesson, Story has a **Training library** link (with a count of lessons done).
+
 ## Cases (main story)
 Each case has:
 - a **briefing**: why it matters on this car, time, cost, tools, the risk if skipped, and sources
@@ -17,7 +22,7 @@ Cases close from real evidence, not from tapping "done". If a case can't be fini
 
 | Act | Case | What closes it | What it reveals |
 |---|---|---|---|
-| 1 Arrival | Safe to Touch | Safety, hood and landmark missions | Academy, Engine bay |
+| 1 Arrival | Safe to Touch | Safety, hood and landmark lessons | Engine bay |
 | 1 | The Signal | A real health check with the adapter, plus 5 decoded signals | Live link |
 | | *Act 1 complete* | | Whole car map, Health score, Flashcards |
 | 2 The Unknowns | The Belt | A logged timing belt record | Service log, Glovebox |
@@ -70,7 +75,7 @@ Four branches, each node earned by evidence already logged elsewhere. A branch b
 Three nodes grant perks that open features: Record keeper opens the **Timeline** view, Scholar opens the **Mechanic** detail level, and Data reader opens **Drive mode** in Live link. Each node is worth 25 XP, and the capstone 100.
 
 ## Progress and rewards
-- **XP and rank:** the level chip in the header. XP comes from Academy missions, closed cases (40 each, 10 for a known risk, 150 for the finale), correct debrief answers (5 each), decoded signals (3 each), DIY jobs, receipts, scans, trips and more.
+- **XP and rank:** the level chip in the header. XP comes from Training lessons and field missions, closed cases (40 each, 10 for a known risk, 150 for the finale), correct debrief answers (5 each), decoded signals (3 each), DIY jobs, receipts, scans, trips and more.
 - **Achievements:** 18 real-proof badges, such as logging three oil checks, verifying the belt or passing the exam.
 - **Scenes:** each closure or new case is a short scene. Scenes wait on Today until you watch them, and any scene can be replayed from Story, then Scenes.
 

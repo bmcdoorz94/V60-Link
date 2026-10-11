@@ -10,8 +10,8 @@
   function n(x) { return x || 0; }
   var B = [["hands", "Hands-on"], ["diag", "Diagnostics"], ["know", "Knowledge"], ["own", "Ownership"]];
   var NODES = [
-    { id: "h1", b: "hands", tier: 1, t: "Under the hood", req: "Open the hood and find the landmarks (Academy).", ok: function () { return M("m-hood") && M("m-five"); }, prog: function () { return (M("m-hood") ? 1 : 0) + (M("m-five") ? 1 : 0) + " of 2"; } },
-    { id: "h2", b: "hands", tier: 2, t: "Fluids", req: "Do the fluid check: the Academy mission and the DIY job.", ok: function () { return M("m-fluidlook") && diy("j-fluids"); } },
+    { id: "h1", b: "hands", tier: 1, t: "Under the hood", req: "Open the hood and find the landmarks (Training).", ok: function () { return M("m-hood") && M("m-five"); }, prog: function () { return (M("m-hood") ? 1 : 0) + (M("m-five") ? 1 : 0) + " of 2"; } },
+    { id: "h2", b: "hands", tier: 2, t: "Fluids", req: "Do the fluid check: the training mission and the DIY job.", ok: function () { return M("m-fluidlook") && diy("j-fluids"); } },
     { id: "h3", b: "hands", tier: 3, t: "Tires", req: "Record pressures and finish the calibration job.", ok: function () { return M("m-psi") && diy("j-tires"); } },
     { id: "h4", b: "hands", tier: 4, t: "Wrench", req: "Finish 3 DIY jobs.", ok: function () { return diy() >= 3; }, prog: function () { return Math.min(3, diy()) + " of 3"; } },
     { id: "d1", b: "diag", tier: 1, t: "Listener", req: "Run a health check with Live link (the simulated car counts).", ok: function () { return (mod("live", { scans: [] }).scans || []).length > 0 || !!API.state.lastScan; } },

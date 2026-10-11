@@ -58,7 +58,7 @@
     "3": { tabs: ["sim"], line: "Act 3 complete. Side mission: the Simulator and its mystery cars." },
     "4": { tabs: ["exam"], line: "Act 4 complete. The V60 Master exam is open. Pass it to reach the finale." }
   };
-  var TABN = { skills: "Skill tree", academy: "Academy", engine: "Engine bay", live: "Live link", bay: "Whole car", health: "Health", cards: "Flashcards", records: "Service log", glove: "Glovebox", fuel: "Fuel & costs", diy: "DIY jobs", trouble: "Troubleshoot", bulletins: "Bulletins", my: "My V60", kb: "Library", achieve: "Achievements", lab: "Data lab", sim: "Simulator", upgrades: "Upgrades", diag: "Diagnose", exam: "Exam" };
+  var TABN = { skills: "Skill tree", academy: "Training", engine: "Engine bay", live: "Live link", bay: "Whole car", health: "Health", cards: "Flashcards", records: "Service log", glove: "Glovebox", fuel: "Fuel & costs", diy: "DIY jobs", trouble: "Troubleshoot", bulletins: "Bulletins", my: "My V60", kb: "Library", achieve: "Achievements", lab: "Data lab", sim: "Simulator", upgrades: "Upgrades", diag: "Diagnose", exam: "Exam" };
   var CASES = [
     { id: "safe", act: "1", crit: true, t: "Safe to Touch", sub: "Learn the car's layout and the rules before touching anything.", scene: "bay", reveals: ["academy", "engine"],
       know: { arts: ["a-car", "a-lights"], tags: ["Identity", "Basics", "Safety", "Warning lights"] }, quiz: ["f-fan6", "f-hoodss", "f-coolloc"],
@@ -372,7 +372,7 @@
     return '<ol class="steps">' + c.steps.map(function (st, i) {
       var ok = s.done[i], pr = st.prog && !ok ? st.prog(api) : "";
       var info = (deep !== "short" && st.why ? "<small>" + esc(st.why) + "</small>" : "") + (deep === "mech" && st.mech ? '<small class="mech">' + esc(st.mech) + "</small>" : "") + (pr ? '<small class="prog">' + esc(pr) + "</small>" : "");
-      var acts = (st.manual ? '<button type="button" class="quiet" data-man="' + st.manual + '" aria-pressed="' + ok + '">' + (ok ? "Undo" : "Mark done") + "</button>" : "") + (st.go && !ok ? '<button type="button" class="quiet" data-jump="' + esc(st.go) + '">Go</button>' : "") + (st.where ? '<button type="button" class="quiet" data-jump="bay:' + st.where + '" title="Show me where">Where</button>' : "") + '<button type="button" class="quiet" data-proof="' + c.id + "|" + i + '" title="Attach a proof photo">Photo</button>';
+      var acts = (st.manual ? '<button type="button" class="quiet" data-man="' + st.manual + '" aria-pressed="' + ok + '">' + (ok ? "Undo" : "Mark done") + "</button>" : "") + (st.go && !ok ? '<button type="button" class="quiet" data-from="' + c.id + '" data-jump="' + esc(st.go) + '">' + (st.go.indexOf("mission:") === 0 ? "Lesson" : "Go") + "</button>" : "") + (st.where ? '<button type="button" class="quiet" data-jump="bay:' + st.where + '" title="Show me where">Where</button>' : "") + '<button type="button" class="quiet" data-proof="' + c.id + "|" + i + '" title="Attach a proof photo">Photo</button>';
       var shots = proofs(api, c.id, i);
       info += shots.length ? '<span class="proofs">' + shots.map(function (p) { var u = api.photoUrl(p); return u ? '<img src="' + esc(u) + '" alt="Proof photo, ' + esc(p.date) + '" loading="lazy">' : ""; }).join("") + "</span>" : "";
       return '<li class="' + (ok ? "done" : "") + '"><span class="sdot" aria-hidden="true">' + (ok ? "✓" : "") + '</span><span class="stx">' + esc(st.t) + (st.optional ? ' <span class="pill none">bonus</span>' : "") + info + '</span><span class="sact">' + acts + "</span></li>";
@@ -396,6 +396,7 @@
   function sideList(api) {
     var G = window.V60_GATE, A = api.acad(), cards = mod(api, "cards", { b: {} }).b || {}, up = mod(api, "upg", { want: {} }).want || {};
     return [
+      [true, "Training library", Object.keys(api.acad().done || {}).length + " of " + api.CHAPTERS.reduce(function (n, c) { return n + c.missions.length; }, 0) + " lessons done", "tab:academy"],
       [G.feature("career"), "Career jobs", Object.keys(A.jobs || {}).length + " of " + api.JOBS.length + " diagnosed", "tab:academy"],
       [G.visible("sim"), "Mystery cars", ((A.sim || {}).correct || 0) + " solved", "tab:sim"],
       [G.visible("diy"), "DIY jobs", diyDone(api) + " done", "tab:diy"],
@@ -478,7 +479,7 @@
     if (ui.view === "file") { $("stV-file").innerHTML = fileHTML(api); return; }
     if (ui.view === "codebook") { $("stV-codebook").innerHTML = codebookHTML(api); return; }
     var nextHTML = (pend.length ? '<div class="nextc scene"><p class="ans-k">New scene</p><h3>' + esc(sceneById(api, pend[0]).t) + '</h3><button type="button" data-jump="story:' + pend[0] + '">Watch</button></div>' : "") +
-      (nx ? '<div class="nextc"><p class="ans-k">Next objective · ' + esc(nx.c.t) + "</p><h3>" + esc(nx.s.t) + "</h3>" + (d.depth !== "short" && nx.s.why ? '<p class="nwhy">' + esc(nx.s.why) + "</p>" : "") + '<div class="row">' + (nx.s.manual ? '<button type="button" data-man="' + nx.s.manual + '">Mark done</button>' : "") + (nx.s.go ? '<button type="button" class="' + (nx.s.manual ? "quiet" : "") + '" data-jump="' + esc(nx.s.go) + '">' + (nx.s.manual ? "Open" : "Go") + "</button>" : "") + '<button type="button" class="quiet" data-case="' + nx.c.id + '">See the case</button></div></div>' : (fin ? "" : (actClosed(api, "4") ? '<div class="nextc"><p class="ans-k">Next objective · Finale</p><h3>Pass the V60 Master exam</h3><button type="button" data-jump="tab:exam">Take the exam</button></div>' : "")));
+      (nx ? '<div class="nextc"><p class="ans-k">Next objective · ' + esc(nx.c.t) + "</p><h3>" + esc(nx.s.t) + "</h3>" + (d.depth !== "short" && nx.s.why ? '<p class="nwhy">' + esc(nx.s.why) + "</p>" : "") + '<div class="row">' + (nx.s.manual ? '<button type="button" data-man="' + nx.s.manual + '">Mark done</button>' : "") + (nx.s.go ? '<button type="button" class="' + (nx.s.manual ? "quiet" : "") + '" data-from="' + nx.c.id + '" data-jump="' + esc(nx.s.go) + '">' + (nx.s.manual ? "Open" : (nx.s.go.indexOf("mission:") === 0 ? "Start the lesson" : "Go")) + "</button>" : "") + '<button type="button" class="quiet" data-case="' + nx.c.id + '">See the case</button></div></div>' : (fin ? "" : (actClosed(api, "4") ? '<div class="nextc"><p class="ans-k">Next objective · Finale</p><h3>Pass the V60 Master exam</h3><button type="button" data-jump="tab:exam">Take the exam</button></div>' : "")));
     if (ui.open == null && nx) ui.open = nx.c.id;
     var acts = ACTS.filter(function (a) { return avail.some(function (c) { return c.act === a[0]; }); }).map(function (act) {
       var cs = avail.filter(function (c) { return c.act === act[0]; });
@@ -500,7 +501,7 @@
   (window.V60_MODULES = window.V60_MODULES || []).push({
     id: "story",
     tabs: [{ id: "story", section: "learn", label: "Story", order: 5, html:
-      '<section class="sthero"><p class="ans-k">Story</p><h2>The As-Is File</h2><p class="lede">Every unknown about your car is a case. Close cases by doing the real thing, and the rest of the garage opens up as you go.</p><div id="stProg"></div><div class="seg" id="stSeg" role="group" aria-label="Story views"></div></section>' +
+      '<section class="sthero"><p class="ans-k">Story</p><h2>The As-Is File</h2><p class="lede">This is where you play. Each case says what to do on the real car. <b>Lesson</b> buttons open short training that shows you how, and finishing a lesson ticks its step here. The rest of the garage opens up as cases close.</p><div id="stProg"></div><div class="seg" id="stSeg" role="group" aria-label="Story views"></div></section>' +
       '<div id="stV-cases"></div><div id="stV-file" hidden></div><div id="stV-timeline" hidden></div><div id="stV-codebook" hidden></div>' }],
     clean: function (v) {
       if (!v || typeof v !== "object") return null;
@@ -530,6 +531,12 @@
       document.body.appendChild(sh);
       sh.addEventListener("click", function (e) { if (e.target === sh || e.target.closest(".dsclose")) { closeDecode(); return; } if (e.target.closest("[data-jump]")) { sh.hidden = true; document.body.classList.remove("cine-open"); } });
       sh.addEventListener("keydown", function (e) { if (e.key === "Escape") closeDecode(); });
+      document.addEventListener("click", function (e) {
+        var f = e.target.closest && e.target.closest("[data-jump]"); if (!f) return;
+        var from = f.getAttribute("data-from"), j = f.getAttribute("data-jump");
+        if (from) { var cc = caseById(from); window.V60_FROMCASE = cc ? { id: cc.id, t: cc.t } : null; }
+        else if (j === "tab:academy" || (j.indexOf("mission:") === 0 && !f.closest("#p-story"))) window.V60_FROMCASE = null;
+      }, true);
       document.addEventListener("click", function (e) { var b = e.target.closest && e.target.closest("[data-decode]"); if (b) { e.preventDefault(); e.stopPropagation(); openDecode(b.getAttribute("data-decode")); } }, true);
       api.$("p-story").addEventListener("click", function (e) {
         var b = e.target.closest && e.target.closest("button"); if (!b) return;
@@ -582,7 +589,7 @@
       if (pend.length) return [{ order: 4, html: '<article class="tcard story"><p class="ans-k">New scene</p><h3>' + esc(sceneById(api, pend[0]).t) + '</h3><button type="button" data-jump="story:' + pend[0] + '">Watch</button></article>' }];
       var nx = nextStep(api);
       if (!nx) return [];
-      return [{ order: 4, html: '<article class="tcard story"><p class="ans-k">Next in your story · ' + esc(nx.c.t) + "</p><h3>" + esc(nx.s.t) + '</h3><div class="row">' + (nx.s.go ? '<button type="button" data-jump="' + esc(nx.s.go) + '">Go</button>' : "") + '<button type="button" class="quiet" data-jump="case:' + nx.c.id + '">Open the case</button></div></article>' }];
+      return [{ order: 4, html: '<article class="tcard story"><p class="ans-k">Next in your story · ' + esc(nx.c.t) + "</p><h3>" + esc(nx.s.t) + '</h3><div class="row">' + (nx.s.go ? '<button type="button" data-from="' + nx.c.id + '" data-jump="' + esc(nx.s.go) + '">' + (nx.s.go.indexOf("mission:") === 0 ? "Start the lesson" : "Go") + "</button>" : "") + '<button type="button" class="quiet" data-jump="case:' + nx.c.id + '">Open the case</button></div></article>' }];
     }
   });
 })();

@@ -16,7 +16,9 @@ ok(!(await p.isVisible('.cockpit .gauge')),'health gauge hidden at start');
 await p.screenshot({path:SH+'s-today-'+nm+'.png',fullPage:true});
 await p.click('[data-jump="story:pro"]'); await p.waitForTimeout(150); await p.click('.cin-skip');
 await p.evaluate(()=>__v60.go('story'));
-ok((await p.evaluate(()=>[...document.querySelectorAll('#subnav button')].map(x=>x.textContent.replace(/\s/g,'')))).join(',')==='Story,Academy','Learn subnav: Story, Academy');
+ok(await p.evaluate(()=>document.getElementById('subnav').hidden),'Learn shows only the Story (Training opens from cases)');
+await p.click('#stV-cases .nextc [data-from]'); ok(/Back to the case: Safe to Touch/.test(await p.textContent('#p-academy')),'lesson opened from a case links back to it');
+await p.click('#p-academy [data-jump="case:safe"]'); ok(await p.evaluate(()=>!document.getElementById('p-story').hidden),'back to the case returns to Story');
 await p.screenshot({path:SH+'s-start-'+nm+'.png',fullPage:true});
 // close Safe to Touch
 await p.evaluate(()=>{const A=V60.acad();['m-sys','m-safe','m-hood','m-five'].forEach(id=>A.done[id]={date:'2026-10-10',outcome:'good'});V60.save();__v60.go('story');});

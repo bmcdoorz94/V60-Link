@@ -19,7 +19,7 @@ Read `docs/ROADMAP.md` before starting. It holds the backlog, the decisions so f
 ## Layout
 - `src/` is the only place to edit. The root `index.html`, `app.css`, `js/`, `sw.js`, `manifest.webmanifest` and all of `dist-artifact/` are build output.
 - `src/body.html` holds the core markup; `src/css/*.css` are concatenated, `app.css` first.
-- `src/js/core.js` is the garage engine: Academy, bay maps, specs, health score, records, Data lab, simulator, backup. It exposes `window.V60` (the API) and `window.__v60` (test hook).
+- `src/js/core.js` is the garage engine: Training (the Academy code, tab id `academy`, hidden from the nav and opened from story steps), bay maps, specs, health score, records, Data lab, simulator, backup. It exposes `window.V60` (the API) and `window.__v60` (test hook).
 - `src/js/data/` holds `facts.js` (V60_SOURCES and V60_FACTS, which drive the Library, Cards and Exam) and `articles.js` (V60_ARTICLES; body lines use "## " for headings and "- " for bullets).
 - `src/js/modules/*.js` is one feature per file. Each registers itself:
   `(window.V60_MODULES = window.V60_MODULES || []).push({ id, tabs:[{id, section, label, order, hidden?, html}], init(api), render(api), clean(v), xp(api), actions(api, list), today(api) -> [{order, html}], jump(api, kind, id) })`
