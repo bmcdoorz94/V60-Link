@@ -1695,7 +1695,9 @@
     }).join("") : '<p class="empty">No photos yet.' + (assetsNs ? " Take the first one above." : "") + "</p>";
   }
   function dotAge(code) { var m = /^(\d{2})(\d{2})$/.exec(String(code || "")); if (!m) return null; var wk = +m[1], yr = 2000 + +m[2], now = new Date(); if (wk < 1 || wk > 53) return null; return now.getFullYear() + now.getMonth() / 12 - (yr + (wk - 1) / 52); }
-  function shrink(file) {
+  function shrink(file, kind) {
+    /* every photo is read and redacted on the device first (scan.js); tests and the scanner itself can skip it */
+    if (window.V60_SCAN && !window.__V60_NOSCAN && !(kind && kind.raw)) return window.V60_SCAN.process(file, kind || "photo").then(function (r) { return r.blob; });
     return new Promise(function (res, rej) {
       var img = new Image(), u = URL.createObjectURL(file);
       img.onload = function () {
@@ -1717,7 +1719,7 @@
     if (photoBusy || !file) return;
     photoBusy = true; $("phStatus").textContent = "Preparing photo...";
     var kind = $("phKind").value, partId = $("phPart").value, note = $("phNote").value.trim(), part = partId ? partById(partId) : null, blob;
-    shrink(file).then(function (b) {
+    shrink(file, kind).then(function (b) {
       blob = b; $("phPreview").src = URL.createObjectURL(b); $("phPreview").hidden = false;
       $("phStatus").textContent = "Saving photo...";
       return assetsNs.upload(b, { name: "v60-" + kind + "-" + todayStr() + ".jpg" }).catch(function (e) { throw new Error(e && e.code === "quota_exceeded" ? "Photo storage is full. Delete old photos first." : "The photo could not be saved (" + ((e && e.code) || "error") + ")."); });
@@ -2067,7 +2069,7 @@
     sample: function () { return sampleFn; }, assets: function () { return assetsNs; }, photoUrl: function (p) { return photoUrl(p); }, takePhotoTo: null,
     importLinkReport: function (R) { return importLinkReport(R); },
     oilRate: function () { return oilRate(); }, replaceState: function (r) { replaceState(r); }, snapshot: function () { return JSON.parse(JSON.stringify(state)); }, blobGet: blobGet, blobPut: blobPut, localMode: function () { return mode === "local"; },
-    shrinkPhoto: function (f) { return shrink(f); }, addPhoto: function (rec) { state.photos = (state.photos || []).concat([rec]).slice(-200); save(); }, navRefresh: function () { renderNav(ui.tab); },
+    shrinkPhoto: function (f, kind) { return shrink(f, kind); }, addPhoto: function (rec) { state.photos = (state.photos || []).concat([rec]).slice(-200); save(); }, navRefresh: function () { renderNav(ui.tab); },
     inClaude: function () { return !!(window.claude && typeof window.claude.use === "function"); }
   };
   if (typeof window !== "undefined") window.V60 = API;

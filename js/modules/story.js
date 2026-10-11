@@ -557,7 +557,7 @@
         var f = pin.files && pin.files[0], A = api.assets(); if (!f || !proofFor) return;
         if (!A) { alertNote(api, "Photos can't be stored in this view."); return; }
         var c = caseById(proofFor[0]), i = +proofFor[1];
-        api.shrinkPhoto(f).then(function (b) { return A.upload(b, { name: "v60-proof-" + api.todayStr() + ".jpg" }); }).then(function (up) {
+        api.shrinkPhoto(f, "proof").then(function (b) { return A.upload(b, { name: "v60-proof-" + api.todayStr() + ".jpg" }); }).then(function (up) {
           api.addPhoto({ id: api.uid(), asset: up.id, url: up.local ? null : up.url, local: !!up.local, date: api.todayStr(), kind: "proof", part: null, note: (c ? c.t + ": " + c.steps[i].t : "").slice(0, 200), ai: null, cs: proofFor[0], st: i });
           render(api);
         }).catch(function (e) { alertNote(api, (e && e.message) || "The photo could not be saved."); });
