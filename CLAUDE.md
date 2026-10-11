@@ -38,7 +38,7 @@ Read `docs/ROADMAP.md` before starting. It holds the backlog, the decisions so f
   This checks every tab on phone, desktop and dark: no errors, no horizontal overflow, no broken `tab:` jumps.
   `tests/features.js` exercises Live link (simulated car), Bulletins and Upgrades. `tests/sync.js` exercises cross-device sync against a mocked GitHub API. `tests/story.js` exercises the story case board: closing cases, known-risk closures, scenes and mission jumps. Tests set `window.__V60_TEST = true`, which stops the story prologue from auto-playing.
 - Look at screenshots in `tests/shots/` (gitignored) before calling UI work done.
-- Deploy: commit to `main` as `bmcdoorz94 <kfitz719@gmail.com>` and push to https://github.com/bmcdoorz94/V60-Link. Pages serves https://bmcdoorz94.github.io/V60-Link/ (the path is case-sensitive).
+- Deploy: pull first (`git pull --rebase -X theirs origin main`), because the GitHub Action commits build output after every source push. Then commit to `main` as `bmcdoorz94 <kfitz719@gmail.com>` and push to https://github.com/bmcdoorz94/V60-Link. Pages serves https://bmcdoorz94.github.io/V60-Link/ (the path is case-sensitive).
 - Claude artifact (only from a Claude session that has the Artifact tool): publish `dist-artifact/garage.html` with the `files` map from `dist-artifact/files.json` to https://claude.ai/artifact/9mpkZE2EzzU2UxWLbqTohR, with capabilities `{"db":{},"user":{},"sample":{"images":true},"downloads":true,"assets":{}}`. Web Bluetooth doesn't work inside artifacts.
 
 ## UI

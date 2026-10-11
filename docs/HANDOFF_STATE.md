@@ -1,16 +1,14 @@
 ## 1. Current Active Objective
-Progressive reveal just shipped. The story ("The As-Is File", `src/js/modules/story.js`) now drives the whole app. On day one only Today, Story, the Ask bar and the "Something's wrong" panel exist. Each case reveals the tabs it needs; act completions unlock side missions; the finale reveals everything. `docs/GAME_DESIGN.md` has the full progression table.
+Shipped on 2026-10-11:
+- Cross-device sync through a private GitHub repository (`src/js/modules/sync.js`).
+- Skill tree with perks (`src/js/modules/skills.js`).
+- Timeline view and proof photos in Story.
+- Garage map on Today, the header pulse strip and Listen buttons (`src/js/modules/ui.js`).
+- Drive mode in Live link, the first-launch cold open, the backup nudge, and a backup export that works outside Claude.
+- The trailer was rewritten as a 40-second mystery teaser (a Claude artifact, not in the repo).
+- A monthly iPhone reminder for the oil and tire check was created in Kyle's Reminders app.
 
-New pieces:
-- **The Signal case (Act 1) and the Codebook.** Live link shows raw labels (PID 0C, MONITOR 04, Encoded fault) until each one is decoded with one tap. The data lives in `src/js/data/codebook.js`; the hooks into Live link are in `tools/gen/cipher.py`.
-- **Case briefings and debriefs.** Debriefs end with a three-question quiz.
-- **The File:** a printable dossier built from logged data.
-- **Knowledge unlocks** for Library articles and flashcards.
-- **Detail levels:** Short, Detailed and Mechanic.
-- **"Where" buttons** that jump to the engine bay with the part highlighted (`bay:<itemId>`).
-- **Options:** "Show everything" and "Plain readings".
-
-All three test files pass (`tests/story.js` covers the progression).
+The waiting item is Kyle's sync setup: create the private repo `v60-garage-data` and a fine-grained token (that repo only, Contents read and write), then paste both in Story, then Options, on each device.
 
 ## 2. Immediate Next Steps
 1. Get Kyle's reaction after he plays the opening (prologue, Safe to Touch, The Signal with his real OBDLink CX in Bluefy). Ask whether the pace of reveals feels right.
