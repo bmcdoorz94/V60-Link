@@ -1,5 +1,23 @@
 ## 1. Current Active Objective
-**Build "Auto-read uploads with privacy redaction"** (Kyle's request, 2026-10-11): every photo or document Kyle adds to the app is read and decoded automatically, and personal information is blacked out before anything is saved or synced. After that, close the gaps found in the feature audit (section 2, step 3).
+**"Auto-read uploads with privacy redaction" is built** (Kyle's request, 2026-10-11). `src/js/modules/scan.js` exposes `window.V60_SCAN.process(file, kind)`.
+
+**What it does.** Core's `shrink(file, kind)` routes every photo through it: the Photos tab, Story proof photos via `api.shrinkPhoto(f, "proof")`, and Glovebox receipts. For each photo it:
+- reads the text on the device with Tesseract.js 5.1.1, pinned and loaded from jsDelivr on first use. The service worker keeps it in the `v60-ocr` cache.
+- blacks out the VIN, names after labels, addresses, phone numbers, emails, card numbers, and the "always hide" words. The hide list lives in localStorage `v60-scan-private`, never synced, plus the VIN, plate and policy number typed in Glovebox.
+- shows a review sheet: tap a box to toggle it, drag to hide more.
+- saves only the redacted image.
+- decodes the photo: receipts prefill the Glovebox form, a door-pillar label offers the build month for Bulletins, and registration or insurance papers offer an expiry date for Glovebox. Everything decoded is labeled unconfirmed.
+
+**History.** Gemini sent the first version. Claude rewrote it because Gemini's version:
+- matched one word at a time, so it never caught spaced phone numbers or addresses
+- saved the red preview outlines into the photo
+- had a broken script URL and an unpinned version
+- couldn't add boxes by hand
+- wasn't wired to anything
+
+**Tests.** `tests/scan.js` covers the detection rules, then runs a synthetic receipt end to end with real on-device reading.
+
+**Next.** Close the gaps found in the feature audit (section 2, step 3), and get Kyle's answers to the scanning questions below. The current defaults are the proposed ones.
 
 State of the app when this handoff was written (all pushed to `main`, tests passing):
 - Story ("The As-Is File") is the only place to play. The old Academy is now **Training**: hidden from the nav, opened from a case step's **Lesson** button (`data-from="<caseId>"` sets `window.V60_FROMCASE`, so the lesson shows "Back to the case"). Story links to a Training library.
@@ -8,12 +26,20 @@ State of the app when this handoff was written (all pushed to `main`, tests pass
 - A fresh `HANDOFF.md` is rebuilt on every push by `.github/workflows/handoff.yml` and kept on the `handoff` branch.
 
 ## 2. Immediate Next Steps
-1. **Ask Kyle these before building** (he wants clarifying questions on every task):
+1. **Ask Kyle these.** Scanning shipped with the proposed defaults below; adjust it to his answers. Also ask whether the VIN and plate he types in Glovebox should stay in the synced data: they currently sync to his private repo.
    - Which uploads should be read: service receipts, the door-pillar label, registration, insurance card, inspection report, dash or warning-light photos, story proof photos? All of them, or a subset?
    - What counts as personal information to black out? Proposed default: VIN, license plate, his name, street address, phone numbers, email addresses, card and account numbers, signatures. Anything else (for example the shop's own name and phone, which are useful and not his)?
    - Save automatically, or show "Here's what I read" and save with one tap? Proposed default: read automatically, pre-fill everything, one tap to confirm, low-confidence fields marked unconfirmed.
    - On-device reading only (free, works offline, less accurate on crumpled receipts), or also an optional AI read using his own Gemini or Claude API key (better accuracy; the already-redacted image leaves the phone)? Proposed default: on-device only.
-2. **Build `src/js/modules/scan.js`** (add to `MODULES` in `tools/build.py`; styles in `src/css/modules.css`). Exposes `window.V60_SCAN.process(file, hint) -> Promise<{blob, text, fields, boxes, kind}>`. Pipeline:
+2. **`src/js/modules/scan.js` is DONE (2026-10-11).** The spec below is kept as the design reference.
+
+   **Remaining follow-ups:**
+   - Add a Paper Trail step, "Scan the door-pillar label", that closes the build-month step (story placement).
+   - Run a real-iPhone test in Bluefy: first-use download time (the language data is several MB) and reading speed on a real receipt.
+   - Check whether the Claude artifact's CSP lets Tesseract's blob worker run. If it doesn't, the sheet says nothing was hidden automatically and asks for boxes by hand.
+   - Signatures can't be detected; they're hidden by dragging.
+
+   Original spec, for reference:
    1. **Shrink** with the existing `api.shrinkPhoto(file)`. It re-encodes through a canvas, which already strips EXIF and GPS metadata. Keep that.
    2. **On-device OCR** with Tesseract.js. Pin an exact version from jsDelivr, load it lazily only when a photo is added, and cache the worker, core and `eng.traineddata` in `src/sw.js` so it works offline in Bluefy. Use word-level bounding boxes.
    3. **Find personal information** in the OCR words:

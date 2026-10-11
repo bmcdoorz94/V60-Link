@@ -12,7 +12,7 @@ SRC = os.path.join(ROOT, "src")
 DATA = sorted(f for f in os.listdir(os.path.join(SRC, "js", "data")) if f.endswith(".js"))
 MODULES = [
     "today.js", "kb.js", "cards.js", "exam.js", "story.js", "fuel.js", "glovebox.js",
-    "diy.js", "trees.js", "bulletins.js", "upgrades.js", "live.js", "extras.js", "skills.js", "sync.js", "ui.js",
+    "diy.js", "trees.js", "bulletins.js", "upgrades.js", "live.js", "extras.js", "skills.js", "sync.js", "ui.js", "scan.js",
 ]
 
 def read(*p):
@@ -89,6 +89,10 @@ self.addEventListener("fetch", function (e) {
   var url = new URL(req.url);
   if (req.mode === "navigate") { e.respondWith(fetch(req).then(function (r) { var cp = r.clone(); caches.open(CACHE).then(function (c) { c.put("index.html", cp); }); return r; }).catch(function () { return caches.match("index.html"); })); return; }
   if (url.origin === location.origin) { e.respondWith(caches.match(req, { ignoreSearch: true }).then(function (hit) { return hit || fetch(req); })); return; }
+  if (url.hostname === "cdn.jsdelivr.net" && /tesseract/.test(url.pathname)) {
+    e.respondWith(caches.open("v60-ocr").then(function (c) { return c.match(req).then(function (hit) { return hit || fetch(req).then(function (r) { if (r.ok) c.put(req, r.clone()); return r; }); }); }));
+    return;
+  }
   if (/fonts\\.(googleapis|gstatic)\\.com$/.test(url.hostname)) {
     e.respondWith(caches.open(CACHE + "-fonts").then(function (c) { return c.match(req).then(function (hit) { var net = fetch(req).then(function (r) { c.put(req, r.clone()); return r; }).catch(function () { return hit; }); return hit || net; }); }));
   }
