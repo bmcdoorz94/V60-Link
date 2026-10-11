@@ -1305,7 +1305,7 @@
       html += "</section>";
     });
     var cu = careerUnlocked();
-    html += '<section class="chap' + (cu ? "" : " locked") + '"><div class="chap-h"><div><div class="eyebrow">Career mode' + (cu ? "" : " · locked") + '</div><h3>Shop jobs</h3></div><span class="status">' + JOBS.filter(function (j) { return acad().jobs[j.id]; }).length + " / " + JOBS.length + '</span></div><p class="lede">A customer brings in a car with a complaint. Choose what to inspect, where every check costs shop time, then make the call. Fewer minutes and the right answer earn more XP. The cases are realistic, but they are practice, not your car\'s diagnosis.</p>' +
+    if (!window.V60_GATE || window.V60_GATE.feature("career")) html += '<section class="chap' + (cu ? "" : " locked") + '"><div class="chap-h"><div><div class="eyebrow">Career mode' + (cu ? "" : " · locked") + '</div><h3>Shop jobs</h3></div><span class="status">' + JOBS.filter(function (j) { return acad().jobs[j.id]; }).length + " / " + JOBS.length + '</span></div><p class="lede">A customer brings in a car with a complaint. Choose what to inspect, where every check costs shop time, then make the call. Fewer minutes and the right answer earn more XP. The cases are realistic, but they are practice, not your car\'s diagnosis.</p>' +
       (cu ? '<ul class="mlist">' + JOBS.map(function (j) { var r2 = acad().jobs[j.id]; return '<li><button type="button" class="mbtn" data-job="' + j.id + '"><span class="pill ' + (r2 ? (r2.correct ? "ok" : "watch") : "none") + '">' + (r2 ? (r2.correct ? "Solved" : "Missed") : "Job") + '</span><span class="mt">' + esc(j.title) + '</span><span class="status">up to ' + j.xp + " XP</span></button></li>"; }).join("") + "</ul>"
         : '<p class="status">Unlocks after two missions in Plug in or Sixth sense.</p>') + "</section>";
     $("acadBody").innerHTML = html;
@@ -1991,19 +1991,27 @@
   }
   var lastTab = {};
   function sectionOf(name) { for (var i = 0; i < SECTIONS.length; i++) if (SECTIONS[i].tabs.some(function (t) { return t[0] === name; })) return SECTIONS[i]; return SECTIONS[0]; }
-  function firstTab(sec) { var v = sec.tabs.filter(function (t) { return !t[3]; }); return (v[0] || sec.tabs[0] || ["today"])[0]; }
+  /* window.V60_GATE (story module) decides which tabs exist yet; a tab can still be reached by a direct jump */
+  function gateOk(id) { var G = window.V60_GATE; return id === "today" || !G || G.visible(id); }
+  function gateNew(id) { var G = window.V60_GATE; return !!(G && G.isNew && G.isNew(id)); }
+  function firstTab(sec) { var v = sec.tabs.filter(function (t) { return !t[3] && gateOk(t[0]); }); return (v[0] || sec.tabs[0] || ["today"])[0]; }
   function renderNav(name) {
+    if (window.V60_GATE && window.V60_GATE.sync) window.V60_GATE.sync();
     var sec = sectionOf(name); lastTab[sec.id] = name;
-    $("rail").innerHTML = SECTIONS.map(function (x) { var on = x.id === sec.id; return '<button type="button" data-tab="' + (lastTab[x.id] || firstTab(x)) + '"' + (on ? ' aria-current="page"' : "") + '><svg viewBox="0 0 24 24" aria-hidden="true">' + ICON[x.id] + "</svg><span>" + esc(x.n) + "</span></button>"; }).join("");
-    var vis = sec.tabs.filter(function (t) { return !t[3] || t[0] === name; });
-    $("subnav").innerHTML = vis.length > 1 ? vis.map(function (t) { return '<button type="button" role="tab" data-tab="' + t[0] + '" aria-selected="' + (t[0] === name) + '">' + esc(t[1]) + "</button>"; }).join("") : "";
+    var secs = SECTIONS.filter(function (x) { return x.id === "today" || x.id === sec.id || x.tabs.some(function (t) { return !t[3] && gateOk(t[0]); }); });
+    $("rail").innerHTML = secs.map(function (x) { var on = x.id === sec.id, dest = lastTab[x.id] && gateOk(lastTab[x.id]) ? lastTab[x.id] : firstTab(x); if (x.id === "today") dest = "today"; var nw = x.tabs.some(function (t) { return gateOk(t[0]) && gateNew(t[0]); }); return '<button type="button" data-tab="' + dest + '"' + (on ? ' aria-current="page"' : "") + '><svg viewBox="0 0 24 24" aria-hidden="true">' + ICON[x.id] + "</svg><span>" + esc(x.n) + "</span>" + (nw ? '<i class="newdot" aria-label="new"></i>' : "") + "</button>"; }).join("");
+    $("rail").setAttribute("data-n", secs.length);
+    var vis = sec.tabs.filter(function (t) { return (!t[3] && gateOk(t[0])) || t[0] === name; });
+    $("subnav").innerHTML = vis.length > 1 ? vis.map(function (t) { return '<button type="button" role="tab" data-tab="' + t[0] + '" aria-selected="' + (t[0] === name) + '">' + esc(t[1]) + (gateNew(t[0]) && t[0] !== name ? '<i class="newdot" aria-label="new"></i>' : "") + "</button>"; }).join("") : "";
     $("subnav").hidden = vis.length < 2;
+    document.body.classList.toggle("gate-nohealth", !gateOk("health"));
   }
   function showTab(name) {
     ui.tab = name;
     if (!$("p-" + name)) name = "today";
     ui.tab = name;
     document.querySelectorAll("main > .panel").forEach(function (p) { p.hidden = p.id !== "p-" + name; });
+    if (window.V60_GATE && window.V60_GATE.shown) window.V60_GATE.shown(name);
     renderNav(name);
     try { window.scrollTo(0, 0); } catch (e) {}
     var md = modByTab(name); if (md && md.render) try { md.render(API, name); } catch (e) { console.error(md.id, e); }
@@ -2019,6 +2027,7 @@
     if (kind === "tab") { showTab(id); return; }
     if (kind === "mission") { if (!missionById(id)) return; aui.view = "mission"; aui.id = id; showTab("academy"); renderAcademy(); window.scrollTo(0, 0); return; }
     for (var mi = 0; mi < MODS.length; mi++) if (MODS[mi].jump && MODS[mi].jump(API, kind, id)) return;
+    if (kind === "bay") { eb.mode = "draw"; eb.sel = id; eb.game = null; showTab("engine"); var bi = document.querySelector('[data-bi="' + id + '"]'); if (bi && bi.scrollIntoView) bi.scrollIntoView({ block: "center" }); return; }
     if (kind === "sys") { ui.sys = id; showTab("bay"); renderBay(); return; }
     if (kind === "part") {
       var part = partById(id); if (!part) return;
@@ -2053,7 +2062,7 @@
     mod: function (id) { if (!state.mods) state.mods = {}; return state.mods[id]; }, setMod: function (id, v) { if (!state.mods) state.mods = {}; state.mods[id] = v; },
     sample: function () { return sampleFn; }, assets: function () { return assetsNs; }, photoUrl: function (p) { return photoUrl(p); }, takePhotoTo: null,
     importLinkReport: function (R) { return importLinkReport(R); },
-    oilRate: function () { return oilRate(); },
+    oilRate: function () { return oilRate(); }, navRefresh: function () { renderNav(ui.tab); },
     inClaude: function () { return !!(window.claude && typeof window.claude.use === "function"); }
   };
   if (typeof window !== "undefined") window.V60 = API;

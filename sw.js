@@ -1,6 +1,6 @@
-/* V60 Garage service worker, version 2026.10.11-0416-1e8c2bab */
-var CACHE = "v60-garage-2026.10.11-0416-1e8c2bab";
-var SHELL = ["./", "index.html", "app.css", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "icons/icon-180.png", "js/data/articles.js", "js/data/facts.js", "js/modules/today.js", "js/modules/kb.js", "js/modules/cards.js", "js/modules/exam.js", "js/modules/story.js", "js/modules/fuel.js", "js/modules/glovebox.js", "js/modules/diy.js", "js/modules/trees.js", "js/modules/bulletins.js", "js/modules/upgrades.js", "js/modules/live.js", "js/modules/extras.js", "js/core.js"];
+/* V60 Garage service worker, version 2026.10.11-0910-5f50352f */
+var CACHE = "v60-garage-2026.10.11-0910-5f50352f";
+var SHELL = ["./", "index.html", "app.css", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "icons/icon-180.png", "js/data/articles.js", "js/data/codebook.js", "js/data/facts.js", "js/modules/today.js", "js/modules/kb.js", "js/modules/cards.js", "js/modules/exam.js", "js/modules/story.js", "js/modules/fuel.js", "js/modules/glovebox.js", "js/modules/diy.js", "js/modules/trees.js", "js/modules/bulletins.js", "js/modules/upgrades.js", "js/modules/live.js", "js/modules/extras.js", "js/core.js"];
 self.addEventListener("install", function (e) { e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(SHELL.map(function (u) { return new Request(u, { cache: "reload" }); })); })); });
 self.addEventListener("activate", function (e) { e.waitUntil(caches.keys().then(function (ks) { return Promise.all(ks.filter(function (k) { return k !== CACHE && k.indexOf("v60-garage-") === 0; }).map(function (k) { return caches.delete(k); })); }).then(function () { return self.clients.claim(); })); });
 self.addEventListener("message", function (e) { if (e.data === "skip") self.skipWaiting(); });

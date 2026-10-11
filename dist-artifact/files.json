@@ -1,6 +1,7 @@
 {
  "app.css": "dist-artifact/app.css",
  "js/data/articles.js": "dist-artifact/js/data/articles.js",
+ "js/data/codebook.js": "dist-artifact/js/data/codebook.js",
  "js/data/facts.js": "dist-artifact/js/data/facts.js",
  "js/modules/today.js": "dist-artifact/js/modules/today.js",
  "js/modules/kb.js": "dist-artifact/js/modules/kb.js",

@@ -36,14 +36,16 @@
   function render(api) {
     var $ = api.$, esc = api.esc, body = $("kbBody");
     $("kbIn").value = kb.q;
+    var K = window.V60_KNOW;
     if (kb.view === "art" && kb.art) {
-      var a = kb.art;
+      var a = kb.art; if (K) K.discover("a", a.id);
       body.innerHTML = '<article class="kbart"><button type="button" class="quiet" data-kb="home">Back to the library</button><p class="ans-k">' + esc(a.cat) + "</p><h2>" + esc(a.t) + "</h2>" + bodyHTML(api, a.body) + '<h4>Sources</h4><ul class="src plain">' + srcLinks(api, a.src) + "</ul></article>";
       return;
     }
     if (kb.view === "results") {
       var r = search(kb.q), code = /\b([pcbu][0-3][0-9a-f]{3})\b/i.exec(kb.q), html = "";
       if (code) { var d = api.decodeCode(code[1]); if (d.valid) html += '<article class="ans best"><p class="ans-k">Trouble code</p><h3>' + esc(d.code) + "</h3><p class=\"ans-a\">" + esc(d.known ? d.known.t : "Not in the built-in list. " + d.prefix + ", " + d.scope + ".") + "</p>" + (d.known ? '<p class="status">Common causes: ' + esc(d.known.c) + "</p>" : "") + '<button type="button" class="quiet" data-jump="tab:diag">Open Diagnose</button></article>'; }
+      if (K) r.facts.slice(0, 3).forEach(function (x) { K.discover("f", x.f.id); });
       if (r.facts.length) html += factCard(api, r.facts[0].f, !code);
       if (r.facts.length > 1) html += '<h3 class="kbh">Related answers</h3><div class="anslist">' + r.facts.slice(1, 5).map(function (x) { return factCard(api, x.f, false); }).join("") + "</div>";
       if (r.arts.length) html += '<h3 class="kbh">Read more</h3><ul class="artlist">' + r.arts.slice(0, 5).map(function (x) { return '<li><button type="button" class="artbtn" data-art="' + x.a.id + '"><span class="ans-k">' + esc(x.a.cat) + "</span><b>" + esc(x.a.t) + "</b></button></li>"; }).join("") + "</ul>";
@@ -53,10 +55,11 @@
       return;
     }
     var cats = {};
-    window.V60_ARTICLES.forEach(function (a) { (cats[a.cat] = cats[a.cat] || []).push(a); });
+    var known = window.V60_ARTICLES.filter(function (a) { return !K || K.article(a.id); });
+    known.forEach(function (a) { (cats[a.cat] = cats[a.cat] || []).push(a); });
     var tagCount = {}; window.V60_FACTS.forEach(function (f) { tagCount[f.tag] = (tagCount[f.tag] || 0) + 1; });
     var tries = ["oil capacity", "tire pressure", "timing belt", "why is my tire light on", "P0171", "jump start", "towing capacity", "what octane"];
-    body.innerHTML = '<div class="tries">' + tries.map(function (t) { return '<button type="button" class="chipq" data-try="' + esc(t) + '">' + esc(t) + "</button>"; }).join("") + '</div><div class="kbcats">' + Object.keys(cats).map(function (c) { return '<section class="kbcat"><h3>' + esc(c) + '</h3><ul class="artlist">' + cats[c].map(function (a) { return '<li><button type="button" class="artbtn" data-art="' + a.id + '"><b>' + esc(a.t) + "</b></button></li>"; }).join("") + "</ul></section>"; }).join("") + '</div><p class="status">' + window.V60_FACTS.length + " verified facts and " + window.V60_ARTICLES.length + " articles about your exact car, all available offline.</p>";
+    body.innerHTML = '<div class="tries">' + tries.map(function (t) { return '<button type="button" class="chipq" data-try="' + esc(t) + '">' + esc(t) + "</button>"; }).join("") + '</div><div class="kbcats">' + Object.keys(cats).map(function (c) { return '<section class="kbcat"><h3>' + esc(c) + '</h3><ul class="artlist">' + cats[c].map(function (a) { return '<li><button type="button" class="artbtn" data-art="' + a.id + '"><b>' + esc(a.t) + "</b>" + (K && K.isNew(a.id) ? ' <span class="pill watch">New entry</span>' : "") + "</button></li>"; }).join("") + "</ul></section>"; }).join("") + '</div><p class="status">' + window.V60_FACTS.length + " verified facts searchable offline. " + known.length + " of " + window.V60_ARTICLES.length + " articles unlocked; more open as the story goes on, or when you look something up.</p>";
   }
   function askClaude(api) {
     var s = api.sample(); if (!s) return;

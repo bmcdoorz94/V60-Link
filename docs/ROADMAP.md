@@ -31,6 +31,7 @@ Story case board shipped. 24 tabs across Today, Learn, Car, Check and Data. Test
   - Contents of TJ30087
 
 ## Decisions
+- 2026-10-11: Progressive reveal (Kyle's call): the main story comes first and everything else stays completely hidden until the story reaches it. The always-available "Something's wrong" button and a "Show everything" option are the safety valves. Briefings and debriefs, The File, knowledge unlocks, three detail levels, "Where" buttons and debrief quizzes were all approved. Kyle already owns the OBDLink CX, so the adapter is introduced in Act 1 as "The Signal", with a Codebook: raw labels decode with one tap, with no puzzles. Full design in docs/GAME_DESIGN.md.
 - 2026-10-10: Story mode is a case board ("The As-Is File"). Eight cases in four acts plus a finale.
   - Six critical cases (Safe to Touch, The Belt, The Thirst, The Light That Won't Go Out, The Paper Trail, Baseline) plus the exam unlock the finale.
   - Narrator is Lars, a fictional retired Volvo tech; the UI says he is fictional.
@@ -47,6 +48,7 @@ Story case board shipped. 24 tabs across Today, Learn, Car, Check and Data. Test
 - VIN, plate and chassis number never go in the repo. They may only be typed into the app's local storage.
 
 ## Done
+- 2026-10-11: Progressive reveal, The Signal case and Codebook, briefings and debriefs with quizzes, The File, knowledge unlocks, detail levels, "Where" jumps to the engine bay, the "Something's wrong" panel on Today, and docs/GAME_DESIGN.md.
 - 2026-10-10: Story case board replaces the chapter reel (src/js/modules/story.js); core.js gained the `mission:` jump and `api.oilRate()`; tests/story.js added.
 - 2026-10-10: Claude/Gemini handoff protocol (tools/handoff.py, tools/apply_handoff.py, GitHub Action build).
 - 2026-10-10: modular app shell (Today plus five sections), offline Library, Cards, Exam, Story v1, Fuel and costs, Glovebox, DIY jobs, Troubleshoot, Bulletins (20 TSBs), Upgrades, Live link port with gauges, 0–60, drive-cycle coach, trips and scan history, achievements, seasonal events, six new articles, tests moved into the repo.

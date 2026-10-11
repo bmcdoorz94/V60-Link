@@ -32,7 +32,7 @@
   function renderCluster() {
     var ds = activeDials();
     $("cluster").innerHTML = ds.length ? ds.map(function (g) {
-      return '<div class="dial"><svg viewBox="0 0 120 92" aria-hidden="true"><path class="dtrack" d="M17 84 A50 50 0 1 1 103 84" pathLength="100"/><path class="dfill" id="lk-df-' + g.k + '" d="M17 84 A50 50 0 1 1 103 84" pathLength="100" stroke-dasharray="0 100"/></svg><div class="dv" id="lk-dv-' + g.k + '">--</div><div class="dl">' + esc(g.n) + "</div></div>";
+      return '<div class="dial"><svg viewBox="0 0 120 92" aria-hidden="true"><path class="dtrack" d="M17 84 A50 50 0 1 1 103 84" pathLength="100"/><path class="dfill" id="lk-df-' + g.k + '" d="M17 84 A50 50 0 1 1 103 84" pathLength="100" stroke-dasharray="0 100"/></svg><div class="dv" id="lk-dv-' + g.k + '">--</div><div class="dl">' + esc(g.pids.length === 1 && window.V60_CB && !window.V60_CB.decoded("pid:" + hex2(g.pids[0])) ? "PID " + hex2(g.pids[0]) : g.n) + "</div></div>";
     }).join("") : '<p class="status">Connect and pick channels such as RPM, speed, coolant or intake pressure to see gauges.</p>';
   }
   function updateDials(row) {

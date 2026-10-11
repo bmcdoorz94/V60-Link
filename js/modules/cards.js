@@ -6,7 +6,8 @@
   function data(api) { var d = api.mod("cards"); if (!d) { d = { b: {}, rev: {}, newDay: {} }; api.setMod("cards", d); } return d; }
   function queue(api) {
     var d = data(api), today = day(), due = [], fresh = [];
-    window.V60_FACTS.forEach(function (f) { var c = d.b[f.id]; if (!c) fresh.push(f); else if (c[1] <= today) due.push(f); });
+    var K = window.V60_KNOW;
+    window.V60_FACTS.forEach(function (f) { var c = d.b[f.id]; if (!c) { if (!K || K.fact(f)) fresh.push(f); } else if (c[1] <= today) due.push(f); });
     var newLeft = Math.max(0, NEW_PER_DAY - (d.newDay[today] || 0));
     return due.concat(fresh.slice(0, newLeft));
   }

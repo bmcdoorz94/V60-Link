@@ -2,7 +2,7 @@
 
 A learn / diagnose / maintain app for one car: Kyle's 2016 Volvo V60 T5 Drive-E Premier. It runs on GitHub Pages as an installable app for iPhone and desktop, and also as a Claude artifact. Kyle directs the work and doesn't write code. Explain changes in plain words.
 
-Read `docs/ROADMAP.md` before starting. It holds the backlog, the decisions so far, and open questions for Kyle.
+Read `docs/ROADMAP.md` before starting. It holds the backlog, the decisions so far, and open questions for Kyle. `docs/GAME_DESIGN.md` explains the progression: the story reveals tabs as it goes, so a new feature must be assigned to a case or an act reward in `src/js/modules/story.js` (`reveals`, `ACT_REWARD`), or it will never appear until the finale.
 
 ## The car (public repo: never commit the VIN, plate or chassis number)
 - 2016 V60 T5 Drive-E Premier, FWD, B4204T11 2.0 L turbo four, 240 hp / 258 lb-ft, Aisin TG-81SC 8-speed, start/stop, indirect tire monitor (no wheel sensors).
@@ -27,7 +27,8 @@ Read `docs/ROADMAP.md` before starting. It holds the backlog, the decisions so f
   - Saved data lives under `api.mod(id)` / `api.setMod(id, v)`. `clean(v)` must validate it.
   - Navigation: `data-jump="tab:<tabId>"`, or a module's own kind such as `kb:<articleId>`, `diy:<jobId>`, `tree:<id>`, `tsb:<id>`, `story:<id>`, `ask:<text>`.
 - `src/js/modules/live.js` is generated. Edit `tools/gen/live_extra.js` or `tools/gen/mklive.py`, then run `python3 tools/gen/mklive.py`. It ports `src/link-legacy.html` (the original V60 Link). Element ids are prefixed `lk-`.
-- To add a feature: create `src/js/modules/<name>.js`, add it to `MODULES` in `tools/build.py`, and put its styles in `src/css/modules.css`.
+- To add a feature: create `src/js/modules/<name>.js`, add it to `MODULES` in `tools/build.py`, put its styles in `src/css/modules.css`, and give its tab a place in the story's reveal order.
+- Story owns `window.V60_GATE` (which tabs are visible; core's nav asks it), `window.V60_KNOW` (Library and flashcard unlocks) and `window.V60_CB` (Codebook decoding; Live link calls it through hooks in `tools/gen/cipher.py`). Raw adapter signals and their meanings live in `src/js/data/codebook.js`.
 
 ## Build, test, deploy
 - Build: `python3 tools/build.py`. It writes the root files and `dist-artifact/`, and bumps the service worker version so installed apps show "Update available".

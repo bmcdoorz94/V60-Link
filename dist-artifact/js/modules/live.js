@@ -15,6 +15,7 @@
   "use strict";
   function $(id) { return document.getElementById("lk-" + id); }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function cbl(k, name) { return window.V60_CB ? window.V60_CB.label(k, name) : esc(name); }
   function hex2(n) { return (n < 16 ? "0" : "") + n.toString(16).toUpperCase(); }
   function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
   function isNum(x) { return typeof x === "number" && isFinite(x); }
@@ -359,10 +360,10 @@
     $("summary").innerHTML = s.map(function (x) { return '<li><span class="pill ' + x[0] + '">' + ({ ok: "Good", watch: "Watch", bad: "Act", info: "Info" })[x[0]] + "</span><b>" + esc(x[1]) + "</b>" + (x[2] ? '<span class="d">' + (x[0] === "info" ? 'Check open recalls for this VIN at <a href="https://www.nhtsa.gov/recalls" target="_blank" rel="noopener">nhtsa.gov/recalls</a>.' : esc(x[2])) + "</span>" : "") + "</li>"; }).join("");
     $("codes").innerHTML = R.codes.length ? R.codes.map(function (c) {
       var lvl = c.kind === "pending" ? "watch" : "bad";
-      return '<li><span class="pill ' + lvl + '">' + esc(c.kind) + '</span><span><span class="code">' + esc(c.code) + "</span> · " + esc(c.ecu) + '</span><span class="d">' + esc(CODE_HINTS[c.code] || "Look this code up in V60 Garage's Diagnose tab.") + (c.kind === "permanent" ? " Permanent codes cannot be cleared with a tool. They erase themselves after the car confirms the fix over several drives." : "") + "</span></li>";
+      return '<li><span class="pill ' + lvl + '">' + esc(c.kind) + '</span><span><span class="code">' + esc(c.code) + "</span> · " + esc(c.ecu) + '</span><span class="d">' + (window.V60_CB ? window.V60_CB.codeHint(c.code, CODE_HINTS[c.code] || "Look this code up in V60 Garage's Diagnose tab.") : esc(CODE_HINTS[c.code] || "Look this code up in V60 Garage's Diagnose tab.")) + (c.kind === "permanent" ? " Permanent codes cannot be cleared with a tool. They erase themselves after the car confirms the fix over several drives." : "") + "</span></li>";
     }).join("") : '<li><span class="pill ok">None</span><span>No codes reported by any module that answered.</span></li>';
     $("freeze").innerHTML = R.freeze ? "<dt>Triggered by</dt><dd>" + esc(R.freeze.dtc) + "</dd>" + R.freeze.values.map(function (v) { return "<dt>" + esc(v[0]) + "</dt><dd>" + esc(v[1]) + "</dd>"; }).join("") : "<dt>None</dt><dd>No freeze frame stored.</dd>";
-    $("monitors").innerHTML = R.monitors.length ? R.monitors.map(function (m) { return "<div><span>" + esc(m.n) + '</span><span class="pill ' + (m.ready ? "ok" : "watch") + '">' + (m.ready ? "ready" : "not ready") + "</span></div>"; }).join("") : '<div><span>No readiness data returned</span></div>';
+    $("monitors").innerHTML = R.monitors.length ? R.monitors.map(function (m) { return "<div><span>" + cbl("mon:" + m.n, m.n) + '</span><span class="pill ' + (m.ready ? "ok" : "watch") + '">' + (m.ready ? "ready" : "not ready") + "</span></div>"; }).join("") : '<div><span>No readiness data returned</span></div>';
     var sv = R.since, rows = [];
     if (isNum(sv.distSinceClear)) rows.push(["Since codes cleared", Math.round(sv.distSinceClear * 0.621371) + " mi" + (isNum(sv.warmupsSinceClear) ? ", " + sv.warmupsSinceClear + " warm-ups" : "")]);
     if (isNum(sv.distWithMil)) rows.push(["Driven with light on", Math.round(sv.distWithMil * 0.621371) + " mi"]);
@@ -405,10 +406,10 @@
   function renderPicks() {
     $("picks").innerHTML = PIDS.map(function (p) {
       var ok = pidSupported(p.pid);
-      return '<label class="' + (ok ? "" : "na") + '"><input type="checkbox" data-pid="' + p.pid + '"' + (live.sel[p.pid] && ok ? " checked" : "") + (ok ? "" : " disabled") + "> " + esc(p.n) + (ok ? "" : " (not supported)") + "</label>";
+      return '<label class="' + (ok ? "" : "na") + '"><input type="checkbox" data-pid="' + p.pid + '"' + (live.sel[p.pid] && ok ? " checked" : "") + (ok ? "" : " disabled") + "> " + cbl("pid:" + hex2(p.pid), p.n) + (ok ? "" : " (not supported)") + "</label>";
     }).join("");
     renderCluster();
-    $("tiles").innerHTML = PIDS.filter(function (p) { return live.sel[p.pid] && pidSupported(p.pid); }).map(function (p) { return '<div class="tile"><div class="k">' + esc(p.n) + '</div><div><span class="v" id="lk-tv' + p.pid + '">--</span><span class="u">' + esc(p.us === "F" ? "°F" : (p.us === "mph" ? "mph" : p.u)) + "</span></div></div>"; }).join("");
+    $("tiles").innerHTML = PIDS.filter(function (p) { return live.sel[p.pid] && pidSupported(p.pid); }).map(function (p) { return '<div class="tile"><div class="k">' + cbl("pid:" + hex2(p.pid), p.n) + '</div><div><span class="v" id="lk-tv' + p.pid + '">--</span><span class="u">' + esc(p.us === "F" ? "°F" : (p.us === "mph" ? "mph" : p.u)) + "</span></div></div>"; }).join("");
   }
   $("picks").addEventListener("change", function (e) { var pid = +e.target.getAttribute("data-pid"); if (pid) { live.sel[pid] = e.target.checked; if (!live.on) renderPicks(); } });
   function shown(p, v) { if (p.us === "F") return Math.round(v * 1.8 + 32); if (p.us === "mph") return Math.round(v * 0.621371); return v.toFixed(p.d); }
@@ -479,7 +480,7 @@
   function renderCluster() {
     var ds = activeDials();
     $("cluster").innerHTML = ds.length ? ds.map(function (g) {
-      return '<div class="dial"><svg viewBox="0 0 120 92" aria-hidden="true"><path class="dtrack" d="M17 84 A50 50 0 1 1 103 84" pathLength="100"/><path class="dfill" id="lk-df-' + g.k + '" d="M17 84 A50 50 0 1 1 103 84" pathLength="100" stroke-dasharray="0 100"/></svg><div class="dv" id="lk-dv-' + g.k + '">--</div><div class="dl">' + esc(g.n) + "</div></div>";
+      return '<div class="dial"><svg viewBox="0 0 120 92" aria-hidden="true"><path class="dtrack" d="M17 84 A50 50 0 1 1 103 84" pathLength="100"/><path class="dfill" id="lk-df-' + g.k + '" d="M17 84 A50 50 0 1 1 103 84" pathLength="100" stroke-dasharray="0 100"/></svg><div class="dv" id="lk-dv-' + g.k + '">--</div><div class="dl">' + esc(g.pids.length === 1 && window.V60_CB && !window.V60_CB.decoded("pid:" + hex2(g.pids[0])) ? "PID " + hex2(g.pids[0]) : g.n) + "</div></div>";
     }).join("") : '<p class="status">Connect and pick channels such as RPM, speed, coolant or intake pressure to see gauges.</p>';
   }
   function updateDials(row) {
@@ -616,7 +617,7 @@
 
 
   window.__link = { parseResponse: parseResponse, dtcsFrom: dtcsFrom, decodeDTC: decodeDTC, SimTransport: SimTransport, csv: csv, live: live, getReport: function () { return report; }, sim: function () { return link; }, zero: zero, trip: trip, onValue: onValue };
-  window.__lkRender = function () { renderHistory(); renderCoach(); renderZero(); renderCluster(); };
+  window.__lkRender = function () { renderHistory(); renderCoach(); renderZero(); renderCluster(); if (link) renderPicks(); if (report) renderReport(); };
   renderHistory(); renderCoach(); renderZero();
     }
   });
