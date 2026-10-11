@@ -58,8 +58,16 @@ ok(await p.evaluate(()=>!!V60.mod('story').revealed.fuel),'next case (The Thirst
 await p.click('[data-case="thirst"]');
 ok(await p.isVisible('.case.open details.brief'),'briefing visible');
 await p.evaluate(()=>{document.getElementById('stOpts').open=true});
-await p.click('[data-depth="mech"]'); ok(await p.locator('.case.open .mech').count()>0,'mechanic depth adds detail');
+ok(await p.isDisabled('[data-depth="mech"]'),'Mechanic detail locked until the Scholar skill');
+await p.evaluate(()=>{const c=V60.mod('cards')||{b:{},rev:{},newDay:{}}; window.V60_FACTS.slice(0,25).forEach(f=>c.b[f.id]=[4,'2099-01-01']); V60.setMod('cards',c); V60.save(); __v60.go('story'); document.getElementById('stOpts').open=true;});
+await p.click('[data-depth="mech"]'); ok(await p.locator('.case.open .mech').count()>0,'Scholar perk unlocks mechanic detail');
 await p.click('[data-depth="det"]');
+await p.click('[data-view="timeline"]'); ok(/Locked|Case closed/.test(await p.textContent('#stV-timeline')),'timeline view renders (locked or filled)');
+await p.click('[data-view="cases"]');
+ok(await p.evaluate(()=>!!V60.mod('story').revealed.skills),'skill tree revealed after Act 1');
+await p.evaluate(()=>__v60.go('skills')); ok(/skills earned/.test(await p.textContent('#skSum')),'skill tree renders: '+await p.textContent('#skSum'));
+await p.screenshot({path:SH+'s-skills-'+nm+'.png',fullPage:true});
+await p.evaluate(()=>__v60.go('story'));
 await p.click('[data-case="safe"]'); await p.locator('.case.open [data-qz]').first().click();
 ok(Object.keys((await p.evaluate(()=>V60.mod('story').quiz)).safe||{}).length===1,'debrief quiz answer saved');
 await p.screenshot({path:SH+'s-mid-'+nm+'.png',fullPage:true});

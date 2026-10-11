@@ -16,5 +16,8 @@
  "js/modules/upgrades.js": "dist-artifact/js/modules/upgrades.js",
  "js/modules/live.js": "dist-artifact/js/modules/live.js",
  "js/modules/extras.js": "dist-artifact/js/modules/extras.js",
+ "js/modules/skills.js": "dist-artifact/js/modules/skills.js",
+ "js/modules/sync.js": "dist-artifact/js/modules/sync.js",
+ "js/modules/ui.js": "dist-artifact/js/modules/ui.js",
  "js/core.js": "dist-artifact/js/core.js"
 }

@@ -18,8 +18,27 @@
       story: '<path d="M5 4h11l3 3v13H5z"/><path d="M8 10h8M8 14h6"/>'
     };
     var G = window.V60_GATE, vis = function (t) { return !G || G.visible(t); };
-    $("tdQuick").innerHTML = quick.filter(function (q) { var t = q[2].split(":")[1]; return document.getElementById("p-" + t) && vis(t); }).map(function (q) { return '<button type="button" class="qa" data-jump="' + q[2] + '"><svg viewBox="0 0 24 24" aria-hidden="true">' + IC[q[0]] + "</svg><span>" + esc(q[1]) + "</span></button>"; }).join("");
+    /* garage map: a top-down drawing of the car; each area lights up once the story has opened it */
+    var Z = [
+      ["seats", "story", '<rect x="112" y="48" width="96" height="104" rx="14"/>', [160, 104], "Story"],
+      ["hood", "engine", '<path d="M262 42 H318 Q336 44 338 100 Q336 156 318 158 H262 Z"/>', [300, 104], "Engine bay"],
+      ["dash", "health", '<rect x="216" y="48" width="18" height="104" rx="6"/>', [225, 192], "Health"],
+      ["obd", "live", '<circle cx="232" cy="66" r="9"/>', [232, 15], "Live link"],
+      ["glove", "glove", '<rect x="238" y="118" width="18" height="26" rx="4"/>', [286, 192], "Glovebox"],
+      ["cargo", "diy", '<path d="M104 48 H42 Q24 52 22 100 Q24 148 42 152 H104 Z"/>', [64, 104], "DIY jobs"],
+      ["fuel", "fuel", '<rect x="86" y="160" width="20" height="10" rx="3"/>', [96, 192], "Fuel"],
+      ["wheels", "bay", '<rect x="62" y="22" width="40" height="14" rx="6"/><rect x="62" y="164" width="40" height="14" rx="6"/><rect x="262" y="22" width="40" height="14" rx="6"/><rect x="262" y="164" width="40" height="14" rx="6"/>', [82, 14], "Whole car"]
+    ];
+    var shown = Z.filter(function (z) { return document.getElementById("p-" + z[1]) && vis(z[1]); });
+    $("tdQuick").innerHTML = '<svg class="gmap" viewBox="0 0 360 200" role="group" aria-label="Your garage. Lit areas are open."><path class="gbody" d="M40 30 H300 Q348 34 350 100 Q348 166 300 170 H40 Q12 166 10 100 Q12 34 40 30 Z"/>' +
+      Z.map(function (z) { var on = shown.indexOf(z) >= 0; return '<g class="gz ' + (on ? "on" : "off") + '"' + (on ? ' role="button" tabindex="0" data-jump="tab:' + z[1] + '" aria-label="' + esc(z[4]) + '"' : ' aria-hidden="true"') + ">" + z[2] + "</g>"; }).join("") +
+      shown.map(function (z) { return '<text class="glab" x="' + z[3][0] + '" y="' + z[3][1] + '" text-anchor="middle">' + esc(z[4]) + "</text>"; }).join("") + "</svg>" +
+      '<p class="gmhint">' + shown.length + " of " + Z.length + " areas open. Tap a lit area.</p>";
+    var lb = null; try { lb = localStorage.getItem("v60-garage-lastbackup"); } catch (e) {}
+    var meaningful = (st.log || []).length + (st.oil || []).length + Object.keys((api.acad() || {}).done || {}).length >= 3;
+    var needSafety = api.localMode && api.localMode() && !(window.V60_SYNC && window.V60_SYNC.on()) && meaningful && (!lb || (Date.now() - new Date(lb + "T12:00:00")) / 864e5 > 14);
     var cards = [];
+    if (needSafety) cards.push({ order: 3, html: '<article class="tcard"><p class="ans-k">Protect your progress</p><h3>Your progress lives only on this device</h3><p class="status">' + (lb ? "Last backup " + esc(lb) + "." : "No backup yet.") + ' Turn on sync to keep every device in step, or save a backup file to iCloud Drive.</p><div class="row"><button type="button" data-jump="opts:sync">Set up sync</button><button type="button" class="quiet" data-jump="backup:go">Save a backup</button></div></article>' });
     var top = h.actions.slice(0, 3);
     if (top.length && vis("health")) cards.push({ order: 20, html: '<article class="tcard"><h3>Fix first</h3><ul class="tlist">' + top.map(function (a) { return '<li><span class="pill ' + (a.sev >= 70 ? "concern" : (a.sev >= 40 ? "watch" : "info")) + '">' + (a.sev >= 70 ? "Act" : (a.sev >= 40 ? "Soon" : "Later")) + '</span><button type="button" class="tlink" data-jump="' + esc(a.jump) + '">' + esc(a.text) + "</button></li>"; }).join("") + '</ul><button type="button" class="quiet" data-jump="tab:health">See all ' + h.actions.length + "</button></article>" });
     cards.push({ order: 30, html: '<article class="tcard"><h3>Your progress</h3><p class="bigline">Level ' + r.lvl + ", " + esc(r.name) + '</p><p class="status">' + (r.next ? (r.next[0] - api.xp()) + " XP to " + esc(r.next[1]) : "Top rank") + '</p><button type="button" class="quiet" data-jump="tab:academy">Continue</button></article>' });
@@ -28,6 +47,7 @@
     $("tdCards").innerHTML = cards.map(function (c) { return c.html; }).join("");
   },
   init: function (api) {
+    api.$("tdQuick").addEventListener("keydown", function (e) { var g = e.target.closest && e.target.closest("[data-jump]"); if (g && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); api.jump(g.getAttribute("data-jump")); } });
     api.$("tdAsk").addEventListener("submit", function (e) { e.preventDefault(); var q = api.$("tdAskIn").value.trim(); if (q) api.jump("ask:" + q); });
   }
 });

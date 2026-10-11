@@ -261,12 +261,14 @@
     return out;
   }
 
+  var quietSave = false;
   function save() {
     var snapshot = JSON.parse(JSON.stringify(state));
     chain = chain.then(function () {
       if (mode === "db" && ref) return ref.set(snapshot).then(function () { setStatus("Saved to your private data for this page"); });
-      try { localStorage.setItem(LSKEY, JSON.stringify(snapshot)); setStatus("Saved in this browser only"); }
+      try { localStorage.setItem(LSKEY, JSON.stringify(snapshot)); setStatus(window.V60_SYNC && window.V60_SYNC.on() ? "Saved on this device · syncing" : "Saved on this device"); }
       catch (e) { setStatus("Could not save. Changes last until you close the page."); }
+      if (window.V60_SYNC && !quietSave) window.V60_SYNC.changed();
     }).catch(function () {
       try { localStorage.setItem(LSKEY, JSON.stringify(snapshot)); setStatus("Cloud save failed. Kept in this browser only."); }
       catch (e) { setStatus("Could not save. Changes last until you close the page."); }
@@ -2063,7 +2065,8 @@
     mod: function (id) { if (!state.mods) state.mods = {}; return state.mods[id]; }, setMod: function (id, v) { if (!state.mods) state.mods = {}; state.mods[id] = v; },
     sample: function () { return sampleFn; }, assets: function () { return assetsNs; }, photoUrl: function (p) { return photoUrl(p); }, takePhotoTo: null,
     importLinkReport: function (R) { return importLinkReport(R); },
-    oilRate: function () { return oilRate(); }, navRefresh: function () { renderNav(ui.tab); },
+    oilRate: function () { return oilRate(); }, replaceState: function (r) { replaceState(r); }, snapshot: function () { return JSON.parse(JSON.stringify(state)); }, blobGet: blobGet, blobPut: blobPut, localMode: function () { return mode === "local"; },
+    shrinkPhoto: function (f) { return shrink(f); }, addPhoto: function (rec) { state.photos = (state.photos || []).concat([rec]).slice(-200); save(); }, navRefresh: function () { renderNav(ui.tab); },
     inClaude: function () { return !!(window.claude && typeof window.claude.use === "function"); }
   };
   if (typeof window !== "undefined") window.V60 = API;
@@ -2182,10 +2185,20 @@
     });
     $("exportBtn").addEventListener("click", function () {
       claudeUse("downloads").then(function (d) {
-        if (!d) { $("backupStatus").textContent = "Downloads are not available in this view."; return null; }
+        if (!d) { localBackup(); return null; }
         return d.save({ filename: "v60-garage-backup.json", data: JSON.stringify(state, null, 1) }).then(function () { $("backupStatus").textContent = "Backup saved."; });
       }).catch(function (e) { $("backupStatus").textContent = e && e.code === "declined" ? "Cancelled." : "Could not save the backup."; });
     });
+    function localBackup() {
+      var name = "v60-garage-backup-" + todayStr() + ".json", text = JSON.stringify(state, null, 1), done = function (m) { $("backupStatus").textContent = m; try { localStorage.setItem("v60-garage-lastbackup", todayStr()); } catch (e) {} };
+      try {
+        var file = new File([text], name, { type: "application/json" });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) { navigator.share({ files: [file], title: name }).then(function () { done("Backup shared. Choose Save to Files to keep it in iCloud Drive."); }).catch(function () { $("backupStatus").textContent = "Cancelled."; }); return; }
+      } catch (e) {}
+      var url = URL.createObjectURL(new Blob([text], { type: "application/json" })), a = document.createElement("a");
+      a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+      done("Backup downloaded.");
+    }
     var pendingImport = null;
     $("importFile").addEventListener("change", function () {
       var f = this.files && this.files[0]; if (!f) return;
@@ -2258,6 +2271,10 @@
     if (!cl || typeof cl.use !== "function") return Promise.resolve(null);
     return cl.use(name);
   }
+  /* used by sync: take a state from another device without marking this device as changed */
+  function replaceState(raw) { state = clean(raw); quietSave = true; save(); chain = chain.then(function () { quietSave = false; }); renderAll(); showTab(ui.tab); loadLocalBlobs().then(function () { renderPhotos(); }); }
+  function blobGet(id) { return idb().then(function (db) { return new Promise(function (res) { var g = db.transaction("blobs").objectStore("blobs").get(id); g.onsuccess = function () { res(g.result || null); }; g.onerror = function () { res(null); }; }); }); }
+  function blobPut(id, blob) { return idb().then(function (db) { return new Promise(function (res, rej) { var tx = db.transaction("blobs", "readwrite"); tx.objectStore("blobs").put(blob, id); tx.oncomplete = function () { localUrls[id] = URL.createObjectURL(blob); res(); }; tx.onerror = function () { rej(tx.error); }; }); }); }
   function applyLoaded(raw) { state = clean(raw); renderAll(); loadLocalBlobs().then(function () { renderPhotos(); }); }
   function loadLocal() {
     try { var s = localStorage.getItem(LSKEY); if (s) applyLoaded(JSON.parse(s)); } catch (e) { /* no storage */ }

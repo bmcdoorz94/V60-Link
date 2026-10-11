@@ -14,7 +14,7 @@
 <meta name="apple-mobile-web-app-title" content="V60 Garage">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira:wdth,wght@75..125,400..800&family=Atkinson+Hyperlegible+Next:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="app.css?v=d1bdd9b0">
+<link rel="stylesheet" href="app.css?v=c9ec78ea">
 </head>
 <body>
 
@@ -34,6 +34,7 @@
       <button type="button" class="rankchip" data-jump="tab:academy" aria-label="Rank, open Academy"><span class="rk" id="hudRank">Lv 1</span><span class="rn" id="hudRankName">Passenger</span></button>
       <label class="odo"><span>Odometer</span><span class="odo-in"><input id="odo" type="number" inputmode="numeric" min="0" step="1" placeholder="95000"><i>mi</i></span></label>
     </div>
+    <div class="pulse" id="pulse" aria-label="Car status at a glance"></div>
     <p class="status savest" id="saveStatus" role="status">Loading your saved data</p>
   </header>
   <nav class="rail" id="rail" aria-label="Sections"></nav>
@@ -543,24 +544,27 @@
 </main>
 
 
-<script>window.V60_VERSION="2026.10.11-1427-d1bdd9b0";</script>
-<script src="js/data/articles.js?v=d1bdd9b0"></script>
-<script src="js/data/codebook.js?v=d1bdd9b0"></script>
-<script src="js/data/facts.js?v=d1bdd9b0"></script>
-<script src="js/modules/today.js?v=d1bdd9b0"></script>
-<script src="js/modules/kb.js?v=d1bdd9b0"></script>
-<script src="js/modules/cards.js?v=d1bdd9b0"></script>
-<script src="js/modules/exam.js?v=d1bdd9b0"></script>
-<script src="js/modules/story.js?v=d1bdd9b0"></script>
-<script src="js/modules/fuel.js?v=d1bdd9b0"></script>
-<script src="js/modules/glovebox.js?v=d1bdd9b0"></script>
-<script src="js/modules/diy.js?v=d1bdd9b0"></script>
-<script src="js/modules/trees.js?v=d1bdd9b0"></script>
-<script src="js/modules/bulletins.js?v=d1bdd9b0"></script>
-<script src="js/modules/upgrades.js?v=d1bdd9b0"></script>
-<script src="js/modules/live.js?v=d1bdd9b0"></script>
-<script src="js/modules/extras.js?v=d1bdd9b0"></script>
-<script src="js/core.js?v=d1bdd9b0"></script>
+<script>window.V60_VERSION="2026.10.11-0959-c9ec78ea";</script>
+<script src="js/data/articles.js?v=c9ec78ea"></script>
+<script src="js/data/codebook.js?v=c9ec78ea"></script>
+<script src="js/data/facts.js?v=c9ec78ea"></script>
+<script src="js/modules/today.js?v=c9ec78ea"></script>
+<script src="js/modules/kb.js?v=c9ec78ea"></script>
+<script src="js/modules/cards.js?v=c9ec78ea"></script>
+<script src="js/modules/exam.js?v=c9ec78ea"></script>
+<script src="js/modules/story.js?v=c9ec78ea"></script>
+<script src="js/modules/fuel.js?v=c9ec78ea"></script>
+<script src="js/modules/glovebox.js?v=c9ec78ea"></script>
+<script src="js/modules/diy.js?v=c9ec78ea"></script>
+<script src="js/modules/trees.js?v=c9ec78ea"></script>
+<script src="js/modules/bulletins.js?v=c9ec78ea"></script>
+<script src="js/modules/upgrades.js?v=c9ec78ea"></script>
+<script src="js/modules/live.js?v=c9ec78ea"></script>
+<script src="js/modules/extras.js?v=c9ec78ea"></script>
+<script src="js/modules/skills.js?v=c9ec78ea"></script>
+<script src="js/modules/sync.js?v=c9ec78ea"></script>
+<script src="js/modules/ui.js?v=c9ec78ea"></script>
+<script src="js/core.js?v=c9ec78ea"></script>
 <script>
 if ("serviceWorker" in navigator && location.protocol === "https:") {
   navigator.serviceWorker.register("sw.js").then(function (reg) {

@@ -39,7 +39,7 @@
     var K = window.V60_KNOW;
     if (kb.view === "art" && kb.art) {
       var a = kb.art; if (K) K.discover("a", a.id);
-      body.innerHTML = '<article class="kbart"><button type="button" class="quiet" data-kb="home">Back to the library</button><p class="ans-k">' + esc(a.cat) + "</p><h2>" + esc(a.t) + "</h2>" + bodyHTML(api, a.body) + '<h4>Sources</h4><ul class="src plain">' + srcLinks(api, a.src) + "</ul></article>";
+      body.innerHTML = '<article class="kbart" id="kbArt"><div class="row"><button type="button" class="quiet" data-kb="home">Back to the library</button><button type="button" class="quiet sm" data-speak="#kbArt">Listen</button></div><p class="ans-k">' + esc(a.cat) + "</p><h2>" + esc(a.t) + "</h2>" + bodyHTML(api, a.body) + '<h4>Sources</h4><ul class="src plain">' + srcLinks(api, a.src) + "</ul></article>";
       return;
     }
     if (kb.view === "results") {

@@ -53,12 +53,12 @@
   /* ---------- the case file ---------- */
   var ACTS = [["1", "Arrival"], ["2", "The Unknowns"], ["3", "The Voice"], ["4", "Ownership"]];
   var ACT_REWARD = {
-    "1": { tabs: ["bay", "health", "cards"], line: "Act 1 complete. The whole-car map, your Health score and daily flashcards are open." },
+    "1": { tabs: ["bay", "health", "cards", "skills"], line: "Act 1 complete. The whole-car map, your Health score, daily flashcards and the skill tree are open." },
     "2": { tabs: ["achieve"], line: "Act 2 complete. Side missions are open: seasonal events and achievements." },
     "3": { tabs: ["sim"], line: "Act 3 complete. Side mission: the Simulator and its mystery cars." },
     "4": { tabs: ["exam"], line: "Act 4 complete. The V60 Master exam is open. Pass it to reach the finale." }
   };
-  var TABN = { academy: "Academy", engine: "Engine bay", live: "Live link", bay: "Whole car", health: "Health", cards: "Flashcards", records: "Service log", glove: "Glovebox", fuel: "Fuel & costs", diy: "DIY jobs", trouble: "Troubleshoot", bulletins: "Bulletins", my: "My V60", kb: "Library", achieve: "Achievements", lab: "Data lab", sim: "Simulator", upgrades: "Upgrades", diag: "Diagnose", exam: "Exam" };
+  var TABN = { skills: "Skill tree", academy: "Academy", engine: "Engine bay", live: "Live link", bay: "Whole car", health: "Health", cards: "Flashcards", records: "Service log", glove: "Glovebox", fuel: "Fuel & costs", diy: "DIY jobs", trouble: "Troubleshoot", bulletins: "Bulletins", my: "My V60", kb: "Library", achieve: "Achievements", lab: "Data lab", sim: "Simulator", upgrades: "Upgrades", diag: "Diagnose", exam: "Exam" };
   var CASES = [
     { id: "safe", act: "1", crit: true, t: "Safe to Touch", sub: "Learn the car's layout and the rules before touching anything.", scene: "bay", reveals: ["academy", "engine"],
       know: { arts: ["a-car", "a-lights"], tags: ["Identity", "Basics", "Safety", "Warning lights"] }, quiz: ["f-fan6", "f-hoodss", "f-coolloc"],
@@ -163,6 +163,13 @@
     ["wrench", "Lars: I fixed these cars for a living. I'll ride along. You do the work, I'll tell you what it means."],
     ["file", "Lars: Every unknown about this car is a case. We open them one at a time, and the rest of the garage opens up as we go. First case: getting under the hood safely."]] };
 
+  var COLD = { id: "cold", t: "", lines: [
+    ["device", "Something under the dashboard has been talking since 2016."],
+    ["papers", "Nobody ever wrote down what it said."],
+    ["belt", "Some of what it knows could cost an engine."],
+    ["file", "CASE FILE: OPEN. Owner: you."],
+    ["road", "It begins when you open the hood."]] };
+
   /* ---------- status, availability and what the app reveals ---------- */
   function status(api, c) {
     var d = D(api), cl = d.closed[c.id];
@@ -228,6 +235,7 @@
   function sceneById(api, id) {
     var d = D(api);
     if (id === "pro") return PRO;
+    if (id === "cold") return COLD;
     if (id === "fin") return finScene(api);
     if (d.beats[id]) return { id: id, t: d.beats[id].t, lines: d.beats[id].lines };
     var c = CASES.filter(function (x) { return "case-" + x.id === id; })[0], rec = c && d.closed[c.id];
@@ -303,6 +311,7 @@
   }
   function closeDecode() { var sh = document.getElementById("decodeSheet"); if (!sh || sh.hidden) return; sh.hidden = true; document.body.classList.remove("cine-open"); API.renderAll(); }
 
+  function alertNote(api, msg) { var n = document.createElement("div"); n.className = "toast"; n.setAttribute("role", "status"); n.textContent = msg; document.body.appendChild(n); setTimeout(function () { n.remove(); }, 4000); }
   /* ---------- cinema ---------- */
   var cin = { ch: null, i: 0, timer: null, typed: null };
   function reduce() { try { return window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; } }
@@ -351,21 +360,25 @@
       return '<div class="qzq"><p><b>' + esc(f.q) + "</b></p>" + (ans ? '<p class="' + (ans === "r" ? "ok" : "bad") + '">' + (ans === "r" ? "Right. " : "Not quite. ") + esc(f.a) + "</p>" : '<div class="qzo">' + opts.map(function (o) { return '<button type="button" class="quiet" data-qz="' + c.id + "|" + f.id + "|" + (o === f.a ? "r" : "w") + '">' + esc(o) + "</button>"; }).join("") + "</div>") + "</div>";
     }).join("") + "</details>";
   }
+  function depthOf(api) { var dp = D(api).depth; return dp === "mech" && window.V60_PERK && !window.V60_PERK("mech") ? "det" : dp; }
   function briefHTML(api, c, s) {
-    var b = c.brief, d = D(api), esc = api.esc, deep = d.depth;
+    var b = c.brief, d = D(api), esc = api.esc, deep = depthOf(api);
     if (deep === "short") return '<p class="bshort">' + esc(b.why.split(". ")[0].replace(/\.$/, "")) + ".</p>";
-    return '<details class="brief"' + (s.st === "unknown" || s.st === "lead" ? " open" : "") + '><summary>Briefing</summary><p>' + esc(b.why) + "</p>" + (deep === "mech" ? '<p class="mech">' + esc(b.mech) + "</p>" : "") +
+    return '<details class="brief" id="brief-' + c.id + '"' + (s.st === "unknown" || s.st === "lead" ? " open" : "") + '><summary>Briefing</summary><div class="row"><button type="button" class="quiet sm" data-speak="#brief-' + c.id + '">Listen</button></div><p>' + esc(b.why) + "</p>" + (deep === "mech" ? '<p class="mech">' + esc(b.mech) + "</p>" : "") +
       '<dl class="bfacts"><dt>Time</dt><dd>' + esc(b.time) + "</dd><dt>Cost</dt><dd>" + esc(b.cost) + "</dd><dt>Tools</dt><dd>" + esc(b.tools) + "</dd><dt>If skipped</dt><dd>" + esc(b.risk) + "</dd></dl>" + '<p class="status">Sources: ' + srcHTML(api, b.src) + "</p></details>";
   }
   function stepsHTML(api, c, s) {
-    var esc = api.esc, deep = D(api).depth;
+    var esc = api.esc, deep = depthOf(api);
     return '<ol class="steps">' + c.steps.map(function (st, i) {
       var ok = s.done[i], pr = st.prog && !ok ? st.prog(api) : "";
       var info = (deep !== "short" && st.why ? "<small>" + esc(st.why) + "</small>" : "") + (deep === "mech" && st.mech ? '<small class="mech">' + esc(st.mech) + "</small>" : "") + (pr ? '<small class="prog">' + esc(pr) + "</small>" : "");
-      var acts = (st.manual ? '<button type="button" class="quiet" data-man="' + st.manual + '" aria-pressed="' + ok + '">' + (ok ? "Undo" : "Mark done") + "</button>" : "") + (st.go && !ok ? '<button type="button" class="quiet" data-jump="' + esc(st.go) + '">Go</button>' : "") + (st.where ? '<button type="button" class="quiet" data-jump="bay:' + st.where + '" title="Show me where">Where</button>' : "");
+      var acts = (st.manual ? '<button type="button" class="quiet" data-man="' + st.manual + '" aria-pressed="' + ok + '">' + (ok ? "Undo" : "Mark done") + "</button>" : "") + (st.go && !ok ? '<button type="button" class="quiet" data-jump="' + esc(st.go) + '">Go</button>' : "") + (st.where ? '<button type="button" class="quiet" data-jump="bay:' + st.where + '" title="Show me where">Where</button>' : "") + '<button type="button" class="quiet" data-proof="' + c.id + "|" + i + '" title="Attach a proof photo">Photo</button>';
+      var shots = proofs(api, c.id, i);
+      info += shots.length ? '<span class="proofs">' + shots.map(function (p) { var u = api.photoUrl(p); return u ? '<img src="' + esc(u) + '" alt="Proof photo, ' + esc(p.date) + '" loading="lazy">' : ""; }).join("") + "</span>" : "";
       return '<li class="' + (ok ? "done" : "") + '"><span class="sdot" aria-hidden="true">' + (ok ? "✓" : "") + '</span><span class="stx">' + esc(st.t) + (st.optional ? ' <span class="pill none">bonus</span>' : "") + info + '</span><span class="sact">' + acts + "</span></li>";
     }).join("") + "</ol>";
   }
+  function proofs(api, cid, i) { return (api.state.photos || []).filter(function (p) { return p.kind === "proof" && p.cs === cid && (i == null || p.st === i); }); }
   var PILL = { unknown: ["Unknown", "none"], lead: ["Lead", "info"], evidence: ["Evidence", "watch"], closed: ["Closed", "ok"], risk: ["Known risk", "concern"] };
   function caseHTML(api, c, s) {
     var esc = api.esc, open = ui.open === c.id, n = c.steps.filter(function (x, i) { return s.done[i] && !x.optional; }).length, tot = c.steps.filter(function (x) { return !x.optional; }).length;
@@ -414,8 +427,34 @@
     sec("Papers", kv([["Receipts on file", (g.receipts || []).length || ""], ["Registration expires", docs.regExp], ["Insurance renews", docs.insRenew], ["Emissions inspection due", docs.inspDue]]));
     var risks = CASES.filter(function (c) { return d.closed[c.id] && d.closed[c.id].how === "reason"; });
     sec("Known risks", risks.length ? '<ul class="fl">' + risks.map(function (c) { return '<li class="riskt"><b>' + esc(c.t) + "</b>: " + esc(d.closed[c.id].reason) + "</li>"; }).join("") + "</ul>" : "");
+    var pf = (st.photos || []).filter(function (p) { return p.kind === "proof"; });
+    sec("Proof photos", pf.length ? '<div class="proofgrid">' + pf.slice(-12).map(function (p) { var c = caseById(p.cs), u = api.photoUrl(p); return u ? '<figure><img src="' + esc(u) + '" alt="Proof photo"><figcaption>' + esc((c ? c.t + " · " : "") + p.date) + "</figcaption></figure>" : ""; }).join("") + "</div>" : "");
     sec("Codebook", "<p>" + plural(decodedN(api), "signal") + " decoded of " + (window.V60_CODEBOOK || []).length + ".</p>");
     return '<div id="fileDoc">' + rows.join("") + '</div><div class="row"><button type="button" class="quiet" id="stPrint">Print or save as PDF</button></div><p class="status">Built from what you have logged. The VIN is never shown here.</p>';
+  }
+  function timelineHTML(api) {
+    var esc = api.esc, st = api.state, d = D(api), ev = [];
+    if (window.V60_PERK && !window.V60_PERK("timeline")) return '<div class="card"><p class="ans-k">Locked</p><h3>Timeline</h3><p>Earn the Record keeper skill (log 3 services or receipts) to see your car\'s whole life on one scroll.</p><button type="button" class="quiet" data-jump="tab:skills">Skill tree</button></div>';
+    function add(date, kind, t, sub, go) { if (date) ev.push({ d: String(date).slice(0, 10), k: kind, t: t, s: sub || "", go: go || "" }); }
+    (st.log || []).forEach(function (e) { var it = (api.ITEMS || []).filter(function (x) { return x.key === e.item; })[0]; add(e.date, "Service", it ? it.name : e.item, e.miles ? api.fmt(e.miles) + " mi" : "", "tab:records"); });
+    (st.oil || []).forEach(function (e) { add(e.date, "Oil", "Oil level check" + (e.qts ? ", added " + e.qts + " qt" : ""), e.miles ? api.fmt(e.miles) + " mi" : "", "tab:records"); });
+    ((mod(api, "glove", {}).receipts) || []).forEach(function (r) { add(r.date, "Receipt", r.shop || "Receipt", r.summary || "", "tab:glove"); });
+    ((mod(api, "fuel", { fills: [] }).fills) || []).forEach(function (f) { add(f.date, "Fuel", "Fill-up" + (f.gal ? ", " + f.gal + " gal" : ""), f.odo ? api.fmt(f.odo) + " mi" : "", "tab:fuel"); });
+    ((mod(api, "live", { scans: [] }).scans) || []).forEach(function (x) { add(x.date, "Scan", "Health check" + (x.sim ? " (simulated)" : ""), (x.codes || []).length ? (x.codes || []).map(function (c) { return c.code; }).join(", ") : "No codes", "tab:live"); });
+    (st.runs || []).forEach(function (r) { add(r.date, "Drive", "Baseline drive saved", r.miles ? api.fmt(r.miles) + " mi" : "", "tab:lab"); });
+    var dd = mod(api, "diy", { done: {} }).done || {}; Object.keys(dd).forEach(function (k) { add(dd[k], "DIY", "DIY job done", k.replace(/^j-/, ""), "diy:" + k); });
+    CASES.forEach(function (c) { var r = d.closed[c.id]; if (r) add(r.date, r.how === "reason" ? "Risk" : "Case", (r.how === "reason" ? "Logged as known risk: " : "Case closed: ") + c.t, r.how === "reason" ? r.reason : "", "case:" + c.id); });
+    var dec = {}; Object.keys(d.cb).forEach(function (k) { var c = d.cb[k]; if (c.dec) dec[c.dec] = (dec[c.dec] || 0) + 1; }); Object.keys(dec).forEach(function (day) { add(day, "Codebook", "Decoded " + plural(dec[day], "signal"), "", "tab:story"); });
+    (st.photos || []).forEach(function (p) { add(p.date, "Photo", p.kind === "proof" ? "Proof photo" : "Photo check", p.note || "", "tab:my"); });
+    if (!ev.length) return '<p class="status">Your timeline fills in as you log services, oil checks, scans, receipts and fill-ups.</p>';
+    ev.sort(function (a, b) { return a.d < b.d ? 1 : (a.d > b.d ? -1 : 0); });
+    var month = "", out = '<ol class="tline">';
+    ev.forEach(function (e) {
+      var m = e.d.slice(0, 7);
+      if (m !== month) { month = m; out += '<li class="tmon">' + esc(new Date(m + "-15T12:00:00").toLocaleDateString(undefined, { month: "long", year: "numeric" })) + "</li>"; }
+      out += '<li class="tev k-' + esc(e.k.toLowerCase()) + '"><span class="tday">' + esc(e.d.slice(8, 10)) + '</span><button type="button" class="tbtn"' + (e.go ? ' data-jump="' + esc(e.go) + '"' : "") + '><span class="tk">' + esc(e.k) + "</span><b>" + esc(e.t) + "</b>" + (e.s ? "<small>" + esc(e.s) + "</small>" : "") + "</button></li>";
+    });
+    return out + "</ol>";
   }
   function codebookHTML(api) {
     var d = D(api), esc = api.esc, groups = {};
@@ -431,10 +470,11 @@
     var $ = api.$, esc = api.esc, d = D(api);
     sweep(api);
     var avail = CASES.filter(function (c) { return available(api, c); }), closed = CASES.filter(function (c) { return d.closed[c.id]; }).length, nx = nextStep(api), fin = !!d.closed.fin;
-    $("stSeg").innerHTML = [["cases", "Cases"], ["file", "The File"], ["codebook", "Codebook"]].map(function (x) { return '<button type="button" data-view="' + x[0] + '" aria-pressed="' + (ui.view === x[0]) + '">' + x[1] + "</button>"; }).join("");
+    $("stSeg").innerHTML = [["cases", "Cases"], ["file", "The File"], ["timeline", "Timeline"], ["codebook", "Codebook"]].map(function (x) { return '<button type="button" data-view="' + x[0] + '" aria-pressed="' + (ui.view === x[0]) + '">' + x[1] + "</button>"; }).join("");
     $("stProg").innerHTML = '<div class="sbar" role="progressbar" aria-valuemin="0" aria-valuemax="' + CASES.length + '" aria-valuenow="' + closed + '"><i style="width:' + Math.round(closed / CASES.length * 100) + '%"></i></div><p class="status">' + closed + " of " + CASES.length + " cases closed" + (fin ? " · Finale reached" : "") + " · " + plural(decodedN(api), "signal") + " decoded</p>";
     var pend = d.pending.filter(function (p) { return sceneById(api, p); });
-    ["cases", "file", "codebook"].forEach(function (v) { $("stV-" + v).hidden = ui.view !== v; });
+    ["cases", "file", "timeline", "codebook"].forEach(function (v) { $("stV-" + v).hidden = ui.view !== v; });
+    if (ui.view === "timeline") { $("stV-timeline").innerHTML = timelineHTML(api); return; }
     if (ui.view === "file") { $("stV-file").innerHTML = fileHTML(api); return; }
     if (ui.view === "codebook") { $("stV-codebook").innerHTML = codebookHTML(api); return; }
     var nextHTML = (pend.length ? '<div class="nextc scene"><p class="ans-k">New scene</p><h3>' + esc(sceneById(api, pend[0]).t) + '</h3><button type="button" data-jump="story:' + pend[0] + '">Watch</button></div>' : "") +
@@ -452,15 +492,16 @@
     var sideH = side.length ? '<section class="card"><details><summary>Side missions (optional) · ' + side.length + '</summary><p class="status">Extra practice and XP. None of these block the story.</p><ul class="joblist">' + side.map(function (x) { return '<li><button type="button" class="mbtn" data-jump="' + x[3] + '"><span class="mt">' + esc(x[1]) + '</span><span class="status">' + esc(x[2]) + "</span></button></li>"; }).join("") + "</ul></details></section>" : "";
     var seenable = ["pro"].concat(Object.keys(d.beats).sort()).concat(CASES.filter(function (c) { return d.closed[c.id]; }).map(function (c) { return "case-" + c.id; })).concat(fin ? ["fin"] : []);
     var scenesH = '<section class="card"><details><summary>Scenes · ' + seenable.length + '</summary><ul class="joblist">' + seenable.map(function (id) { var s = sceneById(api, id); return s ? '<li><button type="button" class="mbtn" data-jump="story:' + id + '"><span class="mt">' + esc(s.t) + '</span><span class="status">' + (d.seen[id] ? "Watched" : "New") + "</span></button></li>" : ""; }).join("") + '</ul><p class="status">Lars is a made-up guide. Every fact he states comes from the sources used elsewhere in the app.</p></details></section>';
-    var opts = '<section class="card"><details id="stOpts"' + (ui.opts ? " open" : "") + '><summary>Options</summary><div class="field"><span class="flab">Detail level</span><div class="seg">' + DEPTH.map(function (x) { return '<button type="button" data-depth="' + x[0] + '" aria-pressed="' + (d.depth === x[0]) + '">' + x[1] + "</button>"; }).join("") + '</div></div><label class="inl"><input type="checkbox" id="stPlain"' + (d.plain ? " checked" : "") + '> Plain readings in Live link (skip decoding)</label><label class="inl"><input type="checkbox" id="stAll"' + (d.all ? " checked" : "") + '> Show everything (skip the reveal)</label><div class="row"><button type="button" class="quiet" data-jump="backup:go">Back up or restore my progress</button></div><p class="status">Progress is saved on this device in this browser. Bluefy and the Home Screen app keep separate copies; a backup file moves it between them.</p></details></section>';
+    var opts = '<section class="card"><details id="stOpts"' + (ui.opts ? " open" : "") + '><summary>Options</summary><div class="field"><span class="flab">Detail level</span><div class="seg">' + DEPTH.map(function (x) { var lock = x[0] === "mech" && window.V60_PERK && !window.V60_PERK("mech"); return '<button type="button" data-depth="' + x[0] + '" aria-pressed="' + (depthOf(api) === x[0]) + '"' + (lock ? ' disabled title="Earn the Scholar skill"' : "") + ">" + x[1] + (lock ? " · Scholar skill" : "") + "</button>"; }).join("") + '</div></div><label class="inl"><input type="checkbox" id="stPlain"' + (d.plain ? " checked" : "") + '> Plain readings in Live link (skip decoding)</label><label class="inl"><input type="checkbox" id="stAll"' + (d.all ? " checked" : "") + '> Show everything (skip the reveal)</label><div id="syncBox" class="syncbox"></div><div class="row"><button type="button" class="quiet" data-jump="backup:go">Back up or restore my progress</button></div><p class="status">Progress is saved on this device in this browser. Turn on sync above to keep every device on the same progress; a backup file is the offline safety net.</p></details></section>';
     $("stV-cases").innerHTML = '<div class="stnext">' + nextHTML + "</div>" + acts + newC + sideH + scenesH + opts;
+    if (window.V60_SYNC) window.V60_SYNC.renderBox();
   }
 
   (window.V60_MODULES = window.V60_MODULES || []).push({
     id: "story",
     tabs: [{ id: "story", section: "learn", label: "Story", order: 5, html:
       '<section class="sthero"><p class="ans-k">Story</p><h2>The As-Is File</h2><p class="lede">Every unknown about your car is a case. Close cases by doing the real thing, and the rest of the garage opens up as you go.</p><div id="stProg"></div><div class="seg" id="stSeg" role="group" aria-label="Story views"></div></section>' +
-      '<div id="stV-cases"></div><div id="stV-file" hidden></div><div id="stV-codebook" hidden></div>' }],
+      '<div id="stV-cases"></div><div id="stV-file" hidden></div><div id="stV-timeline" hidden></div><div id="stV-codebook" hidden></div>' }],
     clean: function (v) {
       if (!v || typeof v !== "object") return null;
       var o = { seen: {}, closed: {}, manual: {}, beats: {}, avail: {}, revealed: {}, fresh: {}, known: {}, read: {}, cb: {}, quiz: {}, pending: [], depth: ["short", "det", "mech"].indexOf(v.depth) >= 0 ? v.depth : "det", plain: !!v.plain, all: !!v.all };
@@ -485,7 +526,7 @@
       ov.addEventListener("keydown", function (e) { if (e.key === "Escape") close(api); else if (e.key === "ArrowRight" || e.key === " " || e.key === "Enter") { e.preventDefault(); next(api); } });
       var sh = document.createElement("div");
       sh.id = "decodeSheet"; sh.className = "dsheet"; sh.hidden = true; sh.setAttribute("role", "dialog"); sh.setAttribute("aria-modal", "true"); sh.setAttribute("aria-label", "Decoded signal");
-      sh.innerHTML = '<div class="dsin"><p class="ans-k">Decoded</p><div class="dsb"></div><button type="button" class="dsclose">Got it</button></div>';
+      sh.innerHTML = '<div class="dsin"><p class="ans-k">Decoded</p><div class="dsb" id="dsBody"></div><div class="row"><button type="button" class="dsclose">Got it</button><button type="button" class="quiet sm" data-speak="#dsBody">Listen</button></div></div>';
       document.body.appendChild(sh);
       sh.addEventListener("click", function (e) { if (e.target === sh || e.target.closest(".dsclose")) { closeDecode(); return; } if (e.target.closest("[data-jump]")) { sh.hidden = true; document.body.classList.remove("cine-open"); } });
       sh.addEventListener("keydown", function (e) { if (e.key === "Escape") closeDecode(); });
@@ -502,6 +543,19 @@
         if ((k = b.getAttribute("data-reason"))) { var sel = api.$("rs-" + k).value, txt = api.$("rt-" + k).value.trim(), r = [sel, txt].filter(Boolean).join(": ") || "No reason given"; d.closed[k] = { date: api.todayStr(), how: "reason", reason: r.slice(0, 200), lines: [] }; d.pending.push("case-" + k); api.save(); api.updateHud(); api.renderAll(); render(api); return; }
         if ((k = b.getAttribute("data-reopen"))) { delete d.closed[k]; d.pending = d.pending.filter(function (p) { return p !== "case-" + k; }); ui.open = k; api.save(); render(api); return; }
       });
+      var pin = document.createElement("input"); pin.type = "file"; pin.accept = "image/*"; pin.setAttribute("capture", "environment"); pin.hidden = true; pin.id = "stProofIn"; document.body.appendChild(pin);
+      var proofFor = null;
+      document.addEventListener("click", function (e) { var b = e.target.closest && e.target.closest("[data-proof]"); if (!b) return; proofFor = b.getAttribute("data-proof").split("|"); pin.value = ""; pin.click(); });
+      pin.addEventListener("change", function () {
+        var f = pin.files && pin.files[0], A = api.assets(); if (!f || !proofFor) return;
+        if (!A) { alertNote(api, "Photos can't be stored in this view."); return; }
+        var c = caseById(proofFor[0]), i = +proofFor[1];
+        api.shrinkPhoto(f).then(function (b) { return A.upload(b, { name: "v60-proof-" + api.todayStr() + ".jpg" }); }).then(function (up) {
+          api.addPhoto({ id: api.uid(), asset: up.id, url: up.local ? null : up.url, local: !!up.local, date: api.todayStr(), kind: "proof", part: null, note: (c ? c.t + ": " + c.steps[i].t : "").slice(0, 200), ai: null, cs: proofFor[0], st: i });
+          render(api);
+        }).catch(function (e) { alertNote(api, (e && e.message) || "The photo could not be saved."); });
+      });
+      if (!window.__V60_TEST) setTimeout(function () { var d = D(api); if (!d.seen.cold && !d.seen.pro && !Object.keys(api.acad().done || {}).length) { d.seen.cold = api.todayStr(); api.save(); play(api, "cold"); } }, 900);
       api.$("p-story").addEventListener("change", function (e) {
         var d = D(api);
         if (e.target.id === "stPlain") { d.plain = e.target.checked; api.save(); return; }
@@ -518,6 +572,7 @@
     jump: function (api, kind, id) {
       if (kind === "story") { play(api, id); return true; }
       if (kind === "case") { ui.open = id; ui.view = "cases"; api.go("story"); return true; }
+      if (kind === "opts") { ui.view = "cases"; ui.opts = true; api.go("story"); var o = document.getElementById("stOpts"); if (o && o.scrollIntoView) o.scrollIntoView({ block: "start" }); return true; }
       return false;
     },
     today: function (api) {

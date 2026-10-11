@@ -36,6 +36,7 @@
     }).join("") : '<p class="status">Connect and pick channels such as RPM, speed, coolant or intake pressure to see gauges.</p>';
   }
   function updateDials(row) {
+    driveUpdate(row);
     activeDials().forEach(function (g) {
       var v = g.v(row); if (!isNum(v)) return;
       var pct = Math.max(0, Math.min(100, (v - g.lo) / (g.hi - g.lo) * 100)), f = $("df-" + g.k), t = $("dv-" + g.k);
@@ -43,6 +44,24 @@
       if (t) t.textContent = g.f(v);
     });
   }
+
+  /* ---------------- drive mode: oversized readouts for a phone mount (perk: Data reader skill) ---------------- */
+  var drive = { el: null };
+  var DRV = [["spd", "mph", function (r) { return isNum(r[0x0D]) ? Math.round(r[0x0D] * 0.621371) : null; }], ["rpm", "rpm", function (r) { return isNum(r[0x0C]) ? Math.round(r[0x0C] / 10) * 10 : null; }], ["cool", "coolant °F", function (r) { return isNum(r[0x05]) ? Math.round(r[0x05] * 1.8 + 32) : null; }], ["volt", "volts", function (r) { return isNum(r[0x42]) ? r[0x42].toFixed(1) : null; }]];
+  function driveOpen() {
+    if (window.V60_PERK && !window.V60_PERK("drive")) { $("driveSt").textContent = "Earn the Data reader skill (3 saved drives) to unlock Drive mode."; return; }
+    if (!drive.el) {
+      drive.el = document.createElement("div"); drive.el.className = "drivemode"; drive.el.id = "lk-drive"; drive.el.setAttribute("role", "dialog"); drive.el.setAttribute("aria-label", "Drive mode");
+      drive.el.innerHTML = '<div class="dvg">' + DRV.map(function (d) { return '<div class="dvt"><b id="lk-dv2-' + d[0] + '">--</b><span>' + d[1] + "</span></div>"; }).join("") + '</div><button type="button" class="dvx" id="lk-driveX">Exit drive mode</button>';
+      document.body.appendChild(drive.el);
+      drive.el.addEventListener("click", function (e) { if (e.target.closest(".dvx")) driveClose(); });
+    }
+    drive.el.hidden = false; document.body.classList.add("cine-open"); wake(true);
+    if (!live.on) $("driveSt").textContent = "Start recording to fill the gauges.";
+  }
+  function driveClose() { if (drive.el) drive.el.hidden = true; document.body.classList.remove("cine-open"); if (!live.on) wake(false); }
+  function driveUpdate(row) { if (!drive.el || drive.el.hidden) return; DRV.forEach(function (d) { var v = d[2](row), el = document.getElementById("lk-dv2-" + d[0]); if (el && v != null) el.textContent = v; }); }
+  $("driveBtn").addEventListener("click", driveOpen);
 
   /* ---------------- 0-60 timer ---------------- */
   var zero = { armed: false, running: false, start: 0, prevT: 0, prevMph: 0 };

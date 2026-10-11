@@ -19,6 +19,7 @@ dash = '''
     <h2 id="lk-h-dash">Dashboard</h2>
     <p class="lede">Big gauges from whatever channels are recording. Boost needs intake pressure and barometric pressure selected.</p>
     <div class="cluster" id="lk-cluster"></div>
+    <div class="row"><button type="button" class="quiet" id="lk-driveBtn">Drive mode</button><span class="status" id="lk-driveSt"></span></div>
     <div class="cols">
       <div class="card flat">
         <h3>0–60 mph timer</h3>

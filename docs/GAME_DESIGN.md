@@ -59,10 +59,31 @@ Library articles and flashcards open with the case that uses them, marked "New e
 ## Side missions
 None of these block the story. They appear one by one as acts finish: Flashcards, DIY jobs, Fuel log, Photo mapping, Upgrades, Achievements and seasonal checklists, Simulator mystery cars, Career shop jobs.
 
+## Skill tree (Learn, then Skills; opens after Act 1)
+Four branches, each node earned by evidence already logged elsewhere. A branch builds tier by tier.
+- **Hands-on:** Under the hood, Fluids, Tires, Wrench
+- **Diagnostics:** Listener, Decoder, Data reader, Diagnostician
+- **Knowledge:** Reader, Scholar, Certified
+- **Ownership:** Record keeper, Paper trail, Budgeter
+- **Master tech** (capstone): Tires, Data reader, Certified and Budgeter all earned
+
+Three nodes grant perks that open features: Record keeper opens the **Timeline** view, Scholar opens the **Mechanic** detail level, and Data reader opens **Drive mode** in Live link. Each node is worth 25 XP, and the capstone 100.
+
 ## Progress and rewards
 - **XP and rank:** the level chip in the header. XP comes from Academy missions, closed cases (40 each, 10 for a known risk, 150 for the finale), correct debrief answers (5 each), decoded signals (3 each), DIY jobs, receipts, scans, trips and more.
 - **Achievements:** 18 real-proof badges, such as logging three oil checks, verifying the belt or passing the exam.
 - **Scenes:** each closure or new case is a short scene. Scenes wait on Today until you watch them, and any scene can be replayed from Story, then Scenes.
+
+## Around the app
+- **Garage map (Today):** a top-down drawing of the car. Areas light up as the story opens them; tap one to go there.
+- **Car pulse (header):** three dots, always visible: warning light or codes, last oil check, and the most urgent service item.
+- **Swipeable Today** on phones, one card at a time.
+- **Listen** buttons read briefings, decode cards, Library articles and DIY jobs aloud.
+- **Proof photos:** a Photo button on every case step attaches a picture, shown on the step and in The File.
+- **Cold open:** on first launch a short mystery teaser plays once, before the prologue.
+- **Sync** (Story, then Options): every device shares the same progress through a private GitHub repository. Each device needs the repository name and a fine-grained token once. Photos sync too. The Claude version can't reach GitHub and stays separate.
+- **Protect your progress card** on Today: appears when sync is off and there has been no backup for 14 days.
+- **Monthly iPhone reminder** for the oil and tire check (in the Reminders app, created from Claude).
 
 ## Options (Story, then Options)
 - **Detail level:** Short, Detailed or Mechanic. Mechanic adds part numbers, specs and bulletin details to briefings and steps.
