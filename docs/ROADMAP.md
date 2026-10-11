@@ -48,6 +48,7 @@ Story case board shipped. 24 tabs across Today, Learn, Car, Check and Data. Test
 - VIN, plate and chassis number never go in the repo. They may only be typed into the app's local storage.
 
 ## Done
+- 2026-10-11: Trailer (Claude artifact "V60 Garage Trailer") and presentation deck ("V60 Garage", Slides). Backup and restore reachable from Story, then Options, at any stage. The app asks the browser for persistent storage.
 - 2026-10-11: Progressive reveal, The Signal case and Codebook, briefings and debriefs with quizzes, The File, knowledge unlocks, detail levels, "Where" jumps to the engine bay, the "Something's wrong" panel on Today, and docs/GAME_DESIGN.md.
 - 2026-10-10: Story case board replaces the chapter reel (src/js/modules/story.js); core.js gained the `mission:` jump and `api.oilRate()`; tests/story.js added.
 - 2026-10-10: Claude/Gemini handoff protocol (tools/handoff.py, tools/apply_handoff.py, GitHub Action build).

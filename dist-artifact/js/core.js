@@ -2027,6 +2027,7 @@
     if (kind === "tab") { showTab(id); return; }
     if (kind === "mission") { if (!missionById(id)) return; aui.view = "mission"; aui.id = id; showTab("academy"); renderAcademy(); window.scrollTo(0, 0); return; }
     for (var mi = 0; mi < MODS.length; mi++) if (MODS[mi].jump && MODS[mi].jump(API, kind, id)) return;
+    if (kind === "backup") { var bs = $("backupSec"), pn = bs && bs.closest(".panel"); if (pn) { showTab(pn.id.slice(2)); bs.scrollIntoView({ block: "start" }); } return; }
     if (kind === "bay") { eb.mode = "draw"; eb.sel = id; eb.game = null; showTab("engine"); var bi = document.querySelector('[data-bi="' + id + '"]'); if (bi && bi.scrollIntoView) bi.scrollIntoView({ block: "center" }); return; }
     if (kind === "sys") { ui.sys = id; showTab("bay"); renderBay(); return; }
     if (kind === "part") {
@@ -2264,6 +2265,8 @@
   }
   function init() {
     setup(); renderAll(); showTab(ui.tab);
+    /* ask the browser to keep this site's data; WebKit grants it more readily to Home Screen web apps */
+    try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().then(function (ok) { window.__v60persist = ok; }).catch(function () {}); } catch (e) {}
     claudeUse("sample").then(function (s) { sampleFn = s; $("askBox").hidden = !s; }).catch(function () { $("askBox").hidden = true; });
     if (!window.claude || typeof window.claude.use !== "function") { loadLocal(); return; }
     Promise.all([claudeUse("db"), claudeUse("user")]).then(function (res) {
