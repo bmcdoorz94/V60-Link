@@ -1,0 +1,30 @@
+# Keeps a ready-to-upload Gemini handoff file on the "handoff" branch after every push to main,
+# so a usage limit that cuts a Claude session off mid-task never leaves Kyle without one.
+# Download: https://github.com/bmcdoorz94/V60-Link/blob/handoff/HANDOFF.md (Download raw file button)
+name: Handoff file
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: { group: handoff, cancel-in-progress: true }
+jobs:
+  handoff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Write HANDOFF.md
+        run: python3 tools/handoff.py "$RUNNER_TEMP/HANDOFF.md"
+      - name: Replace the handoff branch with the new file
+        run: |
+          cd "$RUNNER_TEMP"
+          mkdir out && cp HANDOFF.md out/ && cd out
+          git init -q -b handoff
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add HANDOFF.md
+          git commit -q -m "Handoff file for ${GITHUB_SHA::7} [automated]"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${GITHUB_REPOSITORY}.git" handoff:handoff
