@@ -9,7 +9,7 @@ Shipped on 2026-10-11:
 - The Academy became "Training": hidden from the nav; story steps open lessons with `data-from="<caseId>"`, which sets `window.V60_FROMCASE` so the lesson shows "Back to the case".
 - A monthly iPhone reminder for the oil and tire check was created in Kyle's Reminders app.
 
-The waiting item is Kyle's sync setup: create the private repo `v60-garage-data` and a fine-grained token (that repo only, Contents read and write), then paste both in Story, then Options, on each device.
+Sync is set up (2026-10-11): private repo `bmcdoorz94/v60-garage-data`, fine-grained token for that repo only, expiring Dec 10 2026. Kyle uses **Bluefy only** (no browser switching), so Bluefy's storage is not covered by the Home Screen app's storage protection; sync is the safety net. When the token expires, sync stops until he regenerates it and pastes it again.
 
 ## 2. Immediate Next Steps
 1. Get Kyle's reaction to the Story + Training merge and the new trailer.

@@ -32,6 +32,7 @@ Story case board shipped. 24 tabs across Today, Learn, Car, Check and Data. Test
   - Contents of TJ30087
 
 ## Decisions
+- 2026-10-11: Kyle uses Bluefy for everything (not the Home Screen app) so he never switches browsers. Sync to `v60-garage-data` is on; the token expires Dec 10 2026. A header Sync chip opens the setup directly.
 - 2026-10-11: The Academy and the Story looked like two competing stories. The Academy is now "Training": hidden from the menu, opened from a case step's Lesson button, with a Back to the case button and a Training library link in Story.
 - 2026-10-11: Progressive reveal (Kyle's call): the main story comes first and everything else stays completely hidden until the story reaches it. The always-available "Something's wrong" button and a "Show everything" option are the safety valves. Briefings and debriefs, The File, knowledge unlocks, three detail levels, "Where" buttons and debrief quizzes were all approved. Kyle already owns the OBDLink CX, so the adapter is introduced in Act 1 as "The Signal", with a Codebook: raw labels decode with one tap, with no puzzles. Full design in docs/GAME_DESIGN.md.
 - 2026-10-10: Story mode is a case board ("The As-Is File"). Eight cases in four acts plus a finale.
