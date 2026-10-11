@@ -14,7 +14,7 @@
 <meta name="apple-mobile-web-app-title" content="V60 Garage">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira:wdth,wght@75..125,400..800&family=Atkinson+Hyperlegible+Next:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="app.css?v=11172386">
+<link rel="stylesheet" href="app.css?v=5a33f4af">
 </head>
 <body>
 
@@ -35,7 +35,7 @@
       <label class="odo"><span>Odometer</span><span class="odo-in"><input id="odo" type="number" inputmode="numeric" min="0" step="1" placeholder="95000"><i>mi</i></span></label>
     </div>
     <div class="pulse" id="pulse" aria-label="Car status at a glance"></div>
-    <div class="status savest"><span id="saveStatus" role="status">Loading your saved data</span><button type="button" class="syncchip" id="syncChip" data-jump="opts:sync" hidden>Sync: off · Set up</button></div>
+    <div class="status savest"><span id="saveStatus" role="status">Loading your saved data</span><button type="button" class="syncchip" id="syncChip" data-jump="opts:sync" hidden>Sync: off · Set up</button><button type="button" class="syncchip" id="guideBtn" data-guide="start" hidden>Guide me</button></div>
   </header>
   <nav class="rail" id="rail" aria-label="Sections"></nav>
   <nav class="subnav" id="subnav" role="tablist" aria-label="Pages in this section"></nav>
@@ -545,28 +545,29 @@
 </main>
 
 
-<script>window.V60_VERSION="2026.10.11-1849-11172386";</script>
-<script src="js/data/articles.js?v=11172386"></script>
-<script src="js/data/codebook.js?v=11172386"></script>
-<script src="js/data/facts.js?v=11172386"></script>
-<script src="js/modules/today.js?v=11172386"></script>
-<script src="js/modules/kb.js?v=11172386"></script>
-<script src="js/modules/cards.js?v=11172386"></script>
-<script src="js/modules/exam.js?v=11172386"></script>
-<script src="js/modules/story.js?v=11172386"></script>
-<script src="js/modules/fuel.js?v=11172386"></script>
-<script src="js/modules/glovebox.js?v=11172386"></script>
-<script src="js/modules/diy.js?v=11172386"></script>
-<script src="js/modules/trees.js?v=11172386"></script>
-<script src="js/modules/bulletins.js?v=11172386"></script>
-<script src="js/modules/upgrades.js?v=11172386"></script>
-<script src="js/modules/live.js?v=11172386"></script>
-<script src="js/modules/extras.js?v=11172386"></script>
-<script src="js/modules/skills.js?v=11172386"></script>
-<script src="js/modules/sync.js?v=11172386"></script>
-<script src="js/modules/ui.js?v=11172386"></script>
-<script src="js/modules/scan.js?v=11172386"></script>
-<script src="js/core.js?v=11172386"></script>
+<script>window.V60_VERSION="2026.10.11-1921-5a33f4af";</script>
+<script src="js/data/articles.js?v=5a33f4af"></script>
+<script src="js/data/codebook.js?v=5a33f4af"></script>
+<script src="js/data/facts.js?v=5a33f4af"></script>
+<script src="js/modules/today.js?v=5a33f4af"></script>
+<script src="js/modules/kb.js?v=5a33f4af"></script>
+<script src="js/modules/cards.js?v=5a33f4af"></script>
+<script src="js/modules/exam.js?v=5a33f4af"></script>
+<script src="js/modules/story.js?v=5a33f4af"></script>
+<script src="js/modules/fuel.js?v=5a33f4af"></script>
+<script src="js/modules/glovebox.js?v=5a33f4af"></script>
+<script src="js/modules/diy.js?v=5a33f4af"></script>
+<script src="js/modules/trees.js?v=5a33f4af"></script>
+<script src="js/modules/bulletins.js?v=5a33f4af"></script>
+<script src="js/modules/upgrades.js?v=5a33f4af"></script>
+<script src="js/modules/live.js?v=5a33f4af"></script>
+<script src="js/modules/extras.js?v=5a33f4af"></script>
+<script src="js/modules/skills.js?v=5a33f4af"></script>
+<script src="js/modules/sync.js?v=5a33f4af"></script>
+<script src="js/modules/ui.js?v=5a33f4af"></script>
+<script src="js/modules/scan.js?v=5a33f4af"></script>
+<script src="js/modules/guide.js?v=5a33f4af"></script>
+<script src="js/core.js?v=5a33f4af"></script>
 <script>
 if ("serviceWorker" in navigator && location.protocol === "https:") {
   navigator.serviceWorker.register("sw.js").then(function (reg) {

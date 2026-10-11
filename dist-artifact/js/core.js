@@ -2068,7 +2068,7 @@
     mod: function (id) { if (!state.mods) state.mods = {}; return state.mods[id]; }, setMod: function (id, v) { if (!state.mods) state.mods = {}; state.mods[id] = v; },
     sample: function () { return sampleFn; }, assets: function () { return assetsNs; }, photoUrl: function (p) { return photoUrl(p); }, takePhotoTo: null,
     importLinkReport: function (R) { return importLinkReport(R); },
-    oilRate: function () { return oilRate(); }, replaceState: function (r) { replaceState(r); }, snapshot: function () { return JSON.parse(JSON.stringify(state)); }, blobGet: blobGet, blobPut: blobPut, localMode: function () { return mode === "local"; },
+    oilRate: function () { return oilRate(); }, replaceState: function (r) { replaceState(r); }, snapshot: function () { return JSON.parse(JSON.stringify(state)); }, blobGet: blobGet, blobPut: blobPut, localMode: function () { return mode === "local"; }, ready: function () { return mode === "local" || mode === "db"; },
     shrinkPhoto: function (f, kind) { return shrink(f, kind); }, addPhoto: function (rec) { state.photos = (state.photos || []).concat([rec]).slice(-200); save(); }, navRefresh: function () { renderNav(ui.tab); },
     inClaude: function () { return !!(window.claude && typeof window.claude.use === "function"); }
   };

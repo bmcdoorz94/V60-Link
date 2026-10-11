@@ -220,6 +220,8 @@
     if (changed) { api.save(); api.updateHud(); if (!syncing && api.navRefresh) setTimeout(api.navRefresh, 0); }
     return changed;
   }
+  /* guided mode (guide.js): 0 guided, 1 assisted, 2 on your own */
+  function gl(c) { return window.V60_GUIDE ? window.V60_GUIDE.level(c.id) : 2; }
   function nextStep(api) {
     for (var i = 0; i < CASES.length; i++) {
       var c = CASES[i]; if (!available(api, c)) continue;
@@ -246,6 +248,13 @@
 
   /* ---------- gate and knowledge hooks used by core and other modules ---------- */
   var API = null, syncing = false;
+  window.V60_STORY = {
+    cases: CASES,
+    next: function () { return API ? nextStep(API) : null; },
+    status: function (c) { return status(API, c); },
+    available: function (c) { return available(API, c); },
+    mark: function (k) { D(API).manual[k] = API.todayStr(); API.save(); }
+  };
   window.V60_GATE = {
     visible: function (tab) { if (!API) return true; return !!revealedSet(API)[tab]; },
     feature: function (f) { if (!API) return true; var d = D(API); if (d.all || d.closed.fin) return true; return CASES.some(function (c) { return c.feature === f && available(API, c); }); },
@@ -479,7 +488,7 @@
     if (ui.view === "file") { $("stV-file").innerHTML = fileHTML(api); return; }
     if (ui.view === "codebook") { $("stV-codebook").innerHTML = codebookHTML(api); return; }
     var nextHTML = (pend.length ? '<div class="nextc scene"><p class="ans-k">New scene</p><h3>' + esc(sceneById(api, pend[0]).t) + '</h3><button type="button" data-jump="story:' + pend[0] + '">Watch</button></div>' : "") +
-      (nx ? '<div class="nextc"><p class="ans-k">Next objective · ' + esc(nx.c.t) + "</p><h3>" + esc(nx.s.t) + "</h3>" + (d.depth !== "short" && nx.s.why ? '<p class="nwhy">' + esc(nx.s.why) + "</p>" : "") + '<div class="row">' + (nx.s.manual ? '<button type="button" data-man="' + nx.s.manual + '">Mark done</button>' : "") + (nx.s.go ? '<button type="button" class="' + (nx.s.manual ? "quiet" : "") + '" data-from="' + nx.c.id + '" data-jump="' + esc(nx.s.go) + '">' + (nx.s.manual ? "Open" : (nx.s.go.indexOf("mission:") === 0 ? "Start the lesson" : "Go")) + "</button>" : "") + '<button type="button" class="quiet" data-case="' + nx.c.id + '">See the case</button></div></div>' : (fin ? "" : (actClosed(api, "4") ? '<div class="nextc"><p class="ans-k">Next objective · Finale</p><h3>Pass the V60 Master exam</h3><button type="button" data-jump="tab:exam">Take the exam</button></div>' : "")));
+      (nx ? '<div class="nextc"><p class="ans-k">Next objective · ' + esc(nx.c.t) + "</p><h3>" + esc(nx.s.t) + "</h3>" + (d.depth !== "short" && nx.s.why ? '<p class="nwhy">' + esc(nx.s.why) + "</p>" : "") + '<div class="row">' + (gl(nx.c) === 0 ? '<button type="button" data-guide="' + nx.c.id + '">Start</button>' : "") + (nx.s.manual ? '<button type="button"' + (gl(nx.c) === 0 ? ' class="quiet"' : "") + ' data-man="' + nx.s.manual + '">Mark done</button>' : "") + (nx.s.go ? '<button type="button" class="' + (nx.s.manual || gl(nx.c) === 0 ? "quiet" : "") + '" data-from="' + nx.c.id + '" data-jump="' + esc(nx.s.go) + '">' + (nx.s.manual ? "Open" : (nx.s.go.indexOf("mission:") === 0 ? "Start the lesson" : "Go")) + "</button>" : "") + '<button type="button" class="quiet" data-case="' + nx.c.id + '">See the case</button>' + (gl(nx.c) === 1 ? '<button type="button" class="quiet" data-guide="' + nx.c.id + '">Walk me through it</button>' : "") + "</div></div>" : (fin ? "" : (actClosed(api, "4") ? '<div class="nextc"><p class="ans-k">Next objective · Finale</p><h3>Pass the V60 Master exam</h3><button type="button" data-jump="tab:exam">Take the exam</button></div>' : "")));
     if (ui.open == null && nx) ui.open = nx.c.id;
     var acts = ACTS.filter(function (a) { return avail.some(function (c) { return c.act === a[0]; }); }).map(function (act) {
       var cs = avail.filter(function (c) { return c.act === act[0]; });
@@ -589,7 +598,7 @@
       if (pend.length) return [{ order: 4, html: '<article class="tcard story"><p class="ans-k">New scene</p><h3>' + esc(sceneById(api, pend[0]).t) + '</h3><button type="button" data-jump="story:' + pend[0] + '">Watch</button></article>' }];
       var nx = nextStep(api);
       if (!nx) return [];
-      return [{ order: 4, html: '<article class="tcard story"><p class="ans-k">Next in your story · ' + esc(nx.c.t) + "</p><h3>" + esc(nx.s.t) + '</h3><div class="row">' + (nx.s.go ? '<button type="button" data-from="' + nx.c.id + '" data-jump="' + esc(nx.s.go) + '">' + (nx.s.go.indexOf("mission:") === 0 ? "Start the lesson" : "Go") + "</button>" : "") + '<button type="button" class="quiet" data-jump="case:' + nx.c.id + '">Open the case</button></div></article>' }];
+      return [{ order: 4, html: '<article class="tcard story"><p class="ans-k">Next in your story · ' + esc(nx.c.t) + "</p><h3>" + esc(nx.s.t) + '</h3><div class="row">' + (gl(nx.c) === 0 ? '<button type="button" data-guide="' + nx.c.id + '">Start</button>' : "") + (nx.s.go ? '<button type="button"' + (gl(nx.c) === 0 ? ' class="quiet"' : "") + ' data-from="' + nx.c.id + '" data-jump="' + esc(nx.s.go) + '">' + (nx.s.go.indexOf("mission:") === 0 ? "Start the lesson" : "Go") + "</button>" : "") + '<button type="button" class="quiet" data-jump="case:' + nx.c.id + '">Open the case</button></div></article>' }];
     }
   });
 })();

@@ -19,7 +19,7 @@
       <label class="odo"><span>Odometer</span><span class="odo-in"><input id="odo" type="number" inputmode="numeric" min="0" step="1" placeholder="95000"><i>mi</i></span></label>
     </div>
     <div class="pulse" id="pulse" aria-label="Car status at a glance"></div>
-    <div class="status savest"><span id="saveStatus" role="status">Loading your saved data</span><button type="button" class="syncchip" id="syncChip" data-jump="opts:sync" hidden>Sync: off · Set up</button></div>
+    <div class="status savest"><span id="saveStatus" role="status">Loading your saved data</span><button type="button" class="syncchip" id="syncChip" data-jump="opts:sync" hidden>Sync: off · Set up</button><button type="button" class="syncchip" id="guideBtn" data-guide="start" hidden>Guide me</button></div>
   </header>
   <nav class="rail" id="rail" aria-label="Sections"></nav>
   <nav class="subnav" id="subnav" role="tablist" aria-label="Pages in this section"></nav>
@@ -529,7 +529,7 @@
 </main>
 
 
-<script>window.V60_VERSION="2026.10.11-1849-11172386";</script>
+<script>window.V60_VERSION="2026.10.11-1921-5a33f4af";</script>
 <script src="js/data/articles.js"></script>
 <script src="js/data/codebook.js"></script>
 <script src="js/data/facts.js"></script>
@@ -550,4 +550,5 @@
 <script src="js/modules/sync.js"></script>
 <script src="js/modules/ui.js"></script>
 <script src="js/modules/scan.js"></script>
+<script src="js/modules/guide.js"></script>
 <script src="js/core.js"></script>
