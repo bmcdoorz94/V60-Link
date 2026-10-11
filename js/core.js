@@ -2017,6 +2017,7 @@
   function jump(spec) {
     var p = spec.split(":"), kind = p[0], id = p.slice(1).join(":");
     if (kind === "tab") { showTab(id); return; }
+    if (kind === "mission") { if (!missionById(id)) return; aui.view = "mission"; aui.id = id; showTab("academy"); renderAcademy(); window.scrollTo(0, 0); return; }
     for (var mi = 0; mi < MODS.length; mi++) if (MODS[mi].jump && MODS[mi].jump(API, kind, id)) return;
     if (kind === "sys") { ui.sys = id; showTab("bay"); renderBay(); return; }
     if (kind === "part") {
@@ -2052,6 +2053,7 @@
     mod: function (id) { if (!state.mods) state.mods = {}; return state.mods[id]; }, setMod: function (id, v) { if (!state.mods) state.mods = {}; state.mods[id] = v; },
     sample: function () { return sampleFn; }, assets: function () { return assetsNs; }, photoUrl: function (p) { return photoUrl(p); }, takePhotoTo: null,
     importLinkReport: function (R) { return importLinkReport(R); },
+    oilRate: function () { return oilRate(); },
     inClaude: function () { return !!(window.claude && typeof window.claude.use === "function"); }
   };
   if (typeof window !== "undefined") window.V60 = API;
