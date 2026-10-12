@@ -2086,6 +2086,11 @@
     wireBudget();
 
     $("odo").addEventListener("change", function () { var v = parseFloat(this.value); state.odo = isFinite(v) && v >= 0 ? Math.round(v) : null; renderAll(); save(); });
+    /* Saving only on "change" lost the number when the page was left before the field lost focus (switching apps, tapping a tab). Save while typing and again when the page is hidden. */
+    function odoNow() { var v = parseFloat($("odo").value); if (isFinite(v) && v >= 0 && Math.round(v) !== state.odo) { state.odo = Math.round(v); save(); } }
+    $("odo").addEventListener("input", odoNow);
+    document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") odoNow(); });
+    window.addEventListener("pagehide", odoNow);
     $("overlay").addEventListener("change", function () { ui.overlay = this.value; renderBay(); });
     $("symSel").addEventListener("change", renderSymptom);
     $("codeIn").addEventListener("input", renderCodeLookup);
