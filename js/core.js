@@ -262,7 +262,10 @@
   }
 
   var quietSave = false;
+  /* Nothing may be written to storage until the saved copy has been read: modules (the Story sweep) call save() while the page starts, and a snapshot of the still-empty state used to overwrite the saved data, which then synced. */
+  var loaded = false;
   function save() {
+    if (!loaded) return;
     var snapshot = JSON.parse(JSON.stringify(state));
     chain = chain.then(function () {
       if (mode === "db" && ref) return ref.set(snapshot).then(function () { setStatus("Saved to your private data for this page"); });
@@ -2283,10 +2286,10 @@
   function replaceState(raw) { state = clean(raw); quietSave = true; save(); chain = chain.then(function () { quietSave = false; }); renderAll(); showTab(ui.tab); loadLocalBlobs().then(function () { renderPhotos(); }); }
   function blobGet(id) { return idb().then(function (db) { return new Promise(function (res) { var g = db.transaction("blobs").objectStore("blobs").get(id); g.onsuccess = function () { res(g.result || null); }; g.onerror = function () { res(null); }; }); }); }
   function blobPut(id, blob) { return idb().then(function (db) { return new Promise(function (res, rej) { var tx = db.transaction("blobs", "readwrite"); tx.objectStore("blobs").put(blob, id); tx.oncomplete = function () { localUrls[id] = URL.createObjectURL(blob); res(); }; tx.onerror = function () { rej(tx.error); }; }); }); }
-  function applyLoaded(raw) { state = clean(raw); renderAll(); loadLocalBlobs().then(function () { renderPhotos(); }); }
+  function applyLoaded(raw) { state = clean(raw); loaded = true; renderAll(); loadLocalBlobs().then(function () { renderPhotos(); }); }
   function loadLocal() {
     try { var s = localStorage.getItem(LSKEY); if (s) applyLoaded(JSON.parse(s)); } catch (e) { /* no storage */ }
-    mode = "local"; setStatus("Saved in this browser only");
+    mode = "local"; loaded = true; setStatus("Saved in this browser only");
   }
   function init() {
     setup(); renderAll(); showTab(ui.tab);
@@ -2303,6 +2306,7 @@
         return ref.get().then(function (snap) {
           mode = "db";
           if (snap.exists) applyLoaded(snap.data());
+          loaded = true;
           setStatus(snap.exists ? "Loaded from your private data for this page" : "Nothing saved yet. Entries save privately to this page.");
         });
       });
