@@ -14,7 +14,7 @@
 <meta name="apple-mobile-web-app-title" content="V60 Garage">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira:wdth,wght@75..125,400..800&family=Atkinson+Hyperlegible+Next:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="app.css?v=db6cbe51">
+<link rel="stylesheet" href="app.css?v=8a356d78">
 </head>
 <body>
 
@@ -315,9 +315,10 @@
           <div class="field" style="flex:1 1 14em"><label for="phNote">Note (optional)</label><input id="phNote" type="text" maxlength="200" class="wide"></div>
         </div>
         <div class="row">
-          <label class="filebtn"><input id="phFile" type="file" accept="image/*"><span>Take or choose a photo</span></label>
+          <label class="filebtn"><input id="phFile" type="file" accept="image/*" multiple><span>Take or choose photos</span></label>
           <span class="status" id="phStatus" role="status"></span>
         </div>
+        <div id="phBatch" class="phbatch" hidden></div>
         <img id="phPreview" alt="Photo being reviewed" hidden style="max-width:min(100%,360px);border-radius:8px">
       </div>
       <p class="status" id="phNoStore" hidden>Photo storage is not available in this view. Open the page in Claude while signed in to take photos.</p>
@@ -545,29 +546,29 @@
 </main>
 
 
-<script>window.V60_VERSION="2026.10.12-1524-db6cbe51";</script>
-<script src="js/data/articles.js?v=db6cbe51"></script>
-<script src="js/data/codebook.js?v=db6cbe51"></script>
-<script src="js/data/facts.js?v=db6cbe51"></script>
-<script src="js/modules/today.js?v=db6cbe51"></script>
-<script src="js/modules/kb.js?v=db6cbe51"></script>
-<script src="js/modules/cards.js?v=db6cbe51"></script>
-<script src="js/modules/exam.js?v=db6cbe51"></script>
-<script src="js/modules/story.js?v=db6cbe51"></script>
-<script src="js/modules/fuel.js?v=db6cbe51"></script>
-<script src="js/modules/glovebox.js?v=db6cbe51"></script>
-<script src="js/modules/diy.js?v=db6cbe51"></script>
-<script src="js/modules/trees.js?v=db6cbe51"></script>
-<script src="js/modules/bulletins.js?v=db6cbe51"></script>
-<script src="js/modules/upgrades.js?v=db6cbe51"></script>
-<script src="js/modules/live.js?v=db6cbe51"></script>
-<script src="js/modules/extras.js?v=db6cbe51"></script>
-<script src="js/modules/skills.js?v=db6cbe51"></script>
-<script src="js/modules/sync.js?v=db6cbe51"></script>
-<script src="js/modules/ui.js?v=db6cbe51"></script>
-<script src="js/modules/scan.js?v=db6cbe51"></script>
-<script src="js/modules/guide.js?v=db6cbe51"></script>
-<script src="js/core.js?v=db6cbe51"></script>
+<script>window.V60_VERSION="2026.10.12-1141-8a356d78";</script>
+<script src="js/data/articles.js?v=8a356d78"></script>
+<script src="js/data/codebook.js?v=8a356d78"></script>
+<script src="js/data/facts.js?v=8a356d78"></script>
+<script src="js/modules/today.js?v=8a356d78"></script>
+<script src="js/modules/kb.js?v=8a356d78"></script>
+<script src="js/modules/cards.js?v=8a356d78"></script>
+<script src="js/modules/exam.js?v=8a356d78"></script>
+<script src="js/modules/story.js?v=8a356d78"></script>
+<script src="js/modules/fuel.js?v=8a356d78"></script>
+<script src="js/modules/glovebox.js?v=8a356d78"></script>
+<script src="js/modules/diy.js?v=8a356d78"></script>
+<script src="js/modules/trees.js?v=8a356d78"></script>
+<script src="js/modules/bulletins.js?v=8a356d78"></script>
+<script src="js/modules/upgrades.js?v=8a356d78"></script>
+<script src="js/modules/live.js?v=8a356d78"></script>
+<script src="js/modules/extras.js?v=8a356d78"></script>
+<script src="js/modules/skills.js?v=8a356d78"></script>
+<script src="js/modules/sync.js?v=8a356d78"></script>
+<script src="js/modules/ui.js?v=8a356d78"></script>
+<script src="js/modules/scan.js?v=8a356d78"></script>
+<script src="js/modules/guide.js?v=8a356d78"></script>
+<script src="js/core.js?v=8a356d78"></script>
 <script>
 if ("serviceWorker" in navigator && location.protocol === "https:") {
   navigator.serviceWorker.register("sw.js").then(function (reg) {

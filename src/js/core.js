@@ -249,7 +249,7 @@
     if (raw.bayMap && typeof raw.bayMap === "object") { var bm = { photo: typeof raw.bayMap.photo === "string" ? raw.bayMap.photo : null, pins: {} }; if (raw.bayMap.pins && typeof raw.bayMap.pins === "object") Object.keys(raw.bayMap.pins).forEach(function (k) { var v = raw.bayMap.pins[k]; if (Array.isArray(v) && isNum(v[0]) && isNum(v[1])) bm.pins[k] = [v[0], v[1]]; }); out.bayMap = bm; }
     if (raw.recalls && typeof raw.recalls === "object") { out.recalls = {}; Object.keys(raw.recalls).forEach(function (k) { if (["unknown", "done", "open", "na"].indexOf(raw.recalls[k]) >= 0) out.recalls[k] = raw.recalls[k]; }); }
     if (Array.isArray(raw.specs)) out.specs = raw.specs.filter(function (x) { return x && typeof x.k === "string" && typeof x.v === "string"; }).slice(-200);
-    if (Array.isArray(raw.photos)) out.photos = raw.photos.filter(function (x) { return x && typeof x.asset === "string" && typeof x.date === "string"; }).slice(-200);
+    if (Array.isArray(raw.photos)) { var seenH = {}; out.photos = raw.photos.filter(function (x) { if (!(x && typeof x.asset === "string" && typeof x.date === "string")) return false; /* the same picture saved twice (two devices, or a repeat pick) keeps its first copy */ if (typeof x.hash === "string" && x.hash) { if (seenH[x.hash]) return false; seenH[x.hash] = 1; } return true; }).slice(-200); }
     out.mods = {};
     if (raw.mods && typeof raw.mods === "object") MODS.forEach(function (m) { var v = raw.mods[m.id]; if (v != null) { try { out.mods[m.id] = m.clean ? m.clean(v) : v; } catch (e) { /* drop bad module data */ } } });
     if (raw.rate && typeof raw.rate === "object") {
@@ -1637,7 +1637,7 @@
     { id: "R89708", nhtsa: "16V798000", t: "Front passenger seat belt buckle stud", d: "Applies to cars built Feb 16, 2015 to Aug 22, 2016. The buckle's attaching stud can loosen. Dealers inspect it and replace the buckle if needed." },
     { id: "R39574", nhtsa: "15V555000", t: "Starter motor fuse (stop/start)", d: "Applies to cars built Apr 8 to Aug 19, 2015. The starter fuse can blow during stop/start, so the car will not restart. Dealers fit a higher-amperage fuse." }
   ];
-  var PHOTO_KINDS = [["bay", "Engine bay overview"], ["sidewall", "Tire sidewall (DOT code)"], ["tread", "Tire tread"], ["brake", "Brake pad or rotor"], ["fluid", "Fluid reservoir"], ["leak", "Leak or underside"], ["dash", "Dashboard warning or message"], ["other", "Something else"]];
+  var PHOTO_KINDS = [["bay", "Engine bay overview"], ["sidewall", "Tire sidewall (DOT code)"], ["tread", "Tire tread"], ["brake", "Brake pad or rotor"], ["fluid", "Fluid reservoir"], ["leak", "Leak or underside"], ["dash", "Dashboard warning or message"], ["label", "Door, hood or A/C label"], ["interior", "Seats and interior"], ["other", "Something else"]];
   var assetsNs = null, sampleImg = false, photoBusy = false;
 
   function renderMy() {
@@ -1720,35 +1720,168 @@
       "Look only at what is visible. Do not guess hidden details. If the photo is unclear, say so and say how to retake it.\n" +
       "Return JSON only, with these keys: summary (one sentence), observations (array of short strings, at most 6), dot (the last four digits of a tire DOT code if clearly readable, else null), rating (1 to 5 condition of the part of interest if judgeable from the photo, where 5 is like new and 1 is failed, else null), concern (\"ok\", \"watch\", \"act\" or \"unknown\"), next (array of at most 3 short next steps), confidence (\"low\", \"medium\" or \"high\").";
   }
+  /* ---- duplicate guard: a fingerprint of the picture as it came off the phone ---- */
+  function readBytes(file) {
+    return new Promise(function (res, rej) { var r = new FileReader(); r.onload = function () { res(r.result); }; r.onerror = function () { rej(r.error); }; r.readAsArrayBuffer(file); });
+  }
+  function hexOf(buf) { var a = new Uint8Array(buf), h = ""; for (var i = 0; i < a.length; i++) h += (a[i] < 16 ? "0" : "") + a[i].toString(16); return h; }
+  function sumHash(buf) { /* only when crypto.subtle is missing: two 32-bit mixes over every byte */
+    var a = new Uint8Array(buf), h1 = 0x811c9dc5, h2 = 0x9e3779b9;
+    for (var i = 0; i < a.length; i++) { h1 = Math.imul(h1 ^ a[i], 16777619); h2 = Math.imul(h2 ^ a[i], 0x85ebca6b); h2 ^= h2 >>> 13; }
+    return "f" + (h1 >>> 0).toString(16) + "-" + (h2 >>> 0).toString(16) + "-" + a.length;
+  }
+  function hashBytes(buf) {
+    if (window.crypto && crypto.subtle && crypto.subtle.digest) return crypto.subtle.digest("SHA-256", buf).then(hexOf).catch(function () { return sumHash(buf); });
+    return Promise.resolve(sumHash(buf));
+  }
+  function hashBlob(blob) { return readBytes(blob).then(hashBytes); }
+  /* 64-bit "looks the same" print: 9x8 grey squares, one bit for each left-brighter-than-right. Survives a resave or resize. */
+  function lookPrint(file) {
+    return new Promise(function (res) {
+      var img = new Image(), u = URL.createObjectURL(file);
+      img.onload = function () {
+        try {
+          var c = document.createElement("canvas"); c.width = 9; c.height = 8; var x = c.getContext("2d"); x.drawImage(img, 0, 0, 9, 8);
+          var d = x.getImageData(0, 0, 9, 8).data, g = [], i, bits = "";
+          for (i = 0; i < 72; i++) g.push(d[i * 4] * 0.299 + d[i * 4 + 1] * 0.587 + d[i * 4 + 2] * 0.114);
+          for (var r = 0; r < 8; r++) for (var q = 0; q < 8; q++) bits += g[r * 9 + q] > g[r * 9 + q + 1] ? "1" : "0";
+          var hex = ""; for (i = 0; i < 64; i += 4) hex += parseInt(bits.substr(i, 4), 2).toString(16);
+          URL.revokeObjectURL(u); res(hex);
+        } catch (e) { URL.revokeObjectURL(u); res(""); }
+      };
+      img.onerror = function () { URL.revokeObjectURL(u); res(""); };
+      img.src = u;
+    });
+  }
+  function hamming(a, b) { if (!a || !b || a.length !== b.length) return 64; var n = 0; for (var i = 0; i < a.length; i++) { var v = parseInt(a[i], 16) ^ parseInt(b[i], 16); while (v) { n += v & 1; v >>= 1; } } return n; }
+  function fingerprint(file) { return readBytes(file).then(hashBytes).then(function (h) { return lookPrint(file).then(function (d) { return { hash: h, dh: d }; }); }); }
+  /* exact: the very same picture is already saved. near: something that looks almost identical is (the owner decides). */
+  function findDuplicate(fp, rows) {
+    var all = (state.photos || []).map(function (p) { return { hash: p.hash, hash2: p.hash2, dh: p.dh, date: p.date, kind: p.kind }; }).concat(rows || []);
+    var i, p, flat = /^(0+|f+)$/.test(fp.dh || "");
+    for (i = 0; i < all.length; i++) { p = all[i]; if (fp.hash && (p.hash === fp.hash || p.hash2 === fp.hash)) return { exact: true, of: p }; }
+    if (fp.dh && !flat) for (i = 0; i < all.length; i++) { p = all[i]; if (p.dh && hamming(fp.dh, p.dh) <= 3) return { exact: false, of: p }; }
+    return null;
+  }
+  function dupText(d) { var o = d.of; return (d.exact ? "Already saved" : "Looks almost the same as one already saved") + (o.date ? " (" + o.date + (o.kind ? ", " + kindName(o.kind).toLowerCase() : "") + ")" : ""); }
+
+  /* Save one picture. o: kind ("auto" lets the on-device reader pick), partId, note, hash, dh. Rejects with code "duplicate" or "cancelled". */
+  function savePhoto(file, o) {
+    var kind = o.kind, partId = o.partId || "", note = (o.note || "").trim(), part = partId ? partById(partId) : null, blob;
+    return shrink(file, kind === "auto" || kind === "label" ? "photo" : kind).then(function (b) {
+      blob = b; $("phPreview").src = URL.createObjectURL(b); $("phPreview").hidden = false;
+      return hashBlob(b);
+    }).then(function (h2) {
+      var dupe = (state.photos || []).filter(function (p) { return (o.hash && (p.hash === o.hash || p.hash2 === o.hash)) || p.hash2 === h2 || p.hash === h2; })[0];
+      if (dupe) { var e = new Error("Already saved on " + dupe.date + ". Not added again."); e.code = "duplicate"; throw e; }
+      o.hash2 = h2;
+      $("phStatus").textContent = "Saving photo...";
+      return assetsNs.upload(blob, { name: "v60-" + kind + "-" + todayStr() + ".jpg" }).catch(function (e) { throw new Error(e && e.code === "quota_exceeded" ? "Photo storage is full. Delete old photos first." : "The photo could not be saved (" + ((e && e.code) || "error") + ")."); });
+    }).then(function (up) {
+      var k = kind;
+      if (k === "auto") k = lastScan && lastScan.kind === "tire" ? "sidewall" : lastScan && lastScan.kind === "door" ? "label" : "other";
+      if (k === "sidewall" && !partId) partId = "age";
+      var rec = { id: uid(), asset: up.id, url: up.local ? null : up.url, local: !!up.local, date: todayStr(), kind: k, part: partId || null, note: note.slice(0, 200), ai: null, hash: o.hash || o.hash2, hash2: o.hash2, dh: o.dh || "" };
+      try { if (lastScan && window.V60_SCAN && window.V60_SCAN.describe) rec.ai = window.V60_SCAN.describe(lastScan, k) || null; } catch (e) { /* keep the photo without a reading */ }
+      state.photos = (state.photos || []).concat([rec]).slice(-200); save(); renderPhotos();
+      return { rec: rec, up: up, part: part, blob: blob };
+    });
+  }
+  function reviewWithClaude(r, kind, note) {
+    var rec = r.rec, up = r.up, part = r.part;
+    if (!sampleImg || !sampleFn) { $("phStatus").textContent = up.local ? "Saved on this device. Claude's photo review runs when you open the Garage inside Claude." : "Saved. Claude's photo review is not available in this view."; return Promise.resolve(); }
+    $("phStatus").textContent = "Saved. Claude is looking at it...";
+    return sampleFn.json(aiPrompt(rec.kind, part && part.name, note), { images: [r.blob], cache: false }).then(function (j) {
+      var a = { summary: String(j.summary || "").slice(0, 240), observations: (Array.isArray(j.observations) ? j.observations : []).map(String).slice(0, 6), dot: /^\d{4}$/.test(String(j.dot || "")) ? String(j.dot) : null, rating: isNum(j.rating) && j.rating >= 1 && j.rating <= 5 ? Math.round(j.rating) : null, concern: ["ok", "watch", "act"].indexOf(j.concern) >= 0 ? j.concern : "unknown", next: (Array.isArray(j.next) ? j.next : []).map(String).slice(0, 3), confidence: ["low", "medium", "high"].indexOf(j.confidence) >= 0 ? j.confidence : "low" };
+      rec.ai = a; save(); renderPhotos();
+      $("phStatus").textContent = "Done. Review it below.";
+      var acA = acad(); acA.photos = (acA.photos || 0) + 1;
+    }).catch(function (e) { $("phStatus").textContent = "Photo saved, but Claude's review failed" + (e && e.code === "rate_limited" ? " (busy, try later)." : (e && e.code === "not_granted" ? " (permission not given)." : ".")); });
+  }
+  function photoMsg(e) { return e && e.code === "cancelled" ? "Cancelled. Nothing was saved." : (e && e.message) || "Something went wrong."; }
+
+  /* one photo: the form's type, part and note */
   function takePhoto(file) {
     if (photoBusy || !file) return;
-    photoBusy = true; $("phStatus").textContent = "Preparing photo...";
-    var kind = $("phKind").value, partId = $("phPart").value, note = $("phNote").value.trim(), part = partId ? partById(partId) : null, blob;
-    shrink(file, kind).then(function (b) {
-      blob = b; $("phPreview").src = URL.createObjectURL(b); $("phPreview").hidden = false;
-      $("phStatus").textContent = "Saving photo...";
-      return assetsNs.upload(b, { name: "v60-" + kind + "-" + todayStr() + ".jpg" }).catch(function (e) { throw new Error(e && e.code === "quota_exceeded" ? "Photo storage is full. Delete old photos first." : "The photo could not be saved (" + ((e && e.code) || "error") + ")."); });
-    }).then(function (up) {
-      var rec = { id: uid(), asset: up.id, url: up.local ? null : up.url, local: !!up.local, date: todayStr(), kind: kind, part: partId || null, note: note.slice(0, 200), ai: null };
-      try { if (lastScan && window.V60_SCAN && window.V60_SCAN.describe) rec.ai = window.V60_SCAN.describe(lastScan, kind) || null; } catch (e) { /* keep the photo without a reading */ }
-      state.photos = (state.photos || []).concat([rec]).slice(-200); save(); renderPhotos();
-      if (!sampleImg || !sampleFn) { $("phStatus").textContent = up.local ? "Saved on this device. Claude's photo review runs when you open the Garage inside Claude." : "Saved. Claude's photo review is not available in this view."; return; }
-      $("phStatus").textContent = "Saved. Claude is looking at it...";
-      return sampleFn.json(aiPrompt(kind, part && part.name, note), { images: [blob], cache: false }).then(function (j) {
-        var a = { summary: String(j.summary || "").slice(0, 240), observations: (Array.isArray(j.observations) ? j.observations : []).map(String).slice(0, 6), dot: /^\d{4}$/.test(String(j.dot || "")) ? String(j.dot) : null, rating: isNum(j.rating) && j.rating >= 1 && j.rating <= 5 ? Math.round(j.rating) : null, concern: ["ok", "watch", "act"].indexOf(j.concern) >= 0 ? j.concern : "unknown", next: (Array.isArray(j.next) ? j.next : []).map(String).slice(0, 3), confidence: ["low", "medium", "high"].indexOf(j.confidence) >= 0 ? j.confidence : "low" };
-        rec.ai = a; save(); renderPhotos();
-        $("phStatus").textContent = "Done. Review it below.";
-        var acA = acad(); acA.photos = (acA.photos || 0) + 1;
-      }).catch(function (e) { $("phStatus").textContent = "Photo saved, but Claude's review failed" + (e && e.code === "rate_limited" ? " (busy, try later)." : (e && e.code === "not_granted" ? " (permission not given)." : ".")); });
-    }).catch(function (e) { $("phStatus").textContent = (e && e.message) || "Something went wrong."; })
+    photoBusy = true; $("phStatus").textContent = "Checking for a duplicate...";
+    var kind = $("phKind").value, note = $("phNote").value.trim(), fp = null;
+    fingerprint(file).then(function (f) {
+      fp = f; var d = findDuplicate(f);
+      if (d && d.exact) { var e = new Error(dupText(d) + ". Not added again."); e.code = "duplicate"; throw e; }
+      if (d && !window.confirm(dupText(d) + ". Add this one anyway?")) { var c = new Error("Not added."); c.code = "duplicate"; throw c; }
+      $("phStatus").textContent = "Preparing photo...";
+      return savePhoto(file, { kind: kind, partId: $("phPart").value, note: note, hash: f.hash, dh: f.dh });
+    }).then(function (r) { return reviewWithClaude(r, kind, note).then(function () { if (sampleImg && sampleFn) return; $("phStatus").textContent = r.rec.kind !== kind ? "Saved as " + kindName(r.rec.kind).toLowerCase() + "." : $("phStatus").textContent; }); })
+      .catch(function (e) { $("phStatus").textContent = photoMsg(e); })
       .then(function () { photoBusy = false; $("phFile").value = ""; });
   }
+
+  /* several photos: one screen to tag them all, then they are read and saved one after another */
+  var batch = null;
+  function kindOptions(sel) { return '<option value="auto"' + (sel === "auto" ? " selected" : "") + ">Let the reader decide</option>" + PHOTO_KINDS.map(function (k) { return '<option value="' + k[0] + '"' + (sel === k[0] ? " selected" : "") + ">" + esc(k[1]) + "</option>"; }).join(""); }
+  function renderBatch() {
+    var box = $("phBatch"); if (!batch) { box.hidden = true; box.innerHTML = ""; return; }
+    var n = batch.filter(function (r) { return r.use; }).length, dups = batch.filter(function (r) { return r.dupText && r.exact; }).length;
+    box.hidden = false;
+    box.innerHTML = '<p><b>' + batch.length + " photos chosen.</b> " + (dups ? dups + " already saved and skipped. " : "") + "Pick what each one shows, or leave it on \"Let the reader decide\". Text on labels and tires is read on this phone; a plain engine bay or seat photo goes under \"Something else\" unless you pick it.</p>" +
+      '<ul class="phbl">' + batch.map(function (r, i) {
+        return '<li class="' + (r.exact ? "dup" : "") + '"><img src="' + esc(r.url) + '" alt="Photo ' + (i + 1) + '" width="56" height="56">' +
+          '<div class="phbm"><span class="status">' + esc((r.file.name || "Photo " + (i + 1)).slice(0, 40)) + "</span>" +
+          (r.dupText ? '<span class="pill ' + (r.exact ? "info" : "watch") + '">' + esc(r.dupText) + "</span>" : "") +
+          (r.exact ? "" : '<label class="inl"><input type="checkbox" data-bu="' + i + '"' + (r.use ? " checked" : "") + "> Add this photo</label>" + '<select data-bk="' + i + '" aria-label="What photo ' + (i + 1) + ' shows">' + kindOptions(r.kind) + "</select>") +
+          (r.state ? '<span class="status">' + esc(r.state) + "</span>" : "") + "</div></li>";
+      }).join("") + "</ul>" +
+      '<div class="row"><button type="button" id="phBatchGo"' + (n ? "" : " disabled") + ">Save " + n + " photo" + (n === 1 ? "" : "s") + '</button><button type="button" class="quiet" id="phBatchNo">Cancel</button></div>';
+  }
+  function closeBatch() { if (batch) batch.forEach(function (r) { try { URL.revokeObjectURL(r.url); } catch (e) {} }); batch = null; renderBatch(); }
+  function startBatch(files) {
+    if (photoBusy) return; photoBusy = true; $("phStatus").textContent = "Checking " + files.length + " photos for duplicates...";
+    var rows = [], chain = Promise.resolve();
+    files.forEach(function (f) {
+      chain = chain.then(function () {
+        return fingerprint(f).then(function (fp) {
+          var d = findDuplicate(fp, rows.filter(function (r) { return !r.exact; }));
+          rows.push({ file: f, url: URL.createObjectURL(f), hash: fp.hash, dh: fp.dh, kind: "auto", exact: !!(d && d.exact), dupText: d ? dupText(d) : "", use: !d, state: "" });
+        }).catch(function () { rows.push({ file: f, url: URL.createObjectURL(f), hash: "", dh: "", kind: "auto", exact: false, dupText: "", use: true, state: "" }); });
+      });
+    });
+    return chain.then(function () { batch = rows; photoBusy = false; $("phStatus").textContent = ""; renderBatch(); });
+  }
+  function runBatch() {
+    if (!batch || photoBusy) return; photoBusy = true;
+    var todo = batch.filter(function (r) { return r.use && !r.exact; }), saved = 0, dup = 0, skipped = 0, failed = 0, chain = Promise.resolve();
+    todo.forEach(function (r, i) {
+      chain = chain.then(function () {
+        $("phStatus").textContent = "Photo " + (i + 1) + " of " + todo.length + "...";
+        return savePhoto(r.file, { kind: r.kind, partId: ({ sidewall: "age", tread: "tread", brake: "pads", fluid: "coolant" })[r.kind] || "", note: "", hash: r.hash, dh: r.dh })
+          .then(function (x) { saved++; r.use = false; r.exact = true; r.dupText = "Saved as " + kindName(x.rec.kind).toLowerCase(); }, function (e) { if (e && e.code === "duplicate") dup++; else if (e && e.code === "cancelled") skipped++; else { failed++; r.state = photoMsg(e); } });
+      });
+    });
+    chain.then(function () {
+      var bits = [saved + " saved"]; if (dup) bits.push(dup + " already there"); if (skipped) bits.push(skipped + " cancelled"); if (failed) bits.push(failed + " failed");
+      $("phStatus").textContent = bits.join(", ") + ".";
+      photoBusy = false; $("phFile").value = ""; if (failed || skipped) renderBatch(); else closeBatch();
+    });
+  }
   function initPhotos() {
-    $("phKind").innerHTML = PHOTO_KINDS.map(function (k) { return '<option value="' + k[0] + '">' + esc(k[1]) + "</option>"; }).join("");
+    $("phKind").innerHTML = kindOptions("auto");
     $("phFilter").innerHTML = '<option value="">All photos</option>' + PHOTO_KINDS.map(function (k) { return '<option value="' + k[0] + '">' + esc(k[1]) + "</option>"; }).join("");
     $("phPart").innerHTML = '<option value="">No specific part</option>' + PARTS.map(function (p) { return '<option value="' + p.id + '">' + esc(p.name) + "</option>"; }).join("");
     $("phKind").addEventListener("change", function () { var m = { sidewall: "age", tread: "tread", brake: "pads", fluid: "coolant", bay: "" }[this.value]; if (m != null) $("phPart").value = m; });
-    $("phFile").addEventListener("change", function () { takePhoto(this.files && this.files[0]); });
+    $("phFile").addEventListener("change", function () {
+      var fl = Array.prototype.slice.call(this.files || []); if (!fl.length) return;
+      if (fl.length === 1) { takePhoto(fl[0]); return; }
+      startBatch(fl);
+    });
+    $("phBatch").addEventListener("change", function (e) {
+      var t = e.target, i;
+      if (t.getAttribute("data-bk") != null) { i = +t.getAttribute("data-bk"); if (batch && batch[i]) batch[i].kind = t.value; }
+      if (t.getAttribute("data-bu") != null) { i = +t.getAttribute("data-bu"); if (batch && batch[i]) { batch[i].use = t.checked; renderBatch(); } }
+    });
+    $("phBatch").addEventListener("click", function (e) {
+      var b = e.target.closest ? e.target.closest("button") : null; if (!b) return;
+      if (b.id === "phBatchGo") runBatch(); else if (b.id === "phBatchNo" && !photoBusy) { closeBatch(); $("phStatus").textContent = ""; $("phFile").value = ""; }
+    });
     $("phFilter").addEventListener("change", renderPhotos);
     $("phGallery").addEventListener("click", function (e) {
       var b = e.target.closest ? e.target.closest("button") : null; if (!b) return;

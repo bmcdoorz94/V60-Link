@@ -482,3 +482,12 @@ html.guiding, html.guiding body { overflow: hidden; }
 @media (min-width: 900px) { .gwpill { bottom: 24px; } }
 .gintro { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; background: var(--panel); border-radius: 12px; padding: 10px 14px; margin: 0 0 14px; }
 .gintro p { margin: 0; flex: 1 1 16em; }
+
+/* batch photo upload */
+.phbatch { margin: 10px 0; }
+.phbl { list-style: none; margin: 8px 0; padding: 0; display: grid; gap: 8px; }
+.phbl li { box-sizing: border-box; max-width: 100%; display: flex; gap: 10px; align-items: flex-start; padding: 8px; border: 1px solid var(--line, rgba(128,128,128,.3)); border-radius: 8px; }
+.phbl li.dup { opacity: .7; }
+.phbl img { width: 56px; height: 56px; object-fit: cover; border-radius: 6px; flex: none; }
+.phbm { display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1; }
+.phbm select { max-width: 100%; width: 100%; box-sizing: border-box; }

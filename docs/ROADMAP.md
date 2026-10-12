@@ -72,3 +72,8 @@ Story case board shipped. 24 tabs across Today, Learn, Car, Check and Data. Test
 - 2026-10-10: Story case board replaces the chapter reel (src/js/modules/story.js); core.js gained the `mission:` jump and `api.oilRate()`; tests/story.js added.
 - 2026-10-10: Claude/Gemini handoff protocol (tools/handoff.py, tools/apply_handoff.py, GitHub Action build).
 - 2026-10-10: modular app shell (Today plus five sections), offline Library, Cards, Exam, Story v1, Fuel and costs, Glovebox, DIY jobs, Troubleshoot, Bulletins (20 TSBs), Upgrades, Live link port with gauges, 0–60, drive-cycle coach, trips and scan history, achievements, seasonal events, six new articles, tests moved into the repo.
+
+## Photo batch upload and duplicates (Oct 2026)
+- Done: several photos at once with one tagging screen; "Let the reader decide" uses the on-device text read (door/hood labels, tire sidewalls); everything else lands under "Something else" unless tagged.
+- Done: duplicate guard. Each saved photo stores a SHA-256 of the original file and of the stored copy, plus a 64-bit look-alike print. An identical photo is never added again (single pick, batch, or a second device through sync). A look-alike is flagged and the owner chooses. Photos saved before this change have no fingerprint, so they cannot be matched.
+- Not built: recognising what a photo shows from its picture alone (engine bay vs seats). It needs a downloaded image model; accuracy on this car is untested. Open question for Kyle.

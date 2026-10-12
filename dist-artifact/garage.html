@@ -299,9 +299,10 @@
           <div class="field" style="flex:1 1 14em"><label for="phNote">Note (optional)</label><input id="phNote" type="text" maxlength="200" class="wide"></div>
         </div>
         <div class="row">
-          <label class="filebtn"><input id="phFile" type="file" accept="image/*"><span>Take or choose a photo</span></label>
+          <label class="filebtn"><input id="phFile" type="file" accept="image/*" multiple><span>Take or choose photos</span></label>
           <span class="status" id="phStatus" role="status"></span>
         </div>
+        <div id="phBatch" class="phbatch" hidden></div>
         <img id="phPreview" alt="Photo being reviewed" hidden style="max-width:min(100%,360px);border-radius:8px">
       </div>
       <p class="status" id="phNoStore" hidden>Photo storage is not available in this view. Open the page in Claude while signed in to take photos.</p>
@@ -529,7 +530,7 @@
 </main>
 
 
-<script>window.V60_VERSION="2026.10.12-1524-db6cbe51";</script>
+<script>window.V60_VERSION="2026.10.12-1141-8a356d78";</script>
 <script src="js/data/articles.js"></script>
 <script src="js/data/codebook.js"></script>
 <script src="js/data/facts.js"></script>
