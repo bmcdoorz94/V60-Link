@@ -111,6 +111,7 @@ details summary { cursor: pointer; font-weight: 600; }
         <li>Plug the adapter into the OBD-II port under the dashboard on the driver's side.</li>
         <li>Turn the ignition on. The engine can be off to read codes, but it must be running for live data.</li>
         <li>Do not pair the adapter in your phone's Bluetooth settings. This page finds it directly.</li>
+        <li>iPhone: Bluefy needs Bluetooth permission. Check Settings, then Bluefy, then Bluetooth is on.</li>
         <li>Tap Connect and pick the adapter from the list. Its name is often OBDII, OBDBLE, IOS-Vlink, OBDLink CX or similar.</li>
         <li>Close any other OBD app first, because only one app can talk to the adapter at a time.</li>
         <li>OBDLink CX: it accepts a new pairing only during the first 5 minutes after it powers up. If it does not show up, unplug it, plug it back in, and connect right away.</li>
@@ -222,12 +223,10 @@ details summary { cursor: pointer; font-weight: 600; }
       if (waiter && rx.indexOf(">") >= 0) { var out = rx.slice(0, rx.indexOf(">")); rx = rx.slice(rx.indexOf(">") + 1); var w = waiter; waiter = null; w.resolve(out); }
     }
     self.name = "";
-    self.open = function () {
-      return navigator.bluetooth.requestDevice({ acceptAllDevices: true, optionalServices: KNOWN_SERVICES }).then(function (d) {
-        dev = d; self.name = d.name || "adapter";
-        d.addEventListener("gattserverdisconnected", function () { if (self.onclose) self.onclose(); });
-        return d.gatt.connect();
-      }).then(function (server) { return server.getPrimaryServices(); }).then(function (services) {
+    /* Some adapters (the OBDLink CX among them) can drop the link right after the first connection while iOS
+       finishes pairing. During connecting, a drop is reported to connect() so it can retry once without the picker. */
+    function attach(server) {
+      return server.getPrimaryServices().then(function (services) {
         var jobs = services.map(function (s) { return s.getCharacteristics().then(function (cs) { return { s: s, cs: cs }; }, function () { return { s: s, cs: [] }; }); });
         return Promise.all(jobs);
       }).then(function (groups) {
@@ -242,11 +241,20 @@ details summary { cursor: pointer; font-weight: 600; }
         rxChar = best.n; txChar = best.w; useWWR = !best.w.properties.write && best.w.properties.writeWithoutResponse;
         rxChar.addEventListener("characteristicvaluechanged", onNotify);
         return rxChar.startNotifications();
-      });
+      }).then(function () { log("..", "notifications on (" + String(rxChar.uuid).slice(4, 8) + ")"); return sleep(350); });
+    }
+    self.open = function () {
+      return navigator.bluetooth.requestDevice({ acceptAllDevices: true, optionalServices: KNOWN_SERVICES }).then(function (d) {
+        dev = d; self.name = d.name || "adapter"; log("..", "picked " + self.name);
+        d.addEventListener("gattserverdisconnected", function () { log("!!", "the adapter dropped the Bluetooth link"); if (self.connecting) { self.dropped = true; return; } if (self.onclose) self.onclose(); });
+        return d.gatt.connect();
+      }).then(function (server) { log("..", "GATT connected"); return attach(server); });
     };
+    self.reopen = function () { self.dropped = false; return dev.gatt.connect().then(function (server) { log("..", "GATT reconnected"); return attach(server); }); };
     self.send = function (cmd, timeoutMs) {
       rx = "";
       return new Promise(function (resolve, reject) {
+        if (!dev || !dev.gatt.connected) { var de = new Error("The adapter is not connected."); de.name = "NetworkError"; reject(de); return; }
         var timer = setTimeout(function () { waiter = null; reject(new Error("timeout")); }, timeoutMs || 4000);
         waiter = { resolve: function (v) { clearTimeout(timer); resolve(v); } };
         var bytes = enc.encode(cmd + "\r"), chunks = [];
@@ -449,14 +457,31 @@ details summary { cursor: pointer; font-weight: 600; }
     link = transport;
     setConn("busy", "Connecting...");
     transport.onclose = function () { link = null; enable(false); setConn("", "Disconnected"); stopLive(); };
-    return transport.open().then(function () { setConn("busy", "Talking to the car..."); return initElm(); }).then(function () {
+    transport.connecting = true;
+    function attempt(first) {
+      return (first ? transport.open() : transport.reopen()).then(function () { setConn("busy", "Talking to the car..."); return initElm(); });
+    }
+    return attempt(true).catch(function (e) {
+      var em0 = String((e && e.message) || "") + " " + String((e && e.name) || "");
+      if (!transport.reopen || transport.retried || !(transport.dropped || /NetworkError|disconnect|GATT|not connected/i.test(em0))) throw e;
+      transport.retried = true; log("..", "retrying once after: " + em0); setConn("busy", "Link dropped. Reconnecting...");
+      return sleep(900).then(function () { return attempt(false); });
+    }).then(function () {
+      transport.connecting = false;
+      if (transport.dropped) { var e2 = new Error("The adapter is not connected."); e2.name = "NetworkError"; throw e2; }
       setConn("on", "Connected to " + transport.name + (protoCAN ? " (CAN)" : ""));
       enable(true); renderPicks();
     }).catch(function (e) {
+      transport.connecting = false;
       try { transport.close(); } catch (x) {}
       link = null; enable(false);
       var msg = e && e.name === "NotFoundError" ? "No adapter chosen." : (e && e.name === "SecurityError" ? "This page is not allowed to use Bluetooth here. Open it directly in Bluefy, Chrome or Edge, not inside another app's preview." : ((e && e.message) || "Could not connect."));
       if (e && e.message === "timeout") msg = "The adapter stopped answering. Unplug it, plug it back in, and try again.";
+      var em = String((e && e.message) || "") + " " + String((e && e.name) || "");
+      if (/encrypt|authenticat|insufficient|pair|bond/i.test(em)) msg = "The adapter needs to pair with this phone first. Unplug it, plug it back in, then tap Connect within 5 minutes and accept the pairing request (PIN 123456 if asked).";
+      else if (e && e.name === "NetworkError") msg = "The Bluetooth link dropped. Close the OBDLink app or any other OBD app (only one app can hold the adapter), unplug and replug the adapter, then try again within 5 minutes.";
+      else if (e && e.name === "NotAllowedError") msg = "Bluetooth permission was refused. On iPhone: Settings, then Bluefy, then turn Bluetooth on.";
+      log("!!", "connect failed: " + em);
       setConn("", msg);
     });
   }
