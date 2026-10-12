@@ -1698,9 +1698,11 @@
     }).join("") : '<p class="empty">No photos yet.' + (assetsNs ? " Take the first one above." : "") + "</p>";
   }
   function dotAge(code) { var m = /^(\d{2})(\d{2})$/.exec(String(code || "")); if (!m) return null; var wk = +m[1], yr = 2000 + +m[2], now = new Date(); if (wk < 1 || wk > 53) return null; return now.getFullYear() + now.getMonth() / 12 - (yr + (wk - 1) / 52); }
+  var lastScan = null;
   function shrink(file, kind) {
+    lastScan = null;
     /* every photo is read and redacted on the device first (scan.js); tests and the scanner itself can skip it */
-    if (window.V60_SCAN && !window.__V60_NOSCAN && !(kind && kind.raw)) return window.V60_SCAN.process(file, kind || "photo").then(function (r) { return r.blob; });
+    if (window.V60_SCAN && !window.__V60_NOSCAN && !(kind && kind.raw)) return window.V60_SCAN.process(file, kind || "photo").then(function (r) { lastScan = r; return r.blob; });
     return new Promise(function (res, rej) {
       var img = new Image(), u = URL.createObjectURL(file);
       img.onload = function () {
@@ -1728,6 +1730,7 @@
       return assetsNs.upload(b, { name: "v60-" + kind + "-" + todayStr() + ".jpg" }).catch(function (e) { throw new Error(e && e.code === "quota_exceeded" ? "Photo storage is full. Delete old photos first." : "The photo could not be saved (" + ((e && e.code) || "error") + ")."); });
     }).then(function (up) {
       var rec = { id: uid(), asset: up.id, url: up.local ? null : up.url, local: !!up.local, date: todayStr(), kind: kind, part: partId || null, note: note.slice(0, 200), ai: null };
+      try { if (lastScan && window.V60_SCAN && window.V60_SCAN.describe) rec.ai = window.V60_SCAN.describe(lastScan, kind) || null; } catch (e) { /* keep the photo without a reading */ }
       state.photos = (state.photos || []).concat([rec]).slice(-200); save(); renderPhotos();
       if (!sampleImg || !sampleFn) { $("phStatus").textContent = up.local ? "Saved on this device. Claude's photo review runs when you open the Garage inside Claude." : "Saved. Claude's photo review is not available in this view."; return; }
       $("phStatus").textContent = "Saved. Claude is looking at it...";

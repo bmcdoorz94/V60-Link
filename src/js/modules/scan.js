@@ -151,8 +151,33 @@
     if (/registration|registr\.|renewal notice/i.test(t)) return "registration";
     if (/insurance|policy\s*(no|number|#)|insured/i.test(t)) return "insurance";
     if (/vehicle inspection|inspection report|emissions test/i.test(t)) return "inspection";
+    if (/\bDOT\b/.test(t) && (/\d{3}\s*\/\s*\d{2}/.test(t) || /treadwear|traction|temperature|tubeless/i.test(t))) return "tire";
     if (/total|subtotal|labor|invoice|repair order|\bqty\b|parts/i.test(t)) return "receipt";
     return "photo";
+  }
+  /* DOT code: the last four digits are the week and year made. Take the last valid group after "DOT". */
+  function tireDot(text) {
+    var m = /\bDOT\b([^\n]*)(?:\n([^\n]*))?/i.exec(text); if (!m) return null;
+    var yy = new Date().getFullYear() % 100, found = null, g, re = /(?:^|[^\d])(\d{4})(?!\d)/g, tail = (m[1] || "") + " " + (m[2] || "");
+    while ((g = re.exec(tail))) { var wk = +g[1].slice(0, 2), y = +g[1].slice(2); if (wk >= 1 && wk <= 53 && y >= 10 && y <= yy) found = g[1]; }
+    return found;
+  }
+  function dotYears(code) { var m = /^(\d{2})(\d{2})$/.exec(String(code || "")); if (!m) return null; var made = new Date(2000 + +m[2], 0, 1 + (+m[1] - 1) * 7); return (Date.now() - made.getTime()) / (365.25 * 86400000); }
+  /* What the review adds to a saved photo when no Claude is available: only things read from the picture, always unconfirmed. */
+  function describe(res, photoKind) {
+    if (!res || !res.read && !res.fields) return null;
+    var f = res.fields || {}, obs = [], out = { summary: "Read on this phone. Unconfirmed: check it against the car.", observations: obs, dot: null, rating: null, concern: "unknown", next: [], device: true };
+    if (res.kind === "tire") {
+      if (f.dot) { var a = dotYears(f.dot); out.dot = f.dot; obs.push("DOT date code " + f.dot + ": week " + +f.dot.slice(0, 2) + " of 20" + f.dot.slice(2) + (a != null ? ", about " + a.toFixed(1) + " years old" : "")); if (a != null && a >= 6) { out.concern = "act"; out.next.push("Volvo's manual says to replace tires at 6 years from the date made. Get this tire inspected."); } }
+      else obs.push("The DOT date could not be read. Photograph the sidewall close up with light from the side, and make sure the full code after DOT is in the frame.");
+      if (f.size) obs.push("Size read: " + f.size + (f.size !== "215/50R17" ? " (the Garage lists 215/50R17; check the sidewall)" : ""));
+      return out;
+    }
+    if (/^(dash|fluid|bay)$/.test(photoKind || "") && res.text) {
+      var seen = {}, lines = res.text.split("\n").map(function (l) { return l.replace(/[^\w\s\/.:%\-]/g, " ").replace(/\s+/g, " ").trim(); }).filter(function (l) { var letters = (l.match(/[a-z]/gi) || []).length; return l.length >= 6 && letters / l.length >= 0.6 && !/■/.test(l) && !seen[l.toLowerCase()] && (seen[l.toLowerCase()] = 1); });
+      if (lines.length) { out.summary = "Text read on this phone, unconfirmed. This is a text read, not an inspection."; lines.slice(0, 6).forEach(function (l) { obs.push("Text: " + l.slice(0, 80)); }); return out; }
+    }
+    return null;
   }
   function parse(text, safeText, kind) {
     var f = {}, dates = datesIn(text);
@@ -177,6 +202,10 @@
       if (ed.length) f.expires = ed[0].v;
     } else if (kind === "inspection") {
       if (dates.length) f.date = dates[0].v;
+    } else if (kind === "tire") {
+      var sz = text.match(/\b(\d{3})\s*\/\s*(\d{2})\s*[A-Z]{0,2}\s*R?\s*(\d{2})\b/);
+      if (sz) f.size = sz[1] + "/" + sz[2] + "R" + sz[3];
+      f.dot = tireDot(text);
     }
     return f;
   }
@@ -238,7 +267,7 @@
     $("scanUndo").hidden = !S.boxes.some(function (b) { return b.kind === "hand"; });
     if (S.lines) { S.text = redactedText(S.lines, S.boxes); }
   }
-  var KIND_TITLE = { receipt: "Service receipt", door: "Door-pillar label", registration: "Registration", insurance: "Insurance card", inspection: "Inspection report", photo: "Photo" };
+  var KIND_TITLE = { receipt: "Service receipt", door: "Door-pillar label", registration: "Registration", insurance: "Insurance card", inspection: "Inspection report", tire: "Tire sidewall", photo: "Photo" };
   function fieldsUI() {
     var f = S.fields, k = S.kind, rows = [], apply = [];
     if (k === "receipt") {
@@ -249,6 +278,7 @@
     if (k === "registration" && f.expires) { rows.push(["Expires", f.expires]); apply.push(["regExp", "Save " + f.expires + " as the registration expiry in Glovebox"]); }
     if (k === "insurance" && f.expires) { rows.push(["Renews", f.expires]); apply.push(["insRenew", "Save " + f.expires + " as the insurance renewal in Glovebox"]); }
     if (k === "inspection" && f.date) rows.push(["Inspected", f.date]);
+    if (k === "tire") { if (f.dot) { var ay = dotYears(f.dot); rows.push(["Made", "week " + +f.dot.slice(0, 2) + " of 20" + f.dot.slice(2) + (ay != null ? " (about " + ay.toFixed(1) + " years old)" : "")]); } if (f.size) rows.push(["Size", f.size]); if (!f.dot && S.lines) rows.push(["DOT date", "not read: photograph the code close up with side light"]); }
     var h = "";
     if (rows.length) h += '<div class="scanread"><p class="ans-k">What it read <span class="pill watch">Unconfirmed</span></p><dl class="kv">' + rows.map(function (r) { return "<dt>" + esc(r[0]) + "</dt><dd>" + esc(r[1]) + "</dd>"; }).join("") + "</dl></div>";
     else if (S.lines && k !== "photo") h += '<p class="status">No dates or numbers could be read clearly. A flatter, brighter photo helps.</p>';
@@ -305,7 +335,7 @@
       if (S) finish(null);
       return loadImage(file).then(function (base) {
         return new Promise(function (res, rej) {
-          S = { res: res, rej: rej, base: base, boxes: [], lines: null, fields: {}, kind: kind === "receipt" || kind === "door" ? kind : "photo", hint: kind, text: "", back: document.activeElement };
+          S = { res: res, rej: rej, base: base, boxes: [], lines: null, fields: {}, kind: kind === "receipt" || kind === "door" ? kind : kind === "sidewall" ? "tire" : "photo", hint: kind, text: "", back: document.activeElement };
           var cv = $("scanCv"); cv.width = base.width; cv.height = base.height; cv.style.width = "min(100%, calc(60vh * " + (base.width / base.height).toFixed(4) + "))"; draw();
           $("scanKind").textContent = KIND_TITLE[S.kind] || "Photo"; $("scanFound").innerHTML = ""; $("scanFields").innerHTML = "";
           $("scanMine").value = (function () { try { return (JSON.parse(localStorage.getItem(PRIVATE_KEY) || "[]") || []).join("\n"); } catch (e) { return ""; } })();
@@ -334,7 +364,7 @@
       });
     },
     /* exposed for tests */
-    _detect: detect, _parse: parse, _classify: classify, _redactedText: redactedText, version: TESS
+    describe: describe, _tireDot: tireDot, _detect: detect, _parse: parse, _classify: classify, _redactedText: redactedText, version: TESS
   };
 
   (window.V60_MODULES = window.V60_MODULES || []).push({
