@@ -148,7 +148,7 @@
     id: "tsb",
     tabs: [{ id: "bulletins", section: "check", label: "Bulletins", order: 35, html:
       '<section><h2>Service bulletins</h2><p class="lede">Volvo\'s repair instructions for known problems, read from the copies NHTSA publishes. In Volvo\'s tables your engine is code 40 and the V60 is type 155. A bulletin is not a recall: dealers apply it when the symptom shows, and you pay unless a warranty or program covers it.</p></section>' +
-      '<section class="card"><h3>Your build date</h3><p class="status">Printed on the label on the driver\'s door pillar (month/year). Several bulletins only cover cars built before a certain week.</p><div class="row"><div class="field"><label for="tbBuild">Build month</label><input id="tbBuild" type="month" min="2013-01" max="2016-12"></div><div id="tbSum" class="row"></div></div></section>' +
+      '<section class="card"><h3>Your build date</h3><p class="status">Printed on the label on the driver\'s door pillar (month/year). Several bulletins only cover cars built before a certain week.</p><div class="row"><div class="field"><label for="tbBuild">Build month</label><input id="tbBuild" type="month" min="2013-01" max="2016-12"></div><div id="tbSum" class="row"></div></div><div class="row"><button class="btn" id="tbScan" type="button">Scan the label with the camera</button><input id="tbScanIn" type="file" accept="image/*" hidden></div><p class="status" id="tbScanMsg" aria-live="polite">The photo is read on this phone. Your VIN on the label is blacked out before anything is saved. The month it reads is unconfirmed until you check it against the label.</p></section>' +
       '<section class="card"><h3>Oil consumption program</h3><div id="tbOil"></div></section>' +
       '<section><div class="seg" id="tbFilter" role="group" aria-label="Filter by system"></div><ul class="tsbs" id="tbList"></ul></section>' +
       '<section class="card"><h3>Shop note</h3><pre class="sheet" id="tbSheet"></pre><div class="row"><button type="button" class="quiet" id="tbCopy">Copy note</button><span class="status" id="tbCopySt"></span></div></section>' +
@@ -158,6 +158,11 @@
     init: function (api) {
       var $ = api.$;
       $("tbBuild").addEventListener("change", function () { data(api).build = /^\d{4}-\d{2}$/.test(this.value) ? this.value : ""; api.save(); render(api); });
+      $("tbScan").addEventListener("click", function () { if (!window.V60_SCAN) { $("tbScanMsg").textContent = "The photo reader is not loaded. Type the month above instead."; return; } $("tbScanIn").value = ""; $("tbScanIn").click(); });
+      $("tbScanIn").addEventListener("change", function () {
+        var f = this.files && this.files[0]; if (!f) return;
+        window.V60_SCAN.process(f, "door").then(function () { render(api); var b = data(api).build; $("tbScanMsg").textContent = b ? "Build month " + b + " saved. Check it against the label." : "No build month was saved. Type it in above."; }).catch(function (e) { if (!e || e.code !== "cancelled") $("tbScanMsg").textContent = "Could not read the photo. Type the month above instead."; });
+      });
       $("p-bulletins").addEventListener("click", function (e) {
         var b = e.target.closest && e.target.closest("button"); if (!b) return;
         var s = b.getAttribute("data-tbsys"); if (s) { ui.sys = s; render(api); return; }

@@ -13,6 +13,10 @@ Story case board shipped. 24 tabs across Today, Learn, Car, Check and Data. Test
 - [ ] Story polish after Kyle uses it: more cutscene art per case, and an "Evidence" photo attachment per case.
 
 ## Backlog
+- [x] 2026-10-11 answers from Kyle: no receipts or paperwork found (may call the lot for a UVI); no warranty or service contract of any kind; engine bay photo "tomorrow"; build month not yet entered (use the new Scan the label button in Bulletins); wants wipers and the peeling window tint on the Upgrades list, plus more cosmetic and performance ideas with cost versus benefit; fuel log frequency: Kyle doesn't know what's useful (suggest logging every fill-up, explained in plain words).
+- [ ] Live link still drops after connecting (new adapter; OBDLink app was closed). Need the "Adapter conversation" log.
+- [ ] Tire rotation and engine air filter DIY cards: no sourced procedure found for this car (iFixit's V60 air filter guide is the five-cylinder). Add only when a source turns up.
+- [ ] Kyle was unsure whether the Home Screen icon is Safari or Bluefy. The icon opens in Safari; Bluetooth only works in Bluefy.
 - [x] Kyle: sync set up in Bluefy (2026-10-11).
 - [ ] Build month from the door-pillar label (asked 2026-10-10; drives bulletin applicability).
 - [ ] Engine bay photo to calibrate the bay map to the real car.

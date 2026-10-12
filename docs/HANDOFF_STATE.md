@@ -21,6 +21,8 @@ Most likely real cause: the OBDLink app was still holding the adapter. It only t
 - **Kyle uses Bluefy only.** Claude-powered features (`api.sample()`) work only inside the Claude artifact, not in Bluefy.
 - **Trailer**: a 50-second 3D teaser built with Three.js 0.160.0 from jsDelivr, using bloom and a live 120 bpm Web Audio score. It's a Claude artifact (`LAGywEDVRqFdoNvh4vDcp7`) and **not in this repo**. Only Claude can republish it.
 
+**Update 2026-10-11 evening.** Kyle reports the link still drops right after connecting (new adapter, OBDLink app closed). Added: Scan the label button (Bulletins), DIY cards for the cabin air filter and front turn signal bulb (sources named on the cards), wipers and window tint on Upgrades, clearer Story and Training wording. A block of text Kyle pasted that claimed Gemini had done auto-start trips, the door-pillar step and a cabin filter card was not in the repo and was not applied.
+
 ## 2. Immediate Next Steps
 1. **Confirm the connection fix with Kyle at the car.**
    1. Close the OBDLink app fully, re-plug the adapter, start the engine, then reload the app in Bluefy.

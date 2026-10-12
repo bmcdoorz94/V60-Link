@@ -119,7 +119,7 @@
       steps: [
         { t: "Learn how recalls work", why: "Recalls are free safety repairs. Bulletins are repair instructions you usually pay for.", stage: "lead", ok: function (a) { return M(a, "m-recall"); }, go: "mission:m-recall" },
         { t: "Set every recall to done or not applicable", why: "Check your VIN at nhtsa.gov/recalls or call Volvo at 1-800-458-1552.", stage: "evidence", ok: recallsDone, go: "tab:my" },
-        { t: "Enter your build month from the door-pillar label", why: "It's printed on the label on the driver's door pillar.", stage: "evidence", ok: function (a) { return !!buildMonth(a); }, go: "tab:bulletins" },
+        { t: "Enter your build month from the door-pillar label", why: "It's printed on the label on the driver's door pillar. Open the driver's door, photograph the label, and the app reads the month on your phone.", stage: "evidence", ok: function (a) { return !!buildMonth(a); }, go: "tab:bulletins" },
         { t: "Ask a Volvo dealer to check service action S29842 (spark plugs) by VIN", why: "A free plug replacement may or may not have been done on your car.", stage: "evidence", manual: "s29842", go: "tsb:S29842" },
         { t: "Ask for the factory option list by VIN", why: "Settles which packages your car actually has.", stage: "lead", manual: "options", optional: true, go: "kb:a-trim" }],
       close: function (a) { return recallsDone(a) && !!buildMonth(a) && man(a, "s29842"); },
@@ -510,7 +510,7 @@
   (window.V60_MODULES = window.V60_MODULES || []).push({
     id: "story",
     tabs: [{ id: "story", section: "learn", label: "Story", order: 5, html:
-      '<section class="sthero"><p class="ans-k">Story</p><h2>The As-Is File</h2><p class="lede">This is where you play. Each case says what to do on the real car. <b>Lesson</b> buttons open short training that shows you how, and finishing a lesson ticks its step here. The rest of the garage opens up as cases close.</p><div id="stProg"></div><div class="seg" id="stSeg" role="group" aria-label="Story views"></div></section>' +
+      '<section class="sthero"><p class="ans-k">Story</p><h2>The As-Is File</h2><p class="lede">The Story is the goal: each case is a real thing to learn or check about your car, and closing it means you now know that part. <b>Training</b> is the textbook behind it. Tap a step\'s <b>Lesson</b> button to read how it works, then do the step on the car. Finishing a lesson ticks the step here. The rest of the garage opens up as cases close.</p><div id="stProg"></div><div class="seg" id="stSeg" role="group" aria-label="Story views"></div></section>' +
       '<div id="stV-cases"></div><div id="stV-file" hidden></div><div id="stV-timeline" hidden></div><div id="stV-codebook" hidden></div>' }],
     clean: function (v) {
       if (!v || typeof v !== "object") return null;
