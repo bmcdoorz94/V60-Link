@@ -29,22 +29,22 @@ window.V60_MANUAL_DATA = (function () {
 
   var I = [
     /* ---------- view 1: engine bay ---------- */
-    { id: "oil", view: "bay", num: "1.1", n: "Oil", d: "The level is read in the driver display on this engine; there is no dipstick.", bay: "oilcap", part: "oilfilter", record: "oil", tags: ["Fluids", "Engine", "Maintenance"], photo: ["fluid"], at: [150, 114],
-      spec: [["Spec", "ACEA A5/B5 5W-30, or Volvo 0W-20"], ["Capacity", "6.2 US qt with filter"], ["Level", "Driver display, no dipstick"]],
+    { id: "oil", view: "bay", num: "1.1", n: "Oil", d: "The level is read in the driver display on this engine; there is no dipstick.", bay: "oilcap", part: "oilfilter", record: "oil", tags: ["Fluids", "Engine", "Maintenance"], photo: ["fluid"], at: [128, 98],
+      spec: [["Spec", "ACEA A5/B5 5W-30, or Volvo 0W-20"], ["Capacity", "6.2 US qt with filter"], ["Level", "Driver display, no dipstick"], ["Hood label, your photo", "Castrol EDGE Professional, ACEA A5/B5, SAE 5W-30"]],
       chapters: [
         { tier: "K", t: "Know it", d: "What the oil does, which oil this engine takes, and why some 2015–16 Drive-E engines use more of it than they should.", steps: [{ kb: "a-oil" }, { bay: "oilcap", t: "Find the filler cap on the map", why: "Yellow cap on top of the engine. Nothing to open." }], opens: ["1.3.1"] },
         { tier: "C", t: "Check it", d: "Read the level the way Volvo describes, then log it. Repeating this across 1,000 miles is what tells you whether the engine burns oil.", time: "5 minutes, engine warm then off", steps: [{ mission: "m-oil" }, { oil: 1, t: "Log one oil level reading", why: "Logged readings are the evidence The Thirst case needs.", go: "tab:records" }], opens: ["1.5.1", "2.1.1"] },
         { tier: "S", t: "Service it", d: "Topping up correctly, and getting the oil change on record so the next due date is real instead of guessed.", steps: [{ diy: "j-oilcheck" }, { record: "oil", t: "Log an oil and filter change", why: "A receipt or your own record. The schedule works from this date and mileage.", go: "tab:records" }], opens: ["1.4.1", "1.9.1"] },
         { tier: "D", t: "Diagnose it", d: "A low oil message, a rising consumption rate, and what the oil consumption program means for your car.", steps: [{ tree: "oil" }, { kb: "a-oilprogram" }, { oil: 3, t: "Three logged oil readings", why: "Three points across real miles give a consumption rate the app can show.", go: "tab:records" }] }
       ] },
-    { id: "coolant", view: "bay", num: "1.2", n: "Coolant & cooling", d: "The expansion tank, the radiator and the fan. Pressurised when hot; check cold only.", bay: "coolant", part: "coolant", record: "coolant", tags: ["Fluids", "Engine"], photo: ["fluid"], at: [260, 187],
-      spec: [["Coolant", "Volvo coolant, 50/50 with water"], ["Capacity", "8.7 US qt"], ["Rule", "Never open the tank hot"]],
+    { id: "coolant", view: "bay", num: "1.2", n: "Coolant & cooling", d: "The expansion tank, the radiator and the fan. Pressurised when hot; check cold only.", bay: "coolant", part: "coolant", record: "coolant", tags: ["Fluids", "Engine"], photo: ["fluid"], at: [52, 150],
+      spec: [["Coolant", "Volvo coolant, 50/50 with water"], ["Capacity", "8.7 US qt"], ["Rule", "Never open the tank hot"], ["Cap, your photo", "145 kPa"], ["A/C, hood label", "R-134a, 800 g, Volvo PAG oil, with leak-tracer dye"]],
       chapters: [
         { tier: "K", t: "Know it", d: "The cooling loop: where the tank is, what the fan does, and why the system stays dangerous for minutes after the engine stops.", steps: [{ mission: "m-fluids" }, { bay: "coolant", t: "Find the expansion tank and the radiator", why: "Passenger side of the bay, with MIN and MAX marks." }], opens: ["1.6.1"] },
         { tier: "C", t: "Check it", d: "Level between the marks, cold, without opening anything. Crusty stains tell you about leaks before the gauge does.", steps: [{ mission: "m-fluidlook" }, { diy: "j-fluids" }], opens: ["1.7.1"] },
         { tier: "D", t: "Diagnose it", d: "Running hot in traffic, a sweet smell, steam. What to do at the roadside and what a shop will look at.", steps: [{ tree: "hot" }] }
       ] },
-    { id: "battery", view: "bay", num: "1.3", n: "Battery", d: "Under covers in the bay. Start/stop cars like yours need an AGM battery and have a second support battery.", bay: "battery", part: "battery", tags: ["Electrical"], at: [293, 141],
+    { id: "battery", view: "bay", num: "1.3", n: "Battery", d: "Under covers in the bay. Start/stop cars like yours need an AGM battery and have a second support battery.", bay: "battery", part: "battery", tags: ["Electrical"], at: [302, 68],
       spec: [["Type", "AGM (start/stop)"], ["Jump start", "Negative clamp on the ground point, not the battery"], ["Life in Texas heat", "3 to 5 years is common (unconfirmed)"]],
       chapters: [
         { tier: "K", t: "Know it", d: "Where it sits, why the ground point for a jump start is on the engine mount, and how start/stop changes the rules.", steps: [{ bay: "battery", t: "Find the battery covers on the map" }, { bay: "ground", t: "Find the jump-start ground point" }, { kb: "a-startstop" }], opens: ["1.8.1"] },
@@ -52,37 +52,38 @@ window.V60_MANUAL_DATA = (function () {
         { tier: "S", t: "Service it", d: "Jump-starting the car the way Volvo's manual orders the clamps.", steps: [{ diy: "j-jump" }] },
         { tier: "D", t: "Diagnose it", d: "A click without a crank, a slow crank, random warnings at start.", steps: [{ tree: "nostart" }] }
       ] },
-    { id: "belts", view: "bay", num: "1.4", n: "Belts & timing", d: "The accessory belt you can see and the timing belt you cannot. Nobody can say whether yours was ever replaced.", bay: "belt", part: "timing", record: "timingbelt", tags: ["Engine", "Maintenance"], at: [122, 154],
+    { id: "belts", view: "bay", num: "1.4", n: "Belts & timing", d: "The accessory belt you can see and the timing belt you cannot. Nobody can say whether yours was ever replaced.", bay: "belt", part: "timing", record: "timingbelt", tags: ["Engine", "Maintenance"], at: [74, 94],
       spec: [["Timing drive", "Belt"], ["History", "Unknown"], ["Limit", "About 10 years (see the article)"]],
       chapters: [
         { tier: "K", t: "Know it", d: "Why the timing belt is this car's biggest unknown, and what happens on this engine if it snaps.", steps: [{ kb: "a-belt" }, { bay: "belt", t: "Find the belt end on the map", why: "Under a cover at the end of the engine. Nothing to see without removing it." }] },
         { tier: "C", t: "Check it", d: "Detective work: shop stickers, the lot's paperwork, a call to the dealer with the VIN, a specialist's inspection.", steps: [{ mission: "m-belt" }, { mission: "m-ppi" }], opens: ["3.5.1"] },
         { tier: "S", t: "Service it", d: "A shop job. What a timing belt kit is, what it costs, and getting it on record.", steps: [{ record: "timingbelt", t: "Log a timing belt replacement", why: "From a receipt, a sticker you trust, or the job you have done. This closes The Belt.", go: "tab:records" }] }
       ] },
-    { id: "filters", view: "bay", num: "1.5", n: "Air & cabin filters", d: "The engine air filter in the box under the hood; the cabin filter behind the glovebox.", bay: "airbox", part: "airfilter", record: "airfilter", tags: ["Maintenance"], at: [61, 128],
+    { id: "filters", view: "bay", num: "1.5", n: "Air & cabin filters", d: "The engine air filter in the box under the hood; the cabin filter behind the glovebox.", bay: "airbox", part: "airfilter", record: "airfilter", tags: ["Maintenance"], at: [292, 142],
       chapters: [
         { tier: "K", t: "Know it", d: "Everything the turbo breathes passes the air filter first. The cabin filter is the one you smell.", steps: [{ bay: "airbox", t: "Find the air filter box on the map" }] },
         { tier: "C", t: "Check it", d: "Open the clips, hold the filter to the light, reseat it carefully.", steps: [{ mission: "m-airf" }, { mission: "m-cabin" }] },
         { tier: "S", t: "Service it", d: "The cabin filter is the first real job: no tools, behind the glovebox. Your first wrench.", steps: [{ diy: "j-cabin" }] }
       ] },
-    { id: "bfluid", view: "bay", num: "1.6", n: "Brake fluid", d: "The reservoir at the firewall on the driver's side. A slow drop is the pads wearing; a sudden drop is a leak.", bay: "brake", part: "bfluid", record: "brakefluid", tags: ["Fluids"], at: [204, 42],
+    { id: "bfluid", view: "bay", num: "1.6", n: "Brake fluid", d: "The reservoir at the firewall on the driver's side. A slow drop is the pads wearing; a sudden drop is a leak.", bay: "brake", part: "bfluid", record: "brakefluid", tags: ["Fluids"], at: [320, 40],
       spec: [["Fluid", "DOT 4"], ["Volvo interval", "Every other year"]],
       chapters: [
         { tier: "K", t: "Know it", d: "Where it is, what the level means, and why you don't just top it up.", steps: [{ bay: "brake", t: "Find the reservoir on the map" }] },
         { tier: "C", t: "Check it", d: "Between MIN and MAX with the cap closed. Low means get the brakes looked at.", steps: [{ diy: "j-fluids" }] }
       ] },
-    { id: "washer", view: "bay", num: "1.7", n: "Washer fluid", d: "The one fluid you can always top up yourself.", bay: "washer", part: "wipers", tags: ["Fluids"], at: [44, 186],
+    { id: "washer", view: "bay", num: "1.7", n: "Washer fluid", d: "The one fluid you can always top up yourself.", bay: "washer", part: "wipers", tags: ["Fluids"], at: [330, 184],
       spec: [["Capacity", "6.8 US qt with headlight washers, 4.7 without"]],
       chapters: [
         { tier: "K", t: "Know it", d: "Where the filler is and why washer fluid, not water.", steps: [{ bay: "washer", t: "Find the washer filler on the map" }] },
         { tier: "C", t: "Check it", d: "Top it up. Done.", steps: [{ diy: "j-fluids" }] }
       ] },
-    { id: "fuses", view: "bay", num: "1.8", n: "Fuses", d: "The fuse box in the bay and the second one near the cowl on start/stop cars. The lid shows the map.", bay: "fusebox", part: "modules", tags: ["Electrical"], at: [48, 45],
+    { id: "fuses", view: "bay", num: "1.8", n: "Fuses", d: "The fuse box in the bay and the second one near the cowl on start/stop cars. The lid shows the map.", bay: "fusebox", part: "modules", tags: ["Electrical"], at: [234, 64],
       chapters: [
         { tier: "K", t: "Know it", d: "Where the fuse boxes are and which fuses Volvo says an owner may change.", steps: [{ kb: "a-fuses" }, { bay: "fusebox", t: "Find the fuse box on the map" }] },
         { tier: "S", t: "Service it", d: "Pull, inspect, replace with the same rating. Never a higher one.", steps: [{ diy: "j-fuse" }] }
       ] },
-    { id: "plugs", view: "bay", num: "1.9", n: "Spark plugs & coils", d: "Under the engine cover. Volvo replaced plugs free on 2015–16 four-cylinders under service action S29842.", bay: "coils", part: "coils", record: "plugs", tags: ["Engine"], at: [190, 100],
+    { id: "plugs", view: "bay", num: "1.9", n: "Spark plugs & coils", d: "Under the engine cover. Volvo replaced plugs free on 2015–16 four-cylinders under service action S29842.", bay: "coils", part: "coils", record: "plugs", tags: ["Engine"], at: [166, 64],
+      spec: [["Engine cover, your photo", "B4204T11"]],
       chapters: [
         { tier: "K", t: "Know it", d: "One coil per cylinder. A failing one is a misfire and a shaky idle. Don't touch them hot.", steps: [{ bay: "coils", t: "Find the coils on the map" }] },
         { tier: "D", t: "Diagnose it", d: "Service action S29842: ask a dealer by VIN whether the free plug replacement was done.", steps: [{ tsb: "S29842", t: "Check S29842 with a dealer and mark it", go: "tsb:S29842" }] }
@@ -90,7 +91,7 @@ window.V60_MANUAL_DATA = (function () {
 
     /* ---------- view 2: wheels & brakes ---------- */
     { id: "tires", view: "wheel", num: "2.1", n: "Tires", d: "Size, pressure, tread, age. The pressure light has been on since you bought the car.", part: "tread", record: "tires", tags: ["Tires"], photo: ["sidewall", "tread"], at: [60, 160],
-      spec: [["Size", "215/50R17 on 17 x 7.5 in wheels"], ["Pressure", "38 psi front and rear, cold"], ["Age rule", "Replace at 6 years from the DOT date"]],
+      spec: [["Size", "215/50R17 on 17 x 7.5 in wheels"], ["Pressure", "38 psi front and rear, cold"], ["Age rule", "Replace at 6 years from the DOT date"], ["Placard, your photo", "215/50R17 front and rear, 260 kPa / 38 psi cold, spare: none"], ["On the car, your photos", "Sentury UHP 215/50ZR17 95W, extra load, max 50 psi, made in Thailand; DOT week 43 of 2023 on the one photographed"]],
       chapters: [
         { tier: "K", t: "Know it", d: "What the numbers on a sidewall mean, how to read the DOT date, and what the placard on the door pillar is for.", steps: [{ mission: "m-tires" }], opens: ["2.2.1"] },
         { tier: "C", t: "Check it", d: "Pressure cold against the placard, tread at three points per tire, the DOT date on each sidewall. On your four tires.", time: "About 15 minutes, cold tires", steps: [{ mission: "m-psi" }, { mission: "m-tread" }, { photo: "sidewall", t: "Photograph one sidewall", why: "The app reads the DOT date on your phone and flags a tire past 6 years.", go: "tab:my" }], opens: ["2.3.1", "3.1.1"] },
@@ -149,11 +150,13 @@ window.V60_MANUAL_DATA = (function () {
         { tier: "U", t: "Upgrade it", d: "Polestar's optimization is the sanctioned route. Aftermarket tunes are not, in a county with emissions testing.", steps: [{ upg: "polestar" }, { kb: "a-polestar" }] }
       ] },
     { id: "seats", view: "cabin", num: "3.4", n: "Seats & interior", d: "What Premier trim includes, the safety systems every 2016 V60 has, and keeping the inside the Volvo way.", tags: ["Identity", "Safety"], photo: ["other"], at: [322, 190],
+      spec: [["Upholstery, your photos", "Leather, light coloured; creasing on the driver's seat bolster"]],
       chapters: [
         { tier: "K", t: "Know it", d: "Premier trim, your options, and the safety systems in the cabin.", steps: [{ kb: "a-trim" }, { kb: "a-safety" }] },
         { tier: "S", t: "Service it", d: "Cleaning the interior with what Volvo recommends.", steps: [{ diy: "j-interior" }] }
       ] },
     { id: "glove", view: "cabin", num: "3.5", n: "Glovebox", d: "Papers and records: registration, insurance, inspection, receipts, recalls, bulletins. A filing cabinet, not a lesson.", tags: ["Ownership", "Recalls", "Inspection"], at: [300, 150],
+      spec: [["Door label, your photo", "Date 08/15; market code 31; type PC; colour code 717-46"], ["Weights, door label", "GVWR 4,740 lb; GAWR 2,580 lb front, 2,300 lb rear"]],
       chapters: [
         { tier: "K", t: "Know it", d: "Enter the mileage, hunt for service history, and learn what a bulletin is.", steps: [{ mission: "m-odo" }, { mission: "m-hist" }, { kb: "a-tsb" }], opens: ["5.6.1"] },
         { tier: "C", t: "Check it", d: "Recalls checked by VIN, the build month read off the door-pillar label.", steps: [{ mission: "m-recall" }, { build: 1, t: "Enter the build month from the door label", why: "Photograph the label; the app reads the month on your phone.", go: "tab:bulletins" }] },
@@ -168,6 +171,7 @@ window.V60_MANUAL_DATA = (function () {
         { tier: "C", t: "Check it", d: "A torch under the car, cold. Photograph anything wet.", steps: [{ photo: "leak", t: "Photograph the underside or a drip", go: "tab:my" }], opens: ["4.2.1", "4.3.1"] }
       ] },
     { id: "exhaust", view: "under", num: "4.2", n: "Exhaust & emissions", d: "Travis County tests emissions. The exhaust, the catalyst and the readiness monitors decide whether you pass.", part: "pipes", tags: ["Inspection"], at: [262, 100],
+      spec: [["Emission label, your photo", "2016 MY; US EPA/Canada T2B5 LDV; California ULEV 125 PC; CA II OBD; gasoline"], ["Engine family", "GVVXV02.0U3T; EVAP GVVXR0130EV3; DFI, TC, CAC, HO2S, WR-HO2S, TWC"]],
       chapters: [
         { tier: "K", t: "Know it", d: "How the emissions inspection works here and what makes a car fail.", steps: [{ kb: "a-inspect" }], opens: ["4.4.1"] },
         { tier: "C", t: "Check it", d: "Readiness monitors from a real health check, before the inspection, not at it.", steps: [{ scans: 1, t: "A health check with readiness monitors", go: "tab:live" }] }
@@ -207,12 +211,14 @@ window.V60_MANUAL_DATA = (function () {
         { tier: "U", t: "Upgrade it", d: "New tint within Texas law, with the cost against the benefit.", steps: [{ upg: "tint" }] }
       ] },
     { id: "paint", view: "body", num: "5.4", n: "Paint & body", d: "Washing, polishing, coating, and the small dents.", part: "rust", tags: ["Ownership"], at: [237, 128],
+      spec: [["Colour code, door label", "717-46. The name is unconfirmed; the paint is black in your photos"]],
       chapters: [
         { tier: "K", t: "Know it", d: "Washing and paint care, Volvo's way.", steps: [{ kb: "a-wash" }] },
         { tier: "S", t: "Service it", d: "Wash, then polish and wax by Volvo's guidance.", steps: [{ diy: "j-wash" }, { diy: "j-polish" }], opens: ["5.5.1"] },
         { tier: "U", t: "Upgrade it", d: "A ceramic coating, and paintless dent repair for the small dents.", steps: [{ upg: "ceramic" }, { upg: "dents" }, { diy: "j-ceramic" }] }
       ] },
     { id: "roof", view: "body", num: "5.5", n: "Roof & cargo", d: "A rack for a bike, skis or cargo.", tags: ["Upgrades"], at: [229, 48],
+      spec: [["Load placard, door", "5 seats; occupants and cargo together never more than 950 lb (430 kg)"]],
       chapters: [
         { tier: "U", t: "Upgrade it", d: "Which rack fits, and what it costs.", steps: [{ upg: "rack" }] }
       ] },

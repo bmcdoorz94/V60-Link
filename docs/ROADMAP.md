@@ -65,12 +65,13 @@ Story case board shipped. 24 tabs across Today, Learn, Car, Check and Data. Test
 - VIN, plate and chassis number never go in the repo. They may only be typed into the app's local storage.
 
 ## Redesign backlog (after 2026-10-12)
-- [ ] Kyle's photos for the views: straight side-on of the whole car (home), engine bay from the bumper (hood), from the driver's seat (cabin), the front wheel straight on (wheel), the rear (walk-around).
+- [ ] Kyle's photos for the views. He has the engine bay (from the bumper) and a front-wheel shot with the caliper; still needed: straight side-on of the whole car (home), from the driver's seat (cabin), the rear (walk-around). He uploads them in the app, not in chat (the VIN is on the door label and the hood sticker).
 - [ ] Retire the Today tab once its remaining cards (welcome back, protect your progress, the garage map) have a home elsewhere. The home's Now strip already counts the notes and links there.
 - [ ] Wheel and underside figures: better drawings, or photos.
 - [ ] Desktop: consider the figure and the sheet side by side above 1000 px.
 
 ## Done
+- 2026-10-13: Readings from Kyle's 18 photos (2026-10-12) added as "Your car" rows, marked as from his photos: door label date 08/15, market code 31, colour code 717-46, GVWR/GAWR; placard 215/50R17 at 38 psi, no spare; Sentury UHP 215/50ZR17 95W extra load, DOT week 43 of 2023; coolant cap 145 kPa; A/C R-134a 800 g PAG with tracer dye; emission label T2B5 / ULEV 125, engine family GVVXV02.0U3T; engine cover B4204T11; leather seats. The bay schematic now matches a photo taken from the bumper (driver side on the right); old bay-map pins are mirrored when imported.
 - 2026-10-13: The owner's manual folded into the thin items: three new articles (electric parking brake; starting and the three ignition modes; steering, steering force and Volvo's economical-driving list), 14 new facts, and Check-it chapters for 2.4, 3.2 and 4.3 that walk the procedure from Volvo's own pages. Glossary terms now unlock with an item's chapters, and an article an open chapter points at is in the Library at once.
 - 2026-10-13: Cases page in the manual's dress (act headings, → § labels to the items a case points at, stamps, the Next box); the home's Now strip counts today's notes; item glossaries limited to the eight facts closest to the part.
 - 2026-10-12: The manual (manual.js, data/manual.js, manual.css, theme.css): home with the side-view figure, five views, 28 items, chapters with evidence-based steps, unlock chain plus case openers, glow and resume markers, the gate wrapper, the crumb bar, photos as figures with draggable points, light and dark. tests/manual.js. The old tabs stay reachable through chapters and the back matter.
