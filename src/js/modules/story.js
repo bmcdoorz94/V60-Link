@@ -274,7 +274,8 @@
     },
     fact: factKnown,
     discover: function (kind, id) { if (!API) return; var d = D(API), k = kind + ":" + id; if (!d.known[k]) { d.known[k] = API.todayStr(); API.save(); } if (kind === "a") d.read[id] = 1; },
-    isNew: function (id) { return !!(API && !D(API).read[id] && window.V60_KNOW.article(id)); }
+    isNew: function (id) { return !!(API && !D(API).read[id] && window.V60_KNOW.article(id)); },
+    read: function (id) { return !!(API && D(API).read[id]); }
   };
 
   /* ---------- codebook (cipher) ---------- */

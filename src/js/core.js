@@ -217,7 +217,7 @@
   var pendingDel = {};
   var LSKEY = "v60-garage-v1";
   var MODS = (typeof window !== "undefined" && window.V60_MODULES) || [];
-  var ui = { tab: "today", sys: "eng", open: {}, overlay: "cond" };
+  var ui = { tab: "car", sys: "eng", open: {}, overlay: "cond" };
 
   function $(id) { return document.getElementById(id); }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
@@ -2106,26 +2106,26 @@
     var cur = modByTab(ui.tab); if (cur && cur.render && !$("p-" + ui.tab).hidden) try { cur.render(API, ui.tab); } catch (e) { console.error(e); }
   }
   var ICON = {
-    today: '<path d="M4 11.5L12 5l8 6.5"/><path d="M6 10v9h12v-9"/><path d="M10 19v-5h4v5"/>',
-    learn: '<path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5C4.7 19 4 18.3 4 17.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5-.7 1.5-1.5z"/>',
-    car: '<path d="M3 15.5l1.6-4.6A2 2 0 0 1 6.5 9.5h11a2 2 0 0 1 1.9 1.4l1.6 4.6v3a1 1 0 0 1-1 1h-1.5a1 1 0 0 1-1-1V17H6.5v1.5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><circle cx="7.5" cy="14" r="1.2"/><circle cx="16.5" cy="14" r="1.2"/>',
-    check: '<path d="M4 16a8 8 0 1 1 16 0"/><path d="M12 16l4-5"/><circle cx="12" cy="16" r="1.4"/>',
-    data: '<path d="M3 17l5-6 4 3 4-7 5 6"/><path d="M3 20h18"/>'
+    car: '<path d="M3 15l2-6h10l4 6"/><path d="M2 15h20v3H2z"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>',
+    story: '<path d="M5 4h11l3 3v13H5z"/><path d="M8 11h8M8 15h8"/>',
+    glove: '<path d="M3 8h18v11H3z"/><path d="M3 8l2-3h14l2 3"/><path d="M10 12h4"/>',
+    live: '<path d="M4 12h4l2-5 4 10 2-5h4"/>'
   };
-  /* tab entries: [id, label, hidden-unless-active] ; modules add their own tabs with section + order */
+  /* The bar: four roots. Every other page is reached from the manual (a chapter's Go button), a case, or the back matter,
+     and lives under "car" as hidden-unless-active so the bar still shows where you are. tab entries: [id, label, order, hidden-unless-active] */
   var SECTIONS = [
-    { id: "today", n: "Today", tabs: [] },
-    { id: "learn", n: "Learn", tabs: [["academy", "Training", 10, true], ["learn", "Reference", 80, true], ["unlocks", "Unlocks", 90, true]] },
-    { id: "car", n: "Car", tabs: [["engine", "Engine bay", 10], ["bay", "Whole car", 20], ["my", "My V60", 30]] },
-    { id: "check", n: "Check", tabs: [["health", "Health", 10], ["records", "Service log", 20], ["diag", "Diagnose", 30]] },
-    { id: "data", n: "Data", tabs: [["lab", "Data lab", 20], ["sim", "Simulator", 30]] }
+    { id: "car", n: "The car", tabs: [["engine", "Engine bay", 10, true], ["bay", "Whole car", 20, true], ["my", "My V60", 30, true], ["health", "Health", 40, true], ["records", "Service log", 50, true], ["diag", "Diagnose", 60, true], ["lab", "Data lab", 70, true], ["sim", "Simulator", 80, true], ["academy", "Training", 90, true], ["learn", "Reference", 95, true], ["unlocks", "Unlocks", 96, true]] },
+    { id: "story", n: "Cases", tabs: [] },
+    { id: "glove", n: "Glovebox", tabs: [] },
+    { id: "live", n: "Link", tabs: [] }
   ];
+  var ROOT_LOCK = { glove: "Opens with 3.5 Glovebox, or the case The Paper Trail.", live: "Opens with 3.3 The diagnostic port, or the case The Signal." };
   function modByTab(t) { for (var i = 0; i < MODS.length; i++) if ((MODS[i].tabs || []).some(function (x) { return x.id === t; })) return MODS[i]; return null; }
   function installModules() {
     MODS.forEach(function (m) {
       (m.tabs || []).forEach(function (t) {
-        var sec = SECTIONS.filter(function (x) { return x.id === t.section; })[0]; if (!sec) return;
-        sec.tabs.push([t.id, t.label, t.order || 50, !!t.hidden]);
+        var root = SECTIONS.filter(function (x) { return x.id === t.id; })[0], sec = root || SECTIONS.filter(function (x) { return x.id === t.section; })[0] || SECTIONS[0];
+        if (root) sec.tabs.unshift([t.id, t.label, 0, false]); else sec.tabs.push([t.id, t.label, t.order || 50, true]);
         var div = document.createElement("div"); div.className = "panel"; div.id = "p-" + t.id; div.hidden = true; div.innerHTML = t.html || "";
         var anchor = document.querySelector("main"); anchor.appendChild(div);
       });
@@ -2136,29 +2136,31 @@
   var lastTab = {};
   function sectionOf(name) { for (var i = 0; i < SECTIONS.length; i++) if (SECTIONS[i].tabs.some(function (t) { return t[0] === name; })) return SECTIONS[i]; return SECTIONS[0]; }
   /* window.V60_GATE (story module) decides which tabs exist yet; a tab can still be reached by a direct jump */
-  function gateOk(id) { var G = window.V60_GATE; return id === "today" || !G || G.visible(id); }
+  function gateOk(id) { var G = window.V60_GATE; return id === "today" || id === "car" || !G || G.visible(id); }
   function gateNew(id) { var G = window.V60_GATE; return !!(G && G.isNew && G.isNew(id)); }
   function firstTab(sec) { var v = sec.tabs.filter(function (t) { return !t[3] && gateOk(t[0]); }); return (v[0] || sec.tabs[0] || ["today"])[0]; }
   function renderNav(name) {
     if (window.V60_GATE && window.V60_GATE.sync) window.V60_GATE.sync();
     var sec = sectionOf(name); lastTab[sec.id] = name;
-    var secs = SECTIONS.filter(function (x) { return x.id === "today" || x.id === sec.id || x.tabs.some(function (t) { return !t[3] && gateOk(t[0]); }); });
-    $("rail").innerHTML = secs.map(function (x) { var on = x.id === sec.id, dest = lastTab[x.id] && gateOk(lastTab[x.id]) ? lastTab[x.id] : firstTab(x); if (x.id === "today") dest = "today"; var nw = x.tabs.some(function (t) { return gateOk(t[0]) && gateNew(t[0]); }); return '<button type="button" data-tab="' + dest + '"' + (on ? ' aria-current="page"' : "") + '><svg viewBox="0 0 24 24" aria-hidden="true">' + ICON[x.id] + "</svg><span>" + esc(x.n) + "</span>" + (nw ? '<i class="newdot" aria-label="new"></i>' : "") + "</button>"; }).join("");
-    $("rail").setAttribute("data-n", secs.length);
-    var vis = sec.tabs.filter(function (t) { return (!t[3] && gateOk(t[0])) || t[0] === name; });
-    $("subnav").innerHTML = vis.length > 1 ? vis.map(function (t) { return '<button type="button" role="tab" data-tab="' + t[0] + '" aria-selected="' + (t[0] === name) + '">' + esc(t[1]) + (gateNew(t[0]) && t[0] !== name ? '<i class="newdot" aria-label="new"></i>' : "") + "</button>"; }).join("") : "";
-    $("subnav").hidden = vis.length < 2;
+    /* the bar always shows all four roots; a root the story has not reached yet is drawn locked */
+    $("rail").innerHTML = SECTIONS.map(function (x) {
+      var on = x.id === sec.id, ok = gateOk(x.id), nw = ok && (gateNew(x.id) || (x.id === "car" && window.V60_MANUAL && window.V60_MANUAL.newCount() > 0));
+      return '<button type="button" ' + (ok ? 'data-tab="' + x.id + '"' : 'data-locked="' + esc(ROOT_LOCK[x.id] || "Not open yet.") + '" class="locked" aria-disabled="true"') + (on ? ' aria-current="page"' : "") + '><svg viewBox="0 0 24 24" aria-hidden="true">' + ICON[x.id] + "</svg><span>" + esc(x.n) + "</span>" + (nw ? '<i class="newdot" aria-label="new"></i>' : "") + "</button>";
+    }).join("");
+    $("rail").setAttribute("data-n", SECTIONS.length);
+    $("subnav").innerHTML = ""; $("subnav").hidden = true;
     document.body.classList.toggle("gate-nohealth", !gateOk("health"));
   }
   function showTab(name) {
     ui.tab = name;
-    if (!$("p-" + name)) name = "today";
+    if (!$("p-" + name)) name = "car";
     ui.tab = name;
     document.querySelectorAll("main > .panel").forEach(function (p) { p.hidden = p.id !== "p-" + name; });
     if (window.V60_GATE && window.V60_GATE.shown) window.V60_GATE.shown(name);
     renderNav(name);
     try { window.scrollTo(0, 0); } catch (e) {}
     var md = modByTab(name); if (md && md.render) try { md.render(API, name); } catch (e) { console.error(md.id, e); }
+    MODS.forEach(function (m) { if (m.shown) try { m.shown(API, name); } catch (e) { console.error(m.id, e); } });
     if (name === "health") renderHealth();
     if (name === "academy") renderAcademy();
     if (name === "sim") renderSim();
@@ -2201,7 +2203,7 @@
     get state() { return state; }, save: function () { save(); }, renderAll: function () { renderAll(); }, go: function (t) { showTab(t); }, jump: function (s) { jump(s); },
     $: $, esc: esc, uid: uid, todayStr: todayStr, fmt: fmt, f1: f1, isNum: isNum, claudeUse: claudeUse,
     acad: function () { return acad(); }, xp: function () { return xpTotal(); }, rankFor: rankFor, PARTS: PARTS, ITEMS: ITEMS, partById: partById, lastFor: lastFor, statusFor: statusFor, ratingOf: ratingOf,
-    JOBS: JOBS, CHAPTERS: CHAPTERS, SPECS: SPECS, SCHEDULE: SCHEDULE, BUILD: BUILD, RECALLS: RECALLS, CODES: CODES, decodeCode: decodeCode, monthsSince: monthsSince,
+    JOBS: JOBS, CHAPTERS: CHAPTERS, SPECS: SPECS, BAYITEMS: BAYITEMS, SCHEDULE: SCHEDULE, BUILD: BUILD, RECALLS: RECALLS, CODES: CODES, decodeCode: decodeCode, monthsSince: monthsSince,
     computeHealth: function () { return computeHealth(); }, loadDataset: function (ds, n) { loadDataset(ds, n); }, parseCSV: parseCSV, analyze: analyze, autoMap: autoMap,
     bumpOdo: function (m) { bumpOdo(m); }, updateHud: function () { $("hudRank").textContent = "Lv " + rankFor(xpTotal()).lvl; $("hudRankName").textContent = rankFor(xpTotal()).name; },
     mod: function (id) { if (!state.mods) state.mods = {}; return state.mods[id]; }, setMod: function (id, v) { if (!state.mods) state.mods = {}; state.mods[id] = v; },
@@ -2365,6 +2367,8 @@
       var t = ev.target; if (!t || !t.closest) return;
       var tabB = t.closest("button[data-tab]");
       if (tabB) { showTab(tabB.getAttribute("data-tab")); return; }
+      var lockB = t.closest("button[data-locked]");
+      if (lockB) { $("saveStatus").textContent = lockB.getAttribute("data-locked"); return; }
       var jmp = t.closest("[data-jump]");
       if (jmp) { jump(jmp.getAttribute("data-jump")); return; }
       if (t.closest("#acadBody") && academyClick(t)) return;

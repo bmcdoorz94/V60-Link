@@ -43,6 +43,7 @@ Story case board shipped. 24 tabs across Today, Learn, Car, Check and Data. Test
   - Contents of TJ30087
 
 ## Decisions
+- 2026-10-12 (redesign, Kyle's answers): the car is the menu, organised by area; progression-based unlocks stay and work both ways (chapter chain and story cases); each area opens a view "as if looking inside" (hood open, inside the cabin); glow on first open only, with a quieter "pick up here" marker; light and dark; Live link and the Data lab keep an instrument look; "make it my vehicle as much as possible" is done with the owner's own photos as the figures (no drawing of Volvo's actual design), points placed automatically from the drawing and adjustable by hand; density between dense and roomy; item count per view as mocked (about 4 to 9). Mockup approved before the build.
 - 2026-10-11: Guided mode (Kyle's answers): full-screen walkthrough (Claude's pick), levels change without asking but are announced with an undo, guidance fades per area (Claude's pick), no read-aloud needed in the walkthrough.
 - 2026-10-11 (scanner, Kyle's answers): the shop's own name, address and phone stay visible on receipts (outlined, one tap hides them); always confirm before saving; Glovebox VIN and plate keep syncing to the private repo (no preference); on-device reading only, no API-key AI read (no preference, so the simpler option).
 - 2026-10-11: Kyle uses Bluefy for everything (not the Home Screen app) so he never switches browsers. Sync to `v60-garage-data` is on; the token expires Dec 10 2026. A header Sync chip opens the setup directly.
@@ -63,7 +64,17 @@ Story case board shipped. 24 tabs across Today, Learn, Car, Check and Data. Test
 - No aftermarket tunes in guidance (Clean Air Act tampering, Travis County testing). Polestar is the sanctioned option.
 - VIN, plate and chassis number never go in the repo. They may only be typed into the app's local storage.
 
+## Redesign backlog (after 2026-10-12)
+- [ ] Kyle's photos for the views: straight side-on of the whole car (home), engine bay from the bumper (hood), from the driver's seat (cabin), the front wheel straight on (wheel), the rear (walk-around).
+- [ ] Draw the Cases page in the manual's dress (board 7 of the mockup): act headings, "→ §" labels, stamps.
+- [ ] Fold the Today cards (guide announcements, welcome back, protect your progress) into the home's Now strip; then retire the Today tab.
+- [ ] Curate the glossary per item (facts by tag are coarse: Oil shows 29 terms).
+- [ ] Wheel and underside figures: better drawings, or photos.
+- [ ] Chapter content that is still thin: 2.4 Parking brake, 3.2 Controls, 4.3 Suspension (parts-list reads only).
+- [ ] Desktop: consider the figure and the sheet side by side above 1000 px.
+
 ## Done
+- 2026-10-12: The manual (manual.js, data/manual.js, manual.css, theme.css): home with the side-view figure, five views, 28 items, chapters with evidence-based steps, unlock chain plus case openers, glow and resume markers, the gate wrapper, the crumb bar, photos as figures with draggable points, light and dark. tests/manual.js. The old tabs stay reachable through chapters and the back matter.
 - 2026-10-11: On-device photo reading with redaction (scan.js) and guided mode (guide.js), each with its own test.
 - 2026-10-11: Academy merged into Story as Training (Lesson buttons, Back to the case, Training library link). Trailer v3: a canvas cinematic with synthesized sound and a sport-wagon silhouette.
 - 2026-10-11: Sync through a private GitHub repo (sync.js; tests/sync.js mocks the GitHub API), skill tree with perks (skills.js), Timeline, proof photos, garage map, car pulse strip, swipeable Today, Listen buttons, Drive mode, cold-open teaser, backup nudge, a backup export that works outside Claude (share sheet or download), the teaser trailer rewrite, and a monthly iPhone reminder.

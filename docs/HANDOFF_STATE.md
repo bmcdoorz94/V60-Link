@@ -1,4 +1,6 @@
 ## 1. Current Active Objective
+**The redesign: the car is the menu.** Shipped 2026-10-12 as the new shell (see docs/GAME_DESIGN.md, "The manual"). Home = side view with five points → views → items → chapters. `src/js/data/manual.js` holds the spine; `src/js/modules/manual.js` the engine and UI; `src/css/manual.css` and `theme.css` the look. `tests/manual.js` covers it. Next: Kyle's photos as the figures (he will take them), the Cases page in the new dress, fold Today's cards into the home. Everything below this paragraph predates the redesign and still applies.
+
 **Get Live link working on the real car.** Kyle's OBDLink CX now connects in the official OBDLink app. In V60 Garage (Bluefy, Live link) it connected and then dropped instantly.
 
 Commit `16f762e` (2026-10-11) shipped a fix. It is **not yet confirmed on the real car**:

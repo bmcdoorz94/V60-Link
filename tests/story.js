@@ -9,9 +9,9 @@ const ctx=await b.newContext({viewport:vp,colorScheme:sch});await ctx.addInitScr
 const p=await ctx.newPage();const errs=[];p.on('pageerror',e=>errs.push('PE '+e.message));p.on('console',m=>{if(m.type()==='error')errs.push(m.text())});
 await p.goto('file://'+ROOT+'/index.html');await p.waitForTimeout(500);
 const rail=()=>p.evaluate(()=>[...document.querySelectorAll('#rail button span')].map(x=>x.textContent));
-ok(JSON.stringify(await rail())==='["Today","Learn","Car"]','start shows Today, Learn, Car only: '+await rail());
-ok(/Watch the prologue/.test(await p.textContent('#tdCards')),'prologue card on Today');
-ok(await p.isVisible('#tdSos'),'Something\'s wrong button on Today');
+ok(JSON.stringify(await rail())==='["The car","Cases","Glovebox","Link"]' && await p.evaluate(()=>document.querySelectorAll('#rail button.locked').length)===2,'start shows the four roots, Glovebox and Link locked: '+await rail());
+ok(/Watch the prologue/.test(await p.textContent('#mnHome')),'prologue row on the home');
+ok(await p.isVisible('#mnHome .mn-sos'),'Something\'s wrong button on the home');
 ok(!(await p.isVisible('.cockpit .gauge')),'health gauge hidden at start');
 await p.screenshot({path:SH+'s-today-'+nm+'.png',fullPage:true});
 await p.click('[data-jump="story:pro"]'); await p.waitForTimeout(150); await p.click('.cin-skip');
@@ -80,7 +80,7 @@ await p.click('[data-view="cases"]');
 await p.evaluate(()=>V60.jump('bay:oilcap')); ok(await p.evaluate(()=>!document.getElementById('p-engine').hidden && !!document.querySelector('[data-bi="oilcap"].sel')),'Show me where opens engine bay with part selected');
 // show everything
 await p.evaluate(()=>__v60.go('story')); await p.evaluate(()=>{document.getElementById('stOpts').open=true});
-await p.check('#stAll'); ok((await rail()).length===5,'Show everything reveals all sections');
+await p.check('#stAll'); ok(await p.evaluate(()=>document.querySelectorAll('#rail button.locked').length)===0 && await p.evaluate(()=>V60_GATE.visible('upgrades')),'Show everything unlocks the bar and every page');
 await p.uncheck('#stAll');
 console.log(' ov',await p.evaluate(()=>document.documentElement.scrollWidth-innerWidth),'errs',errs); if(errs.length) process.exitCode=1;
 await ctx.close();}

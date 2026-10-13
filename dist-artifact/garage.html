@@ -1,27 +1,28 @@
 <title>V60 Garage</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira:wdth,wght@75..125,400..800&family=Atkinson+Hyperlegible+Next:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="app.css">
 
 
 <div class="updatebar" id="updateBar" hidden role="status"><span>A new version of V60 Garage is ready.</span><button type="button">Refresh</button></div>
 <main>
   <header class="cockpit">
+    <div class="strip"><span class="brand">V60 Garage · Workshop manual</span><span class="status savest"><span id="saveStatus" role="status">Loading your saved data</span><button type="button" class="syncchip" id="syncChip" data-jump="opts:sync" hidden>Sync: off · Set up</button><button type="button" class="syncchip" id="guideBtn" data-guide="start" hidden>Guide me</button></span></div>
     <div class="ident">
-      <h1>V60 Garage</h1>
-      <p class="sub">2016 V60 T5 Premier, B4204T11 2.0 turbo, front-wheel drive</p>
+      <h1>2016 V60 T5</h1>
+      <p class="sub">Premier · B4204T11 2.0 turbo · front-wheel drive</p>
     </div>
     <div class="instruments">
       <button type="button" class="gauge" data-jump="tab:health" aria-label="Health score, open Health">
         <svg viewBox="0 0 120 74" aria-hidden="true"><path class="g-track" d="M12 66 A48 48 0 0 1 108 66"/><path class="g-fill" id="gFill" d="M12 66 A48 48 0 0 1 108 66" pathLength="100"/><g class="g-ticks"><line x1="12" y1="66" x2="20" y2="66"/><line x1="60" y1="18" x2="60" y2="26"/><line x1="108" y1="66" x2="100" y2="66"/><line x1="26" y1="32" x2="31.7" y2="37.7"/><line x1="94" y1="32" x2="88.3" y2="37.7"/></g></svg>
         <span class="g-val" id="hudScore">--</span><span class="g-lab">Health</span>
       </button>
-      <button type="button" class="rankchip" data-jump="tab:story" aria-label="Rank, open the story"><span class="rk" id="hudRank">Lv 1</span><span class="rn" id="hudRankName">Passenger</span></button>
+      <button type="button" class="rankchip" data-jump="tab:story" aria-label="Rank, open the cases"><span class="rk" id="hudRank">Lv 1</span><span class="rn" id="hudRankName">Passenger</span></button>
       <label class="odo"><span>Odometer</span><span class="odo-in"><input id="odo" type="number" inputmode="numeric" min="0" step="1" placeholder="Enter miles"><i>mi</i></span></label>
     </div>
     <div class="pulse" id="pulse" aria-label="Car status at a glance"></div>
-    <div class="status savest"><span id="saveStatus" role="status">Loading your saved data</span><button type="button" class="syncchip" id="syncChip" data-jump="opts:sync" hidden>Sync: off · Set up</button><button type="button" class="syncchip" id="guideBtn" data-guide="start" hidden>Guide me</button></div>
   </header>
   <nav class="rail" id="rail" aria-label="Sections"></nav>
+  <div id="crumb" class="crumb" hidden></div>
   <nav class="subnav" id="subnav" role="tablist" aria-label="Pages in this section"></nav>
 
   <!-- ACADEMY -->
@@ -530,15 +531,17 @@
 </main>
 
 
-<script>window.V60_VERSION="2026.10.13-0033-8e61f1a3";</script>
+<script>window.V60_VERSION="2026.10.12-2338-59dea1eb";</script>
 <script src="js/data/articles.js"></script>
 <script src="js/data/codebook.js"></script>
 <script src="js/data/facts.js"></script>
+<script src="js/data/manual.js"></script>
 <script src="js/modules/today.js"></script>
 <script src="js/modules/kb.js"></script>
 <script src="js/modules/cards.js"></script>
 <script src="js/modules/exam.js"></script>
 <script src="js/modules/story.js"></script>
+<script src="js/modules/manual.js"></script>
 <script src="js/modules/fuel.js"></script>
 <script src="js/modules/glovebox.js"></script>
 <script src="js/modules/diy.js"></script>

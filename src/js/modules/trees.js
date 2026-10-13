@@ -1,6 +1,6 @@
 /* Troubleshoot: yes/no decision trees per symptom. Node: {q, y, n} or outcome {r, sev: ok|watch|act|stop, cost, go: [[label, jump]]} */
 (function () {
-  var T = {
+  var T = window.V60_TREES = {
     cel: { t: "Check-engine light is on", start: "a", n: {
       a: { q: "Is the light flashing?", y: "flash", n: "b" },
       flash: { r: "A flashing check-engine light means an active misfire bad enough to damage the catalytic converter. Ease off, avoid hard acceleration and hills, and get the car checked today. If it shakes badly, pull over.", sev: "stop", cost: "Often coils or spark plugs: $150–$600", go: [["Read codes with V60 Link", "tab:live"], ["Misfire in the simulator", "tab:sim"]] },

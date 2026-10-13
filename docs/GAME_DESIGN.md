@@ -1,5 +1,21 @@
 # V60 Garage: how the game works
 
+## The manual (redesign, Oct 2026): the car is the menu
+Kyle's brief: an app a car person would want, not "an app Claude designed". Look at the car, tap a part, get that part's manual, and watch chapters unlock in order of difficulty. Mockup: the Design artifact "V60 Garage redesign mockup".
+
+- **Home ("The car")** is a side-view figure with five numbered points, one per **view**: 1 Engine bay (hood open), 2 Wheels & brakes (the wheel), 3 Cabin (inside), 4 Underside, 5 Lights & body (walk-around). Tapping a point shows a sheet (where you stand, what is next) and an Open button into that view. Below: a Now strip (pick up here, urgent health items, a waiting scene), the contents list, the back matter (every old page the gate allows), and the red "Something's wrong" list.
+- **A view** is a figure with numbered **items** (1.3 is the battery). The figure is a schematic drawing until the owner picks one of their own photos as the figure; the points start where they sit on the drawing and are dragged into place once ("Move points"). Positions are saved per view.
+- **An item** is one part's manual: up to five **chapters** in order of difficulty, K Know it, C Check it, S Service it, D Diagnose it, U Upgrade it. Only chapters with sourced content exist. An item page shows "Your car" specs (from the car's data and the owner's photo readings, marked unconfirmed), the chapters, a glossary of facts by topic (locked terms show as black boxes), and evidence photos.
+- **A chapter** is a short procedure: numbered steps that are things done elsewhere in the app (a Training lesson, a Library article, a DIY job, a troubleshooter, a photo, a record, a real scan, a receipt, a bulletin mark, an upgrade decision). Each step names its evidence and has a Go button; the crumb bar at the top of the old page leads back. Steps whose only evidence is "you went there" can also be confirmed by hand. A chapter closes when every step is done; it gets a dated stamp.
+- **Unlocking, both ways.** The chapter before it in the same item opens the next one. A closed chapter can open chapters elsewhere (`opens`), at most two at a time so the car never lights up everywhere. A story case that is available opens its item's first chapter early (`caseOpens`): The Signal opens 3.3 the port, The Belt opens 1.4, The Thirst 1.1, The Light 2.1, The Paper Trail 3.5. Chapter 0, Before you touch anything (the Safe to Touch missions), opens 1.1 and 1.2; nothing else opens before it closes.
+- **Two markers, by Kyle's choice.** Amber glow = a chapter is open and has never been opened; it stops the first time the chapter page is shown. Amber dot = the one chapter you last opened and have not closed ("pick up here"). Both roll up from chapter to item to view, so the home shows at a glance where something new is and where you left off.
+- **The gate.** An old page (Library, DIY, Troubleshoot, Bulletins, Data lab, ...) is reachable once an open chapter's step points at it, or once the story reveals it as before. The bar always shows four roots: The car, Cases, Glovebox, Link; Glovebox and Link are drawn locked until 3.5 or The Paper Trail, and 3.3 or The Signal.
+- **The story moves into the Cases drawer** (the Story tab). Each case still closes from evidence; the manual's chapters reuse the same evidence, so a chapter page says which case step it is.
+- **Instruments stay instruments.** Live link and the Data lab keep gauges and teal traces.
+- **Look.** A workshop manual: paper and ink, hairline rules, numbered sections, condensed display type (Barlow Condensed), IBM Plex Sans body, IBM Plex Mono numbers and labels. Square corners, no shadows, one accent (amber) that only ever means new. Light and dark.
+- **Not built yet:** wheel and underside figures are schematic only; the Cases page keeps its old layout inside the new dress; Today's cards (guide announcements, welcome back) live under Back matter, Today's notes.
+
+
 The app is a real-life game about one car. The main story, "The As-Is File", drives everything. On day one almost nothing is visible. Each case you open reveals the tools it needs, and finishing acts unlocks side content. Every objective is something done on or for the real car, then recorded in the app.
 
 ## Start

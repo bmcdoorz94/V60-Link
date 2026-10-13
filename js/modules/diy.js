@@ -1,6 +1,6 @@
 /* DIY job cards from Volvo's 2016 V60 US owner's manual. Completing a job logs it and can rate the part. */
 (function () {
-  var JOBS = [
+  var JOBS = window.V60_DIY = [
     { id: "j-oilcheck", t: "Check the oil level", lvl: 1, min: 3, cost: "Free", tools: [], part: "oilfilter", pg: "337",
       steps: ["Park on level ground. The reading is right after about 20 miles of driving or 5 minutes parked level with the engine off.", "Put the ignition in mode II: key in, press START/STOP ENGINE for about 2 seconds with your foot off the brake.", "Roll the thumb wheel on the left steering-wheel stalk until Oil level appears.", "Read the bar between min and max. 'No values available' only means conditions are not met yet.", "If it says low, top up with the amount shown, using the same oil type already in the engine. Never above max."],
       warn: ["'Oil service required' can mean the level is too high. Volvo says take it to a workshop.", "Do not spill oil on the hot exhaust."] },

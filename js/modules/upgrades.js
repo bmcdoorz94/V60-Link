@@ -1,6 +1,6 @@
 /* Upgrades: ranked for this car and this owner, with a "should I" check per item. Prices only where a source gave one. */
 (function () {
-  var UP = [
+  var UP = window.V60_UPGRADES = [
     { id: "tires", t: "A matched set of good all-season tires", cat: "Safety", lo: 400, hi: 800, costNote: "for four tires before mounting and balancing (the Garage's budget range)", diff: "Shop job", rev: "Normal wear item",
       what: "Your size is 215/50R17. Tires in that size from the research: Michelin CrossClimate 2, Michelin Primacy Tour A/S, Continental PureContact LS, Pirelli P7 AS Plus 3. Live prices were not checked.",
       why: "Tires are the single biggest change to braking and wet grip. Your car's tire monitor compares wheel speeds, so Volvo's bulletin TJ29818 wants all four within 5% rolling circumference: mismatched or unevenly worn tires can keep the warning on.",
