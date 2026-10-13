@@ -115,6 +115,7 @@ details summary { cursor: pointer; font-weight: 600; }
         <li>iPhone: Bluefy needs Bluetooth permission. Check Settings, then Bluefy, then Bluetooth is on.</li>
         <li>Tap Connect and pick the adapter from the list. Its name is often OBDII, OBDBLE, IOS-Vlink, OBDLink CX or similar.</li>
         <li>Close any other OBD app first, because only one app can talk to the adapter at a time.</li>
+      <li>Empty picker? The adapter only shows while it is advertising, and it stops once the phone holds a link to it. Close this picker, quit Bluefy fully, unplug the adapter for ten seconds, plug it back in, then try again. Music over Bluetooth is fine.</li>
         <li>OBDLink CX: it accepts a new pairing only during the first 5 minutes after it powers up. If it does not show up, unplug it, plug it back in, and connect right away.</li>
       </ol>
     </details>
@@ -264,12 +265,23 @@ details summary { cursor: pointer; font-weight: 600; }
         return rxChar.startNotifications();
       }).then(function () { log("..", "notifications on (" + short(rxChar.uuid) + ")"); return sleep(350); });
     }
+    /* The picker lists only adapters that are advertising, and the CX stops advertising while the phone still holds a link to it
+       (Bluefy keeps one after "allow future background connections"). So first try the adapter picked last time, without the picker. */
+    function remembered() {
+      var name = null; try { name = localStorage.getItem("v60-link-dev"); } catch (e) {}
+      if (!name || !navigator.bluetooth.getDevices) return Promise.resolve(null);
+      return navigator.bluetooth.getDevices().then(function (list) { var d = (list || []).filter(function (x) { return x.name === name; })[0]; if (d) log("..", "trying " + name + " from last time, no picker"); return d || null; }, function () { return null; });
+    }
     self.open = function () {
-      return navigator.bluetooth.requestDevice({ acceptAllDevices: true, optionalServices: KNOWN_SERVICES }).then(function (d) {
+      return remembered().then(function (known) {
+        if (known) return known;
+        return navigator.bluetooth.requestDevice({ acceptAllDevices: true, optionalServices: KNOWN_SERVICES });
+      }).then(function (d) {
         dev = d; self.name = d.name || "adapter"; log("..", "picked " + self.name);
+        try { if (d.name) localStorage.setItem("v60-link-dev", d.name); } catch (e) {}
         d.addEventListener("gattserverdisconnected", function () { log("!!", "the adapter dropped the Bluetooth link" + (self.lastCmd ? " (last command sent: " + self.lastCmd + ")" : "")); if (waiter) { var w = waiter; waiter = null; var de = new Error("The adapter is not connected."); de.name = "NetworkError"; w.reject(de); } if (self.connecting) { self.dropped = true; return; } if (self.onclose) self.onclose(); });
         return d.gatt.connect();
-      }).then(function (server) { log("..", "GATT connected"); return attach(server); });
+      }).then(function (server) { log("..", "GATT connected"); return attach(server); }, function (e) { try { localStorage.removeItem("v60-link-dev"); } catch (x) {} throw e; });
     };
     self.reopen = function () { self.dropped = false; return dev.gatt.connect().then(function (server) { log("..", "GATT reconnected"); return attach(server); }); };
     self.send = function (cmd, timeoutMs) {
