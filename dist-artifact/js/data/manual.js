@@ -66,7 +66,7 @@ window.V60_MANUAL_DATA = (function () {
         { tier: "S", t: "Service it", d: "The cabin filter is the first real job: no tools, behind the glovebox. Your first wrench.", steps: [{ diy: "j-cabin" }] }
       ] },
     { id: "bfluid", view: "bay", num: "1.6", n: "Brake fluid", d: "The reservoir at the firewall on the driver's side. A slow drop is the pads wearing; a sudden drop is a leak.", bay: "brake", part: "bfluid", record: "brakefluid", tags: ["Fluids"], at: [320, 40],
-      spec: [["Fluid", "DOT 4"], ["Volvo interval", "Every other year"]],
+      spec: [["Fluid", "DOT 4"], ["Volvo interval", "Every other year"], ["Where, your photo", "Under the round cover on the driver's side of the cowl; the yellow cap says DOT 4 from a sealed container, clean the cap before removing"]],
       chapters: [
         { tier: "K", t: "Know it", d: "Where it is, what the level means, and why you don't just top it up.", steps: [{ bay: "brake", t: "Find the reservoir on the map" }] },
         { tier: "C", t: "Check it", d: "Between MIN and MAX with the cap closed. Low means get the brakes looked at.", steps: [{ diy: "j-fluids" }] }
@@ -78,6 +78,7 @@ window.V60_MANUAL_DATA = (function () {
         { tier: "C", t: "Check it", d: "Top it up. Done.", steps: [{ diy: "j-fluids" }] }
       ] },
     { id: "fuses", view: "bay", num: "1.8", n: "Fuses", d: "The fuse box in the bay and the second one near the cowl on start/stop cars. The lid shows the map.", bay: "fusebox", part: "modules", tags: ["Electrical"], at: [234, 64],
+      spec: [["Where, your photo", "The black box on the driver's side next to the air intake duct, lid marked with a fuse and a book symbol; the box behind it carries the battery symbol"]],
       chapters: [
         { tier: "K", t: "Know it", d: "Where the fuse boxes are and which fuses Volvo says an owner may change.", steps: [{ kb: "a-fuses" }, { bay: "fusebox", t: "Find the fuse box on the map" }] },
         { tier: "S", t: "Service it", d: "Pull, inspect, replace with the same rating. Never a higher one.", steps: [{ diy: "j-fuse" }] }

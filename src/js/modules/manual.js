@@ -399,7 +399,8 @@
     var d = D(api), f = FIG[v.fig] || FIG.side, pins = {};
     /* first guess: where each point sits on the drawing. The bay map's pins, if any, are better. */
     var legacy = v.id === "bay" && api.state.bayMap && api.state.bayMap.pins ? api.state.bayMap.pins : {};
-    v.items.forEach(function (it) { var lp = it.bay && legacy[it.bay]; pins[it.id] = lp ? [1 - lp[0], 1 - lp[1]] : [it.at[0] / 358, it.at[1] / f.h]; });
+    /* pins from the old engine-bay map were placed on the owner's own photo, so they carry over as they are */
+    v.items.forEach(function (it) { var lp = it.bay && legacy[it.bay]; pins[it.id] = lp ? [lp[0], lp[1]] : [it.at[0] / 358, it.at[1] / f.h]; });
     d.views[v.id] = { photo: photoId, pins: pins }; ui.arrange = true; ui.fm = null; api.save();
   }
   function wire(api) {
