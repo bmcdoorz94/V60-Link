@@ -32,8 +32,7 @@ Update 2026-10-12: Kyle reports it still drops with the OBDLink app closed and a
    1. When Kyle sends the five photos (side-on, engine bay, driver's seat, front wheel, rear), check them in the app as the figures ("Your photo" in each view) and that the scanner blacked out the VIN on anything with a label in frame.
    2. Retire the Today tab: move "welcome back", "protect your progress" and the garage map somewhere sensible (the Now strip or Cases), then drop the panel. `today.js` still renders module cards; the home only counts them.
    3. Better wheel and underside figures (`FIG` in `src/js/modules/manual.js`), or rely on photos.
-   4. Thin items: 2.4 Parking brake, 3.2 Controls, 4.3 Suspension have one or two chapters with parts-list reads only. Add sourced content before adding chapters.
-   5. Desktop: figure and sheet side by side above 1000 px.
+   4. Desktop: figure and sheet side by side above 1000 px.
 
 1. **Confirm the connection fix with Kyle at the car.**
    1. Close the OBDLink app fully, re-plug the adapter, start the engine, then reload the app in Bluefy.

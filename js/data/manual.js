@@ -104,16 +104,24 @@ window.V60_MANUAL_DATA = (function () {
         { tier: "C", t: "Check it", d: "Set all four pressures cold, then run the calibration in the car's menu.", steps: [{ diy: "j-tires" }] },
         { tier: "D", t: "Diagnose it", d: "If the light returns after a correct calibration, the fault is in the car, not the tires. Bulletin TJ29818 covers one cause.", steps: [{ tree: "tpms" }, { tsb: "TJ29818", t: "Read bulletin TJ29818 and mark it", go: "tsb:TJ29818" }] }
       ] },
-    { id: "brakes", view: "wheel", num: "2.3", n: "Brake pads & rotors", d: "Visible through the spokes. Pad thickness and the rotor's lip tell most of the story.", part: "pads", record: "brakes", tags: ["Maintenance"], photo: ["brake"], at: [195, 118],
+    { id: "brakes", view: "wheel", num: "2.3", n: "Brake pads & rotors", d: "Visible through the spokes. Pad thickness and the rotor's lip tell most of the story.", part: "pads", record: "brakes", tags: ["Brakes", "Maintenance"], photo: ["brake"], at: [195, 118],
       chapters: [
         { tier: "K", t: "Know it", d: "What pads, rotors and calipers do, and what the parts list says to look for.", steps: [{ part: "pads", t: "Read the brake pads entry in the parts list" }, { part: "rotors", t: "Read the brake discs entry" }], opens: ["2.4.1"] },
         { tier: "C", t: "Check it", d: "Photograph the pad edge through the spokes and log an inspection. A shop does the rest.", steps: [{ photo: "brake", t: "Photograph a brake pad through the wheel", go: "tab:my" }, { record: "brakes", t: "Log a brake inspection", go: "tab:records" }], opens: ["4.1.1"] },
         { tier: "D", t: "Diagnose it", d: "Squeal, grind, pulsing, a soft pedal: what each one usually is.", steps: [{ tree: "brakes" }] },
         { tier: "U", t: "Upgrade it", d: "Fresh pads and rotors when worn. A shop job on this car; the rear linings are workshop-only in Volvo's manual.", steps: [{ upg: "brakes" }] }
       ] },
-    { id: "parking", view: "wheel", num: "2.4", n: "Parking brake", d: "Electric on this car. The switch is in the cabin; the mechanism is at the rear wheels.", part: "parking", tags: ["Maintenance"], at: [290, 180],
+    { id: "parking", view: "wheel", num: "2.4", n: "Parking brake", d: "Electric on this car: a control on the console, a motor at the wheels. It has its own messages, and a flat battery locks it.", part: "parking", tags: ["Brakes"], at: [290, 180],
+      spec: [["Type", "Electric, control on the console"], ["Emergency use", "Hold the control while moving; a signal sounds above 6 mph"], ["Flat battery", "Cannot apply or release"]],
       chapters: [
-        { tier: "K", t: "Know it", d: "How the electric parking brake works and what Volvo says you can and can't service.", steps: [{ part: "parking", t: "Read the parking brake entry in the parts list" }] }
+        { tier: "K", t: "Know it", d: "Applying, releasing by hand and automatically, the emergency use, the messages, and why a flat battery locks it. All from Volvo's manual for this car.", steps: [{ kb: "a-parkbrake" }, { part: "parking", t: "Read the parking brake entry in the parts list" }] },
+        { tier: "C", t: "Check it", d: "Work it once, parked, and learn what normal looks like: the flashing symbol, the faint motor sound, the pedal that moves a little.", time: "5 minutes, parked", steps: [
+          { manual: "pb-apply", t: "Apply it and watch the symbol", why: "Foot firmly on the brake pedal, push the control. The symbol flashes, then stays lit. The faint motor sound and the slight pedal movement are normal." },
+          { manual: "pb-release", t: "Release it both ways", why: "By hand: belt on, ignition on, brake pedal down, pull the control. Automatically: engine running, belt on, D or R, accelerator. It will not auto-release without the belt." },
+          { manual: "pb-msg", t: "Note any message", why: "\"Park brake not fully released\", \"Parking brake not applied\" or \"Service required\" is a fault. Apply and release several times. If it stays, a Volvo workshop.", optional: true }] },
+        { tier: "D", t: "Diagnose it", d: "A message that stays, and the one cause you can fix yourself: a battery too low to move the motor.", steps: [
+          { manual: "pb-fault", t: "If a message stays after several tries, log it and book the workshop", why: "Until it is fixed, park in P with the wheels turned into the curb. Driving with the message gives a warning sound.", go: "tab:diag" },
+          { diy: "j-jump", t: "Know the jump-start order: a flat battery locks the parking brake" }] }
       ] },
 
     /* ---------- view 3: cabin ---------- */
@@ -123,10 +131,15 @@ window.V60_MANUAL_DATA = (function () {
         { tier: "C", t: "Check it", d: "Which lights are on right now, photographed, so the record starts today.", steps: [{ photo: "dash", t: "Photograph the display with the ignition on", why: "The app reads the text on your phone.", go: "tab:my" }], opens: ["3.2.1", "5.1.1"] },
         { tier: "D", t: "Diagnose it", d: "The check-engine light, steady or flashing, and what to do in each case.", steps: [{ tree: "cel" }] }
       ] },
-    { id: "controls", view: "cabin", num: "3.2", n: "Controls & start/stop", d: "The start button, the drive modes, the parking brake switch, and when start/stop refuses to stop the engine.", tags: ["Basics"], at: [230, 120],
+    { id: "controls", view: "cabin", num: "3.2", n: "Controls & start/stop", d: "The START/STOP ENGINE button, the three ignition modes it steps through, the Eco button if your car has one, and when start/stop refuses to stop the engine.", tags: ["Basics"], at: [230, 120],
+      spec: [["Ignition modes", "0, I (press briefly), II (hold about 2 s), foot off the brake"], ["No start after 3 tries", "Wait 3 minutes"], ["Eco button", "Optional on some four-cylinders; unconfirmed on yours"]],
       chapters: [
-        { tier: "K", t: "Know it", d: "When start/stop stops, when it won't, and how to turn it off for a drive.", steps: [{ kb: "a-startstop" }] },
-        { tier: "D", t: "Diagnose it", d: "Start/stop not stopping the engine is usually a condition, not a fault.", steps: [{ tree: "ss" }] }
+        { tier: "K", t: "Know it", d: "Starting, the three ignition modes without the engine, the key rules, and how start/stop decides when to stop.", steps: [{ kb: "a-ignition" }, { kb: "a-startstop" }] },
+        { tier: "C", t: "Check it", d: "Step through the ignition modes once, parked, and use mode II as a lamp check.", time: "5 minutes, parked", steps: [
+          { manual: "ign-1", t: "Ignition mode I without starting", why: "Key in the slot, foot off the brake, press START/STOP ENGINE briefly. Windows, wipers and the blower work. Press briefly again to go back to 0." },
+          { manual: "ign-2", t: "Mode II: hold the button about 2 seconds", why: "Headlights come on and every warning light shows for 5 seconds: that is your bulb-and-lamp check. Only for a moment, to spare the battery. Back to 0 with a brief press." },
+          { manual: "eco-btn", t: "Look for an ECO button on the centre console", why: "Volvo's US manual calls Eco optional on certain four-cylinders. Unconfirmed on your car until you look; note what you find.", optional: true }] },
+        { tier: "D", t: "Diagnose it", d: "Start/stop not stopping the engine is usually a condition, not a fault. And the economical-driving list from Volvo's manual.", steps: [{ tree: "ss" }, { kb: "a-steering", t: "Read: economical driving, Volvo's list (in the steering article)" }] }
       ] },
     { id: "port", view: "cabin", num: "3.3", n: "The diagnostic port", d: "Under the dash on the driver's side. The adapter plugs in here and the car starts talking. Live link lives here.", tags: ["Diagnostics"], at: [62, 186], instrument: true,
       chapters: [
@@ -159,10 +172,15 @@ window.V60_MANUAL_DATA = (function () {
         { tier: "K", t: "Know it", d: "How the emissions inspection works here and what makes a car fail.", steps: [{ kb: "a-inspect" }], opens: ["4.4.1"] },
         { tier: "C", t: "Check it", d: "Readiness monitors from a real health check, before the inspection, not at it.", steps: [{ scans: 1, t: "A health check with readiness monitors", go: "tab:live" }] }
       ] },
-    { id: "susp", view: "under", num: "4.3", n: "Suspension & steering", d: "Struts, arms, bushings, the steering rack. Noises and feelings are the diagnostics.", part: "struts", tags: ["Drivetrain"], at: [60, 118],
+    { id: "susp", view: "under", num: "4.3", n: "Suspension & steering", d: "Struts, arms, bushings, and a fully electric steering rack with no fluid to check. Noises and feelings are the diagnostics.", part: "struts", tags: ["Drivetrain", "Steering"], at: [60, 118],
+      spec: [["Steering", "Electric, no pump or fluid"], ["Wheel adjustment", "Lever under the column: height and reach, parked only"], ["Steering force menu", "Optional; unconfirmed on yours"]],
       chapters: [
-        { tier: "K", t: "Know it", d: "What each part does, from the parts list.", steps: [{ part: "struts", t: "Read the struts entry" }, { part: "arms", t: "Read the control arms entry" }] },
-        { tier: "D", t: "Diagnose it", d: "What that noise, that smell and that feeling mean.", steps: [{ mission: "m-sound" }, { mission: "m-feel" }, { tree: "vibe" }] }
+        { tier: "K", t: "Know it", d: "Adjusting the wheel, the steering force setting, what is on the wheel, and what each suspension part does.", steps: [{ kb: "a-steering" }, { part: "struts", t: "Read the struts entry" }, { part: "arms", t: "Read the control arms entry" }] },
+        { tier: "C", t: "Check it", d: "Set the wheel for you, look for the steering force menu, and learn what the car feels like when it is right.", steps: [
+          { manual: "sw-adj", t: "Set the steering wheel, parked", why: "Pull the lever toward you, move the wheel for height and reach, push the lever back. Press the wheel lightly if the lever is stiff. Never while driving." },
+          { manual: "sw-force", t: "Find the steering force setting", why: "My Car, then Car settings, then Steering wheel force: Low, Medium, High. Optional equipment; if the entry is not there, your car does not have it. Note which.", optional: true },
+          { mission: "m-feel" }] },
+        { tier: "D", t: "Diagnose it", d: "What that noise and that feeling mean, and the vibration tree.", steps: [{ mission: "m-sound" }, { tree: "vibe" }] }
       ] },
     { id: "trans", view: "under", num: "4.4", n: "Transmission & driveline", d: "The Aisin 8-speed and the front axles. Volvo says the fluid needs no change in normal use.", part: "atf", record: "trans", tags: ["Drivetrain"], at: [96, 78],
       chapters: [

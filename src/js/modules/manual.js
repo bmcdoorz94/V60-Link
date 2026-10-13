@@ -132,6 +132,7 @@
       toast = { t: closedNow.map(label).join(", ") + " closed", d: opened.length ? "Unlocked: " + opened.map(longLabel).join(" · ") : "" };
     }
     if (changed) api.save();
+    unlockTerms(api);
     return changed;
   }
 
@@ -149,8 +150,15 @@
     });
     return set;
   }
+  function neededArticles(api) {
+    var x = compute(api), set = {};
+    CHLIST.forEach(function (c) { if (x.open[c.id]) c.steps.forEach(function (s) { if (s.kb) set[s.kb] = 1; }); });
+    return set;
+  }
   function installGate() {
     var inner = window.V60_GATE || {};
+    /* an article an open chapter points at is in the Library already */
+    if (window.V60_KNOW && window.V60_KNOW.article) { var innerArt = window.V60_KNOW.article; window.V60_KNOW.article = function (id) { return innerArt(id) || !!(API && neededArticles(API)[id]); }; }
     window.V60_GATE = {
       visible: function (tab) { if (!API) return true; if (ROOTS[tab]) return true; if (inner.visible && inner.visible(tab)) return true; return !!neededTabs(API)[tab]; },
       feature: function (f) { return inner.feature ? inner.feature(f) : true; },
@@ -298,15 +306,27 @@
       return '<button type="button" class="mn-ch ' + st + '" data-ch="' + c.id + '"' + (st === "locked" ? ' aria-disabled="true"' : "") + '><span class="n">' + c.id + '</span><span class="b"><span class="t">' + esc(c.t) + '</span><span class="d">' + esc(c.d) + '</span></span><span class="s">' + right + "</span></button>";
     }).join("") + "</section>";
     /* glossary */
-    /* the item's glossary: facts on its topics, the ones that mention the part first, eight at most */
-    var words = (it.n.toLowerCase() + " " + it.id).split(/[^a-z]+/).filter(function (w) { return w.length > 2 && w !== "and" && w !== "the"; });
-    var facts = (window.V60_FACTS || []).filter(function (f) { return (it.tags || []).indexOf(f.tag) >= 0; }).map(function (f) { var txt = ((f.k || "") + " " + f.q).toLowerCase(), sc = 0; words.forEach(function (w) { if (txt.indexOf(w) >= 0) sc++; }); return { f: f, sc: sc }; }).sort(function (a, b) { return b.sc - a.sc; }).slice(0, 8).map(function (x) { return x.f; });
-    var known = facts.filter(function (f) { return !window.V60_KNOW || window.V60_KNOW.fact(f); });
+    var facts = glossary(it), known = facts.filter(function (f) { return !window.V60_KNOW || window.V60_KNOW.fact(f); });
     if (facts.length) h += '<section class="mn-list"><div class="mn-kick"><span>GLOSSARY · ' + known.length + " OF " + facts.length + ' UNLOCKED</span></div><div class="mn-chips">' + facts.map(function (f) { var k = known.indexOf(f) >= 0; return k ? '<button type="button" class="mn-chip" data-jump="ask:' + esc(f.q) + '">' + esc(f.q.replace(/\?$/, "")) + "</button>" : '<span class="mn-chip locked" aria-label="locked term">' + "■".repeat(Math.max(4, Math.min(10, Math.round(f.q.length / 4)))) + "</span>"; }).join("") + "</div>" + (known.length < facts.length ? '<p class="status">Locked terms open with the chapters.</p>' : "") + "</section>";
     /* evidence */
     var ph = (api.state.photos || []).filter(function (p) { return (it.photo || []).indexOf(p.kind) >= 0 || (it.part && p.part === it.part); }).slice(-4).reverse();
     h += '<section class="mn-list"><div class="mn-kick"><span>EVIDENCE ON FILE</span></div>' + (ph.length ? '<div class="mn-thumbs">' + ph.map(function (p) { return '<button type="button" data-jump="tab:my"><img src="' + esc(api.photoUrl(p)) + '" alt="' + esc(p.kind) + " photo from " + esc(p.date) + '"><span>' + esc(p.date) + "</span></button>"; }).join("") + "</div>" : '<p class="status">No photos of this part yet.</p>') + '<button type="button" class="quiet" data-jump="tab:my">Photos</button></section>';
     $("mnItem").innerHTML = h;
+  }
+  /* the item's glossary: facts on its topics, the ones that mention the part first, eight at most */
+  function glossary(it) {
+    var words = (it.n.toLowerCase() + " " + it.id).split(/[^a-z]+/).filter(function (w) { return w.length > 2 && w !== "and" && w !== "the"; });
+    return (window.V60_FACTS || []).filter(function (f) { return (it.tags || []).indexOf(f.tag) >= 0; }).map(function (f, i) { var txt = ((f.k || "") + " " + f.q).toLowerCase(), sc = 0; words.forEach(function (w) { if (txt.indexOf(w) >= 0) sc++; }); return { f: f, sc: sc, i: i }; }).sort(function (a, b) { return b.sc - a.sc || a.i - b.i; }).slice(0, 8).map(function (x) { return x.f; });
+  }
+  /* glossary terms unlock with the chapters: each closed chapter of an item opens its share of the item's eight */
+  function unlockTerms(api) {
+    var K = window.V60_KNOW; if (!K || !K.discover) return;
+    var x = compute(api);
+    ITEMS.forEach(function (it) {
+      var closed = it.chapters.filter(function (c) { return x.closed[c.id]; }).length; if (!closed) return;
+      var g = glossary(it), n = Math.ceil(g.length * closed / it.chapters.length);
+      g.slice(0, n).forEach(function (f) { if (!K.fact(f)) K.discover("f", f.id); });
+    });
   }
   function lastDot(api, it) { if ((it.photo || []).indexOf("sidewall") < 0) return null; var ps = (api.state.photos || []).filter(function (p) { return p.ai && p.ai.dot; }); return ps.length ? ps[ps.length - 1].ai.dot : null; }
   function lockedAfter(api, c) { var prev = c.item && c.idx > 0 ? c.item.chapters[c.idx - 1] : null; if (prev) return prev.id; var w = []; CHLIST.forEach(function (o) { if ((o.opens || []).indexOf(c.id) >= 0) w.push(o.id); }); return w[0] || "the story"; }
