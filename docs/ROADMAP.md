@@ -66,14 +66,13 @@ Story case board shipped. 24 tabs across Today, Learn, Car, Check and Data. Test
 
 ## Redesign backlog (after 2026-10-12)
 - [ ] Kyle's photos for the views: straight side-on of the whole car (home), engine bay from the bumper (hood), from the driver's seat (cabin), the front wheel straight on (wheel), the rear (walk-around).
-- [ ] Draw the Cases page in the manual's dress (board 7 of the mockup): act headings, "→ §" labels, stamps.
-- [ ] Fold the Today cards (guide announcements, welcome back, protect your progress) into the home's Now strip; then retire the Today tab.
-- [ ] Curate the glossary per item (facts by tag are coarse: Oil shows 29 terms).
+- [ ] Retire the Today tab once its remaining cards (welcome back, protect your progress, the garage map) have a home elsewhere. The home's Now strip already counts the notes and links there.
 - [ ] Wheel and underside figures: better drawings, or photos.
 - [ ] Chapter content that is still thin: 2.4 Parking brake, 3.2 Controls, 4.3 Suspension (parts-list reads only).
 - [ ] Desktop: consider the figure and the sheet side by side above 1000 px.
 
 ## Done
+- 2026-10-13: Cases page in the manual's dress (act headings, → § labels to the items a case points at, stamps, the Next box); the home's Now strip counts today's notes; item glossaries limited to the eight facts closest to the part.
 - 2026-10-12: The manual (manual.js, data/manual.js, manual.css, theme.css): home with the side-view figure, five views, 28 items, chapters with evidence-based steps, unlock chain plus case openers, glow and resume markers, the gate wrapper, the crumb bar, photos as figures with draggable points, light and dark. tests/manual.js. The old tabs stay reachable through chapters and the back matter.
 - 2026-10-11: On-device photo reading with redaction (scan.js) and guided mode (guide.js), each with its own test.
 - 2026-10-11: Academy merged into Story as Training (Lesson buttons, Back to the case, Training library link). Trailer v3: a canvas cinematic with synthesized sound and a sport-wagon silhouette.
