@@ -99,6 +99,7 @@ details summary { cursor: pointer; font-weight: 600; }
     <div class="row">
       <span class="conn" id="conn" role="status"><i></i><span id="connText">Not connected</span></span>
     </div>
+    <div class="row" id="connFail" hidden><button type="button" class="quiet" id="btnCopyLog2">Copy the adapter log</button><span class="status" id="connFailMsg">Paste it into the chat so the failure can be read step by step.</span></div>
     <div id="noBt" class="note" hidden></div>
     <div class="row">
       <button type="button" id="btnConnect">Connect adapter</button>
@@ -457,7 +458,7 @@ details summary { cursor: pointer; font-weight: 600; }
   }
   function connect(transport) {
     link = transport;
-    setConn("busy", "Connecting...");
+    setConn("busy", "Connecting..."); $("connFail").hidden = true;
     transport.onclose = function () { link = null; enable(false); setConn("", "Disconnected"); stopLive(); };
     transport.connecting = true;
     function attempt(first) {
@@ -477,14 +478,15 @@ details summary { cursor: pointer; font-weight: 600; }
       transport.connecting = false;
       try { transport.close(); } catch (x) {}
       link = null; enable(false);
-      var msg = e && e.name === "NotFoundError" ? "No adapter chosen." : (e && e.name === "SecurityError" ? "This page is not allowed to use Bluetooth here. Open it directly in Bluefy, Chrome or Edge, not inside another app's preview." : ((e && e.message) || "Could not connect."));
+      var msg = e && e.name === "NotFoundError" ? "No adapter chosen." : (e && e.name === "SecurityError" ? "This page is not allowed to use Bluetooth here. Open it directly in Bluefy, Chrome or Edge, not inside another app's preview." : ((e && e.message) || ("Could not connect" + (e && e.name ? " (" + e.name + ")" : "") + ". The adapter log at the bottom says where it stopped.")));
       if (e && e.message === "timeout") msg = "The adapter stopped answering. Unplug it, plug it back in, and try again.";
       var em = String((e && e.message) || "") + " " + String((e && e.name) || "");
       if (/encrypt|authenticat|insufficient|pair|bond/i.test(em)) msg = "The adapter needs to pair with this phone first. Unplug it, plug it back in, then tap Connect within 5 minutes and accept the pairing request (PIN 123456 if asked).";
       else if (e && e.name === "NetworkError") msg = "The Bluetooth link dropped. Close the OBDLink app or any other OBD app (only one app can hold the adapter), unplug and replug the adapter, then try again within 5 minutes.";
       else if (e && e.name === "NotAllowedError") msg = "Bluetooth permission was refused. On iPhone: Settings, then Bluefy, then turn Bluetooth on.";
-      log("!!", "connect failed: " + em);
+      log("!!", "connect failed: " + em + (e && e.stack ? " | " + String(e.stack).slice(0, 160).replace(/\s+/g, " ") : ""));
       setConn("", msg);
+      if (!(e && e.name === "NotFoundError")) { $("connFail").hidden = false; }
     });
   }
   $("btnConnect").addEventListener("click", function () {
@@ -674,7 +676,14 @@ details summary { cursor: pointer; font-weight: 600; }
     }).catch(function (e) { $("clearStatus").textContent = (e && e.message) || "Clear failed."; armClear(); });
   });
 
-  $("btnCopyLog").addEventListener("click", function () { try { navigator.clipboard.writeText(logLines.join("\n")); } catch (e) {} });
+  function copyLog(btn) {
+    var text = logLines.join("\n") || "(empty log)";
+    var done = function () { if (btn) { btn.textContent = "Copied"; setTimeout(function () { btn.textContent = btn.id === "btnCopyLog2" ? "Copy the adapter log" : "Copy log"; }, 1500); } };
+    try { navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text); done(); }); } catch (e) { fallbackCopy(text); done(); }
+  }
+  function fallbackCopy(text) { try { var ta = document.createElement("textarea"); ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.top = "-1000px"; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta); } catch (e) {} }
+  $("btnCopyLog").addEventListener("click", function () { copyLog(this); });
+  $("btnCopyLog2").addEventListener("click", function () { copyLog(this); });
 
   window.__link = { parseResponse: parseResponse, dtcsFrom: dtcsFrom, decodeDTC: decodeDTC, SimTransport: SimTransport, csv: csv, live: live, getReport: function () { return report; }, sim: function () { return link; } };
 })();
