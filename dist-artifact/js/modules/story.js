@@ -390,9 +390,16 @@
   }
   function proofs(api, cid, i) { return (api.state.photos || []).filter(function (p) { return p.kind === "proof" && p.cs === cid && (i == null || p.st === i); }); }
   var PILL = { unknown: ["Unknown", "none"], lead: ["Lead", "info"], evidence: ["Evidence", "watch"], closed: ["Closed", "ok"], risk: ["Known risk", "concern"] };
+  /* which items of the manual this case points at ("→ §2.1 TIRES"), from the manual's caseOpens */
+  function pointsAt(c) {
+    var esc = API.esc, M = window.V60_MANUAL, ids = (window.V60_MANUAL_DATA && window.V60_MANUAL_DATA.caseOpens[c.id]) || [], seen = {}, out = [];
+    ids.forEach(function (id) { var ch = M && M.chapters[id]; var k = ch ? (ch.item ? ch.item.num + " " + ch.item.n : "0 " + ch.n) : id; if (!seen[k]) { seen[k] = 1; out.push({ k: k, ch: ch }); } });
+    if (!out.length) return "";
+    return '<div class="cto">' + out.map(function (o) { return '<button type="button" class="mn-pill" data-jump="' + (o.ch && o.ch.item ? "item:" + o.ch.item.id : "ch:0") + '">→ §' + esc(o.k) + "</button>"; }).join(" ") + "</div>";
+  }
   function caseHTML(api, c, s) {
     var esc = api.esc, open = ui.open === c.id, n = c.steps.filter(function (x, i) { return s.done[i] && !x.optional; }).length, tot = c.steps.filter(function (x) { return !x.optional; }).length;
-    var h = '<li class="case ' + s.st + (open ? " open" : "") + '"><button type="button" class="caseh" data-case="' + c.id + '" aria-expanded="' + open + '"><span class="pill ' + PILL[s.st][1] + '">' + PILL[s.st][0] + '</span><span class="ct"><b>' + esc(c.t) + "</b><small>" + esc(c.sub) + '</small></span><span class="cn">' + (s.st === "closed" || s.st === "risk" ? "" : n + "/" + tot) + "</span></button>";
+    var h = '<li class="case ' + s.st + (open ? " open" : "") + '"><button type="button" class="caseh" data-case="' + c.id + '" aria-expanded="' + open + '">' + (s.st === "unknown" || s.st === "closed" || s.st === "risk" ? "" : '<span class="pill ' + PILL[s.st][1] + '">' + PILL[s.st][0] + "</span>") + '<span class="ct"><b>' + esc(c.t) + "</b><small>" + esc(c.sub) + '</small></span><span class="cn">' + (s.st === "closed" ? '<span class="mn-stamp">CLOSED</span>' : s.st === "risk" ? '<span class="mn-stamp risk">RISK</span>' : n + " / " + tot) + "</span></button>" + pointsAt(c);
     if (!open) return h + "</li>";
     h += '<div class="caseb">' + briefHTML(api, c, s) + stepsHTML(api, c, s);
     if (s.st === "closed" || s.st === "risk") {
@@ -511,7 +518,7 @@
   (window.V60_MODULES = window.V60_MODULES || []).push({
     id: "story",
     tabs: [{ id: "story", section: "learn", label: "Story", order: 5, html:
-      '<section class="sthero"><p class="ans-k">Story</p><h2>The As-Is File</h2><p class="lede">The Story is the goal: each case is a real thing to learn or check about your car, and closing it means you now know that part. <b>Training</b> is the textbook behind it. Tap a step\'s <b>Lesson</b> button to read how it works, then do the step on the car. Finishing a lesson ticks the step here. The rest of the garage opens up as cases close.</p><div id="stProg"></div><div class="seg" id="stSeg" role="group" aria-label="Story views"></div></section>' +
+      '<section class="sthero"><p class="ans-k">The As-Is File</p><h2>Cases</h2><p class="lede">Every unknown about this car is a case. Each one points at an item of the manual; closing chapters there closes the case here. A step\'s <b>Lesson</b> button opens the Training behind it, and finishing the lesson ticks the step.</p><div id="stProg"></div><div class="seg" id="stSeg" role="group" aria-label="Story views"></div></section>' +
       '<div id="stV-cases"></div><div id="stV-file" hidden></div><div id="stV-timeline" hidden></div><div id="stV-codebook" hidden></div>' }],
     clean: function (v) {
       if (!v || typeof v !== "object") return null;

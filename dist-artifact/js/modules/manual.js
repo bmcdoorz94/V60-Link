@@ -223,6 +223,8 @@
     var sd = storyD(api), pend = (sd.pending || []);
     if (!(sd.seen || {}).pro) now.unshift('<button type="button" class="mn-row" data-jump="story:pro"><span class="mn-pill new">Scene</span><span>Watch the prologue: <b>The As-Is File</b>. A used Volvo, sold as-is, with no records.</span></button>');
     else if (pend.length) now.push('<button type="button" class="mn-row" data-jump="story:' + esc(pend[0]) + '"><span class="mn-pill new">Scene</span><span>' + pend.length + (pend.length === 1 ? " scene is" : " scenes are") + " waiting. Watch</span></button>");
+    var notes = 0; (window.V60_MODULES || []).forEach(function (m) { if (m.id === "today" || m.id === "story" || m.id === "manual" || !m.today) return; if (m.tabs && m.tabs.length && !m.tabs.some(function (t) { return window.V60_GATE.visible(t.id); })) return; try { notes += (m.today(api) || []).length; } catch (e) {} });
+    if (notes) now.push('<button type="button" class="mn-row" data-jump="tab:today"><span class="mn-pill">Notes</span><span>' + notes + (notes === 1 ? " note" : " notes") + " for today, from Lars and the garage</span></button>");
     if (now.length) h += '<section class="mn-list"><div class="mn-kick"><span>NOW</span></div>' + now.join("") + "</section>";
     /* contents */
     h += '<section class="mn-list"><div class="mn-kick"><span>CONTENTS</span></div>' +

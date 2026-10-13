@@ -1171,3 +1171,36 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .pdot { border-radius: 0; min-height: 30px; padding: 3px 10px 3px 8px; font-size: 12.5px; }
 .pdot b { font-weight: 600; }
 .pdot i { border-radius: 0; width: 8px; height: 8px; }
+
+/* Cases (the story) in the manual's dress */
+.sthero h2 { font-size: 34px; }
+.sbar { height: 6px; border-radius: 0; background: var(--line); }
+.sbar i { background: var(--ink); border-radius: 0; }
+.stnext { gap: 10px; }
+.nextc { background: var(--panel); color: var(--ink); border: 0; border-left: 3px solid var(--new); border-radius: 0; padding: 10px 12px 12px; }
+.nextc .ans-k { color: var(--new-ink); }
+.nextc h3 { font-size: 22px; }
+.nextc button { background: var(--ink); color: var(--bg); border: 1px solid var(--ink); }
+.nextc button.quiet { background: transparent; color: var(--ink); border-color: var(--ink); }
+.nextc.scene { border: 0; border-left: 3px solid var(--new); background: var(--panel); }
+.act h3 { font-family: var(--font-data); font-weight: 500; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--ink); padding: 14px 0 5px; margin: 0; gap: 10px; }
+.act h3 span { font-family: var(--font-data); font-weight: 500; font-size: 11px; letter-spacing: .12em; color: var(--muted); }
+.cases { gap: 0; }
+.case { border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; overflow: visible; }
+.case.closed, .case.risk { border-color: var(--line); }
+.case.open { box-shadow: none; border-left: 3px solid var(--ink); background: var(--panel); margin: 6px 0; }
+.caseh { grid-template-columns: 1fr auto; padding: 11px 0; }
+.case.open .caseh { padding: 11px 12px; }
+.caseh .pill { grid-column: 1 / -1; order: 3; justify-self: start; margin-top: 4px; }
+.caseh .ct b { font-family: var(--font-display); font-weight: 600; font-size: 20px; line-height: 1.05; }
+.caseh .ct small { font-size: 13px; }
+.case .cto { display: flex; flex-wrap: wrap; gap: 4px; padding: 0 0 10px; }
+.case.open .cto { padding: 0 12px 10px; }
+.case .cto .mn-pill { cursor: pointer; min-height: 28px; background: transparent; color: var(--ink); border-color: var(--ink); font-weight: 500; }
+.case.unknown .cto .mn-pill { color: var(--muted); border-color: var(--muted); }
+.caseh .cn { font-family: var(--font-data); font-weight: 500; font-size: 12px; color: var(--muted); padding-top: 4px; }
+.mn-stamp.risk { border-color: var(--bad); color: var(--bad); }
+.caseb { padding: 12px; }
+.case.unknown .caseh .ct b { color: var(--muted); }
+.steps .sdot { border-radius: 0; border-width: 1.5px; font-weight: 700; }
+.steps li.done .sdot { background: transparent; color: var(--done); border-color: var(--done); }
