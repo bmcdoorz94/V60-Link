@@ -28,6 +28,13 @@ Update 2026-10-12: Kyle reports it still drops with the OBDLink app closed and a
 **Update 2026-10-11 evening.** Kyle reports the link still drops right after connecting (new adapter, OBDLink app closed). Added: Scan the label button (Bulletins), DIY cards for the cabin air filter and front turn signal bulb (sources named on the cards), wipers and window tint on Upgrades, clearer Story and Training wording. A block of text Kyle pasted that claimed Gemini had done auto-start trips, the door-pillar step and a cabin filter card was not in the repo and was not applied.
 
 ## 2. Immediate Next Steps
+0. **Redesign follow-ups (2026-10-13).** Done so far: the manual shell, the Cases page in the manual's dress, the home's Now strip counting today's notes, item glossaries trimmed to eight. Next, in order:
+   1. When Kyle sends the five photos (side-on, engine bay, driver's seat, front wheel, rear), check them in the app as the figures ("Your photo" in each view) and that the scanner blacked out the VIN on anything with a label in frame.
+   2. Retire the Today tab: move "welcome back", "protect your progress" and the garage map somewhere sensible (the Now strip or Cases), then drop the panel. `today.js` still renders module cards; the home only counts them.
+   3. Better wheel and underside figures (`FIG` in `src/js/modules/manual.js`), or rely on photos.
+   4. Thin items: 2.4 Parking brake, 3.2 Controls, 4.3 Suspension have one or two chapters with parts-list reads only. Add sourced content before adding chapters.
+   5. Desktop: figure and sheet side by side above 1000 px.
+
 1. **Confirm the connection fix with Kyle at the car.**
    1. Close the OBDLink app fully, re-plug the adapter, start the engine, then reload the app in Bluefy.
    2. Open Live link, then Connect adapter, then pick OBDLink CX.
