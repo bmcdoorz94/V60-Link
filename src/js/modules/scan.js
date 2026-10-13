@@ -173,7 +173,11 @@
       if (f.size) obs.push("Size read: " + f.size + (f.size !== "215/50R17" ? " (the Garage lists 215/50R17; check the sidewall)" : ""));
       return out;
     }
-    if (/^(dash|fluid|bay)$/.test(photoKind || "") && res.text) {
+    if (res.kind === "door") {
+      if (f.build) { obs.push("Build month read from the label: " + f.build + ". Bulletins uses it to tell which production ranges cover this car."); return out; }
+      obs.push("The build date could not be read. Photograph the label straight on, with the whole label in the frame."); return out;
+    }
+    if (/^(dash|fluid|bay|label)$/.test(photoKind || "") && res.text) {
       var seen = {}, lines = res.text.split("\n").map(function (l) { return l.replace(/[^\w\s\/.:%\-]/g, " ").replace(/\s+/g, " ").trim(); }).filter(function (l) { var letters = (l.match(/[a-z]/gi) || []).length; return l.length >= 6 && letters / l.length >= 0.6 && !/■/.test(l) && !seen[l.toLowerCase()] && (seen[l.toLowerCase()] = 1); });
       if (lines.length) { out.summary = "Text read on this phone, unconfirmed. This is a text read, not an inspection."; lines.slice(0, 6).forEach(function (l) { obs.push("Text: " + l.slice(0, 80)); }); return out; }
     }

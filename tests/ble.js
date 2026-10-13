@@ -5,7 +5,7 @@ const path = require('path'); const ROOT = path.resolve(__dirname, '..');
 function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } else console.log(' ok', m); }
 (async () => {
   const b = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
-  for (const mode of ['drop-once', 'drop-always']) {
+  for (const mode of ['drop-once', 'drop-always', 'drop-after-atz']) {
     const ctx = await b.newContext({ viewport: { width: 390, height: 844 } });
     await ctx.addInitScript(m => {
       window.__V60_TEST = true;
@@ -16,7 +16,7 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
         const gatt = { connected: false };
         let notify = null;
         const rx = { uuid: '0000fff1-0000-1000-8000-00805f9b34fb', properties: { notify: true }, addEventListener: (t, f) => { notify = f; }, startNotifications: () => {
-          if (m === 'drop-always' || connects === 1) setTimeout(() => { gatt.connected = false; dev.dispatchEvent(new Event('gattserverdisconnected')); }, 30);
+          if (m === 'drop-always' || (m === 'drop-once' && connects === 1)) setTimeout(() => { gatt.connected = false; dev.dispatchEvent(new Event('gattserverdisconnected')); }, 30);
           return Promise.resolve(); } };
         const reply = cmd => {
           if (/^0100/.test(cmd)) return '7E8 06 41 00 BE 3F A8 13 00\r\r>';
@@ -28,7 +28,7 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
         let buf = '';
         function send(v) {
           if (!gatt.connected) { const e = new Error('GATT Server is disconnected.'); e.name = 'NetworkError'; return Promise.reject(e); }
-          buf += dec.decode(v); if (buf.indexOf('\r') >= 0) { const c = buf.trim(); buf = ''; setTimeout(() => notify && notify({ target: { value: new DataView(enc.encode(reply(c)).buffer) } }), 5); }
+          buf += dec.decode(v); if (buf.indexOf('\r') >= 0) { const c = buf.trim(); buf = ''; if (m === 'drop-after-atz' && c === 'ATZ') { setTimeout(() => { gatt.connected = false; dev.dispatchEvent(new Event('gattserverdisconnected')); }, 10); return Promise.resolve(); } setTimeout(() => notify && notify({ target: { value: new DataView(enc.encode(reply(c)).buffer) } }), 5); }
           return Promise.resolve();
         }
         const svc = { uuid: '0000fff0-0000-1000-8000-00805f9b34fb', getCharacteristics: () => Promise.resolve([rx, tx]) };
@@ -49,6 +49,13 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
       ok(/Connected to OBDLink CX/.test(txt), 'drop right after connecting: retried and connected (' + txt + ')');
       ok(/retrying once/.test(log) && /GATT reconnected/.test(log), 'log shows the drop and the retry');
       ok(await p.evaluate(() => window.__connects()) === 2, 'reconnected without a second picker');
+    } else if (mode === 'drop-after-atz') {
+      const t0 = Date.now();
+      await p.waitForFunction(() => /Connected to/.test(document.getElementById('lk-connText').textContent), null, { timeout: 30000 }).catch(() => {});
+      const txt = await p.textContent('#lk-connText'), log = await p.textContent('#lk-log');
+      ok(/Connected to OBDLink CX/.test(txt), 'drop after the ATZ reset: retried with a warm start and connected (' + txt + ')');
+      ok(/last command sent: ATZ/.test(log) && /ATWS/.test(log), 'log names the command before the drop and the warm start'); if (!/last command sent: ATZ/.test(log)) console.log(log);
+      ok(Date.now() - t0 < 5000, 'no 6-second wait for a reply that cannot come (' + (Date.now() - t0) + ' ms)');
     } else {
       await p.waitForFunction(() => /Close the OBDLink|answered but|permission|pair with/i.test(document.getElementById('lk-connText').textContent), null, { timeout: 40000 }).catch(() => {});
       const txt = await p.textContent('#lk-connText');

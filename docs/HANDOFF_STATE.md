@@ -13,6 +13,8 @@ Commit `16f762e` (2026-10-11) shipped a fix. It is **not yet confirmed on the re
 
 Most likely real cause: the OBDLink app was still holding the adapter. It only talks to one app at a time.
 
+Update 2026-10-12: Kyle reports it still drops with the OBDLink app closed and a new adapter. Added (commit after `a9c4b12`): the retry now sends `ATWS` (warm start) instead of `ATZ`, in case the full reset drops the BLE link; a pending command is failed the moment the link drops (no 6 s wait); the log names the last command sent before each drop. `tests/ble.js` covers a drop after `ATZ`. Still unconfirmed on the real car. The next step is unchanged: get the Adapter conversation log.
+
 **State of the app** (all on `main`, all test suites passing):
 - **Story ("The As-Is File") is the only place to play.** Training (the old Academy) opens from a case step's Lesson button.
 - **Guided mode** (`guide.js`): a full-screen walkthrough at first, then guidance fades per area. Rules are in GAME_DESIGN.md under "Guided mode".

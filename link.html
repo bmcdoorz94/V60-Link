@@ -246,7 +246,7 @@ details summary { cursor: pointer; font-weight: 600; }
     self.open = function () {
       return navigator.bluetooth.requestDevice({ acceptAllDevices: true, optionalServices: KNOWN_SERVICES }).then(function (d) {
         dev = d; self.name = d.name || "adapter"; log("..", "picked " + self.name);
-        d.addEventListener("gattserverdisconnected", function () { log("!!", "the adapter dropped the Bluetooth link"); if (self.connecting) { self.dropped = true; return; } if (self.onclose) self.onclose(); });
+        d.addEventListener("gattserverdisconnected", function () { log("!!", "the adapter dropped the Bluetooth link" + (self.lastCmd ? " (last command sent: " + self.lastCmd + ")" : "")); if (waiter) { var w = waiter; waiter = null; var de = new Error("The adapter is not connected."); de.name = "NetworkError"; w.reject(de); } if (self.connecting) { self.dropped = true; return; } if (self.onclose) self.onclose(); });
         return d.gatt.connect();
       }).then(function (server) { log("..", "GATT connected"); return attach(server); });
     };
@@ -256,7 +256,8 @@ details summary { cursor: pointer; font-weight: 600; }
       return new Promise(function (resolve, reject) {
         if (!dev || !dev.gatt.connected) { var de = new Error("The adapter is not connected."); de.name = "NetworkError"; reject(de); return; }
         var timer = setTimeout(function () { waiter = null; reject(new Error("timeout")); }, timeoutMs || 4000);
-        waiter = { resolve: function (v) { clearTimeout(timer); resolve(v); } };
+        self.lastCmd = cmd;
+        waiter = { resolve: function (v) { clearTimeout(timer); resolve(v); }, reject: function (e) { clearTimeout(timer); reject(e); } };
         var bytes = enc.encode(cmd + "\r"), chunks = [];
         for (var i = 0; i < bytes.length; i += 20) chunks.push(bytes.slice(i, i + 20));
         chunks.reduce(function (p, c) { return p.then(function () { return useWWR ? txChar.writeValueWithoutResponse(c) : (txChar.writeValueWithResponse ? txChar.writeValueWithResponse(c) : txChar.writeValue(c)); }); }, Promise.resolve())
@@ -446,8 +447,9 @@ details summary { cursor: pointer; font-weight: 600; }
     $("btnScan").disabled = !on; $("btnLive").disabled = !on; $("btnDisconnect").disabled = !on;
     $("btnConnect").disabled = on; $("btnDemo").disabled = on;
   }
-  function initElm() {
-    var seq = [["ATZ", 6000], ["ATE0"], ["ATL0"], ["ATS1"], ["ATH1"], ["ATCAF1"], ["ATAT1"], ["ATSP0"]];
+  /* warm: ATWS (software reset) instead of ATZ (full reset). Used on the retry, in case the full reset is what drops the Bluetooth link. ELM327 data sheet: AT WS. */
+  function initElm(warm) {
+    var seq = [[warm ? "ATWS" : "ATZ", 6000], ["ATE0"], ["ATL0"], ["ATS1"], ["ATH1"], ["ATCAF1"], ["ATAT1"], ["ATSP0"]];
     return seq.reduce(function (p, s) { return p.then(function () { return cmd(s[0], s[1]).catch(function () {}); }).then(function () { return sleep(60); }); }, Promise.resolve())
       .then(function () { return query("0100", 12000); })
       .then(function (r) { if (!r.length) throw new Error("The adapter answered but the car did not. Check that the ignition is on."); return cmd("ATDPN").catch(function () { return "A6"; }); })
@@ -459,7 +461,7 @@ details summary { cursor: pointer; font-weight: 600; }
     transport.onclose = function () { link = null; enable(false); setConn("", "Disconnected"); stopLive(); };
     transport.connecting = true;
     function attempt(first) {
-      return (first ? transport.open() : transport.reopen()).then(function () { setConn("busy", "Talking to the car..."); return initElm(); });
+      return (first ? transport.open() : transport.reopen()).then(function () { setConn("busy", "Talking to the car..."); if (!first) log("..", "warm start (ATWS) this time instead of a full reset (ATZ)"); return initElm(!first); });
     }
     return attempt(true).catch(function (e) {
       var em0 = String((e && e.message) || "") + " " + String((e && e.name) || "");

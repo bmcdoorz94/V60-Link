@@ -24,14 +24,14 @@ Story case board shipped. 24 tabs across Today, Learn, Car, Check and Data. Test
 - [ ] Kyle was unsure whether the Home Screen icon is Safari or Bluefy. The icon opens in Safari; Bluetooth only works in Bluefy.
 - [x] Kyle: sync set up in Bluefy (2026-10-11).
 - [ ] Build month from the door-pillar label (asked 2026-10-10; drives bulletin applicability).
-- [ ] Engine bay photo to calibrate the bay map to the real car.
+- [ ] Engine bay photo to calibrate the bay map to the real car (photos sent in chat 2026-10-12; not yet uploaded to the app).
 - [x] Monthly reminder for oil level and tire pressure (iPhone Reminders, from 2026-11-01).
 - [ ] Import the recent oil change receipt and any others.
-- [ ] Confirm whether the OBDLink CX has been ordered, then test Live link on the real car in Bluefy.
-- [ ] Ask whether any service contract or extended warranty came with the car.
-- [ ] Fuel log frequency: every fill-up or occasional.
+- [ ] Live link on the real car: it connects and then drops at once (2026-10-11, new OBDLink CX). The retry now uses a warm start (ATWS) and the log names the last command before each drop. Need Kyle's Adapter conversation log.
+- [x] No service contract or warranty of any kind (Kyle, 2026-10-11).
+- [x] Fuel log frequency: Kyle didn't know what's useful; the app suggests every fill-up.
 - [ ] Upgrade interests: CarPlay, Polestar, tires, dash cam.
-- [ ] Today screen header repeats information from the top bar; tighten it.
+- [x] Today screen no longer repeats the odometer from the top bar (2026-10-12).
 - [ ] Factory option list by VIN (dealer printout) to confirm Premier content and packages.
 - [ ] Unconfirmed items to resolve when sources allow:
   - Polestar availability and price in 2026

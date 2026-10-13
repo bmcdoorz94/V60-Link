@@ -7,7 +7,9 @@
     var hr = new Date().getHours();
     $("tdGreet").textContent = hr < 12 ? "Good morning" : (hr < 18 ? "Good afternoon" : "Good evening");
     $("tdHead").textContent = h.score == null ? "Let's get to know your V60" : (h.score >= 75 ? "Your V60 is in good shape" : (h.score >= 50 ? "Your V60 needs some attention" : "Your V60 needs work"));
-    $("tdOdo").innerHTML = st.odo != null ? "<b>" + api.fmt(st.odo) + "</b><span>miles</span>" : '<button type="button" class="quiet" data-jump="tab:records">Add mileage</button>';
+    /* the odometer already sits in the top bar; only prompt here while it is empty */
+    $("tdOdo").innerHTML = st.odo != null ? "" : '<button type="button" class="quiet" id="tdOdoGo">Add mileage</button>';
+    var og = $("tdOdoGo"); if (og) og.addEventListener("click", function () { var o = $("odo"); if (o) { o.scrollIntoView({ block: "center" }); o.focus(); } });
     var quick = [["fuel", "Log fuel", "tab:fuel"], ["receipt", "Add a receipt", "tab:glove"], ["camera", "Photo check", "tab:my"], ["link", "Connect to car", "tab:live"], ["cards", "Daily cards", "tab:cards"], ["story", "Story", "tab:story"]];
     var IC = {
       fuel: '<path d="M5 20V5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v15"/><path d="M4 20h11"/><path d="M14 9h2l2 2v6a1.5 1.5 0 0 0 3 0V8l-3-3"/><path d="M7 8h5"/>',
