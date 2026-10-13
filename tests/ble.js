@@ -31,8 +31,13 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
           buf += dec.decode(v); if (buf.indexOf('\r') >= 0) { const c = buf.trim(); buf = ''; if (m === 'drop-after-atz' && c === 'ATZ') { setTimeout(() => { gatt.connected = false; dev.dispatchEvent(new Event('gattserverdisconnected')); }, 10); return Promise.resolve(); } setTimeout(() => notify && notify({ target: { value: new DataView(enc.encode(reply(c)).buffer) } }), 5); }
           return Promise.resolve();
         }
-        const svc = { uuid: '0000fff0-0000-1000-8000-00805f9b34fb', getCharacteristics: () => Promise.resolve([rx, tx]) };
-        gatt.connect = () => { connects++; gatt.connected = true; return Promise.resolve({ getPrimaryServices: () => Promise.resolve([svc]) }); };
+        const svc = { uuid: '0000FFF0-0000-1000-8000-00805F9B34FB', getCharacteristics: () => Promise.resolve([rx, tx]) };
+        /* the CX also exposes a firmware-update service (FEF5) whose characteristics notify and write but never answer; Bluefy lists it first */
+        const dead = { uuid: '0000FEF5-0000-1000-8000-00805F9B34FB', getCharacteristics: () => Promise.resolve([
+          { uuid: '5F78DF94-798C-46F5-990A-B3EB6A065C88', properties: { notify: true, read: true }, addEventListener: () => {}, startNotifications: () => Promise.resolve() },
+          { uuid: '8082CAA8-41A6-4021-91C6-56F9B954CC34', properties: { write: true }, writeValue: () => Promise.reject(new Error('')), writeValueWithResponse: () => Promise.reject(new Error('')) }]) };
+        const info = { uuid: '0000180A-0000-1000-8000-00805F9B34FB', getCharacteristics: () => Promise.resolve([{ uuid: '00002A29-0000-1000-8000-00805F9B34FB', properties: { read: true } }]) };
+        gatt.connect = () => { connects++; gatt.connected = true; return Promise.resolve({ getPrimaryServices: () => Promise.resolve([dead, info, svc]) }); };
         gatt.disconnect = () => { gatt.connected = false; };
         dev.gatt = gatt; return dev;
       }
@@ -48,6 +53,7 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
       const txt = await p.textContent('#lk-connText'), log = await p.textContent('#lk-log');
       ok(/Connected to OBDLink CX/.test(txt), 'drop right after connecting: retried and connected (' + txt + ')');
       ok(/retrying once/.test(log) && /GATT reconnected/.test(log), 'log shows the drop and the retry');
+      ok(/using known service fff0: notify fff1, write fff2/.test(log) && /service fef5:/.test(log), 'picked the CX serial service over the firmware-update one, whatever the letter case: ' + (log.match(/using [^\n]*/) || [''])[0]);
       ok(await p.evaluate(() => window.__connects()) === 2, 'reconnected without a second picker');
     } else if (mode === 'drop-after-atz') {
       const t0 = Date.now();

@@ -15,6 +15,8 @@ Commit `16f762e` (2026-10-11) shipped a fix. It is **not yet confirmed on the re
 
 Most likely real cause: the OBDLink app was still holding the adapter. It only talks to one app at a time.
 
+**Found 2026-10-13, from Kyle's adapter log.** Bluefy lists the CX's services with upper-case UUIDs and includes its FEF5 firmware-update (SUOTA) service, whose characteristics notify and write but never answer. The old `attach()` preferred "fff0" with a case-sensitive test, so it fell through to the first service with notify+write: FEF5 (`5F78DF94…`). ATZ timed out, later writes failed with an empty error, and `close()` logged a "drop" that was really our own disconnect. Fix: UUIDs normalised to lower case and short form, a list of known serial services (FFF0/FFF1/FFF2 first), housekeeping services never picked, every service and characteristic logged. `tests/ble.js` now mocks the decoy service with upper-case UUIDs. Still to confirm on the real car.
+
 Update 2026-10-12: Kyle reports it still drops with the OBDLink app closed and a new adapter. Added (commit after `a9c4b12`): the retry now sends `ATWS` (warm start) instead of `ATZ`, in case the full reset drops the BLE link; a pending command is failed the moment the link drops (no 6 s wait); the log names the last command sent before each drop. `tests/ble.js` covers a drop after `ATZ`. Still unconfirmed on the real car. The next step is unchanged: get the Adapter conversation log.
 
 **State of the app** (all on `main`, all test suites passing):

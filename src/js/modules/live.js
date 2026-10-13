@@ -42,23 +42,43 @@
     self.name = "";
     /* Some adapters (the OBDLink CX among them) can drop the link right after the first connection while iOS
        finishes pairing. During connecting, a drop is reported to connect() so it can retry once without the picker. */
+    /* UUIDs as Bluefy and Chrome give them: any case, sometimes the short 16-bit form. Everything is compared lower-case. */
+    function norm(u) { u = String(u || "").toLowerCase(); if (/^[0-9a-f]{4}$/.test(u)) u = "0000" + u + "-0000-1000-8000-00805f9b34fb"; return u; }
+    function short(u) { u = norm(u); return u.slice(0, 4) === "0000" && u.slice(8) === "-0000-1000-8000-00805f9b34fb" ? u.slice(4, 8) : u; }
+    function props(c) { var p = c.properties || {}; return (p.notify ? "N" : "") + (p.indicate ? "I" : "") + (p.write ? "W" : "") + (p.writeWithoutResponse ? "w" : "") + (p.read ? "R" : ""); }
+    /* Serial channels we know. Each entry: service, notify characteristic, write characteristic. The OBDLink CX is FFF0/FFF1/FFF2
+       (OBDLink CX adapter notes). Its FEF5 service is firmware-update only and answers nothing; it is never picked. */
+    var UARTS = [["fff0", "fff1", "fff2"], ["ffe0", "ffe1", "ffe1"], ["18f0", "2af0", "2af1"], ["ffe5", "ffe9", "ffe4"], ["e7810a71-73ae-499d-8c15-faa9aef0c3f2", "bef8d6c9-9c21-4c9e-b632-bd58c1009f9f", "bef8d6c9-9c21-4c9e-b632-bd58c1009f9f"]];
+    var NEVER = { fef5: 1, "180a": 1, "1800": 1, "1801": 1, "180f": 1, "1805": 1, "fe59": 1 };
     function attach(server) {
       return server.getPrimaryServices().then(function (services) {
         var jobs = services.map(function (s) { return s.getCharacteristics().then(function (cs) { return { s: s, cs: cs }; }, function () { return { s: s, cs: [] }; }); });
         return Promise.all(jobs);
       }).then(function (groups) {
+        groups.forEach(function (g) { log("..", "service " + short(g.s.uuid) + ": " + (g.cs.map(function (c) { return short(c.uuid) + "[" + props(c) + "]"; }).join(" ") || "no characteristics")); });
         var best = null;
-        groups.sort(function (a, b) { return (String(b.s.uuid).indexOf("fff0") === 4) - (String(a.s.uuid).indexOf("fff0") === 4); });
+        function find(g, id, kind) { return g.cs.filter(function (c) { var p = c.properties || {}; return short(c.uuid) === id && (kind === "n" ? (p.notify || p.indicate) : (p.write || p.writeWithoutResponse)); })[0]; }
+        function anyN(g) { return g.cs.filter(function (c) { var p = c.properties || {}; return p.notify || p.indicate; })[0]; }
+        function anyW(g) { return g.cs.filter(function (c) { var p = c.properties || {}; return p.write || p.writeWithoutResponse; })[0]; }
+        /* 1. a known serial service, by its own characteristics */
+        UARTS.forEach(function (u) {
+          if (best) return;
+          var g = groups.filter(function (x) { return short(x.s.uuid) === u[0]; })[0]; if (!g) return;
+          var n = find(g, u[1], "n") || anyN(g), w = find(g, u[2], "w") || anyW(g);
+          if (n && w) best = { n: n, w: w, how: "known service " + u[0] };
+        });
+        /* 2. any other service with a notify and a write characteristic, never the housekeeping ones */
         groups.forEach(function (g) {
-          var n = g.cs.filter(function (c) { return c.properties.notify || c.properties.indicate; })[0];
-          var w = g.cs.filter(function (c) { return c.properties.write || c.properties.writeWithoutResponse; })[0];
-          if (n && w && !best) best = { n: n, w: w };
+          if (best || NEVER[short(g.s.uuid)]) return;
+          var n = anyN(g), w = anyW(g);
+          if (n && w) best = { n: n, w: w, how: "unlisted service " + short(g.s.uuid) };
         });
         if (!best) throw new Error("Connected, but this device does not offer a serial data channel this page recognizes. It may not be an OBD adapter, or it may be a Classic-Bluetooth model.");
         rxChar = best.n; txChar = best.w; useWWR = !best.w.properties.write && best.w.properties.writeWithoutResponse;
+        log("..", "using " + best.how + ": notify " + short(rxChar.uuid) + ", write " + short(txChar.uuid) + (useWWR ? " (without response)" : ""));
         rxChar.addEventListener("characteristicvaluechanged", onNotify);
         return rxChar.startNotifications();
-      }).then(function () { log("..", "notifications on (" + String(rxChar.uuid).slice(4, 8) + ")"); return sleep(350); });
+      }).then(function () { log("..", "notifications on (" + short(rxChar.uuid) + ")"); return sleep(350); });
     }
     self.open = function () {
       return navigator.bluetooth.requestDevice({ acceptAllDevices: true, optionalServices: KNOWN_SERVICES }).then(function (d) {
