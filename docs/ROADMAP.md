@@ -9,7 +9,7 @@ Story case board shipped. 24 tabs across Today, Learn, Car, Check and Data. Test
 - [ ] Auto-read uploads with privacy redaction (on-device OCR in Bluefy, black out VIN/plate/name/address/phone/card before saving or syncing). Full spec in docs/HANDOFF_STATE.md, step 2.
 - [ ] Close the feature-audit gaps listed in docs/HANDOFF_STATE.md, step 3 (86 of ~150 cards, missing DIY cards, interactive diagrams, Mode 06, resale tracker, and more).
 - [ ] Ask Kyle for his build month (door-pillar label) and the other backlog questions below.
-- [ ] First real-car test of Live link in Bluefy once the adapter arrives.
+- [x] 2026-10-14: Live link connected and held on the real car in Bluefy (after the FFF0 service fix). Remaining: confirm a saved report.
 - [ ] Story polish after Kyle uses it: more cutscene art per case, and an "Evidence" photo attachment per case.
 
 ## Backlog
@@ -19,7 +19,7 @@ Story case board shipped. 24 tabs across Today, Learn, Car, Check and Data. Test
 - [x] 2026-10-11: odometer lost when the field wasn't left (saved only on "change"). Now saves while typing and when the page is hidden; tests/odo.js.
 - [ ] Upgrades research (2026-10-11): added brakes and roof rack with sourced prices. No reliable source found yet, so not added: paint protection film and ceramic coating, headlight restoration cost, floor liners for the V60 (WeatherTech listings found were S60 only), lowering springs (Eibach V60 listings found were for non-US 4-cylinder fitments), Polestar price for 2016 cars (dealer pages cover new models). Search results were mostly SEO pages; add each only when a manufacturer, dealer parts or government page gives the number.
 - [x] 2026-10-11 answers from Kyle: no receipts or paperwork found (may call the lot for a UVI); no warranty or service contract of any kind; engine bay photo "tomorrow"; build month not yet entered (use the new Scan the label button in Bulletins); wants wipers and the peeling window tint on the Upgrades list, plus more cosmetic and performance ideas with cost versus benefit; fuel log frequency: Kyle doesn't know what's useful (suggest logging every fill-up, explained in plain words).
-- [ ] Live link still drops after connecting (new adapter; OBDLink app was closed). Need the "Adapter conversation" log.
+- [x] Live link drops: root cause was the wrong BLE service (FEF5 firmware service matched because Bluefy returns upper-case UUIDs). Fixed 2026-10-13; worked on the car 2026-10-14.
 - [ ] Tire rotation and engine air filter DIY cards: no sourced procedure found for this car (iFixit's V60 air filter guide is the five-cylinder). Add only when a source turns up.
 - [ ] Kyle was unsure whether the Home Screen icon is Safari or Bluefy. The icon opens in Safari; Bluetooth only works in Bluefy.
 - [x] Kyle: sync set up in Bluefy (2026-10-11).
@@ -27,7 +27,7 @@ Story case board shipped. 24 tabs across Today, Learn, Car, Check and Data. Test
 - [ ] Engine bay photo to calibrate the bay map to the real car (photos sent in chat 2026-10-12; not yet uploaded to the app).
 - [x] Monthly reminder for oil level and tire pressure (iPhone Reminders, from 2026-11-01).
 - [ ] Import the recent oil change receipt and any others.
-- [ ] Live link on the real car: it connects and then drops at once (2026-10-11, new OBDLink CX). The retry now uses a warm start (ATWS) and the log names the last command before each drop. Need Kyle's Adapter conversation log.
+- [x] Live link on the real car: it connected and then dropped at once (2026-10-11, new OBDLink CX); fixed 2026-10-13, confirmed 2026-10-14. The retry now uses a warm start (ATWS) and the log names the last command before each drop. Need Kyle's Adapter conversation log.
 - [x] No service contract or warranty of any kind (Kyle, 2026-10-11).
 - [x] Fuel log frequency: Kyle didn't know what's useful; the app suggests every fill-up.
 - [ ] Upgrade interests: CarPlay, Polestar, tires, dash cam.

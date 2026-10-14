@@ -1,12 +1,14 @@
 ## 1. Current Active Objective
 **The redesign: the car is the menu.** Shipped 2026-10-12 as the new shell (see docs/GAME_DESIGN.md, "The manual"). Home = side view with five points → views → items → chapters. `src/js/data/manual.js` holds the spine; `src/js/modules/manual.js` the engine and UI; `src/css/manual.css` and `theme.css` the look. `tests/manual.js` covers it. Next: Kyle's photos as the figures (he will take them), the Cases page in the new dress, fold Today's cards into the home. Everything below this paragraph predates the redesign and still applies.
 
-**Get Live link working on the real car.** Kyle's OBDLink CX now connects in the official OBDLink app. In V60 Garage (Bluefy, Live link) it connected and then dropped instantly.
+**Live link works on the real car (Kyle, 2026-10-14):** it connected in Bluefy and held for his drive to work after the FFF0 service fix (2026-10-13). The log from that drive was lost to a page reload, so the log is now kept in localStorage `v60-link-log` and shown under the Connect buttons. Still to confirm: whether it stayed connected the whole drive, and whether Kyle saved a report (which closes The Signal). Earlier history follows.
 
-Commit `16f762e` (2026-10-11) shipped a fix. It is **not yet confirmed on the real car**:
+Kyle's OBDLink CX connected in the official OBDLink app. In V60 Garage (Bluefy, Live link) it connected and then dropped instantly.
+
+Commit `16f762e` (2026-10-11) shipped a fix:
 - `BleTransport` in `src/link-legacy.html` keeps the device, and a drop during connecting no longer ends the attempt.
 - `connect()` retries once through `transport.reopen()`, without reopening the picker. The status shows "Link dropped. Reconnecting...".
-- Every step is logged to the "Adapter conversation" log at the bottom of Live link: picked, GATT connected, notifications on, dropped, retrying.
+- Every step is logged to the "Adapter log" under the Connect buttons on Live link: picked, GATT connected, notifications on, dropped, retrying.
 - Errors are mapped to plain advice:
   - pairing or encryption: re-plug, connect within 5 minutes, PIN 123456
   - NetworkError: close the OBDLink app, which can hold the adapter
