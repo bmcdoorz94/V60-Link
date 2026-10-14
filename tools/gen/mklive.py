@@ -8,7 +8,7 @@ html = re.sub(r'<header>.*?</header>', '', html, flags=re.S)
 html = re.sub(r'(id|for|aria-labelledby)="([^"]+)"', lambda m: '%s="lk-%s"' % (m.group(1), m.group(2)), html)
 html = html.replace('<h2 id="lk-h-conn">Connect</h2>', '<h2 id="lk-h-conn">Connect</h2>')
 html = html.replace('<button type="button" id="lk-btnReport">Save report for V60 Garage</button>',
-  '<button type="button" id="lk-btnReport">Save to my Garage</button>\n        <button type="button" class="quiet" id="lk-btnDlReport">Download report</button>')
+  '<button type="button" id="lk-btnReport">Save to my Garage</button>\n        <button type="button" class="quiet" id="lk-btnDlReport">Save as a file</button>')
 html = html.replace('<button type="button" class="quiet" id="lk-btnCsv" disabled>Save CSV</button>',
   '<button type="button" class="quiet" id="lk-btnCsv" disabled>Open in Data lab</button>\n      <button type="button" class="quiet" id="lk-btnDlCsv" disabled>Download CSV</button>\n      <label class="status" style="display:inline-flex;gap:6px;align-items:center"><input type="checkbox" id="lk-wake" checked> Keep screen awake</label>')
 html = html.replace('<span>I saved the health-check report (the Save report button ticks this automatically).</span>', '<span>I saved the health-check report (Save to my Garage ticks this automatically).</span>')

@@ -448,7 +448,7 @@
     var pf = (st.photos || []).filter(function (p) { return p.kind === "proof"; });
     sec("Proof photos", pf.length ? '<div class="proofgrid">' + pf.slice(-12).map(function (p) { var c = caseById(p.cs), u = api.photoUrl(p); return u ? '<figure><img src="' + esc(u) + '" alt="Proof photo"><figcaption>' + esc((c ? c.t + " · " : "") + p.date) + "</figcaption></figure>" : ""; }).join("") + "</div>" : "");
     sec("Codebook", "<p>" + plural(decodedN(api), "signal") + " decoded of " + (window.V60_CODEBOOK || []).length + ".</p>");
-    return '<div id="fileDoc">' + rows.join("") + '</div><div class="row"><button type="button" class="quiet" id="stPrint">Print or save as PDF</button></div><p class="status">Built from what you have logged. The VIN is never shown here.</p>';
+    return '<div id="fileDoc">' + rows.join("") + '</div><div class="row">' + (window.V60_FILE && !window.V60_FILE.canPrint ? '<button type="button" class="quiet" id="stShareFile">Save or share as text</button>' : '<button type="button" class="quiet" id="stPrint">Print or save as PDF</button><button type="button" class="quiet" id="stShareFile">Share as text</button>') + '</div><p class="status">Built from what you have logged. The VIN is never shown here.</p>';
   }
   function timelineHTML(api) {
     var esc = api.esc, st = api.state, d = D(api), ev = [];
@@ -560,6 +560,7 @@
         var d = D(api), k;
         if ((k = b.getAttribute("data-view"))) { ui.view = k; render(api); return; }
         if (b.id === "stPrint") { document.body.classList.add("printing-file"); window.print(); setTimeout(function () { document.body.classList.remove("printing-file"); }, 500); return; }
+        if (b.id === "stShareFile") { var fd = document.getElementById("fileDoc"); if (fd && window.V60_FILE) window.V60_FILE.save("v60-the-file-" + api.todayStr() + ".txt", "THE AS-IS FILE, 2016 Volvo V60 T5\n" + window.V60_FILE.textOf(fd), "text/plain").catch(function () {}); return; }
         if ((k = b.getAttribute("data-depth"))) { ui.opts = true; d.depth = k; api.save(); render(api); return; }
         if ((k = b.getAttribute("data-case"))) { ui.open = ui.open === k ? "" : k; render(api); var el = document.querySelector('[data-case="' + k + '"]'); if (el && el.scrollIntoView && ui.open === k) el.scrollIntoView({ block: "nearest" }); return; }
         if ((k = b.getAttribute("data-man"))) { if (d.manual[k]) delete d.manual[k]; else d.manual[k] = api.todayStr(); api.save(); render(api); return; }

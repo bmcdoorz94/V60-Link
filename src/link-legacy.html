@@ -110,7 +110,7 @@ details summary { cursor: pointer; font-weight: 600; }
       <summary id="h-log">Adapter log</summary>
       <p class="lede" style="margin:8px 0">Every command sent and every reply, kept on this phone across reloads. Tap Copy and paste it into the chat.</p>
       <textarea class="log" id="log" readonly rows="10" spellcheck="false" aria-label="Adapter log"></textarea>
-      <div class="row" style="margin-top:8px"><button type="button" class="quiet" id="btnCopyLog">Copy log</button><button type="button" class="quiet" id="btnShareLog" hidden>Share log</button><button type="button" class="quiet" id="btnDlLog">Download log</button><button type="button" class="quiet" id="btnClearLog">Clear log</button></div>
+      <div class="row" style="margin-top:8px"><button type="button" class="quiet" id="btnCopyLog">Copy log</button><button type="button" class="quiet" id="btnShareLog" hidden>Share log</button><button type="button" class="quiet" id="btnDlLog">Save as a file</button><button type="button" class="quiet" id="btnClearLog">Clear log</button></div>
       <p class="lede" style="margin:6px 0 0" id="logHelp">If Copy does nothing, use Share (to Messages, Notes or this chat), or press and hold inside the log, choose Select All, then Copy.</p>
     </details>
     <details>
@@ -618,6 +618,7 @@ details summary { cursor: pointer; font-weight: 600; }
   /* ---------------- export helpers ---------------- */
   function fileFor(name, text, type) { return new File([text], name, { type: type }); }
   function download(name, text, type) {
+    if (window.V60_FILE) { window.V60_FILE.save(name, text, type).catch(function () {}); return; }
     var url = URL.createObjectURL(new Blob([text], { type: type })), a = document.createElement("a");
     a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
     setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
