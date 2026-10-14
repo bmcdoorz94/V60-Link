@@ -781,7 +781,7 @@ ol.jsteps input:checked ~ span { color: var(--muted); text-decoration: line-thro
 #p-live .mon div { display: flex; justify-content: space-between; gap: 8px; border: 1px solid var(--line); border-radius: var(--r-sm); padding: 8px 10px; background: var(--panel); font-size: 14px; }
 #p-live .checks label { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; }
 #p-live .checks input { margin-top: 4px; flex: none; }
-#p-live pre.log { margin: 0; max-height: 260px; overflow: auto; font-size: 12px; background: var(--panel2); border: 1px solid var(--line); border-radius: var(--r-md); padding: 10px; white-space: pre-wrap; word-break: break-all; }
+#p-live pre.log, #p-live textarea.log { margin: 0; width: 100%; min-height: 160px; max-height: 260px; overflow: auto; font-family: var(--font-data); font-size: 12px; line-height: 1.4; color: var(--ink); -webkit-user-select: text; user-select: text; background: var(--panel2); border: 1px solid var(--line); border-radius: var(--r-md); padding: 10px; white-space: pre-wrap; word-break: break-all; }
 #p-live button.danger { background: var(--bad); border-color: var(--bad); color: #fff; }
 #p-live .note.bad { border-left-color: var(--bad); background: var(--bad-bg); }
 .cluster { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(46%, 220px), 1fr)); gap: 10px; }
