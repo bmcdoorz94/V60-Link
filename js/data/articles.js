@@ -255,7 +255,7 @@ window.V60_ARTICLES = [
       "## What it tells you",
       "- Mileage ran about 12,000 a year to 2018, then slowed: 39,000 miles in the six years from 2019 to 2025, with no Texas inspection at all in that gap. The car was most likely registered elsewhere or parked for part of it.",
       "- Every emissions test passed with all readiness monitors complete and the light off. Nothing here suggests the computer was cleared just before a test.",
-      "- Your Live link report of 2026-10-14 says codes were last cleared about 6,700 miles ago, which falls around 88,000 miles, after the lot's test and before the May 2026 one.",
+      "- Your Live link report of 2026-10-14 says codes were last cleared about 6,700 miles ago. With 91,357 on the cluster that day, that is about 84,650 miles: right after the lot's test and at the sale, so the lot most likely cleared the computer before handing it over. Trip T2 on the cluster, 6,803 miles, is the distance you have driven it.",
       "- The next emissions test is due with the May 2027 registration renewal. A lit check-engine light fails it, so P0171 needs to be resolved before then, not this week.",
       "- The 2025 entry lists the engine as a 2.5 five-cylinder. That is a typing mistake at the station; every other entry and your hood label say 2.0, four cylinders."],
     src: ["txcar", "dps"] },

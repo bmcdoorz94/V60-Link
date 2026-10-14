@@ -1145,7 +1145,7 @@
         body: ["Find what has been done to the car: receipts, the glovebox service booklet, emails from shops, or a vehicle history report. Log the last oil change, brake work, spark plugs, coolant and brake fluid in Records. Unknown is a fine answer, and then those items count as due."],
         steps: ["Gather receipts and records.", "Log each item in the Records tab with date and mileage.", "Mark this mission complete when you have logged what you can find."] },
       { id: "m-belt", type: "field", title: "Timing belt detective", xp: 60, min: 15, need: "Hood open, flashlight, your purchase paperwork",
-        body: ["Your car was bought as-is from an independent lot near 90,000 miles, so whether the timing belt was ever replaced is unknown. On this engine that is the single most expensive unknown, because a snapped belt usually ruins the engine."],
+        body: ["Your car was bought as-is from an independent lot at about 84,500 miles, so whether the timing belt was ever replaced is unknown. On this engine that is the single most expensive unknown, because a snapped belt usually ruins the engine."],
         steps: ["Look under the hood for a sticker on the timing cover, the strut tower, the radiator support or the underside of the hood. Many shops leave one with a date and mileage when they replace a timing belt.", "Go through every paper from the purchase: the Buyers Guide, any vehicle history report, and receipts left in the glovebox.", "Call any Volvo dealer with your VIN and ask whether a timing belt service shows in Volvo's service history.", "Optionally buy a vehicle history report by VIN. These sometimes list service visits from reporting shops.", "Record what you found in the notes. 'No evidence' is a real answer, and it means you should plan the job."],
         see: "Proof of a belt change with date and mileage, or a clear 'no evidence', which goes straight to the shop visit mission." },
       { id: "m-ppi", type: "log", title: "Book a baseline inspection at a Volvo specialist", xp: 80, min: 10, go: "tab:records",
@@ -1715,7 +1715,7 @@
     });
   }
   function aiPrompt(kind, partName, note) {
-    return "You are helping the owner of one specific car inspect it from a photo. Car: 2016 Volvo V60 T5 wagon, Premier trim, engine B4204T11 2.0 L turbo four-cylinder (Drive-E), front-wheel drive, 8-speed automatic, about 95,000 miles, indirect tire-pressure monitoring (no wheel sensors). The owner is a beginner.\n" +
+    return "You are helping the owner of one specific car inspect it from a photo. Car: 2016 Volvo V60 T5 wagon, Premier trim, engine B4204T11 2.0 L turbo four-cylinder (Drive-E), front-wheel drive, 8-speed automatic, about 91,000 miles, indirect tire-pressure monitoring (no wheel sensors). The owner is a beginner.\n" +
       "Photo type: " + kindName(kind) + (partName ? ". Part of interest: " + partName : "") + (note ? ". Owner's note: " + note : "") + ".\n" +
       "Look only at what is visible. Do not guess hidden details. If the photo is unclear, say so and say how to retake it.\n" +
       "Return JSON only, with these keys: summary (one sentence), observations (array of short strings, at most 6), dot (the last four digits of a tire DOT code if clearly readable, else null), rating (1 to 5 condition of the part of interest if judgeable from the photo, where 5 is like new and 1 is failed, else null), concern (\"ok\", \"watch\", \"act\" or \"unknown\"), next (array of at most 3 short next steps), confidence (\"low\", \"medium\" or \"high\").";

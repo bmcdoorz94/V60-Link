@@ -156,7 +156,7 @@
   var CRIT = CASES.filter(function (c) { return c.crit; }).map(function (c) { return c.id; });
   function caseById(id) { return CASES.filter(function (c) { return c.id === id; })[0]; }
   var PRO = { id: "pro", t: "Prologue: The As-Is File", lines: [
-    ["road", "Summer 2025. A Volvo wagon with just under 90,000 miles rolls off an independent lot."],
+    ["road", "Summer 2025. A Volvo wagon with about 84,500 miles rolls off an independent lot."],
     ["papers", "Sold as-is. No service records. No promises."],
     ["car", "2016 Volvo V60 T5. Two liters, one turbo, 240 horsepower."],
     ["device", "And a small box you bought for it. It speaks the car's language. You don't, yet."],
