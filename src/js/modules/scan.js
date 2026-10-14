@@ -148,10 +148,15 @@
   ];
   function classify(t) {
     if (/\b(mfd|manufactured|gvwr|gawr|conforms to all applicable)\b/i.test(t)) return "door";
-    if (/registration|registr\.|renewal notice/i.test(t)) return "registration";
-    if (/insurance|policy\s*(no|number|#)|insured/i.test(t)) return "insurance";
-    if (/vehicle inspection|inspection report|emissions test/i.test(t)) return "inspection";
     if (/\bDOT\b/.test(t) && (/\d{3}\s*\/\s*\d{2}/.test(t) || /treadwear|traction|temperature|tubeless/i.test(t))) return "tire";
+    if (/vehicle history report|carfax|autocheck|history-based value/i.test(t)) return "history";
+    if (/vehicle inspection|inspection report|inspection history|vehicle test detail|emissions test|overall result|readiness|inspection station/i.test(t)) return "inspection";
+    if (/safety recall|recall notice|recall campaign|nhtsa campaign|campaign (no|number)|\b\d{2}V-?\d{3}\b/i.test(t)) return "recall";
+    if (/service contract|vehicle service agreement|extended warranty|warranty coverage|coverage period|deductible|powertrain coverage|mechanical breakdown/i.test(t)) return "warranty";
+    if (/certificate of title|title number|title no\b|lienholder|lien holder/i.test(t)) return "title";
+    if (/registration|registr\.|renewal notice|txdmv|registration receipt/i.test(t)) return "registration";
+    if (/insurance|policy\s*(no|number|#)|insured|proof of (financial responsibility|coverage)/i.test(t)) return "insurance";
+    if (/owner'?s manual|owners manual|volvo car usa|see your retailer/i.test(t) && !/total|invoice/i.test(t)) return "manual";
     if (/total|subtotal|labor|invoice|repair order|\bqty\b|parts/i.test(t)) return "receipt";
     return "photo";
   }
@@ -205,7 +210,37 @@
       if (!ed.length && dates.length) ed = [dates[dates.length - 1]];
       if (ed.length) f.expires = ed[0].v;
     } else if (kind === "inspection") {
+      var td = text.match(/test\s*date\W{0,4}([^\n]{0,24})/i), tdd = td ? datesIn(td[1]) : [];
+      if (tdd.length) f.date = tdd[0].v; else if (dates.length) f.date = dates[0].v;
+      var om = text.match(/odometer\D{0,12}(\d{1,3}(?:,\d{3})+|\d{3,6})\b/i); if (om) { var on = +om[1].replace(/\D/g, ""); if (on >= 1 && on <= 400000) f.miles = on; }
+      var rr = text.match(/overall\s*result\W{0,4}(pass|fail)/i) || text.match(/\b(passed|failed)\b/i); if (rr) f.result = /pass/i.test(rr[1]) ? "pass" : "fail";
+      var sn = text.match(/station\s*name\W{0,4}([^\n]{3,60})/i); if (sn) f.station = sn[1].replace(/\s+(overall|test|tx dot).*$/i, "").trim().slice(0, 60);
+      var tt = text.match(/test\s*type\W{0,4}([^\n]{3,40})/i); if (tt) f.type = tt[1].replace(/\s+(tx dot|waiver).*$/i, "").trim().slice(0, 40);
+      var codes = {}, cm, cre = /\b([PBCU][0-3][0-9A-F]{3})\b/g; while ((cm = cre.exec(text))) codes[cm[1].toUpperCase()] = 1; var cl = Object.keys(codes); if (cl.length) f.codes = cl.slice(0, 10);
+      var mil = text.match(/mil\s*(?:command\s*status|engine\s*on)\W{0,4}(pass|fail|yes|no)/i); if (mil) f.mil = mil[1].toLowerCase();
+    } else if (kind === "recall") {
+      var camp = text.match(/\b(\d{2}V-?\d{3})\b/); if (camp) f.campaign = camp[1].replace("-", "");
+      var vr = text.match(/\b(R\d{5})\b/); if (vr) f.volvo = vr[1];
       if (dates.length) f.date = dates[0].v;
+      var subj = text.match(/(?:subject|re|regarding)\W{0,4}([^\n]{6,100})/i); if (subj) f.subject = subj[1].trim().slice(0, 100);
+    } else if (kind === "warranty") {
+      var prov = safeText.split("\n").map(function (l) { return l.trim(); }).filter(function (l) { return l.length >= 4 && /[a-z]{3}/i.test(l) && l.indexOf("■") < 0 && !/contract|agreement|page|date|customer/i.test(l); })[0]; if (prov) f.provider = prov.slice(0, 60);
+      var sd = text.match(/(?:effective|start|purchase|contract)\s*date\W{0,4}([^\n]{0,24})/i), sdd = sd ? datesIn(sd[1]) : []; if (sdd.length) f.start = sdd[0].v; else if (dates.length) f.start = dates[0].v;
+      var mo = text.match(/(\d{1,3})\s*months?/i); if (mo) f.months = +mo[1];
+      var mls = text.match(/(\d{2,3},\d{3}|\d{5,6})\s*miles/i); if (mls) f.miles = +mls[1].replace(/,/g, "");
+      var dd = text.match(/deductible\D{0,12}\$?\s*(\d{1,4})\b/i); if (dd) f.deductible = +dd[1];
+      var ed = text.match(/(?:expir(?:es|ation)|end)\s*(?:date)?\W{0,4}([^\n]{0,24})/i), edd = ed ? datesIn(ed[1]) : []; if (edd.length) f.expires = edd[0].v;
+    } else if (kind === "title") {
+      if (dates.length) f.issued = dates[0].v;
+      f.lien = /lien\s*holder|lienholder|first lien/i.test(text) && !/no\s+liens?|lien\s*holder\W{0,4}none/i.test(text);
+      var st = text.match(/\b(texas|new york|florida|california|[A-Z][a-z]+)\s+(?:certificate\s+of\s+)?title\b/i); if (st) f.state = st[1];
+    } else if (kind === "history") {
+      var pts = [], L = text.split("\n");
+      L.forEach(function (ln) { var d = datesIn(ln); var o = ln.match(/\b(\d{1,3},\d{3}|\d{4,6})\b(?=[^\n]{0,12}\b(?:mi|miles|odometer)|\s*$)/i); if (d.length && o) { var n = +o[1].replace(/\D/g, ""); if (n >= 100 && n <= 400000) pts.push({ date: d[0].v, miles: n }); } });
+      if (pts.length) f.points = pts.slice(0, 40);
+      var own = text.match(/(\d+)\s*(?:previous\s+)?owners?/i); if (own) f.owners = +own[1];
+    } else if (kind === "manual") {
+      var pg = text.match(/\bpage\s*(\d{1,3})\b/i); if (pg) f.page = +pg[1];
     } else if (kind === "tire") {
       var sz = text.match(/\b(\d{3})\s*\/\s*(\d{2})\s*[A-Z]{0,2}\s*R?\s*(\d{2})\b/);
       if (sz) f.size = sz[1] + "/" + sz[2] + "R" + sz[3];
@@ -271,7 +306,7 @@
     $("scanUndo").hidden = !S.boxes.some(function (b) { return b.kind === "hand"; });
     if (S.lines) { S.text = redactedText(S.lines, S.boxes); }
   }
-  var KIND_TITLE = { receipt: "Service receipt", door: "Door-pillar label", registration: "Registration", insurance: "Insurance card", inspection: "Inspection report", tire: "Tire sidewall", photo: "Photo" };
+  var KIND_TITLE = { receipt: "Service receipt", door: "Door-pillar label", registration: "Registration", insurance: "Insurance card", inspection: "Inspection report", tire: "Tire sidewall", photo: "Photo", recall: "Recall letter", warranty: "Service contract or warranty", title: "Title", history: "Vehicle history report", manual: "Manual page" };
   function fieldsUI() {
     var f = S.fields, k = S.kind, rows = [], apply = [];
     if (k === "receipt") {
@@ -281,7 +316,11 @@
     if (k === "door" && f.build) { rows.push(["Build month", f.build]); apply.push(["build", "Save " + f.build + " as the build month in Bulletins"]); }
     if (k === "registration" && f.expires) { rows.push(["Expires", f.expires]); apply.push(["regExp", "Save " + f.expires + " as the registration expiry in Glovebox"]); }
     if (k === "insurance" && f.expires) { rows.push(["Renews", f.expires]); apply.push(["insRenew", "Save " + f.expires + " as the insurance renewal in Glovebox"]); }
-    if (k === "inspection" && f.date) rows.push(["Inspected", f.date]);
+    if (k === "inspection") { if (f.date) rows.push(["Inspected", f.date]); if (f.miles) rows.push(["Odometer", f.miles.toLocaleString() + " mi"]); if (f.result) rows.push(["Result", f.result]); if (f.station) rows.push(["Station", f.station]); if (f.codes) rows.push(["Codes on file", f.codes.join(", ")]); }
+    if (k === "recall") { if (f.campaign) rows.push(["NHTSA campaign", f.campaign]); if (f.volvo) rows.push(["Volvo recall", f.volvo]); if (f.subject) rows.push(["Subject", f.subject]); }
+    if (k === "warranty") { if (f.provider) rows.push(["Provider", f.provider]); if (f.start) rows.push(["Start", f.start]); if (f.months) rows.push(["Term", f.months + " months" + (f.miles ? " / " + f.miles.toLocaleString() + " mi" : "")]); if (f.deductible != null) rows.push(["Deductible", "$" + f.deductible]); }
+    if (k === "title") { if (f.issued) rows.push(["Issued", f.issued]); rows.push(["Lien", f.lien ? "a lienholder is listed" : "none found"]); }
+    if (k === "history" && f.points) rows.push(["Odometer readings", f.points.length + " found, " + f.points[0].date + " to " + f.points[f.points.length - 1].date]);
     if (k === "tire") { if (f.dot) { var ay = dotYears(f.dot); rows.push(["Made", "week " + +f.dot.slice(0, 2) + " of 20" + f.dot.slice(2) + (ay != null ? " (about " + ay.toFixed(1) + " years old)" : "")]); } if (f.size) rows.push(["Size", f.size]); if (!f.dot && S.lines) rows.push(["DOT date", "not read: photograph the code close up with side light"]); }
     var h = "";
     if (rows.length) h += '<div class="scanread"><p class="ans-k">What it read <span class="pill watch">Unconfirmed</span></p><dl class="kv">' + rows.map(function (r) { return "<dt>" + esc(r[0]) + "</dt><dd>" + esc(r[1]) + "</dd>"; }).join("") + "</dl></div>";
@@ -367,6 +406,14 @@
         });
       });
     },
+    /* read a canvas (a PDF page, say) to raw text with no review sheet; docs.js uses it */
+    ocrText: function (canvas) { return ocr(canvas).then(function (data) { return linesOf(data).map(function (l) { return (l.words || []).map(function (w) { return w.text; }).join(" "); }).join("\n"); }); },
+    /* black out personal details in plain text (a PDF's own text layer) with the same rules as a photo */
+    scrub: function (text, opt) {
+      var lines = String(text || "").split("\n").map(function (ln) { var x = 0; return { words: ln.split(/\s+/).filter(Boolean).map(function (t) { var b = { x0: x, y0: 0, x1: x + t.length, y1: 1 }; x += t.length + 1; return { text: t, bbox: b }; }) }; });
+      return redactedText(lines, detect(lines, privateWords(), opt || {}));
+    },
+    classify: classify, parse: parse, titles: KIND_TITLE,
     /* exposed for tests */
     describe: describe, _tireDot: tireDot, _detect: detect, _parse: parse, _classify: classify, _redactedText: redactedText, version: TESS
   };

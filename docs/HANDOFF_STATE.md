@@ -31,6 +31,8 @@ Update 2026-10-12: Kyle reports it still drops with the OBDLink app closed and a
 
 **Update 2026-10-11 evening.** Kyle reports the link still drops right after connecting (new adapter, OBDLink app closed). Added: Scan the label button (Bulletins), DIY cards for the cabin air filter and front turn signal bulb (sources named on the cards), wipers and window tint on Upgrades, clearer Story and Training wording. A block of text Kyle pasted that claimed Gemini had done auto-start trips, the door-pillar step and a cabin filter card was not in the repo and was not applied.
 
+**Documents intake (2026-10-14):** `src/js/modules/docs.js`, tab `docs` (hidden, revealed with glove by The Belt; manual step `docs: 1` in Glovebox Service). pdf.js 3.11.174 legacy from jsDelivr (cached by the service worker with Tesseract). `V60_SCAN` gained `ocrText(canvas)`, `scrub(text)`, `classify`, `parse`, `titles`, and kinds recall/warranty/title/history/manual. Receipts hand off to `window.V60_GLOVE.pendReceipt`. Kyle reports Bluefy: downloads and print do nothing, share sheet passes only text: `window.V60_FILE.save` (ui.js) is the one way out for files.
+
 ## 2. Immediate Next Steps
 0. **Redesign follow-ups (2026-10-13).** Done so far: the manual shell, the Cases page in the manual's dress, the home's Now strip counting today's notes, item glossaries trimmed to eight. Next, in order:
    1. When Kyle sends the five photos (side-on, engine bay, driver's seat, front wheel, rear), check them in the app as the figures ("Your photo" in each view) and that the scanner blacked out the VIN on anything with a label in frame.
