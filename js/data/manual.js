@@ -38,7 +38,7 @@ window.V60_MANUAL_DATA = (function () {
         { tier: "D", t: "Diagnose it", d: "A low oil message, a rising consumption rate, and what the oil consumption program means for your car.", steps: [{ tree: "oil" }, { kb: "a-oilprogram" }, { oil: 3, t: "Three logged oil readings", why: "Three points across real miles give a consumption rate the app can show.", go: "tab:records" }] }
       ] },
     { id: "coolant", view: "bay", num: "1.2", n: "Coolant & cooling", d: "The expansion tank, the radiator and the fan. Pressurised when hot; check cold only.", bay: "coolant", part: "coolant", record: "coolant", tags: ["Fluids", "Engine"], photo: ["fluid"], at: [52, 150],
-      spec: [["Coolant", "Volvo coolant, 50/50 with water"], ["Capacity", "8.7 US qt"], ["Rule", "Never open the tank hot"], ["Cap, your photo", "145 kPa"], ["A/C, hood label", "R-134a, 800 g, Volvo PAG oil, with leak-tracer dye"]],
+      spec: [["Coolant", "Volvo coolant, 50/50 with water"], ["Capacity", "8.7 US qt"], ["Rule", "Never open the tank hot"], ["Cap, your photo", "145 kPa"], ["A/C, hood label", "R-134a, 800 g, Volvo PAG oil, with leak-tracer dye (the manual says 770 g; the label on the car wins)"]],
       chapters: [
         { tier: "K", t: "Know it", d: "The cooling loop: where the tank is, what the fan does, and why the system stays dangerous for minutes after the engine stops.", steps: [{ mission: "m-fluids" }, { bay: "coolant", t: "Find the expansion tank and the radiator", why: "Passenger side of the bay, with MIN and MAX marks." }], opens: ["1.6.1"] },
         { tier: "C", t: "Check it", d: "Level between the marks, cold, without opening anything. Crusty stains tell you about leaks before the gauge does.", steps: [{ mission: "m-fluidlook" }, { diy: "j-fluids" }], opens: ["1.7.1"] },
@@ -66,7 +66,7 @@ window.V60_MANUAL_DATA = (function () {
         { tier: "S", t: "Service it", d: "The cabin filter is the first real job: no tools, behind the glovebox. Your first wrench.", steps: [{ diy: "j-cabin" }] }
       ] },
     { id: "bfluid", view: "bay", num: "1.6", n: "Brake fluid", d: "The reservoir at the firewall on the driver's side. A slow drop is the pads wearing; a sudden drop is a leak.", bay: "brake", part: "bfluid", record: "brakefluid", tags: ["Fluids"], at: [320, 40],
-      spec: [["Fluid", "DOT 4"], ["Volvo interval", "Every other year"], ["Where, your photo", "Under the round cover on the driver's side of the cowl; the yellow cap says DOT 4 from a sealed container, clean the cap before removing"]],
+      spec: [["Fluid", "DOT 4, boiling point above 536 F; 0.63 US qt in the system"], ["Volvo interval", "3 years or 40,000 miles (2016 US schedule); the owner's manual defers to the service booklet"], ["Where, your photo", "Under the round cover on the driver's side of the cowl; the yellow cap says DOT 4 from a sealed container, clean the cap before removing"]],
       chapters: [
         { tier: "K", t: "Know it", d: "Where it is, what the level means, and why you don't just top it up.", steps: [{ bay: "brake", t: "Find the reservoir on the map" }] },
         { tier: "C", t: "Check it", d: "Between MIN and MAX with the cap closed. Low means get the brakes looked at.", steps: [{ diy: "j-fluids" }] }

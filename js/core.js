@@ -1058,7 +1058,7 @@
     placard: { t: "The recommended pressures are on the tire label on the driver's side door pillar, the post you see when the front door is open. Use those numbers, not the maximum printed on the tire. Your Premier's standard 215/50R17 tires take 38 psi front and rear, cold, per Volvo's manual." },
     obd: { t: "The OBD-II port is a 16-pin socket under the dashboard on the driver's side. Look up under the dash near the hood release with a flashlight.", v: true },
     adapter: { t: "Buy a Bluetooth LE adapter, because iPhones cannot use classic-Bluetooth adapters. The OBDLink CX (about $80) works with V60 Link and most apps. The Veepeak OBDCheck BLE+ (about $42) is a cheaper option for scanner apps. The Unlocks tab compares them." },
-    bfluid: { t: "Volvo calls for brake fluid every other year, or every year with hard, frequent braking." }
+    bfluid: { t: "Volvo's 2016 US schedule lists brake fluid every 3 years or 40,000 miles; the owner's manual says more often under hard conditions such as mountain driving." }
   };
   function factHTML(k) { var f = FACT[k]; return esc(f.t) + (f.v ? ' <span class="tag verify">verify</span>' : ""); }
 
@@ -1093,7 +1093,7 @@
         see: "Six of the seven landmarks found. It is fine to mark one you could not find." },
       { id: "m-oil", type: "field", title: "Check your oil level", xp: 60, min: 8, need: "Car on level ground", parts: ["oilfilter"], go: "tab:records",
         body: ["Your 2016 V60 T5 has no dipstick. A sensor measures the oil and the car shows it in the instrument cluster. This engine family is known to burn oil in some cars, so this is the most important habit in the whole campaign."],
-        steps: ["Park on level ground. The reading is most accurate after about 20 miles of driving, or after the car has sat parked for a few minutes.", "Put the ignition in mode II without starting the engine.", "Roll the thumb wheel on the left steering-wheel stalk until Oil level appears.", "Read the level. If oil is needed, add a little at a time: full synthetic 5W-30 ACEA A5/B5, or Volvo's 0W-20. Match what the last oil change used if you know it.", "Log it in Records under Oil watch, with the odometer and any quarts added. Over months that becomes your consumption rate."],
+        steps: ["Park on level ground. The reading is most accurate after about 20 miles of driving, or after the car has sat parked on level ground for 5 minutes with the engine off.", "Put the ignition in mode II without starting the engine.", "Roll the thumb wheel on the left steering-wheel stalk until Oil level appears.", "Read the level. If oil is needed, add a little at a time: full synthetic 5W-30 ACEA A5/B5, or Volvo's 0W-20. Match what the last oil change used if you know it.", "Log it in Records under Oil watch, with the odometer and any quarts added. Over months that becomes your consumption rate."],
         see: "A level within range. 'Not available' is not a fault. It means the car needs to be level or settled longer. 'Oil service required' can also mean the oil is overfilled.",
         safety: "Do not overfill. Too much oil can foam and damage the engine. Add a little, wait, and check again." },
       { id: "m-fluids", type: "learn", title: "Name that fluid", xp: 30, min: 4,
@@ -2079,12 +2079,12 @@
   /* ================= SPEC SHEET (Volvo 2016 V60 US owner's manual and maintenance schedule) ================= */
   var SPECS = [
     ["Engine", [["Code", "B4204T11, 1,969 cc four-cylinder turbo"], ["Bore and stroke", "82 x 93.2 mm"], ["Compression", "10.8:1"], ["Power", "240 hp at 5,600 rpm"], ["Torque", "258 lb-ft at 1,500 to 4,500 rpm"], ["Timing drive", "Belt"]]],
-    ["Engine oil", [["Volvo spec", "Full synthetic, ACEA A5/B5, SAE 5W-30 for normal driving. Volvo's 0W-20 (VCC RBS0-2AE) is approved for this four-cylinder"], ["Capacity with filter", "6.2 US qt (5.9 L)"], ["Level check", "Electronic, in the instrument cluster. There is no dipstick"]]],
-    ["Fluids", [["Coolant", "Volvo coolant, 50/50 with water, 8.7 US qt"], ["Automatic transmission", "Volvo AW1 fluid, about 7 US qt. Volvo says no change is needed in normal use"], ["Brake fluid", "DOT 4, 0.63 US qt"], ["Washer fluid", "6.8 US qt (4.7 without headlight washers)"], ["A/C refrigerant", "R134a, 1.7 lb, PAG oil"]]],
+    ["Engine oil", [["Volvo spec", "Full synthetic, ACEA A5/B5. SAE 5W-30 for normal driving; 0W-30 A5/B5 or Volvo's 0W-20 (VCC RBS0-2AE, four-cylinders only) for extreme driving"], ["Capacity with filter", "6.2 US qt (5.9 L)"], ["Level check", "Electronic, in the instrument cluster. There is no dipstick"]]],
+    ["Fluids", [["Coolant", "Volvo coolant, 50/50 with water, 8.7 US qt"], ["Automatic transmission", "Volvo AW1 fluid, about 7 US qt. Volvo says no change is needed in normal use"], ["Brake fluid", "DOT 4, 0.63 US qt"], ["Washer fluid", "6.8 US qt (4.7 without headlight washers)"], ["A/C refrigerant", "R134a, PAG oil. Manual: 1.7 lb (770 g); the sticker under the hood: 800 g"]]],
     ["Wheels and tires", [["Standard tires", "215/50R17 on 17 x 7.5 in wheels"], ["Pressure, 215/50R17", "38 psi front and rear, cold"], ["Wheel bolt torque", "103 lb-ft (140 Nm), tightened in a crosswise pattern"], ["Tire monitor", "Indirect. Recalibrate after any pressure or tire change"]]],
     ["Electrical", [["Battery", "12 V AGM, 800 CCA, required on start/stop cars. In the engine bay under two covers"], ["Low beam", "H11 halogen, 55 W"], ["High beam", "H9 halogen, 65 W"], ["Turn signals", "PY24W front, PY21W rear"]]],
     ["Fuel and economy", [["Tank", "17.8 US gal"], ["Fuel", "87 octane or higher is fine for reliability. Volvo recommends premium for best performance, and 91 or higher for heat or towing. Up to E10"], ["EPA rating", "25 city, 37 highway, 29 combined mpg"]]],
-    ["Capacities and limits", [["Curb weight", "About 3,530 to 3,620 lb (sources differ)"], ["Towing", "3,300 lb braked, 1,650 lb unbraked"], ["Roof load", "165 lb"]]]
+    ["Capacities and limits", [["Curb weight", "3,620 to 3,960 lb across engines per the manual; the 2.0 FWD is the lightest. Other sources: about 3,530 lb"], ["Towing", "3,300 lb braked (2 in ball), 2,000 lb (1 7/8 in ball), 1,650 lb unbraked, 165 lb tongue"], ["Roof load", "165 lb in the weights table, 220 lb on the loading pages. Stay under 165 lb"]]]
   ];
   var SCHEDULE = [
     ["Every 10,000 mi or 12 months", "Oil and filter, reset the service reminder, check fluids, brakes, tires, wipers, lights, belts"],
