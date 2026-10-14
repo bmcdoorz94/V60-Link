@@ -82,7 +82,7 @@ input[type="text"] { font: inherit; font-family: var(--font-data); color: var(--
 .kv dd { margin: 0; font-family: var(--font-data); }
 .checks label { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; }
 .checks input { margin-top: 4px; width: 18px; height: 18px; flex: none; }
-pre.log { margin: 0; max-height: 260px; overflow: auto; font-family: var(--font-data); font-size: 12px; background: var(--panel2); border: 1px solid var(--line); border-radius: 4px; padding: 10px; white-space: pre-wrap; word-break: break-all; }
+pre.log, textarea.log { margin: 0; max-height: 260px; overflow: auto; font-family: var(--font-data); font-size: 12px; background: var(--panel2); border: 1px solid var(--line); border-radius: 4px; padding: 10px; white-space: pre-wrap; word-break: break-all; }
 details summary { cursor: pointer; font-weight: 600; }
 </style>
 </head>
@@ -109,8 +109,9 @@ details summary { cursor: pointer; font-weight: 600; }
     <details id="logBox">
       <summary id="h-log">Adapter log</summary>
       <p class="lede" style="margin:8px 0">Every command sent and every reply, kept on this phone across reloads. Tap Copy and paste it into the chat.</p>
-      <pre class="log" id="log"></pre>
-      <div class="row" style="margin-top:8px"><button type="button" class="quiet" id="btnCopyLog">Copy log</button><button type="button" class="quiet" id="btnClearLog">Clear log</button></div>
+      <textarea class="log" id="log" readonly rows="10" spellcheck="false" aria-label="Adapter log"></textarea>
+      <div class="row" style="margin-top:8px"><button type="button" class="quiet" id="btnCopyLog">Copy log</button><button type="button" class="quiet" id="btnShareLog" hidden>Share log</button><button type="button" class="quiet" id="btnDlLog">Download log</button><button type="button" class="quiet" id="btnClearLog">Clear log</button></div>
+      <p class="lede" style="margin:6px 0 0" id="logHelp">If Copy does nothing, use Share (to Messages, Notes or this chat), or press and hold inside the log, choose Select All, then Copy.</p>
     </details>
     <details>
       <summary>Before you connect</summary>
@@ -205,7 +206,7 @@ details summary { cursor: pointer; font-weight: 600; }
   /* ---------------- log ---------------- */
   var LOG_KEY = "v60-link-log", logLines = [];
   try { logLines = JSON.parse(localStorage.getItem(LOG_KEY) || "[]"); if (!Array.isArray(logLines)) logLines = []; } catch (e) { logLines = []; }
-  function showLog() { $("log").textContent = logLines.join("\n"); }
+  function showLog() { var el = $("log"); el.value = logLines.join("\n"); el.scrollTop = el.scrollHeight; }
   function log(dir, text) {
     logLines.push(new Date().toISOString().slice(0, 23).replace("T", " ") + " " + dir + " " + String(text).replace(/\r/g, "\\r").replace(/\n/g, "\\n"));
     if (logLines.length > 400) logLines.shift();
@@ -709,14 +710,37 @@ details summary { cursor: pointer; font-weight: 600; }
     }).catch(function (e) { $("clearStatus").textContent = (e && e.message) || "Clear failed."; armClear(); });
   });
 
+  function logText() { return logLines.join("\n") || "(empty log)"; }
   function copyLog(btn) {
-    var text = logLines.join("\n") || "(empty log)";
-    var done = function () { if (btn) { btn.textContent = "Copied"; setTimeout(function () { btn.textContent = btn.id === "btnCopyLog2" ? "Copy the adapter log" : "Copy log"; }, 1500); } };
-    try { navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text); done(); }); } catch (e) { fallbackCopy(text); done(); }
+    var text = logText(), label = btn ? btn.textContent : "";
+    var done = function (okk) { if (btn) { btn.textContent = okk ? "Copied" : "Copy failed: use Share or select the text"; setTimeout(function () { btn.textContent = label; }, okk ? 1500 : 4000); } };
+    var fb = function () { done(fallbackCopy()); };
+    try { navigator.clipboard.writeText(text).then(function () { done(true); }, fb); } catch (e) { fb(); }
   }
-  function fallbackCopy(text) { try { var ta = document.createElement("textarea"); ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.top = "-1000px"; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta); } catch (e) {} }
+  /* iOS needs a real selection on a visible, editable box; select() on a hidden readonly textarea copies nothing. */
+  function fallbackCopy() {
+    var el = $("log"), okk = false;
+    try {
+      $("logBox").open = true; el.readOnly = false; el.contentEditable = true;
+      var range = document.createRange(); range.selectNodeContents(el);
+      var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+      el.setSelectionRange(0, el.value.length);
+      okk = document.execCommand("copy");
+    } catch (e) { okk = false; }
+    try { el.contentEditable = false; el.readOnly = true; } catch (e) {}
+    return okk;
+  }
   $("btnCopyLog").addEventListener("click", function () { copyLog(this); });
-  $("btnCopyLog2").addEventListener("click", function () { copyLog(this); $("logBox").open = true; });
+  $("btnCopyLog2").addEventListener("click", function () { $("logBox").open = true; copyLog(this); });
+  $("btnDlLog").addEventListener("click", function () { download("v60-adapter-log-" + stamp() + ".txt", logText(), "text/plain"); });
+  if (navigator.share) {
+    $("btnShareLog").hidden = false;
+    $("btnShareLog").addEventListener("click", function () {
+      var text = logText(), name = "v60-adapter-log-" + stamp() + ".txt";
+      var p = canShareFiles() ? navigator.share({ files: [fileFor(name, text, "text/plain")], title: name }) : navigator.share({ title: name, text: text });
+      p.catch(function () {});
+    });
+  }
   $("btnClearLog").addEventListener("click", function () { logLines = []; showLog(); try { localStorage.removeItem(LOG_KEY); } catch (e) {} });
 
   window.__link = { parseResponse: parseResponse, dtcsFrom: dtcsFrom, decodeDTC: decodeDTC, SimTransport: SimTransport, csv: csv, live: live, getReport: function () { return report; }, sim: function () { return link; } };

@@ -50,7 +50,7 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
     await p.click('#lk-btnConnect');
     if (mode === 'drop-once') {
       await p.waitForFunction(() => /Connected to/.test(document.getElementById('lk-connText').textContent), null, { timeout: 30000 }).catch(() => {});
-      const txt = await p.textContent('#lk-connText'), log = await p.textContent('#lk-log');
+      const txt = await p.textContent('#lk-connText'), log = await p.inputValue('#lk-log');
       ok(/Connected to OBDLink CX/.test(txt), 'drop right after connecting: retried and connected (' + txt + ')');
       ok(/retrying once/.test(log) && /GATT reconnected/.test(log), 'log shows the drop and the retry');
       ok(/using known service fff0: notify fff1, write fff2/.test(log) && /service fef5:/.test(log), 'picked the CX serial service over the firmware-update one, whatever the letter case: ' + (log.match(/using [^\n]*/) || [''])[0]);
@@ -58,17 +58,17 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
     } else if (mode === 'drop-after-atz') {
       const t0 = Date.now();
       await p.waitForFunction(() => /Connected to/.test(document.getElementById('lk-connText').textContent), null, { timeout: 30000 }).catch(() => {});
-      const txt = await p.textContent('#lk-connText'), log = await p.textContent('#lk-log');
+      const txt = await p.textContent('#lk-connText'), log = await p.inputValue('#lk-log');
       ok(/Connected to OBDLink CX/.test(txt), 'drop after the ATZ reset: retried with a warm start and connected (' + txt + ')');
       ok(/last command sent: ATZ/.test(log) && /ATWS/.test(log), 'log names the command before the drop and the warm start'); if (!/last command sent: ATZ/.test(log)) console.log(log);
       ok(Date.now() - t0 < 5000, 'no 6-second wait for a reply that cannot come (' + (Date.now() - t0) + ' ms)');
     } else {
       await p.waitForFunction(() => /Close the OBDLink|answered but|permission|pair with/i.test(document.getElementById('lk-connText').textContent), null, { timeout: 40000 }).catch(() => {});
       const txt = await p.textContent('#lk-connText');
-      ok(/Close the OBDLink app/.test(txt), 'keeps dropping: plain advice shown (' + txt + ')'); if (!/Close the OBDLink/.test(txt)) console.log(await p.textContent('#lk-log'));
+      ok(/Close the OBDLink app/.test(txt), 'keeps dropping: plain advice shown (' + txt + ')'); if (!/Close the OBDLink/.test(txt)) console.log(await p.inputValue('#lk-log'));
       ok(!(await p.evaluate(() => document.getElementById('lk-connFail').hidden)), 'copy-the-log button shown after the failure');
       await p.reload(); await p.waitForTimeout(600); await p.evaluate(() => __v60.go('live'));
-      const kept = await p.textContent('#lk-log');
+      const kept = await p.inputValue('#lk-log');
       ok(/connect failed/.test(kept) && /page loaded/.test(kept), 'adapter log survives a reload');
     }
     ok(errs.length === 0, 'no page errors ' + JSON.stringify(errs));
