@@ -64,7 +64,7 @@ new_sup = '''  (function checkSupport() {
 '''
 s = s.replace(old_sup, new_sup)
 # report save -> garage
-old_rep = s[s.index('  $("btnReport").addEventListener("click", function () {'):s.index('  if (canShareFiles())')]
+old_rep = s[s.index('  $("btnReport").addEventListener("click", function () {'):s.index('  if (navigator.share) {')]
 new_rep = '''  $("btnReport").addEventListener("click", function () {
     if (!report) return;
     var r = JSON.parse(reportJSON()).report, added = api.importLinkReport(r);

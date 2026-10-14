@@ -623,7 +623,12 @@ details summary { cursor: pointer; font-weight: 600; }
     setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
   }
   function canShareFiles() { try { return !!(navigator.canShare && navigator.canShare({ files: [fileFor("x.txt", "x", "text/plain")] })); } catch (e) { return false; } }
-  function share(name, text, type) { return navigator.share({ files: [fileFor(name, text, type)], title: name }); }
+  /* Bluefy's share sheet has delivered only the file name, not the file. Pass the content as text too, so the receiving app gets it either way. */
+  function share(name, text, type) {
+    var data = { title: name, text: text };
+    if (canShareFiles()) data.files = [fileFor(name, text, type)];
+    return navigator.share(data);
+  }
   function stamp() { var d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0") + "_" + String(d.getHours()).padStart(2, "0") + String(d.getMinutes()).padStart(2, "0"); }
   function reportJSON() {
     var r = JSON.parse(JSON.stringify(report)); delete r.vin;
@@ -635,7 +640,7 @@ details summary { cursor: pointer; font-weight: 600; }
     $("reportStatus").textContent = "Saved. In V60 Garage, load it in Diagnose, under Import a V60 Link report.";
     $("ck1").checked = true; armClear();
   });
-  if (canShareFiles()) { $("btnShareReport").hidden = false; $("btnShareCsv").hidden = false; }
+  if (navigator.share) { $("btnShareReport").hidden = false; $("btnShareCsv").hidden = false; }
   $("btnShareReport").addEventListener("click", function () { if (!report) return; share("v60-health-" + stamp() + ".json", reportJSON(), "application/json").then(function () { $("ck1").checked = true; armClear(); }).catch(function () {}); });
 
   /* ---------------- live data ---------------- */
@@ -737,8 +742,7 @@ details summary { cursor: pointer; font-weight: 600; }
     $("btnShareLog").hidden = false;
     $("btnShareLog").addEventListener("click", function () {
       var text = logText(), name = "v60-adapter-log-" + stamp() + ".txt";
-      var p = canShareFiles() ? navigator.share({ files: [fileFor(name, text, "text/plain")], title: name }) : navigator.share({ title: name, text: text });
-      p.catch(function () {});
+      share(name, text, "text/plain").catch(function () {});
     });
   }
   $("btnClearLog").addEventListener("click", function () { logLines = []; showLog(); try { localStorage.removeItem(LOG_KEY); } catch (e) {} });
