@@ -12,6 +12,7 @@
  "js/modules/manual.js": "dist-artifact/js/modules/manual.js",
  "js/modules/fuel.js": "dist-artifact/js/modules/fuel.js",
  "js/modules/glovebox.js": "dist-artifact/js/modules/glovebox.js",
+ "js/modules/docs.js": "dist-artifact/js/modules/docs.js",
  "js/modules/diy.js": "dist-artifact/js/modules/diy.js",
  "js/modules/trees.js": "dist-artifact/js/modules/trees.js",
  "js/modules/bulletins.js": "dist-artifact/js/modules/bulletins.js",

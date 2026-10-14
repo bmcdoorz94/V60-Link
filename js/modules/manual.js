@@ -56,6 +56,7 @@
     else if (s.oil) { o.kind = "Record"; o.go = o.go || "tab:records"; o.done = (api.state.oil || []).length >= s.oil; }
     else if (s.scans) { o.kind = "Live link"; o.go = o.go || "tab:live"; o.done = scansReal(api) >= s.scans; }
     else if (s.receipts) { o.kind = "Glovebox"; o.go = o.go || "tab:glove"; o.done = (mod(api, "glove", {}).receipts || []).length >= s.receipts; }
+    else if (s.docs) { o.kind = "Documents"; o.go = o.go || "tab:docs"; o.done = (mod(api, "docs", {}).list || []).length >= s.docs; }
     else if (s.build) { o.kind = "Bulletins"; o.go = o.go || "tab:bulletins"; o.done = !!mod(api, "tsb", {}).build; }
     else if (s.tsb) { o.kind = "Bulletin"; o.go = o.go || "tsb:" + s.tsb; o.done = !!((mod(api, "tsb", { mark: {} }).mark || {})[s.tsb]); }
     else if (s.upg) { var u = upgrade(s.upg); o.kind = "Upgrade"; o.t = o.t || ("Decide: " + (u ? u.t : s.upg)); o.go = o.go || "tab:upgrades"; o.done = !!((mod(api, "upg", { want: {} }).want || {})[s.upg]); }

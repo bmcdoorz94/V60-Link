@@ -161,7 +161,7 @@ window.V60_MANUAL_DATA = (function () {
       chapters: [
         { tier: "K", t: "Know it", d: "Enter the mileage, hunt for service history, and read the car's Texas paper trail.", steps: [{ mission: "m-odo" }, { mission: "m-hist" }, { kb: "a-txhistory" }, { kb: "a-tsb" }], opens: ["5.6.1"] },
         { tier: "C", t: "Check it", d: "Recalls checked by VIN, the build month read off the door-pillar label.", steps: [{ mission: "m-recall" }, { build: 1, t: "Enter the build month from the door label", why: "Photograph the label; the app reads the month on your phone.", go: "tab:bulletins" }] },
-        { tier: "S", t: "Service it", d: "Receipts in, renewal dates in, the first real service record on file.", steps: [{ receipts: 1, t: "Add a receipt", go: "tab:glove" }, { tab: "glove", t: "Enter the registration and insurance dates", go: "tab:glove" }] },
+        { tier: "S", t: "Service it", d: "Receipts in, renewal dates in, the first real service record on file.", steps: [{ receipts: 1, t: "Add a receipt", go: "tab:glove" }, { docs: 1, t: "Drop in any document: a receipt, the registration, an insurance card, an inspection report", why: "Photos and PDFs are read on this phone, sorted, and filed where they belong.", go: "tab:docs" }, { tab: "glove", t: "Enter the registration and insurance dates", go: "tab:glove" }] },
         { tier: "D", t: "Diagnose it", d: "Which bulletins apply to your build, and what the owner complaints say actually goes wrong.", steps: [{ tab: "bulletins", t: "Mark the bulletins that match a symptom you have", go: "tab:bulletins" }, { kb: "a-complaints" }] }
       ] },
 

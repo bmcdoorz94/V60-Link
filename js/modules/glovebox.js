@@ -66,6 +66,8 @@
     if (mi) api.bumpOdo(mi);
     if (+total && window.V60_FUEL) window.V60_FUEL.addExpense(api, { id: api.uid(), date: date || api.todayStr(), cat: "service", amt: +total, odo: mi || null, note: (shop || note || "Service").slice(0, 120) });
   }
+  /* docs.js hands a receipt it read here, so the work gets logged through the same check-and-save card */
+  window.V60_GLOVE = { pendReceipt: function (api, p) { gb.pending = p; gb.asset = null; render(api); api.$("gbStatus").textContent = "Read from the document. Check every value below, then save."; } };
   (window.V60_MODULES = window.V60_MODULES || []).push({
     id: "glove",
     tabs: [{ id: "glove", section: "car", label: "Glovebox", order: 40, html: '<section><h2>Glovebox</h2><p class="lede">Receipts, papers, coverage and tools. Every past service you add makes the due dates real instead of guessed.</p></section>' +
