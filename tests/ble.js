@@ -66,6 +66,10 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
       await p.waitForFunction(() => /Close the OBDLink|answered but|permission|pair with/i.test(document.getElementById('lk-connText').textContent), null, { timeout: 40000 }).catch(() => {});
       const txt = await p.textContent('#lk-connText');
       ok(/Close the OBDLink app/.test(txt), 'keeps dropping: plain advice shown (' + txt + ')'); if (!/Close the OBDLink/.test(txt)) console.log(await p.textContent('#lk-log'));
+      ok(!(await p.evaluate(() => document.getElementById('lk-connFail').hidden)), 'copy-the-log button shown after the failure');
+      await p.reload(); await p.waitForTimeout(600); await p.evaluate(() => __v60.go('live'));
+      const kept = await p.textContent('#lk-log');
+      ok(/connect failed/.test(kept) && /page loaded/.test(kept), 'adapter log survives a reload');
     }
     ok(errs.length === 0, 'no page errors ' + JSON.stringify(errs));
     await ctx.close();

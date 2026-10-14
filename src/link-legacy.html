@@ -106,6 +106,12 @@ details summary { cursor: pointer; font-weight: 600; }
       <button type="button" class="quiet" id="btnDemo">Try with a simulated car</button>
       <button type="button" class="quiet" id="btnDisconnect" disabled>Disconnect</button>
     </div>
+    <details id="logBox">
+      <summary id="h-log">Adapter log</summary>
+      <p class="lede" style="margin:8px 0">Every command sent and every reply, kept on this phone across reloads. Tap Copy and paste it into the chat.</p>
+      <pre class="log" id="log"></pre>
+      <div class="row" style="margin-top:8px"><button type="button" class="quiet" id="btnCopyLog">Copy log</button><button type="button" class="quiet" id="btnClearLog">Clear log</button></div>
+    </details>
     <details>
       <summary>Before you connect</summary>
       <ol style="margin:8px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:4px">
@@ -176,15 +182,6 @@ details summary { cursor: pointer; font-weight: 600; }
     <span class="status" id="clearStatus"></span>
   </section>
 
-  <section class="card" aria-labelledby="h-log">
-    <details>
-      <summary id="h-log">Adapter conversation</summary>
-      <p class="lede" style="margin:8px 0">Every command sent and every reply, for troubleshooting.</p>
-      <pre class="log" id="log"></pre>
-      <div class="row" style="margin-top:8px"><button type="button" class="quiet" id="btnCopyLog">Copy log</button></div>
-    </details>
-  </section>
-
   <section class="card">
     <h2>Limits</h2>
     <ul style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px">
@@ -206,12 +203,16 @@ details summary { cursor: pointer; font-weight: 600; }
   function isNum(x) { return typeof x === "number" && isFinite(x); }
 
   /* ---------------- log ---------------- */
-  var logLines = [];
+  var LOG_KEY = "v60-link-log", logLines = [];
+  try { logLines = JSON.parse(localStorage.getItem(LOG_KEY) || "[]"); if (!Array.isArray(logLines)) logLines = []; } catch (e) { logLines = []; }
+  function showLog() { $("log").textContent = logLines.join("\n"); }
   function log(dir, text) {
-    logLines.push(new Date().toISOString().slice(11, 23) + " " + dir + " " + String(text).replace(/\r/g, "\\r").replace(/\n/g, "\\n"));
+    logLines.push(new Date().toISOString().slice(0, 23).replace("T", " ") + " " + dir + " " + String(text).replace(/\r/g, "\\r").replace(/\n/g, "\\n"));
     if (logLines.length > 400) logLines.shift();
-    $("log").textContent = logLines.join("\n");
+    showLog();
+    try { localStorage.setItem(LOG_KEY, JSON.stringify(logLines)); } catch (e) {}
   }
+  if (logLines.length) { showLog(); log("..", "page loaded"); }
 
   /* ---------------- transports ---------------- */
   /* Full 128-bit UUIDs: Bluefy does not accept the 16-bit short forms. FFF0 is the OBDLink CX UART service (notify FFF1, write FFF2). */
@@ -510,7 +511,7 @@ details summary { cursor: pointer; font-weight: 600; }
       transport.connecting = false;
       try { transport.close(); } catch (x) {}
       link = null; enable(false);
-      var msg = e && e.name === "NotFoundError" ? "No adapter chosen." : (e && e.name === "SecurityError" ? "This page is not allowed to use Bluetooth here. Open it directly in Bluefy, Chrome or Edge, not inside another app's preview." : ((e && e.message) || ("Could not connect" + (e && e.name ? " (" + e.name + ")" : "") + ". The adapter log at the bottom says where it stopped.")));
+      var msg = e && e.name === "NotFoundError" ? "No adapter was chosen. If the list was empty, the adapter is probably still held by the phone or another app: unplug it, wait 10 seconds, plug it back in and try again." : (e && e.name === "SecurityError" ? "This page is not allowed to use Bluetooth here. Open it directly in Bluefy, Chrome or Edge, not inside another app's preview." : ((e && e.message) || ("Could not connect" + (e && e.name ? " (" + e.name + ")" : "") + ". The adapter log at the bottom says where it stopped.")));
       if (e && e.message === "timeout") msg = "The adapter stopped answering. Unplug it, plug it back in, and try again.";
       var em = String((e && e.message) || "") + " " + String((e && e.name) || "");
       if (/encrypt|authenticat|insufficient|pair|bond/i.test(em)) msg = "The adapter needs to pair with this phone first. Unplug it, plug it back in, then tap Connect within 5 minutes and accept the pairing request (PIN 123456 if asked).";
@@ -518,7 +519,7 @@ details summary { cursor: pointer; font-weight: 600; }
       else if (e && e.name === "NotAllowedError") msg = "Bluetooth permission was refused. On iPhone: Settings, then Bluefy, then turn Bluetooth on.";
       log("!!", "connect failed: " + em + (e && e.stack ? " | " + String(e.stack).slice(0, 160).replace(/\s+/g, " ") : ""));
       setConn("", msg);
-      if (!(e && e.name === "NotFoundError")) { $("connFail").hidden = false; }
+      $("connFail").hidden = false;
     });
   }
   $("btnConnect").addEventListener("click", function () {
@@ -715,7 +716,8 @@ details summary { cursor: pointer; font-weight: 600; }
   }
   function fallbackCopy(text) { try { var ta = document.createElement("textarea"); ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.top = "-1000px"; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta); } catch (e) {} }
   $("btnCopyLog").addEventListener("click", function () { copyLog(this); });
-  $("btnCopyLog2").addEventListener("click", function () { copyLog(this); });
+  $("btnCopyLog2").addEventListener("click", function () { copyLog(this); $("logBox").open = true; });
+  $("btnClearLog").addEventListener("click", function () { logLines = []; showLog(); try { localStorage.removeItem(LOG_KEY); } catch (e) {} });
 
   window.__link = { parseResponse: parseResponse, dtcsFrom: dtcsFrom, decodeDTC: decodeDTC, SimTransport: SimTransport, csv: csv, live: live, getReport: function () { return report; }, sim: function () { return link; } };
 })();
