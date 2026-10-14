@@ -7,7 +7,7 @@ Read `docs/ROADMAP.md` before starting. It holds the backlog, the decisions so f
 ## The car (public repo: never commit the VIN, plate or chassis number)
 - 2016 V60 T5 Drive-E Premier, FWD, B4204T11 2.0 L turbo four, 240 hp / 258 lb-ft, Aisin TG-81SC 8-speed, start/stop, indirect tire monitor (no wheel sensors).
 - Volvo bulletin codes: engine code 40, vehicle type 155.
-- Bought about Aug 2025, as-is from an independent lot, at about 90k miles, with no service history. About 95k miles in Oct 2026. Austin, TX (Travis County emissions testing). iPhone only.
+- Bought about Aug 2025, as-is from an independent lot (Lams Austin Autos), at about 84,550 miles, with no service history. 91,357 miles on 2026-10-14 (cluster photo). Digital instrument cluster (a Premier item). Austin, TX (Travis County emissions testing). iPhone only.
 - Tire pressure light is always on. Timing belt history is unknown.
 
 ## Rules for content
