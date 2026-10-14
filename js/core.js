@@ -2312,10 +2312,10 @@
       L.push("END:VCALENDAR"); return L.join("\r\n");
     }
     function saveIcs(name, text) {
-      claudeUse("downloads").then(function (d) {
-        if (!d) { $("icsStatus").textContent = "Saving files is not available in this view."; return null; }
-        return d.save({ filename: name, data: text }).then(function () { $("icsStatus").textContent = "Saved. Open the file to add it to your calendar."; });
-      }).catch(function (e) { $("icsStatus").textContent = e && e.code === "declined" ? "Cancelled." : "Could not save the file."; });
+      if (!window.V60_FILE) { $("icsStatus").textContent = "Saving files is not available in this view."; return; }
+      window.V60_FILE.save(name, text, "text/calendar").then(function (how) {
+        $("icsStatus").textContent = how === "share" ? "Shared. On iPhone, choose Save to Files, then open the .ics file there to add it to Calendar." : "Saved. Open the file to add it to your calendar.";
+      }).catch(function (e) { $("icsStatus").textContent = e && (e.code === "declined" || e.name === "AbortError") ? "Cancelled." : "Could not save the file."; });
     }
     $("icsMonthly").addEventListener("click", function () {
       var d = new Date(); d.setDate(1); d.setMonth(d.getMonth() + 1); while (d.getDay() !== 6) d.setDate(d.getDate() + 1);
@@ -2340,13 +2340,10 @@
     });
     function localBackup() {
       var name = "v60-garage-backup-" + todayStr() + ".json", text = JSON.stringify(state, null, 1), done = function (m) { $("backupStatus").textContent = m; try { localStorage.setItem("v60-garage-lastbackup", todayStr()); } catch (e) {} };
-      try {
-        var file = new File([text], name, { type: "application/json" });
-        if (navigator.canShare && navigator.canShare({ files: [file] })) { navigator.share({ files: [file], title: name }).then(function () { done("Backup shared. Choose Save to Files to keep it in iCloud Drive."); }).catch(function () { $("backupStatus").textContent = "Cancelled."; }); return; }
-      } catch (e) {}
-      var url = URL.createObjectURL(new Blob([text], { type: "application/json" })), a = document.createElement("a");
-      a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
-      done("Backup downloaded.");
+      if (!window.V60_FILE) { done("Saving files is not available in this view."); return; }
+      window.V60_FILE.save(name, text, "application/json").then(function (how) {
+        done(how === "share" ? "Backup shared. Choose Save to Files (or Notes) to keep it; the restore box below reads it back." : "Backup saved.");
+      }).catch(function (e) { $("backupStatus").textContent = e && e.name === "AbortError" ? "Cancelled." : "Could not save the backup."; });
     }
     var pendingImport = null;
     $("importFile").addEventListener("change", function () {
