@@ -42,15 +42,20 @@ def main():
     state = open(os.path.join(ROOT, "docs", "HANDOFF_STATE.md"), encoding="utf-8").read().strip()
     fl = files()
     rows, blocks, total = [], [], 0
+    extra_bins = []
     for p in fl:
         data = open(os.path.join(ROOT, p), "rb").read()
-        text = data.decode("utf-8")
+        try:
+            text = data.decode("utf-8")
+        except UnicodeDecodeError:
+            extra_bins.append(p)  # a binary under a text folder (a PDF test fixture, say) goes out as base64 below
+            continue
         total += len(data)
         rows.append("| `%s` | %d | %d | `%s` |" % (p, text.count("\n") + (0 if text.endswith("\n") or not text else 1), len(data), hashlib.sha256(data).hexdigest()[:12]))
         f = fence_for(text)
         blocks.append("### `%s`\n\n%s%s\n%s%s%s\n" % (p, f, LANG.get(os.path.splitext(p)[1], ""), text, "" if text.endswith("\n") or not text else "\n", f))
     bins = []
-    for p in BINARY:
+    for p in BINARY + extra_bins:
         fp = os.path.join(ROOT, p)
         if not os.path.isfile(fp): continue
         data = open(fp, "rb").read()
