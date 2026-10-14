@@ -157,9 +157,9 @@ window.V60_MANUAL_DATA = (function () {
         { tier: "S", t: "Service it", d: "Cleaning the interior with what Volvo recommends.", steps: [{ diy: "j-interior" }] }
       ] },
     { id: "glove", view: "cabin", num: "3.5", n: "Glovebox", d: "Papers and records: registration, insurance, inspection, receipts, recalls, bulletins. A filing cabinet, not a lesson.", tags: ["Ownership", "Recalls", "Inspection"], at: [300, 150],
-      spec: [["Door label, your photo", "Date 08/15; market code 31; type PC; colour code 717-46"], ["Weights, door label", "GVWR 4,740 lb; GAWR 2,580 lb front, 2,300 lb rear"]],
+      spec: [["Door label, your photo", "Date 08/15; market code 31; type PC; colour code 717-46"], ["Weights, door label", "GVWR 4,740 lb; GAWR 2,580 lb front, 2,300 lb rear"], ["Sold new", "Austin, Roger Beasley Volvo, Dec 2015 (Texas inspection record)"], ["Mileage on record", "37,000 Sep 2018; 45,122 Sep 2019; 84,574 Jun 2025; 89,617 May 2026"], ["Last emissions test", "Passed 2026-05-16, next due with the May 2027 renewal"]],
       chapters: [
-        { tier: "K", t: "Know it", d: "Enter the mileage, hunt for service history, and learn what a bulletin is.", steps: [{ mission: "m-odo" }, { mission: "m-hist" }, { kb: "a-tsb" }], opens: ["5.6.1"] },
+        { tier: "K", t: "Know it", d: "Enter the mileage, hunt for service history, and read the car's Texas paper trail.", steps: [{ mission: "m-odo" }, { mission: "m-hist" }, { kb: "a-txhistory" }, { kb: "a-tsb" }], opens: ["5.6.1"] },
         { tier: "C", t: "Check it", d: "Recalls checked by VIN, the build month read off the door-pillar label.", steps: [{ mission: "m-recall" }, { build: 1, t: "Enter the build month from the door label", why: "Photograph the label; the app reads the month on your phone.", go: "tab:bulletins" }] },
         { tier: "S", t: "Service it", d: "Receipts in, renewal dates in, the first real service record on file.", steps: [{ receipts: 1, t: "Add a receipt", go: "tab:glove" }, { tab: "glove", t: "Enter the registration and insurance dates", go: "tab:glove" }] },
         { tier: "D", t: "Diagnose it", d: "Which bulletins apply to your build, and what the owner complaints say actually goes wrong.", steps: [{ tab: "bulletins", t: "Mark the bulletins that match a symptom you have", go: "tab:bulletins" }, { kb: "a-complaints" }] }
