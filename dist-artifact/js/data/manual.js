@@ -29,7 +29,7 @@ window.V60_MANUAL_DATA = (function () {
 
   var I = [
     /* ---------- view 1: engine bay ---------- */
-    { id: "oil", view: "bay", num: "1.1", n: "Oil", d: "The level is read in the driver display on this engine; there is no dipstick.", bay: "oilcap", part: "oilfilter", record: "oil", tags: ["Fluids", "Engine", "Maintenance"], photo: ["fluid"], at: [128, 98],
+    { id: "oil", view: "bay", num: "1.1", n: "Oil", d: "The level is read in the driver display on this engine; there is no dipstick.", bay: "oilcap", part: "oilfilter", record: "oil", tags: ["Fluids", "Engine", "Maintenance"], photo: ["fluid"], at: [122, 90],
       spec: [["Spec", "ACEA A5/B5 5W-30, or Volvo 0W-20"], ["Capacity", "6.2 US qt with filter"], ["Level", "Driver display, no dipstick"], ["Hood label, your photo", "Castrol EDGE Professional, ACEA A5/B5, SAE 5W-30"]],
       chapters: [
         { tier: "K", t: "Know it", d: "What the oil does, which oil this engine takes, and why some 2015–16 Drive-E engines use more of it than they should.", steps: [{ kb: "a-oil" }, { bay: "oilcap", t: "Find the filler cap on the map", why: "Yellow cap on top of the engine. Nothing to open." }], opens: ["1.3.1"] },
@@ -37,14 +37,14 @@ window.V60_MANUAL_DATA = (function () {
         { tier: "S", t: "Service it", d: "Topping up correctly, and getting the oil change on record so the next due date is real instead of guessed.", steps: [{ diy: "j-oilcheck" }, { record: "oil", t: "Log an oil and filter change", why: "A receipt or your own record. The schedule works from this date and mileage.", go: "tab:records" }], opens: ["1.4.1", "1.9.1"] },
         { tier: "D", t: "Diagnose it", d: "A low oil message, a rising consumption rate, and what the oil consumption program means for your car.", steps: [{ tree: "oil" }, { kb: "a-oilprogram" }, { oil: 3, t: "Three logged oil readings", why: "Three points across real miles give a consumption rate the app can show.", go: "tab:records" }] }
       ] },
-    { id: "coolant", view: "bay", num: "1.2", n: "Coolant & cooling", d: "The expansion tank, the radiator and the fan. Pressurised when hot; check cold only.", bay: "coolant", part: "coolant", record: "coolant", tags: ["Fluids", "Engine"], photo: ["fluid"], at: [52, 150],
+    { id: "coolant", view: "bay", num: "1.2", n: "Coolant & cooling", d: "The expansion tank, the radiator and the fan. Pressurised when hot; check cold only.", bay: "coolant", part: "coolant", record: "coolant", tags: ["Fluids", "Engine"], photo: ["fluid"], at: [40, 103],
       spec: [["Coolant", "Volvo coolant, 50/50 with water"], ["Capacity", "8.7 US qt"], ["Rule", "Never open the tank hot"], ["Cap, your photo", "145 kPa"], ["A/C, hood label", "R-134a, 800 g, Volvo PAG oil, with leak-tracer dye (the manual says 770 g; the label on the car wins)"]],
       chapters: [
         { tier: "K", t: "Know it", d: "The cooling loop: where the tank is, what the fan does, and why the system stays dangerous for minutes after the engine stops.", steps: [{ mission: "m-fluids" }, { bay: "coolant", t: "Find the expansion tank and the radiator", why: "Passenger side of the bay, with MIN and MAX marks." }], opens: ["1.6.1"] },
         { tier: "C", t: "Check it", d: "Level between the marks, cold, without opening anything. Crusty stains tell you about leaks before the gauge does.", steps: [{ mission: "m-fluidlook" }, { diy: "j-fluids" }], opens: ["1.7.1"] },
         { tier: "D", t: "Diagnose it", d: "Running hot in traffic, a sweet smell, steam. What to do at the roadside and what a shop will look at.", steps: [{ tree: "hot" }] }
       ] },
-    { id: "battery", view: "bay", num: "1.3", n: "Battery", d: "Under covers in the bay. Start/stop cars like yours need an AGM battery and have a second support battery.", bay: "battery", part: "battery", tags: ["Electrical"], at: [302, 68],
+    { id: "battery", view: "bay", num: "1.3", n: "Battery", d: "Under covers in the bay. Start/stop cars like yours need an AGM battery and have a second support battery.", bay: "battery", part: "battery", tags: ["Electrical"], at: [261, 71],
       spec: [["Type", "AGM (start/stop)"], ["Jump start", "Negative clamp on the ground point, not the battery"], ["Life in Texas heat", "3 to 5 years is common (unconfirmed)"]],
       chapters: [
         { tier: "K", t: "Know it", d: "Where it sits, why the ground point for a jump start is on the engine mount, and how start/stop changes the rules.", steps: [{ bay: "battery", t: "Find the battery covers on the map" }, { bay: "ground", t: "Find the jump-start ground point" }, { kb: "a-startstop" }], opens: ["1.8.1"] },
@@ -52,38 +52,38 @@ window.V60_MANUAL_DATA = (function () {
         { tier: "S", t: "Service it", d: "Jump-starting the car the way Volvo's manual orders the clamps.", steps: [{ diy: "j-jump" }] },
         { tier: "D", t: "Diagnose it", d: "A click without a crank, a slow crank, random warnings at start.", steps: [{ tree: "nostart" }] }
       ] },
-    { id: "belts", view: "bay", num: "1.4", n: "Belts & timing", d: "The accessory belt you can see and the timing belt you cannot. Nobody can say whether yours was ever replaced.", bay: "belt", part: "timing", record: "timingbelt", tags: ["Engine", "Maintenance"], at: [74, 94],
+    { id: "belts", view: "bay", num: "1.4", n: "Belts & timing", d: "The accessory belt you can see and the timing belt you cannot. Nobody can say whether yours was ever replaced.", bay: "belt", part: "timing", record: "timingbelt", tags: ["Engine", "Maintenance"], at: [78, 70],
       spec: [["Timing drive", "Belt"], ["History", "Unknown"], ["Limit", "About 10 years (see the article)"]],
       chapters: [
         { tier: "K", t: "Know it", d: "Why the timing belt is this car's biggest unknown, and what happens on this engine if it snaps.", steps: [{ kb: "a-belt" }, { bay: "belt", t: "Find the belt end on the map", why: "Under a cover at the end of the engine. Nothing to see without removing it." }] },
         { tier: "C", t: "Check it", d: "Detective work: shop stickers, the lot's paperwork, a call to the dealer with the VIN, a specialist's inspection.", steps: [{ mission: "m-belt" }, { mission: "m-ppi" }], opens: ["3.5.1"] },
         { tier: "S", t: "Service it", d: "A shop job. What a timing belt kit is, what it costs, and getting it on record.", steps: [{ record: "timingbelt", t: "Log a timing belt replacement", why: "From a receipt, a sticker you trust, or the job you have done. This closes The Belt.", go: "tab:records" }] }
       ] },
-    { id: "filters", view: "bay", num: "1.5", n: "Air & cabin filters", d: "The engine air filter in the box under the hood; the cabin filter behind the glovebox.", bay: "airbox", part: "airfilter", record: "airfilter", tags: ["Maintenance"], at: [292, 142],
+    { id: "filters", view: "bay", num: "1.5", n: "Air & cabin filters", d: "The engine air filter in the box under the hood; the cabin filter behind the glovebox.", bay: "airbox", part: "airfilter", record: "airfilter", tags: ["Maintenance"], at: [250, 130],
       chapters: [
         { tier: "K", t: "Know it", d: "Everything the turbo breathes passes the air filter first. The cabin filter is the one you smell.", steps: [{ bay: "airbox", t: "Find the air filter box on the map" }] },
         { tier: "C", t: "Check it", d: "Open the clips, hold the filter to the light, reseat it carefully.", steps: [{ mission: "m-airf" }, { mission: "m-cabin" }] },
         { tier: "S", t: "Service it", d: "The cabin filter is the first real job: no tools, behind the glovebox. Your first wrench.", steps: [{ diy: "j-cabin" }] }
       ] },
-    { id: "bfluid", view: "bay", num: "1.6", n: "Brake fluid", d: "The reservoir at the firewall on the driver's side. A slow drop is the pads wearing; a sudden drop is a leak.", bay: "brake", part: "bfluid", record: "brakefluid", tags: ["Fluids"], at: [320, 40],
+    { id: "bfluid", view: "bay", num: "1.6", n: "Brake fluid", d: "The reservoir at the firewall on the driver's side. A slow drop is the pads wearing; a sudden drop is a leak.", bay: "brake", part: "bfluid", record: "brakefluid", tags: ["Fluids"], at: [222, 35],
       spec: [["Fluid", "DOT 4, boiling point above 536 F; 0.63 US qt in the system"], ["Volvo interval", "3 years or 40,000 miles (2016 US schedule); the owner's manual defers to the service booklet"], ["Where, your photo", "Under the round cover on the driver's side of the cowl; the yellow cap says DOT 4 from a sealed container, clean the cap before removing"]],
       chapters: [
         { tier: "K", t: "Know it", d: "Where it is, what the level means, and why you don't just top it up.", steps: [{ bay: "brake", t: "Find the reservoir on the map" }] },
         { tier: "C", t: "Check it", d: "Between MIN and MAX with the cap closed. Low means get the brakes looked at.", steps: [{ diy: "j-fluids" }] }
       ] },
-    { id: "washer", view: "bay", num: "1.7", n: "Washer fluid", d: "The one fluid you can always top up yourself.", bay: "washer", part: "wipers", tags: ["Fluids"], at: [330, 174],
+    { id: "washer", view: "bay", num: "1.7", n: "Washer fluid", d: "The one fluid you can always top up yourself.", bay: "washer", part: "wipers", tags: ["Fluids"], at: [322, 146],
       spec: [["Capacity", "6.8 US qt with headlight washers, 4.7 without"]],
       chapters: [
         { tier: "K", t: "Know it", d: "Where the filler is and why washer fluid, not water.", steps: [{ bay: "washer", t: "Find the washer filler on the map" }] },
         { tier: "C", t: "Check it", d: "Top it up. Done.", steps: [{ diy: "j-fluids" }] }
       ] },
-    { id: "fuses", view: "bay", num: "1.8", n: "Fuses", d: "The fuse box in the bay and the second one near the cowl on start/stop cars. The lid shows the map.", bay: "fusebox", part: "modules", tags: ["Electrical"], at: [234, 64],
+    { id: "fuses", view: "bay", num: "1.8", n: "Fuses", d: "The fuse box beside the battery, and a second one for start/stop in what Volvo calls the cold zone (spot not shown in the manual). The lid shows the map.", bay: "fusebox", part: "modules", tags: ["Electrical"], at: [309, 103],
       spec: [["Where, your photo", "The black box on the driver's side next to the air intake duct, lid marked with a fuse and a book symbol; the box behind it carries the battery symbol"]],
       chapters: [
         { tier: "K", t: "Know it", d: "Where the fuse boxes are and which fuses Volvo says an owner may change.", steps: [{ kb: "a-fuses" }, { bay: "fusebox", t: "Find the fuse box on the map" }] },
         { tier: "S", t: "Service it", d: "Pull, inspect, replace with the same rating. Never a higher one.", steps: [{ diy: "j-fuse" }] }
       ] },
-    { id: "plugs", view: "bay", num: "1.9", n: "Spark plugs & coils", d: "Under the engine cover. Volvo replaced plugs free on 2015–16 four-cylinders under service action S29842.", bay: "coils", part: "coils", record: "plugs", tags: ["Engine"], at: [166, 64],
+    { id: "plugs", view: "bay", num: "1.9", n: "Spark plugs & coils", d: "Under the engine cover. Volvo replaced plugs free on 2015–16 four-cylinders under service action S29842.", bay: "coils", part: "coils", record: "plugs", tags: ["Engine"], at: [164, 62],
       spec: [["Engine cover, your photo", "B4204T11"]],
       chapters: [
         { tier: "K", t: "Know it", d: "One coil per cylinder. A failing one is a misfire and a shaky idle. Don't touch them hot.", steps: [{ bay: "coils", t: "Find the coils on the map" }] },

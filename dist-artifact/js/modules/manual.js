@@ -175,24 +175,25 @@
     side: { h: 196, svg: SIDE, cap: "Side view" },
     body: { h: 196, svg: SIDE, cap: "Walk-around" },
     /* standing at the front bumper looking down: windshield at the top, hood catch and bumper at the bottom,
-       passenger side on the left, driver side on the right; the bay widens toward you. Part places follow Kyle's photo. */
+       passenger side on the left, driver side on the right; the bay widens toward you. Part places follow Volvo's
+       2016 V60 manual, Engine compartment - overview, 4-cylinder illustration (V60_SOURCES.bayov). */
     bay: { h: 222, cap: "From the front bumper, hood open, driver side on the right", svg:
       '<path d="M 40 0 L 318 0 L 332 14 L 26 14 Z" class="fg-glass"/><path d="M 64 12 L 150 3 M 196 12 L 284 3" class="fg-thin"/>' +
       '<path d="M 20 14 L 338 14 L 354 190 L 4 190 Z" class="fg-body"/><path d="M 32 26 L 18 184 M 326 26 L 340 184" class="fg-thin"/>' +
       '<rect x="24" y="15" width="310" height="11" class="fg-part"/><path d="M 52 20.5 h 18 M 78 20.5 h 18 M 104 20.5 h 18 M 236 20.5 h 18 M 262 20.5 h 18" class="fg-thin"/>' +
-      '<circle cx="46" cy="46" r="12" class="fg-part"/><circle cx="46" cy="46" r="4" class="fg-fill"/>' +
-      '<rect x="92" y="46" width="138" height="110" rx="12" class="fg-part"/><rect x="102" y="54" width="118" height="94" rx="9" class="fg-glass"/>' +
-      '<rect x="139" y="57" width="10" height="15" rx="2" class="fg-part"/><rect x="155" y="57" width="10" height="15" rx="2" class="fg-part"/><rect x="171" y="57" width="10" height="15" rx="2" class="fg-part"/><rect x="187" y="57" width="10" height="15" rx="2" class="fg-part"/>' +
-      '<circle cx="128" cy="98" r="10" class="fg-part"/><path d="M 122 98 h 12 M 128 92 v 12" class="fg-thin"/><path d="M 148 118 L 212 118 M 148 132 L 212 132" class="fg-dash"/>' +
-      '<rect x="62" y="52" width="26" height="96" rx="7" class="fg-part"/><path d="M 69 62 L 69 138 M 81 62 L 81 138" class="fg-dash"/>' +
-      '<rect x="24" y="126" width="56" height="44" rx="7" class="fg-glass"/><circle cx="40" cy="134" r="5" class="fg-part"/><path d="M 56 140 h 18 M 56 160 h 18" class="fg-thin"/><path d="M 80 140 Q 88 140 92 132" class="fg-thin"/>' +
-      '<rect x="210" y="40" width="48" height="46" rx="3" class="fg-part"/><path d="M 216 50 h 36 M 216 76 h 36" class="fg-thin"/>' +
-      '<rect x="300" y="30" width="38" height="16" rx="5" class="fg-glass"/><circle cx="320" cy="34" r="4" class="fg-part"/>' +
-      '<rect x="266" y="52" width="72" height="40" rx="3" class="fg-part"/><rect x="274" y="56" width="8" height="5" class="fg-fill"/><rect x="322" y="56" width="8" height="5" class="fg-fill"/><path d="M 274 76 h 8 M 278 72 v 8 M 322 76 h 8" class="fg-thin"/>' +
-      '<rect x="252" y="110" width="82" height="54" rx="8" class="fg-part"/><path d="M 262 110 v -4 M 324 110 v -4 M 262 164 v 4 M 324 164 v 4" class="fg-thin"/><path d="M 252 124 Q 238 124 230 112 M 252 138 Q 234 138 230 126" class="fg-thin"/>' +
-      '<circle cx="330" cy="174" r="7" class="fg-part"/>' +
-      '<rect x="90" y="162" width="156" height="12" class="fg-glass"/><path d="M 100 168 h 136" class="fg-dash"/>' +
-      '<rect x="36" y="176" width="286" height="12" class="fg-part"/><path d="M 174 176 L 174 170 L 184 170 L 184 176" class="fg-thin"/><rect x="170" y="178" width="18" height="8" rx="2" class="fg-fill"/>' +
+      '<circle cx="40" cy="40" r="11" class="fg-part"/><circle cx="40" cy="40" r="4" class="fg-fill"/>' +
+      '<rect x="20" y="78" width="40" height="50" rx="7" class="fg-glass"/><circle cx="31" cy="86" r="5" class="fg-part"/><path d="M 40 98 h 14 M 40 118 h 14" class="fg-thin"/><path d="M 60 100 Q 63 100 66 96" class="fg-thin"/>' +
+      '<rect x="66" y="46" width="24" height="100" rx="7" class="fg-part"/><path d="M 72 56 L 72 136 M 84 56 L 84 136" class="fg-dash"/>' +
+      '<rect x="94" y="44" width="118" height="106" rx="12" class="fg-part"/><rect x="102" y="52" width="102" height="90" rx="9" class="fg-glass"/>' +
+      '<rect x="139" y="55" width="10" height="15" rx="2" class="fg-part"/><rect x="155" y="55" width="10" height="15" rx="2" class="fg-part"/><rect x="171" y="55" width="10" height="15" rx="2" class="fg-part"/><rect x="187" y="55" width="10" height="15" rx="2" class="fg-part"/>' +
+      '<circle cx="122" cy="90" r="9" class="fg-part"/><path d="M 117 90 h 10 M 122 85 v 10" class="fg-thin"/><path d="M 142 118 L 198 118 M 142 130 L 198 130" class="fg-dash"/>' +
+      '<rect x="204" y="28" width="36" height="14" rx="4" class="fg-glass"/><circle cx="222" cy="35" r="4" class="fg-part"/>' +
+      '<rect x="236" y="50" width="50" height="42" rx="3" class="fg-part"/><rect x="241" y="55" width="8" height="5" class="fg-fill"/><rect x="273" y="55" width="8" height="5" class="fg-fill"/><path d="M 241 74 h 8 M 245 70 v 8 M 273 74 h 8" class="fg-thin"/>' +
+      '<rect x="290" y="84" width="38" height="38" rx="3" class="fg-part"/><path d="M 295 92 h 28 M 295 114 h 28" class="fg-thin"/>' +
+      '<rect x="220" y="102" width="60" height="56" rx="8" class="fg-part"/><path d="M 228 102 v -4 M 272 102 v -4 M 228 158 v 4 M 272 158 v 4" class="fg-thin"/><path d="M 220 116 Q 216 116 212 110 M 220 130 Q 214 130 212 124" class="fg-thin"/>' +
+      '<circle cx="322" cy="146" r="7" class="fg-part"/>' +
+      '<rect x="70" y="162" width="230" height="12" class="fg-glass"/><path d="M 80 168 h 210" class="fg-dash"/>' +
+      '<rect x="36" y="176" width="286" height="12" class="fg-part"/><path d="M 174 176 L 174 170 L 184 170 L 184 176" class="fg-thin"/><rect x="170" y="178" width="18" height="8" rx="2" class="fg-fill"/><path d="M 170 182 L 150 182" class="fg-body"/>' +
       '<path d="M 4 190 L 54 190 L 50 206 L 8 202 Z" class="fg-glass"/><path d="M 354 190 L 304 190 L 308 206 L 350 202 Z" class="fg-glass"/>' +
       '<rect x="112" y="190" width="134" height="13" class="fg-part"/><path d="M 124 190 v 13 M 136 190 v 13 M 148 190 v 13 M 160 190 v 13 M 172 190 v 13 M 186 190 v 13 M 198 190 v 13 M 210 190 v 13 M 222 190 v 13 M 234 190 v 13" class="fg-thin"/>' +
       '<path d="M 2 204 Q 179 214 356 204 L 356 214 Q 179 224 2 214 Z" class="fg-body"/>' +
@@ -265,16 +266,34 @@
         var v = q.v, n = v.items.filter(function (it) { return itemClosedN(api, it) === it.chapters.length; }).length, stat;
         if (q.status === "locked") stat = "after " + firstGate(api, v); else if (q.status === "new") { var nw = newList(api).filter(function (c) { return c.item && c.item.view === v.id; })[0]; stat = "NEW · " + (nw ? nw.id : ""); } else if (q.status === "resume") { stat = "● " + (rc ? rc.id : ""); } else stat = n + " / " + v.items.length;
         return '<button type="button" class="mn-ix ' + q.status + '" data-view="' + v.id + '"' + (q.status === "locked" ? ' aria-disabled="true"' : "") + '><span class="n">' + v.num + "</span><span>" + esc(v.n) + ' · ' + v.items.length + ' items</span><span class="st">' + esc(stat) + "</span></button>";
-      }).join("") + backMatter(api) + "</section>";
+      }).join("") + "</section>" + backMatter(api);
     h += sosHtml();
     $("mnHome").innerHTML = h;
   }
   function firstGate(api, v) { var id = v.items.length ? v.items[0].chapters[0].id : ""; var froms = []; CHLIST.forEach(function (o) { if ((o.opens || []).indexOf(id) >= 0) froms.push(o.id); }); return froms.length ? froms[0] : "the story"; }
   function firstWhy(api, v) { var c = v.items.length ? v.items[0].chapters[0] : null; return c ? why(api, c) : ""; }
   var BACK = [["kb", "Library"], ["cards", "Flashcards"], ["exam", "Exam"], ["academy", "Training library"], ["health", "Health score"], ["records", "Service log"], ["fuel", "Fuel & costs"], ["lab", "Data lab"], ["sim", "Simulator"], ["diy", "All DIY jobs"], ["trouble", "Troubleshoot"], ["bulletins", "Bulletins"], ["upgrades", "Upgrades"], ["my", "My V60 & photos"], ["bay", "Whole-car parts list"], ["engine", "Engine bay map"], ["skills", "Skill tree"], ["achieve", "Achievements"], ["today", "Today's notes"]];
+  /* every other page, grouped by what you want to do; only pages the story has opened are listed */
+  var INDEX = [["Your car", ["engine", "bay", "health", "my", "upgrades", "bulletins"]], ["Fix & maintain", ["records", "diy", "trouble", "fuel", "unlocks"]], ["Learn", ["academy", "learn", "kb", "cards", "exam"]], ["Data", ["lab", "diag", "sim"]], ["Progress", ["skills", "achieve", "today"]]];
+  /* "see also" on each view and on the other three roots */
+  var ALSO = { bay: ["bay", "diy", "records"], wheel: ["diy", "records", "bulletins"], cabin: ["live", "diag", "trouble"], under: ["trouble", "diy"], body: ["upgrades", "diy", "bulletins"],
+    glove: ["records", "fuel", "docs", "bulletins"], live: ["lab", "diag", "sim", "health"], story: ["academy", "kb", "cards", "exam", "skills", "achieve"] };
+  function seen(tab) { return !!($("p-" + tab) && (!window.V60_GATE || window.V60_GATE.visible(tab))); }
+  function pageName(tab) { var b = BACK.filter(function (x) { return x[0] === tab; })[0]; return NAMES[tab] || (b && b[1]) || tab; }
+  function alsoHtml(tabs, kick) {
+    var vis = (tabs || []).filter(seen);
+    return vis.length ? '<nav class="mn-also" aria-label="' + esc(kick || "See also") + '"><div class="mn-kick"><span>' + esc((kick || "See also").toUpperCase()) + '</span></div><div class="mn-chips">' + vis.map(function (t) { return '<button type="button" class="mn-chip" data-jump="tab:' + t + '">' + esc(pageName(t)) + "</button>"; }).join("") + "</div></nav>" : "";
+  }
   function backMatter(api) {
-    var vis = BACK.filter(function (b) { return $("p-" + b[0]) && window.V60_GATE.visible(b[0]); });
-    return '<details class="mn-back"><summary><span class="n">§</span><span>Back matter</span><span class="st">' + vis.length + " pages</span></summary><div class=\"mn-chips\">" + vis.map(function (b) { return '<button type="button" class="mn-chip" data-jump="tab:' + b[0] + '">' + esc(b[1]) + "</button>"; }).join("") + "</div></details>";
+    return INDEX.map(function (g) { return alsoHtml(g[1], g[0]); }).join("");
+  }
+  /* the other roots get their "see also" strip under the page's title and intro, where it is seen without scrolling */
+  function rootAlso(tab) {
+    var p = $("p-" + tab); if (!p || !ALSO[tab]) return;
+    var el = $("also-" + tab); if (!el) { el = document.createElement("div"); el.id = "also-" + tab; el.className = "mn mn-alsotop"; }
+    var h = p.querySelector("h2"), after = h && h.nextElementSibling && h.nextElementSibling.classList.contains("lede") ? h.nextElementSibling : h;
+    if (after) { if (after.nextSibling !== el) after.parentNode.insertBefore(el, after.nextSibling); } else if (p.firstChild !== el) p.insertBefore(el, p.firstChild);
+    el.innerHTML = alsoHtml(ALSO[tab]);
   }
 
   /* ---------- a view ---------- */
@@ -289,6 +308,7 @@
       '<div class="mn-title"><h2>' + esc(v.n) + '</h2><div class="mn-seg" role="group" aria-label="Figure"><button type="button" data-fm="draw" aria-pressed="' + !photo + '">Drawing</button><button type="button" data-fm="photo" aria-pressed="' + !!photo + '">Your photo</button></div></div></div>' + toastHtml();
     h += '<div class="mn-figwrap"><div class="mn-kick"><span>FIG. ' + v.num + "-1 · " + esc(photo ? "YOUR PHOTO, " + photo.date : (FIG[v.fig] || FIG.side).cap.toUpperCase() + " · SCHEMATIC") + "</span>" + (photo ? '<button type="button" class="mn-link" data-arrange="1" aria-pressed="' + ui.arrange + '">' + (ui.arrange ? "Done moving" : "Move points") + "</button>" : "") + "</div>" + figure(api, v, items, sel, function (it) { return it.it.at; }) +
       (ui.arrange ? '<p class="status">Drag a number to where that part really is on your photo. Positions are saved as you go.</p>' : "") + "</div>";
+    if (v.id === "bay" && seen("engine")) h += '<button type="button" class="mn-cta mn-mapbtn" data-jump="tab:engine">Engine bay map: every part, labelled <span aria-hidden="true">→</span></button>';
     if (ui.fm === "photo" && !photo) h += photoPicker(api, v);
     var si = items.filter(function (q) { return q.id === sel; })[0];
     if (si) {
@@ -303,7 +323,7 @@
       if (q.status === "locked") stat = "after " + (function () { var w = []; CHLIST.forEach(function (o) { if ((o.opens || []).indexOf(it.chapters[0].id) >= 0) w.push(o.id); }); return w[0] || "the story"; })();
       else if (q.status === "new") stat = "NEW · " + (nx ? nx.id : ""); else if (q.status === "resume") stat = "● " + (nx ? nx.id : ""); else if (q.status === "closed") stat = "CLOSED"; else stat = itemClosedN(api, it) + " / " + it.chapters.length;
       return '<button type="button" class="mn-ix ' + q.status + '" data-item="' + it.id + '"' + (q.status === "locked" ? ' aria-disabled="true"' : "") + '><span class="n">' + esc(it.num) + "</span><span>" + esc(it.n) + '</span><span class="st">' + esc(stat) + "</span></button>";
-    }).join("") + "</section>";
+    }).join("") + "</section>" + alsoHtml(ALSO[v.id]);
     $("mnView").innerHTML = h;
   }
   function caseFor(api, it) { return (window.V60_STORY ? window.V60_STORY.cases : []).filter(function (c) { return (CASE_OPENS[c.id] || []).some(function (id) { return CH[id] && CH[id].item === it; }) && window.V60_STORY.available(c); }); }
@@ -390,14 +410,34 @@
     $("mnChapter").innerHTML = h;
   }
 
-  /* ---------- crumb: a way back from the old pages ---------- */
+  /* ---------- crumb: "← Back to …" on every page that is not one of the four roots or the manual itself ----------
+     trail holds where you came from, newest last. A root clears it; the manual's own pages keep their own back links. */
+  var NAMES = { car: "The car", story: "Cases", glove: "Glovebox", live: "Link", docs: "Documents", diag: "Diagnose", learn: "How it works", unlocks: "Unlocks: beyond the app", today: "Today" };
+  var TAB_ROOT = { car: 1, story: 1, glove: 1, live: 1 }, trail = [], here = null, goingBack = false;
+  function where(tab) {
+    if (tab === "view") { var v = VIEWS.filter(function (q) { return q.id === ui.view; })[0]; return v && { tab: "view", id: v.id, label: v.n }; }
+    if (tab === "item") { var it = ITEMS.filter(function (q) { return q.id === ui.item; })[0]; return it && { tab: "item", id: it.id, label: it.num + " " + it.n }; }
+    if (tab === "chapter") { var c = CH[ui.chapter]; return c && { tab: "chapter", id: c.id, label: label(c) }; }
+    var b = BACK.filter(function (x) { return x[0] === tab; })[0];
+    return { tab: tab, label: NAMES[tab] || (b && b[1]) || tab };
+  }
   function crumb(api, tab) {
-    var el = $("crumb"); if (!el) return;
-    if (tab === "car" || tab === "view" || tab === "item" || tab === "chapter") { ui.from = null; el.hidden = true; el.innerHTML = ""; return; }
-    if (!ui.from) { el.hidden = true; return; }
+    var el = $("crumb"), now = where(tab), prev = here;
+    here = now;
+    if (TAB_ROOT[tab]) trail = [];
+    else if (!goingBack && prev && prev.tab !== tab) trail.push(prev);
+    goingBack = false;
+    if (trail.length > 20) trail = trail.slice(-20);
+    ui.from = trail.length ? trail[trail.length - 1] : null;
+    if (!el) return;
+    if (tab === "view" || tab === "item" || tab === "chapter" || TAB_ROOT[tab] || !ui.from) { el.hidden = true; el.innerHTML = ""; return; }
     el.hidden = false; el.innerHTML = '<button type="button" class="mn-link" data-back="1">← Back to ' + esc(ui.from.label) + "</button>";
   }
-  function goBack(api) { var f = ui.from; if (!f) { api.go("car"); return; } if (f.tab === "chapter") { ui.chapter = f.id; api.go("chapter"); } else if (f.tab === "item") { ui.item = f.id; api.go("item"); } else if (f.tab === "view") { ui.view = f.id; api.go("view"); } else api.go("car"); }
+  function goBack(api) {
+    var f = trail.pop(); goingBack = true;
+    if (!f) { api.go("car"); return; }
+    if (f.tab === "chapter") { ui.chapter = f.id; api.go("chapter"); } else if (f.tab === "item") { ui.item = f.id; api.go("item"); } else if (f.tab === "view") { ui.view = f.id; api.go("view"); } else api.go(f.tab);
+  }
 
   /* ---------- wiring ---------- */
   function open(api, kind, id) {
@@ -441,7 +481,7 @@
         if ((b = t.closest("[data-view]"))) { if (b.getAttribute("aria-disabled") === "true") { ui.selView = b.getAttribute("data-view"); if (id === "mnHome") { renderHome(api); var s = root.querySelector(".mn-sheet"); if (s) s.scrollIntoView({ block: "nearest" }); } return; } open(api, "view", b.getAttribute("data-view")); return; }
         if ((b = t.closest("[data-item]"))) { if (b.getAttribute("aria-disabled") === "true") { ui.item = b.getAttribute("data-item"); renderView(api); return; } open(api, "item", b.getAttribute("data-item")); return; }
         if ((b = t.closest("[data-ch]"))) { if (b.getAttribute("aria-disabled") === "true") return; open(api, "ch", b.getAttribute("data-ch")); return; }
-        if ((b = t.closest("[data-go]"))) { var c = CH[ui.chapter]; D(api).went[b.getAttribute("data-k")] = 1; api.save(); ui.from = c ? { tab: "chapter", id: c.id, label: label(c) } : null; api.jump(b.getAttribute("data-go")); return; }
+        if ((b = t.closest("[data-go]"))) { D(api).went[b.getAttribute("data-k")] = 1; api.save(); api.jump(b.getAttribute("data-go")); return; }
         if ((b = t.closest("[data-man]"))) { D(api).manual[b.getAttribute("data-man")] = api.todayStr(); api.save(); bust(); renderChapter(api); api.updateHud(); return; }
         if ((b = t.closest("[data-fm]"))) { var m = b.getAttribute("data-fm"), v = VIEWS.filter(function (q) { return q.id === ui.view; })[0]; if (!v) return; if (m === "draw") { var dd = D(api); delete dd.views[v.id]; ui.arrange = false; ui.fm = null; api.save(); } else ui.fm = "photo"; renderView(api); return; }
         if ((b = t.closest("[data-arrange]"))) { ui.arrange = !ui.arrange; renderView(api); return; }
@@ -469,7 +509,7 @@
     init: function (api) { API = api; installGate(); wire(api); },
     render: function (api, tab) { bust(); if (tab === "car") renderHome(api); else if (tab === "view") renderView(api); else if (tab === "item") renderItem(api); else if (tab === "chapter") renderChapter(api); },
     refresh: function (api) { bust(); },
-    shown: function (api, tab) { crumb(api, tab); },
+    shown: function (api, tab) { crumb(api, tab); rootAlso(tab); },
     clean: function (v) { return v && typeof v === "object" ? v : {}; },
     xp: function (api) { var d = api.mod("manual"); if (!d || !d.closed) return 0; return Object.keys(d.closed).length * 15 + (d.closed["0"] ? 15 : 0); },
     jump: function (api, kind, id) { if (kind === "view" || kind === "item" || kind === "ch") { open(api, kind, id); return true; } return false; }

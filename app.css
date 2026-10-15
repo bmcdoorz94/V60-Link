@@ -561,6 +561,10 @@ ul.sched li { display: grid; grid-template-columns: minmax(10em, 13em) 1fr; gap:
 .mn-back summary::-webkit-details-marker { display: none; }
 .mn-back summary .n { font-family: var(--font-data); font-size: 13px; color: var(--muted); width: 2.4em; flex: none; }
 .mn-back summary .st { margin-left: auto; font-family: var(--font-data); font-size: 12px; color: var(--muted); }
+.mn-also { margin-top: 16px; }
+.mn-also .mn-chip { min-height: 44px; }
+.mn-alsotop .mn-also { margin: 8px 0 12px; }
+.mn-mapbtn { display: flex; width: 100%; justify-content: space-between; margin-top: 10px; }
 .mn-chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 0 4px; }
 .mn-chip { font: inherit; font-size: 13px; padding: 7px 10px; min-height: 36px; border: 1px solid var(--ink); background: var(--panel); color: var(--ink); border-radius: 0; font-weight: 400; }
 .mn-chip.locked { border-style: dashed; border-color: var(--none); color: var(--none); background: transparent; font-family: var(--font-data); display: inline-flex; align-items: center; }

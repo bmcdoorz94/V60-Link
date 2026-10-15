@@ -53,12 +53,12 @@
   /* ---------- the case file ---------- */
   var ACTS = [["1", "Arrival"], ["2", "The Unknowns"], ["3", "The Voice"], ["4", "Ownership"]];
   var ACT_REWARD = {
-    "1": { tabs: ["bay", "health", "cards", "skills"], line: "Act 1 complete. The whole-car map, your Health score, daily flashcards and the skill tree are open." },
-    "2": { tabs: ["achieve"], line: "Act 2 complete. Side missions are open: seasonal events and achievements." },
+    "1": { tabs: ["bay", "health", "cards", "skills", "learn"], line: "Act 1 complete. The whole-car map, your Health score, How it works, daily flashcards and the skill tree are open." },
+    "2": { tabs: ["achieve", "unlocks"], line: "Act 2 complete. Side missions are open: seasonal events and achievements. Unlocks lists what this app cannot do and who can." },
     "3": { tabs: ["sim"], line: "Act 3 complete. Side mission: the Simulator and its mystery cars." },
     "4": { tabs: ["exam"], line: "Act 4 complete. The V60 Master exam is open. Pass it to reach the finale." }
   };
-  var TABN = { skills: "Skill tree", academy: "Training", engine: "Engine bay", live: "Live link", bay: "Whole car", health: "Health", cards: "Flashcards", records: "Service log", glove: "Glovebox", fuel: "Fuel & costs", diy: "DIY jobs", trouble: "Troubleshoot", bulletins: "Bulletins", my: "My V60", kb: "Library", achieve: "Achievements", lab: "Data lab", sim: "Simulator", upgrades: "Upgrades", diag: "Diagnose", exam: "Exam" };
+  var TABN = { skills: "Skill tree", academy: "Training", engine: "Engine bay", live: "Live link", bay: "Whole car", health: "Health", cards: "Flashcards", records: "Service log", glove: "Glovebox", fuel: "Fuel & costs", diy: "DIY jobs", trouble: "Troubleshoot", bulletins: "Bulletins", my: "My V60", kb: "Library", achieve: "Achievements", lab: "Data lab", sim: "Simulator", upgrades: "Upgrades", diag: "Diagnose", exam: "Exam", learn: "How it works", unlocks: "Unlocks" };
   var CASES = [
     { id: "safe", act: "1", crit: true, t: "Safe to Touch", sub: "Learn the car's layout and the rules before touching anything.", scene: "bay", reveals: ["academy", "engine"],
       know: { arts: ["a-car", "a-lights"], tags: ["Identity", "Basics", "Safety", "Warning lights"] }, quiz: ["f-fan6", "f-hoodss", "f-coolloc"],

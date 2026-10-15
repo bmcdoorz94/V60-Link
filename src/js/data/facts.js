@@ -8,6 +8,7 @@ window.V60_SOURCES = {
   tpms: ["Volvo: Tire Monitor, 2016 V60", "https://www.volvocars.com/us/support/car/v60/2016/article/c43f9d2decd9952dc0a801513772c990"],
   tsb29818: ["Volvo TSB TJ29818 (tire monitor false warnings)", "https://static.nhtsa.gov/odi/tsbs/2016/MC-10120958-9999.pdf"],
   hood: ["Volvo: Opening the hood, 2016 V60", "https://www.volvocars.com/us/support/car/v60/2016/article/f2de677bb96926f2c0a801e801c6ec9e"],
+  bayov: ["Volvo 2016 V60 US owner's manual: Engine compartment – overview (4-cylinder illustration)", "https://www.volvocars.com/us/support/car/v60/2016/article/b71053e7aa65e1e6c0a801e800f4fff8/f8938102aa693f3ac0a801e8017afe89/cc0c2d67b96a845fc0a801e8012da814/"],
   oilchk: ["Volvo: Checking engine oil, 2016 V60", "https://www.volvocars.com/us/support/car/v60/2016/article/527f24d2b96b2c38c0a801e8000aafe8"],
   epa: ["fueleconomy.gov: 2016 V60 T5", "https://www.fueleconomy.gov/feg/noframes/36292.shtml"],
   polestar: ["Polestar optimization sheet, 2016 V60 T5 Drive-E FWD", "https://engineered-api.polestar.com/optimisations/v60-t5-drive-e-fwd-automatic-2016/productSheet?market=us"],
