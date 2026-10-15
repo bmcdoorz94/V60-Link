@@ -36,18 +36,18 @@
       var rows = list.map(function (t) {
         var id = t[0], have = !!d.tools[id], mine = d.price && d.price[id] != null ? d.price[id] : null, opts = priceOf(id).filter(function (x) { return x.price != null; }).sort(function (a, b) { return a.price - b.price; }), up = usePrice(d, id);
         if (have) owned++; else { left++; if (up == null) nop++; else sum += up; }
-        var sumTxt = mine != null ? money(mine) + " · your price" : opts.length ? money(opts[0].price) + (opts.length > 1 ? "–" + money(opts[opts.length - 1].price) : "") + " · " + esc(opts[0].store) : id === "quarter" ? "25¢" : "No price checked";
+        var sumTxt = mine != null ? money(mine) + " · your price" : opts.length ? money(opts[0].price) + (opts.length > 1 ? "–" + money(opts[opts.length - 1].price) + " · " + opts.length + " options" : " · " + esc(opts[0].store)) : id === "quarter" ? "25¢" : "No price checked";
         var body = opts.map(function (x) { return '<li><a href="' + esc(x.url) + '" target="_blank" rel="noopener">' + esc(x.name) + "</a><span class=\"status\"> " + esc(x.store) + ", " + money(x.price) + (x.note ? ". " + esc(x.note) : "") + "</span></li>"; }).join("");
         var src = opts.length ? '<ul class="tpsrc">' + body + '</ul><p class="status">Checked ' + esc(shortDate(P.checked)) + ". Store prices change; type what you paid or saw to replace it.</p>" : '<p class="status">No store price checked for this one. Type one in to count it in the totals.</p>';
         return '<div class="tool' + (have ? " have" : "") + '"><label class="tcheck"><input type="checkbox" data-tool="' + id + '"' + (have ? " checked" : "") + "><span><b>" + esc(t[1]) + "</b><small>" + esc(t[2]) + "</small></span></label>" +
-          (id === "quarter" ? "" : '<details class="tprice" data-tp="' + id + '"' + (gb.openPrice === id ? " open" : "") + '><summary><span class="mono">' + sumTxt + "</span></summary>" + src +
+          (id === "quarter" || (have && mine == null && !opts.length) ? "" : '<details class="tprice" data-tp="' + id + '"' + (gb.openPrice === id ? " open" : "") + '><summary><span class="mono">' + sumTxt + "</span></summary>" + src +
           '<div class="row tpmine"><div class="field"><label for="gbTP-' + id + '">Your price ($)</label><input id="gbTP-' + id + '" type="number" inputmode="decimal" min="0" step="0.01" data-tprice="' + id + '" value="' + (mine != null ? mine : "") + '"></div>' + (mine != null ? '<button type="button" class="quiet" data-tpclear="' + id + '">Use the store price</button>' : "") + "</div></details>") + "</div>";
       }).join("");
       needLo += sum; unpriced += nop;
-      var head = left ? "still need " + left + (sum ? " · about " + money(sum) : "") + (nop ? (sum ? " + " : " · ") + nop + " unpriced" : "") : "all set";
+      var head = left ? "still need " + left + (sum ? " · about $" + Math.round(sum) : "") + (nop ? (sum ? " + " : " · ") + nop + " unpriced" : "") : "all set";
       return '<section class="ttier"><h4>' + esc(tr.n) + ' <span class="status">' + head + '</span></h4><p class="status">' + esc(tr.d) + '</p><div class="tools">' + rows + "</div></section>";
     }).join("");
-    $("gbToolStat").textContent = owned + " of " + TOOLS.length + " owned" + (needLo ? " · about " + money(needLo) + " to finish" : "");
+    $("gbToolStat").textContent = owned + " of " + TOOLS.length + " owned" + (needLo ? " · about $" + Math.round(needLo) + " to finish" : "");
   }
   function render(api) {
     var $ = api.$, esc = api.esc, d = data(api), D = d.docs, C = d.contract;

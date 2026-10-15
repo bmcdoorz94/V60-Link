@@ -1,5 +1,5 @@
-/* V60 Garage service worker, version 2026.10.15-2020-2ef5e6ba */
-var CACHE = "v60-garage-2026.10.15-2020-2ef5e6ba";
+/* V60 Garage service worker, version 2026.10.15-2028-639d18c1 */
+var CACHE = "v60-garage-2026.10.15-2028-639d18c1";
 var SHELL = ["./", "index.html", "app.css", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "icons/icon-180.png", "js/data/articles.js", "js/data/codebook.js", "js/data/facts.js", "js/data/manual.js", "js/data/toolprices.js", "js/modules/today.js", "js/modules/kb.js", "js/modules/cards.js", "js/modules/exam.js", "js/modules/story.js", "js/modules/manual.js", "js/modules/fuel.js", "js/modules/glovebox.js", "js/modules/docs.js", "js/modules/diy.js", "js/modules/trees.js", "js/modules/bulletins.js", "js/modules/upgrades.js", "js/modules/live.js", "js/modules/extras.js", "js/modules/skills.js", "js/modules/sync.js", "js/modules/ui.js", "js/modules/scan.js", "js/modules/guide.js", "js/core.js"];
 self.addEventListener("install", function (e) { e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(SHELL.map(function (u) { return new Request(u, { cache: "reload" }); })); })); });
 self.addEventListener("activate", function (e) { e.waitUntil(caches.keys().then(function (ks) { return Promise.all(ks.filter(function (k) { return k !== CACHE && k.indexOf("v60-garage-") === 0; }).map(function (k) { return caches.delete(k); })); }).then(function () { return self.clients.claim(); })); });
