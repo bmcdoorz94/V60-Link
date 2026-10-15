@@ -4,6 +4,669 @@
    A task with no entry yet shows "No sourced entry yet" in the app. Never write an entry from memory: fetch the source first.
    Merge researched entries with tools/gen/g1merge.py; it validates ids, sources and questions. */
 window.V60_G1_ENTRIES = {
+ "D1": {
+  "body": [
+   "The supplemental restraint system (SRS) covers more than the airbags: Volvo lists seat belt pretensioners, front airbags, side impact (SIPS) airbags, inflatable curtains and the front passenger occupant weight sensor, all watched by the SRS control module.",
+   "The front airbags are fired by gas generators that inflate them with nitrogen; a full deployment and deflation takes about one fifth of a second, so an accidental firing during repair work is a serious injury risk.",
+   "Volvo's manual says never to repair any SRS part yourself, never to open the airbag cover on the steering wheel or the dash, and to leave all SRS work to a trained Volvo technician.",
+   "Volvo's manual gives two power-down timings: before removing the battery, switch the ignition off, take out the remote key and wait at least 5 minutes; for a flood-damaged car, switch off for at least 10 minutes and disconnect the battery before anything else, because otherwise an airbag could deploy.",
+   "After power is restored, the SRS warning light should come on with the ignition in mode I or II and go out after about 6 seconds; a light that stays on or comes on while driving means the system needs inspection."
+  ],
+  "car": "The V60's driver front airbag is in the steering wheel hub and the passenger airbag is behind the panel above the glove compartment, marked SRS AIRBAG; the manual gives no airbag-disabling procedure for owners and sends all SRS work to a Volvo technician.",
+  "src": [
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Supplemental Restraint System (SRS), Front airbags, Battery – changing",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A 2016 V60 has stood in floodwater and the carpets are soaked. Before the car is towed, what does Volvo's owner's manual say to do first?",
+    "o": [
+     "Start the engine to check whether the SRS light goes out",
+     "Insert the remote key and cycle the ignition to mode II",
+     "Switch the ignition off for at least 10 minutes and disconnect the battery",
+     "Remove the steering wheel airbag cover to check for water"
+    ],
+    "a": 2,
+    "why": "For a flood-damaged car, Volvo says not to start it or insert the key, but to switch off the ignition for at least 10 minutes and disconnect the battery, because an airbag could otherwise deploy.",
+    "src": [
+     "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Supplemental Restraint System (SRS)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   },
+   {
+    "q": "After reconnecting a V60's battery, the technician turns the ignition to mode II. Technician A says the SRS warning light should come on and go out after about 6 seconds if no fault is found. Technician B says an SRS light that stays on can be cleared by the owner opening the steering wheel airbag cover and checking the connector. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Volvo says the SRS light normally goes out after about 6 seconds, and also says never to open the airbag cover or repair SRS parts yourself; a light that stays on needs a trained Volvo technician.",
+    "src": [
+     "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Supplemental Restraint System (SRS), Front airbags",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   }
+  ]
+ },
+ "D2": {
+  "body": [
+   "This task means finding out whether a car has hydraulic power steering, with a fluid reservoir and pump, or electric power steering, where an electric motor supports the steering rack.",
+   "On a hydraulic system, the fluid level must sit between the MIN and MAX marks on the reservoir, and only the fluid the carmaker specifies is used; Volvo's manual gives the specification only as power steering fluid recommended by Volvo.",
+   "Volvo's manual says to check the level without removing the cap, to keep the area around the reservoir clean while checking, and that the fluid does not normally need changing.",
+   "A steering-pump remanufacturer warns that running a hydraulic system with too little or too much fluid can damage it.",
+   "An electric system shows up in other ways: Volvo's 2016 V60 press material says the Drive-E engines use Electrical Power Assist Steering (EPAS), where an electric motor supports the steering rack, and the V60 fuse list includes a 100 A fuse for the power steering."
+  ],
+  "car": "Volvo's September 2016 V60 specification sheet lists 'Power Assisted Rack and Pinion Steering', a McPherson strut front suspension with coil springs, hydraulic shock absorbers and a stabilizer bar, and an independent rear suspension with coil springs, hydraulic shock absorbers and a stabilizer bar; Volvo's 2016 and 2015.5 V60 press texts say the T5 Drive-E has Electrical Power Assist Steering (EPAS). Volvo's documents conflict on fluid: the MY2016 owner's manual, written for all engines, still has a power steering fluid section and shows a reservoir in one engine-bay picture, but its 4-cylinder engine-bay picture shows no power steering reservoir, so on this electric-assist car there is no fluid to check (unconfirmed by a hands-on look).",
+  "src": [
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Engine compartment – overview, Engine compartment – power steering fluid, Power steering – specification, Fuses – engine compartment",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "Volvo V60 - model year 2016",
+    "https://www.media.volvocars.com/uk/en-gb/media/documenttext/244979"
+   ],
+   [
+    "Model Overview: 2015.5 Volvo V60",
+    "https://www.media.volvocars.com/us/en-us/media/documenttext/244969"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ],
+   [
+    "Troubleshooting guidelines: Steering Pumps",
+    "https://www.elstock.com/media/1644/troubleshooting_steering_pumps.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A technician opens the hood of a 2016 V60 T5 Drive-E and can find no power steering reservoir. Which is the most likely reason?",
+    "o": [
+     "The reservoir is under the battery tray",
+     "The car uses Electrical Power Assist Steering, with an electric motor on the rack",
+     "The pump is driven by the timing belt and shares the engine oil",
+     "The fluid is checked through the brake fluid reservoir"
+    ],
+    "a": 1,
+    "why": "Volvo's 2016 V60 press text says the Drive-E engines come with EPAS, which uses an electric motor to support the steering rack, so there is no hydraulic reservoir to find.",
+    "src": [
+     "Volvo V60 - model year 2016",
+     "https://www.media.volvocars.com/uk/en-gb/media/documenttext/244979"
+    ]
+   },
+   {
+    "q": "On a car with hydraulic power steering, which statement about the fluid check is correct according to Volvo's V60 manual?",
+    "o": [
+     "The level must be between the MIN and MAX marks",
+     "The cap must be removed to read the level",
+     "The fluid must be changed at every oil change",
+     "Any brake fluid may be used to top up"
+    ],
+    "a": 0,
+    "why": "Volvo's manual says the power steering fluid level must be between MIN and MAX, that it is checked without removing the cap, and that it does not normally need changing.",
+    "src": [
+     "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Engine compartment – power steering fluid",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   }
+  ]
+ },
+ "D3": {
+  "body": [
+   "On cars with an engine-driven hydraulic pump, the pump carries a pulley on the accessory belt drive, so this task covers that belt, its tensioner and the pulleys.",
+   "Gates says low belt tension causes slipping, noise, heat, early belt wear and poor accessory output, while too much tension wears the belt and the driven parts.",
+   "Gates lists tensioner failure signs: rust bleeding or cracks at the arm, base or bracket; a pulley bearing that is noisy, rough or stiff when turned by hand with the belt off; a worn, chipped or cracked pulley; abnormal belt tracking; squeaks or rattles; large or constant arm oscillation; binding arm movement; and an arm with no spring resistance through its full travel.",
+   "Gates calls pulley misalignment the most common cause of early belt failure and advises replacing the tensioner whenever the multi-ribbed belt is replaced.",
+   "When fitting a tensioner, Gates says to photograph or sketch the belt routing first, then tighten the mounting bolts in a star pattern to one third, then two thirds, then the full torque the carmaker specifies."
+  ],
+  "car": "Not applicable to this car's steering: Volvo's press texts say the T5 Drive-E uses Electrical Power Assist Steering, with an electric motor supporting the rack, so there is no steering pump and no belt or pulley for one. The engine's accessory belt still drives other parts, which no source here lists for this engine.",
+  "src": [
+   [
+    "Replacing Tensioners",
+    "https://www.gatestechzone.com/en/installation/metals/tensioners"
+   ],
+   [
+    "Belt Tensioner Failure Signs",
+    "https://www.gatestechzone.com/en/problem-diagnosis/accessory-drive-system/tensioner-failure-signs"
+   ],
+   [
+    "Volvo V60 - model year 2016",
+    "https://www.media.volvocars.com/uk/en-gb/media/documenttext/244979"
+   ],
+   [
+    "Model Overview: 2015.5 Volvo V60",
+    "https://www.media.volvocars.com/us/en-us/media/documenttext/244969"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "With the belt removed, a technician spins the tensioner pulley by hand and feels roughness. What does Gates recommend?",
+    "o": [
+     "Replace only the pulley bearing",
+     "Replace the complete tensioner",
+     "Add belt dressing and recheck",
+     "Increase belt tension"
+    ],
+    "a": 1,
+    "why": "Gates says noise, resistance or roughness when the pulley is turned by hand points to bearing wear and that the complete tensioner should be replaced, not just the pulley.",
+    "src": [
+     "Belt Tensioner Failure Signs",
+     "https://www.gatestechzone.com/en/problem-diagnosis/accessory-drive-system/tensioner-failure-signs"
+    ]
+   },
+   {
+    "q": "All of these are tensioner failure signs listed by Gates EXCEPT:",
+    "o": [
+     "Shiny streaks or gouges on the arm or spring housing",
+     "Continuous back-and-forth arm oscillation while running",
+     "The arm moves smoothly and with resistance through its full range",
+     "Rust bleeding from between the arm and base"
+    ],
+    "a": 2,
+    "why": "Gates says the arm should move smoothly with resistance stop to stop; binding, loss of spring force, rust bleed, wear streaks and excessive oscillation are the failure signs.",
+    "src": [
+     "Belt Tensioner Failure Signs",
+     "https://www.gatestechzone.com/en/problem-diagnosis/accessory-drive-system/tensioner-failure-signs"
+    ]
+   }
+  ]
+ },
+ "D4": {
+  "body": [
+   "This task covers tracing noise, vibration and leaks on an engine-driven hydraulic power steering pump.",
+   "A steering-pump remanufacturer lists air locked in the system as a cause of a distinct whirring from the pump with the engine running; the fix is to bleed the system, and some units need vacuum bleeding.",
+   "Heavy steering with low or no pressure can come from debris in the system, collapsed hydraulic lines or trapped air; the same source says most lines last around 10 years and that debris in old fluid can point to failing lines.",
+   "Fluid on the outside of the pump after spills have been cleaned up means a leak; at the line connections the usual causes are O-rings or gaskets not renewed, or a dirty or damaged mating surface or thread.",
+   "Freightliner's rack inspection bulletin checks for rack leaks by wiping the rack clean, warming the fluid to at least 200 °F (93 °C), turning the wheels to the stops three times each way and then looking for fresh fluid under the boots."
+  ],
+  "car": "Not applicable: Volvo's press texts say the T5 Drive-E uses Electrical Power Assist Steering with an electric motor on the rack, so there is no hydraulic pump to diagnose. The V60 manual does say the electric assist can overheat, reduce assist slightly and show a message in the instrument panel.",
+  "src": [
+   [
+    "Troubleshooting guidelines: Steering Pumps",
+    "https://www.elstock.com/media/1644/troubleshooting_steering_pumps.pdf"
+   ],
+   [
+    "Inspection Procedure for Rack and Pinion Steering Gear (Freightliner Service Bulletin 46-53, June 2012)",
+    "https://static.nhtsa.gov/odi/tsbs/2012/SB-10044665-1931.pdf"
+   ],
+   [
+    "Volvo V60 - model year 2016",
+    "https://www.media.volvocars.com/uk/en-gb/media/documenttext/244979"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Adjustable steering force",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Right after a hydraulic power steering pump is replaced, it makes a distinct whirring with the engine running. What is the most likely cause?",
+    "o": [
+     "Air locked in the steering system",
+     "Worn outer tie rod ends",
+     "Over-tightened Oetiker boot clamps",
+     "An oversized steering wheel"
+    ],
+    "a": 0,
+    "why": "The pump remanufacturer lists an air lock as the cause of a distinct whirring from the unit and says to bleed the system, with vacuum bleeding on some units.",
+    "src": [
+     "Troubleshooting guidelines: Steering Pumps",
+     "https://www.elstock.com/media/1644/troubleshooting_steering_pumps.pdf"
+    ]
+   },
+   {
+    "q": "A hydraulic power steering pump shows fluid at its line connection after the area was cleaned. Technician A says the O-rings may not have been renewed. Technician B says a dirty or damaged mating surface could cause it. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "The remanufacturer lists both O-rings or gaskets not replaced and an unclean or damaged mating surface or thread as causes of a leak at the hydraulic lines.",
+    "src": [
+     "Troubleshooting guidelines: Steering Pumps",
+     "https://www.elstock.com/media/1644/troubleshooting_steering_pumps.pdf"
+    ]
+   }
+  ]
+ },
+ "D5": {
+  "body": [
+   "This task is removing and fitting an engine-driven hydraulic power steering pump with its brackets and pulley.",
+   "A steering-pump remanufacturer says to find out why the old pump failed before fitting a new one, because unrepaired faults elsewhere can damage the new pump.",
+   "The replacement must match the old unit: same pulley size and offset, same mounting measurements and same connections.",
+   "The same source recommends flushing the system when the pump is replaced, checking the hoses (and replacing all of them if any feel stiff, porous or hard), renewing the O-rings and gaskets on the lines, bleeding the system with fresh fluid of the carmaker's specification, and finishing with the level between MIN and MAX.",
+   "Where the pump is belt-driven, Gates says a tensioner is tightened in a star pattern to one third, two thirds and then full manufacturer torque, and that the pulleys should be checked and a new belt fitted during a drive overhaul."
+  ],
+  "car": "Not applicable: Volvo's press texts say the T5 Drive-E uses Electrical Power Assist Steering with an electric motor supporting the rack, so the car has no power steering pump, bracket or pulley.",
+  "src": [
+   [
+    "Troubleshooting guidelines: Steering Pumps",
+    "https://www.elstock.com/media/1644/troubleshooting_steering_pumps.pdf"
+   ],
+   [
+    "Replacing Tensioners",
+    "https://www.gatestechzone.com/en/installation/metals/tensioners"
+   ],
+   [
+    "Volvo V60 - model year 2016",
+    "https://www.media.volvocars.com/uk/en-gb/media/documenttext/244979"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Before installing a replacement hydraulic power steering pump, which step does the pump remanufacturer list first?",
+    "o": [
+     "Bleed the system with a vacuum pump",
+     "Determine what caused the old pump to fail",
+     "Overfill the reservoir above MAX",
+     "Replace the tie rod ends"
+    ],
+    "a": 1,
+    "why": "The installation steps begin with determining the cause of the old pump's breakdown, because a new pump will not fix the rest of the system and unrepaired faults may damage it.",
+    "src": [
+     "Troubleshooting guidelines: Steering Pumps",
+     "https://www.elstock.com/media/1644/troubleshooting_steering_pumps.pdf"
+    ]
+   },
+   {
+    "q": "When comparing a new power steering pump with the old one, all of these must match EXCEPT:",
+    "o": [
+     "Pulley size",
+     "Pulley offset",
+     "Mounting (fixation) measurements",
+     "The colour of the old fluid"
+    ],
+    "a": 3,
+    "why": "The remanufacturer says to match pulley size, offset, fixation measurements and connections; old fluid is checked for debris, not matched.",
+    "src": [
+     "Troubleshooting guidelines: Steering Pumps",
+     "https://www.elstock.com/media/1644/troubleshooting_steering_pumps.pdf"
+    ]
+   }
+  ]
+ },
+ "D6": {
+  "body": [
+   "This task covers the high-pressure and return hoses, fittings, O-rings, coolers and filters of a hydraulic power steering system.",
+   "A steering-pump remanufacturer notes that hoses wear from the inside out, so a visual check cannot judge them; if any hose feels stiff, porous or hard, all of them should be replaced because they have aged together.",
+   "The same source says most lines last around 10 years, that collapsed lines can cause low pressure and heavy steering, and that debris in the old fluid can show the lines are breaking down.",
+   "O-rings and gaskets on the hydraulic lines should always be renewed when a rack or pump is replaced; reusing them is a listed cause of leaks.",
+   "No sourced procedure found yet for power steering coolers and filters."
+  ],
+  "car": "Not applicable: Volvo's press texts say the T5 Drive-E uses Electrical Power Assist Steering with an electric motor on the rack, so there are no power steering hoses, coolers or filters on this car.",
+  "src": [
+   [
+    "Troubleshooting guidelines: Steering Pumps",
+    "https://www.elstock.com/media/1644/troubleshooting_steering_pumps.pdf"
+   ],
+   [
+    "Volvo V60 - model year 2016",
+    "https://www.media.volvocars.com/uk/en-gb/media/documenttext/244979"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A power steering hose looks fine on the outside but feels hard and stiff. What does the pump remanufacturer recommend?",
+    "o": [
+     "Keep it, since the outside shows no cracks",
+     "Replace only that hose",
+     "Replace all the power steering hoses",
+     "Wrap it with tape"
+    ],
+    "a": 2,
+    "why": "Hoses wear from the inside out, so their state cannot be judged by eye; if any feel stiff, porous or hard, all should be replaced because they have aged equally.",
+    "src": [
+     "Troubleshooting guidelines: Steering Pumps",
+     "https://www.elstock.com/media/1644/troubleshooting_steering_pumps.pdf"
+    ]
+   },
+   {
+    "q": "A new steering rack is installed and the old line O-rings are reused. Which problem is most likely?",
+    "o": [
+     "A leak at the hydraulic line connections",
+     "Rapid outer tie rod wear",
+     "A pulled tensioner arm",
+     "An SRS warning light"
+    ],
+    "a": 0,
+    "why": "The remanufacturer lists O-rings or gaskets not replaced as a leak cause and says to always renew them when fitting a new rack or pump.",
+    "src": [
+     "Troubleshooting guidelines: Steering Pumps",
+     "https://www.elstock.com/media/1644/troubleshooting_steering_pumps.pdf"
+    ]
+   }
+  ]
+ },
+ "D7": {
+  "body": [
+   "Rack-and-pinion boots (bellows) seal the ends of the steering rack and the inner tie rod joints against water and dirt.",
+   "Freightliner's rack inspection bulletin cleans the bellows, removes and discards the clamps, checks the inner tie rods for looseness, wipes the rack shafts clean and looks for power steering fluid under the bellows.",
+   "Any tear or poor seal in a boot means it must be replaced; a parts-industry inspection guide also recommends a new boot whenever an inner tie rod is replaced, and squeezing the boot can help tell a worn inner joint from a loose rack.",
+   "In that bulletin, new Oetiker clamps are crimped until the ear width is 0.08 to 0.16 in (2 to 4 mm), all three barbs must engage, and a stretched or over-tightened clamp is discarded, because a poor seal lets moisture in and causes corrosion.",
+   "The bulletin's grease and sealant steps are specific to that truck's gear; the carmaker's own procedure applies to any other vehicle."
+  ],
+  "car": "Volvo's September 2016 V60 specification sheet lists power assisted rack-and-pinion steering, so the car has rack boots; no Volvo source fetched gives a boot replacement procedure for it.",
+  "src": [
+   [
+    "Inspection Procedure for Rack and Pinion Steering Gear (Freightliner Service Bulletin 46-53, June 2012)",
+    "https://static.nhtsa.gov/odi/tsbs/2012/SB-10044665-1931.pdf"
+   ],
+   [
+    "Ball Joint, Control Arm, and Tie Rod Inspection Tips | KnowYourParts",
+    "https://www.knowyourparts.com/technical-resources/ride-control/ball-joint-control-arm-and-tie-rod-inspection-tips/"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "After crimping a new Oetiker clamp on a rack boot, only two of its three barbs are engaged. What should be done?",
+    "o": [
+     "Leave it; two barbs are enough",
+     "Crimp it further until the ear is flat",
+     "Remove and discard it and fit a new clamp",
+     "Add a zip tie beside it"
+    ],
+    "a": 2,
+    "why": "The bulletin says all three barbs must be engaged, and if they are not after crimping the clamp is removed, discarded and replaced.",
+    "src": [
+     "Inspection Procedure for Rack and Pinion Steering Gear (Freightliner Service Bulletin 46-53, June 2012)",
+     "https://static.nhtsa.gov/odi/tsbs/2012/SB-10044665-1931.pdf"
+    ]
+   },
+   {
+    "q": "Technician A says a rack boot should be replaced whenever the inner tie rod is replaced. Technician B says a torn boot can stay if the inner tie rod has no play. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "The parts-industry guide recommends a new boot with every inner tie rod, and the bulletin says any tear or improper seal requires replacement, since it lets moisture in.",
+    "src": [
+     "Ball Joint, Control Arm, and Tie Rod Inspection Tips | KnowYourParts",
+     "https://www.knowyourparts.com/technical-resources/ride-control/ball-joint-control-arm-and-tie-rod-inspection-tips/"
+    ]
+   }
+  ]
+ },
+ "D8": {
+  "body": [
+   "This task is draining old fluid from a hydraulic power steering system, refilling it with the specified fluid and removing trapped air.",
+   "A steering-pump remanufacturer recommends flushing the system when a pump is replaced, so that particles that may have caused the failure are removed.",
+   "After the work, the system is filled with fresh power steering fluid of the carmaker's specification and bled; some systems need a vacuum pump to clear air locks, and an air lock shows up as a whirring pump or heavy steering.",
+   "The finished level must be between the MIN and MAX marks, since too little or too much fluid can damage the system.",
+   "No sourced step-by-step bleeding sequence found yet; the carmaker's procedure applies."
+  ],
+  "car": "Not applicable: Volvo's press texts say the T5 Drive-E uses Electrical Power Assist Steering with an electric motor supporting the rack, so there is no steering fluid to flush or bleed.",
+  "src": [
+   [
+    "Troubleshooting guidelines: Steering Pumps",
+    "https://www.elstock.com/media/1644/troubleshooting_steering_pumps.pdf"
+   ],
+   [
+    "Volvo V60 - model year 2016",
+    "https://www.media.volvocars.com/uk/en-gb/media/documenttext/244979"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Why does the pump remanufacturer recommend flushing the steering system when replacing the pump?",
+    "o": [
+     "To raise the fluid's boiling point",
+     "To remove particles that may have caused the old pump to fail",
+     "To reset the steering angle sensor",
+     "To loosen the tie rod sleeves"
+    ],
+    "a": 1,
+    "why": "The guide says flushing ensures particles that could have caused the pump failure are removed.",
+    "src": [
+     "Troubleshooting guidelines: Steering Pumps",
+     "https://www.elstock.com/media/1644/troubleshooting_steering_pumps.pdf"
+    ]
+   },
+   {
+    "q": "After normal bleeding, a hydraulic steering system still has an air lock. What does the remanufacturer suggest?",
+    "o": [
+     "Use a vacuum pump to remove the air",
+     "Overfill above MAX",
+     "Replace the tie rod ends",
+     "Disconnect the battery for 10 minutes"
+    ],
+    "a": 0,
+    "why": "The guide says some units need vacuum bleeding to remove all air locks.",
+    "src": [
+     "Troubleshooting guidelines: Steering Pumps",
+     "https://www.elstock.com/media/1644/troubleshooting_steering_pumps.pdf"
+    ]
+   }
+  ]
+ },
+ "D9": {
+  "body": [
+   "This task is reading the stored fault codes for the steering and suspension systems and writing them down before any repair or code clearing.",
+   "Volvo's manual describes OBD II as part of the engine management system: it stores diagnostic information about emission controls, records a message about each fault, permanent or temporary, and can light the Check Engine light.",
+   "The manual notes that disconnecting the battery leaves OBD II data incomplete and not ready for inspection, and that about two half-hour trips of mixed stop-and-go and highway driving are typically needed to reach readiness again.",
+   "Other systems report faults through their own warnings: the V60's electric steering assist shows a message in the instrument panel when it overheats and reduces assist.",
+   "No sourced procedure found yet for reading the V60's steering and suspension control-module codes."
+  ],
+  "car": "Volvo's manual says the V60's power steering can get too warm, reduce assist slightly and show a message in the instrument panel; the manual does not describe how to read steering or chassis codes.",
+  "src": [
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Onboard Diagnostic System, Adjustable steering force",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A V60's battery was just disconnected during a repair. According to Volvo's manual, which is most likely at an OBD II emissions inspection the same day?",
+    "o": [
+     "The car shows not ready because diagnostic data is incomplete",
+     "All monitors report ready immediately",
+     "The Check Engine light flashes continuously",
+     "The SRS light stays on"
+    ],
+    "a": 0,
+    "why": "Volvo says disconnecting the battery can leave OBD II information incomplete and not ready, and two half-hour mixed trips are typically needed to reach readiness.",
+    "src": [
+     "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Onboard Diagnostic System",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   }
+  ]
+ },
+ "D10": {
+  "body": [
+   "This task covers checking the electronic parts of an adjustable or self-levelling suspension, such as ride-height sensors, actuators and their wiring.",
+   "On the V60, Volvo's optional Four-C (Continuously Controlled Chassis Concept) adjusts the shock absorbers' characteristics, with three settings: Comfort, Sport and Advanced.",
+   "The setting in use when the engine is switched off comes back at the next start, and the setting is changed with buttons in the center console.",
+   "Volvo's manual also links Four-C to an optional speed-dependent power steering whose steering force can be set to Low, Medium or High, but only when the car is not moving.",
+   "No sourced procedure found yet for testing ride-height sensors or suspension wiring."
+  ],
+  "car": "Four-C is an option on the V60 according to Volvo's manual; whether this car has it is unconfirmed. Volvo's September 2016 spec sheet lists McPherson struts at the front and independent rear suspension, both with coil springs and hydraulic shock absorbers.",
+  "src": [
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Active chassis (Four C), Adjustable steering force",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A V60 with Four-C was switched off in Sport mode. Which setting is active at the next engine start, according to Volvo?",
+    "o": [
+     "Comfort, always",
+     "Sport",
+     "Advanced",
+     "None until a button is pressed"
+    ],
+    "a": 1,
+    "why": "Volvo's manual says the setting in use when the engine is switched off is activated the next time the engine is started.",
+    "src": [
+     "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Active chassis (Four C)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   }
+  ]
+ },
+ "D11": {
+  "body": [
+   "The pitman arm, centre link (drag link) and idler arm are parts of a steering-box linkage; in TRW's linkage manual the drag link joins the pitman arm to the steering arm, and tie rods join the tie rod arms.",
+   "TRW's linkage service manual starts with a visual check of drag links, tie rods, tie rod ends and the pitman arm for cracks, breaks, bends, broken clamps and gouges from rubbing parts, and confirms the correct pitman arm and steering arms are fitted.",
+   "It also checks for torn seals, missing or damaged grease fittings, wear at the socket throat, excessive lash in the sockets and missing cotter pins.",
+   "Nuts must be tight at the drag-link-to-pitman-arm and drag-link-to-steering-arm joints and at the clamps on the adjustable sections.",
+   "That manual is written for heavy commercial vehicles; the carmaker's procedure applies to a passenger car."
+  ],
+  "car": "Volvo's September 2016 V60 specification sheet lists 'Power Assisted Rack and Pinion Steering', so the V60 has no pitman arm, centre link or idler arm; the same sheet lists McPherson strut front and independent rear suspension, each with coil springs, hydraulic shock absorbers and a stabilizer bar.",
+  "src": [
+   [
+    "TRW Commercial Steering Systems linkage service manual, Section 2: On-Vehicle Inspection",
+    "https://www.trwaftermarket.com/globalassets/na/trucksteering---literature/linkages-lit/linkages-sm/lnk-insp.pdf"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A technician is asked to inspect the idler arm on a 2016 Volvo V60. What is the most likely finding?",
+    "o": [
+     "The idler arm is worn and needs grease",
+     "The car has none, because it uses rack-and-pinion steering",
+     "The idler arm is behind the rear subframe",
+     "The idler arm is part of the airbag module"
+    ],
+    "a": 1,
+    "why": "Volvo's V60 specification sheet lists power assisted rack-and-pinion steering, which uses no idler arm, pitman arm or centre link.",
+    "src": [
+     "Volvo V60 specifications (Volvo Cars, Sept 2016)",
+     "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+    ]
+   },
+   {
+    "q": "During a visual inspection of a pitman-arm steering linkage, all of these are faults EXCEPT:",
+    "o": [
+     "A missing cotter pin at a socket",
+     "A torn socket seal",
+     "A missing grease fitting",
+     "Tight nuts at the drag link to pitman arm joint"
+    ],
+    "a": 3,
+    "why": "TRW lists missing cotter pins, seal tears and missing or damaged grease fittings as faults, and says the drag link to pitman arm nuts must be tight.",
+    "src": [
+     "TRW Commercial Steering Systems linkage service manual, Section 2: On-Vehicle Inspection",
+     "https://www.trwaftermarket.com/globalassets/na/trucksteering---literature/linkages-lit/linkages-sm/lnk-insp.pdf"
+    ]
+   }
+  ]
+ },
+ "D12": {
+  "body": [
+   "Tie rod ends are ball-stud-and-socket joints in the steering linkage; small wear in each one can add up to a significant change in toe.",
+   "For outer tie rod ends, a parts-industry inspection guide says to push and pull the joint by hand, not with a pry bar, and to do a dry-park test with the car on the ground while a helper rocks the steering wheel; any free play or vertical movement means replacement.",
+   "Inner tie rods are checked for horizontal movement during the dry-park test and for knocking or clicking when steering; squeezing the rack boot helps tell a worn joint from a loose rack, and the boot is replaced with the joint.",
+   "Torn seals or water or corrosion at the stud also mean replacement; before removing an outer end, measure its position or count the turns so toe can be set close again, then confirm toe with an alignment.",
+   "In TRW's heavy-vehicle linkage manual, any threaded joint looseness needs repair, socket thread ends visible through the sleeve slot mean the rod is misadjusted, and in-and-out ball stud movement of 1/8 in (3 mm) or more takes the vehicle out of service."
+  ],
+  "car": "Volvo's September 2016 V60 specification sheet lists power assisted rack-and-pinion steering with McPherson strut front suspension (coil springs, hydraulic shock absorbers, stabilizer bar), so the car has inner tie rods inside the rack boots and outer tie rod ends at the knuckles; no Volvo tie rod specification was found.",
+  "src": [
+   [
+    "Ball Joint, Control Arm, and Tie Rod Inspection Tips | KnowYourParts",
+    "https://www.knowyourparts.com/technical-resources/ride-control/ball-joint-control-arm-and-tie-rod-inspection-tips/"
+   ],
+   [
+    "TRW Commercial Steering Systems linkage service manual, Section 2: On-Vehicle Inspection",
+    "https://www.trwaftermarket.com/globalassets/na/trucksteering---literature/linkages-lit/linkages-sm/lnk-insp.pdf"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "During a dry-park test, a helper rocks the steering wheel while the technician watches an outer tie rod end. The joint moves up and down. What is the correct action?",
+    "o": [
+     "Grease it and retest next service",
+     "Replace the outer tie rod end",
+     "Adjust the toe only",
+     "Replace the rack boot only"
+    ],
+    "a": 1,
+    "why": "The inspection guide says any vertical movement of the outer joint during the dry-park test means it should be replaced.",
+    "src": [
+     "Ball Joint, Control Arm, and Tie Rod Inspection Tips | KnowYourParts",
+     "https://www.knowyourparts.com/technical-resources/ride-control/ball-joint-control-arm-and-tie-rod-inspection-tips/"
+    ]
+   },
+   {
+    "q": "Technician A says a pry bar gives the best check for tie rod end play. Technician B says to measure or count turns before removing an outer tie rod end so toe can be reset close to before. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "The guide says not to use a pry bar, which can give skewed readings, and to measure the tie rod's position or count turns before removal, then confirm toe is in specification.",
+    "src": [
+     "Ball Joint, Control Arm, and Tie Rod Inspection Tips | KnowYourParts",
+     "https://www.knowyourparts.com/technical-resources/ride-control/ball-joint-control-arm-and-tie-rod-inspection-tips/"
+    ]
+   }
+  ]
+ },
+ "D13": {
+  "body": [
+   "A steering linkage damper (steering stabilizer) is a damper unit clamped to the steering linkage, in Roadmaster's kit by a bracket on the tie rod; MOOG describes its job as reducing vibration and steering shimmy and stopping steering oscillation.",
+   "Roadmaster's installation instructions say to inspect the drag link, tie rod ends and other steering parts first, because worn parts with excessive play cause handling problems that a stabilizer will not fix.",
+   "The steering wheel is centred and locked before fitting, the stabilizer must clear all chassis and steering parts through the full suspension travel, and a test drive confirms the car does not pull and the wheel returns to centre.",
+   "Roadmaster also says to inspect the stabilizer's fasteners for tightness once a year and not to use an air impact wrench on its bolts.",
+   "No sourced wear limits found yet for steering dampers."
+  ],
+  "car": null,
+  "src": [
+   [
+    "Auto Steering Stabilizers & Car Steering Dampers | MOOG Parts",
+    "https://www.moogparts.com/parts/steering/steering-stabilizers.html"
+   ],
+   [
+    "Steering Stabilizer Installation Instructions, Kit RBK32 (Roadmaster)",
+    "https://www.roadmasterinc.com/content/pdfinst/RBK32.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A vehicle has front-end shimmy, and the owner wants a steering stabilizer fitted. Inspection finds excessive play in the tie rod ends. What should happen first, according to Roadmaster?",
+    "o": [
+     "Fit the stabilizer; it will mask the play",
+     "Replace the worn steering parts before fitting the stabilizer",
+     "Increase tire pressure",
+     "Remove the steering damper entirely"
+    ],
+    "a": 1,
+    "why": "Roadmaster says worn drag link and tie rod ends cause handling problems a stabilizer will not fix, and should be replaced before it is installed.",
+    "src": [
+     "Steering Stabilizer Installation Instructions, Kit RBK32 (Roadmaster)",
+     "https://www.roadmasterinc.com/content/pdfinst/RBK32.pdf"
+    ]
+   }
+  ]
+ },
  "D42": {
   "body": [
    "A car that pulls or drifts to one side on a flat, straight road, a steering wheel that sits off center while driving straight, and uneven wear on the inner or outer tread edges are the common signs of misalignment.",
