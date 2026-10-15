@@ -20,10 +20,15 @@ const srv = http.createServer((q, r) => {
   await p.goto(base + 'index.html'); await p.waitForTimeout(2600);
   const mine = await p.evaluate(() => window.V60_VERSION);
   ok(!!mine && await p.evaluate(() => document.getElementById('updateBar').hidden), 'same version: no bar (' + mine + ')');
+  const chip = () => p.textContent('#verChip');
+  ok(await p.isVisible('#verChip') && /^Version [A-Z][a-z]{2} \d{1,2}, \d{1,2}:\d{2}/.test(await chip()), 'the header shows the version as a date and time: ' + await chip());
+  ok(await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'the header still fits a 390-wide phone');
+  await p.click('#verChip'); await p.waitForTimeout(500);
+  ok(/^Up to date/.test(await chip()), 'tapping it checks now: ' + await chip());
 
   published = mine.replace(/-[0-9a-f]+$/, '-ffffffff');
-  await p.evaluate(() => window.__v60CheckUpdate(true)); await p.waitForTimeout(400);
-  ok(await p.isVisible('#updateBar'), 'a newer version.json shows the bar, with no service worker');
+  await p.click('#verChip'); await p.waitForTimeout(500);
+  ok(await p.isVisible('#updateBar') && /^New version ready/.test(await chip()), 'a newer version.json shows the bar, with no service worker: ' + await chip());
 
   const nav = p.waitForNavigation({ timeout: 10000 }).catch(() => null);
   await p.click('#updateBar button'); await nav; await p.waitForTimeout(800);

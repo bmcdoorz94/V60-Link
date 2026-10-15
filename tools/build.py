@@ -25,7 +25,7 @@ def write(path, text):
         f.write(text)
 
 def main():
-    stamp = time.strftime("%Y.%m.%d-%H%M")
+    stamp = time.strftime("%Y.%m.%d-%H%M", time.gmtime())  # UTC, so a build here and the GitHub build read the same; the header shows it in the phone's time
     mods = [m for m in MODULES if os.path.exists(os.path.join(SRC, "js", "modules", m))]
     js_files = ["js/data/" + d for d in DATA] + ["js/modules/" + m for m in mods] + ["js/core.js"]
     css = "\n".join(read("css", c) for c in ["app.css"] + sorted(f for f in os.listdir(os.path.join(SRC, "css")) if f.endswith(".css") and f != "app.css"))
@@ -76,15 +76,30 @@ def main():
   /* a fresh address skips the 10-minute browser cache GitHub Pages allows on index.html */
   function hard() { if (reloaded) return; reloaded = true; location.replace(location.pathname + "?u=" + Date.now() + location.hash); }
   try { if (/[?&]u=\\d+/.test(location.search)) history.replaceState(null, "", location.pathname + location.hash); } catch (e) {}
+  /* the header's Version chip: when this copy was built, in the phone's own time; tap it to check now */
+  var chip = document.getElementById("verChip");
+  function when(v) {
+    var m = /^(\\d{4})\\.(\\d{2})\\.(\\d{2})-(\\d{2})(\\d{2})/.exec(v || ""); if (!m) return v || "";
+    var d = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5]));
+    try { return d.toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }); } catch (e) { return d.toString(); }
+  }
+  function label(t) { if (chip) chip.textContent = t; }
+  var mineTxt = "Version " + when(window.V60_VERSION);
   var last = 0;
-  function check(force) {
+  function check(force, tell) {
     if (!/^https?:$/.test(location.protocol) || !window.V60_VERSION) return;
     var now = Date.now(); if (!force && now - last < 60000) return; last = now;
+    if (tell) label("Checking...");
     fetch("version.json?t=" + now, { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
-      if (j && j.v && j.v !== window.V60_VERSION) offer();
-    }).catch(function () {});
+      if (j && j.v && j.v !== window.V60_VERSION) { offer(); label("New version ready: " + when(j.v)); }
+      else if (tell) { label("Up to date · " + when(window.V60_VERSION)); setTimeout(function () { label(mineTxt); }, 4000); }
+    }).catch(function () { if (tell) { label("Could not check. Offline?"); setTimeout(function () { label(mineTxt); }, 4000); } });
   }
   window.__v60CheckUpdate = check;
+  if (chip && /^https?:$/.test(location.protocol) && window.V60_VERSION) {
+    label(mineTxt); chip.hidden = false;
+    chip.addEventListener("click", function () { if (bar && !bar.hidden) { refresh(); return; } check(true, true); });
+  }
   setTimeout(function () { check(true); }, 2000);
   document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") check(); });
   window.addEventListener("pageshow", function (e) { if (e.persisted) check(true); });

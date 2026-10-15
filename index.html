@@ -14,7 +14,7 @@
 <meta name="apple-mobile-web-app-title" content="V60 Garage">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="app.css?v=dee5761a">
+<link rel="stylesheet" href="app.css?v=b7e01ae1">
 </head>
 <body>
 
@@ -22,7 +22,7 @@
 <div class="updatebar" id="updateBar" hidden role="status"><span>A new version of V60 Garage is ready.</span><button type="button">Refresh</button></div>
 <main>
   <header class="cockpit">
-    <div class="strip"><span class="brand">V60 Garage · Workshop manual</span><span class="status savest"><span id="saveStatus" role="status">Loading your saved data</span><button type="button" class="syncchip" id="syncChip" data-jump="opts:sync" hidden>Sync: off · Set up</button><button type="button" class="syncchip" id="guideBtn" data-guide="start" hidden>Guide me</button></span></div>
+    <div class="strip"><span class="brand">V60 Garage · Workshop manual</span><span class="status savest"><span id="saveStatus" role="status">Loading your saved data</span><button type="button" class="syncchip" id="syncChip" data-jump="opts:sync" hidden>Sync: off · Set up</button><button type="button" class="syncchip" id="guideBtn" data-guide="start" hidden>Guide me</button><button type="button" class="syncchip verchip" id="verChip" hidden aria-label="App version. Tap to check for a new one.">Version</button></span></div>
     <div class="ident">
       <h1>2016 V60 T5</h1>
       <p class="sub">Premier · B4204T11 2.0 turbo · front-wheel drive</p>
@@ -547,32 +547,32 @@
 </main>
 
 
-<script>window.V60_VERSION="2026.10.15-1235-dee5761a";</script>
-<script src="js/data/articles.js?v=dee5761a"></script>
-<script src="js/data/codebook.js?v=dee5761a"></script>
-<script src="js/data/facts.js?v=dee5761a"></script>
-<script src="js/data/manual.js?v=dee5761a"></script>
-<script src="js/modules/today.js?v=dee5761a"></script>
-<script src="js/modules/kb.js?v=dee5761a"></script>
-<script src="js/modules/cards.js?v=dee5761a"></script>
-<script src="js/modules/exam.js?v=dee5761a"></script>
-<script src="js/modules/story.js?v=dee5761a"></script>
-<script src="js/modules/manual.js?v=dee5761a"></script>
-<script src="js/modules/fuel.js?v=dee5761a"></script>
-<script src="js/modules/glovebox.js?v=dee5761a"></script>
-<script src="js/modules/docs.js?v=dee5761a"></script>
-<script src="js/modules/diy.js?v=dee5761a"></script>
-<script src="js/modules/trees.js?v=dee5761a"></script>
-<script src="js/modules/bulletins.js?v=dee5761a"></script>
-<script src="js/modules/upgrades.js?v=dee5761a"></script>
-<script src="js/modules/live.js?v=dee5761a"></script>
-<script src="js/modules/extras.js?v=dee5761a"></script>
-<script src="js/modules/skills.js?v=dee5761a"></script>
-<script src="js/modules/sync.js?v=dee5761a"></script>
-<script src="js/modules/ui.js?v=dee5761a"></script>
-<script src="js/modules/scan.js?v=dee5761a"></script>
-<script src="js/modules/guide.js?v=dee5761a"></script>
-<script src="js/core.js?v=dee5761a"></script>
+<script>window.V60_VERSION="2026.10.15-1320-b7e01ae1";</script>
+<script src="js/data/articles.js?v=b7e01ae1"></script>
+<script src="js/data/codebook.js?v=b7e01ae1"></script>
+<script src="js/data/facts.js?v=b7e01ae1"></script>
+<script src="js/data/manual.js?v=b7e01ae1"></script>
+<script src="js/modules/today.js?v=b7e01ae1"></script>
+<script src="js/modules/kb.js?v=b7e01ae1"></script>
+<script src="js/modules/cards.js?v=b7e01ae1"></script>
+<script src="js/modules/exam.js?v=b7e01ae1"></script>
+<script src="js/modules/story.js?v=b7e01ae1"></script>
+<script src="js/modules/manual.js?v=b7e01ae1"></script>
+<script src="js/modules/fuel.js?v=b7e01ae1"></script>
+<script src="js/modules/glovebox.js?v=b7e01ae1"></script>
+<script src="js/modules/docs.js?v=b7e01ae1"></script>
+<script src="js/modules/diy.js?v=b7e01ae1"></script>
+<script src="js/modules/trees.js?v=b7e01ae1"></script>
+<script src="js/modules/bulletins.js?v=b7e01ae1"></script>
+<script src="js/modules/upgrades.js?v=b7e01ae1"></script>
+<script src="js/modules/live.js?v=b7e01ae1"></script>
+<script src="js/modules/extras.js?v=b7e01ae1"></script>
+<script src="js/modules/skills.js?v=b7e01ae1"></script>
+<script src="js/modules/sync.js?v=b7e01ae1"></script>
+<script src="js/modules/ui.js?v=b7e01ae1"></script>
+<script src="js/modules/scan.js?v=b7e01ae1"></script>
+<script src="js/modules/guide.js?v=b7e01ae1"></script>
+<script src="js/core.js?v=b7e01ae1"></script>
 <script>
 (function () {
   var bar = document.getElementById("updateBar"), waiting = null, reloaded = false;
@@ -584,15 +584,30 @@
   /* a fresh address skips the 10-minute browser cache GitHub Pages allows on index.html */
   function hard() { if (reloaded) return; reloaded = true; location.replace(location.pathname + "?u=" + Date.now() + location.hash); }
   try { if (/[?&]u=\d+/.test(location.search)) history.replaceState(null, "", location.pathname + location.hash); } catch (e) {}
+  /* the header's Version chip: when this copy was built, in the phone's own time; tap it to check now */
+  var chip = document.getElementById("verChip");
+  function when(v) {
+    var m = /^(\d{4})\.(\d{2})\.(\d{2})-(\d{2})(\d{2})/.exec(v || ""); if (!m) return v || "";
+    var d = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5]));
+    try { return d.toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }); } catch (e) { return d.toString(); }
+  }
+  function label(t) { if (chip) chip.textContent = t; }
+  var mineTxt = "Version " + when(window.V60_VERSION);
   var last = 0;
-  function check(force) {
+  function check(force, tell) {
     if (!/^https?:$/.test(location.protocol) || !window.V60_VERSION) return;
     var now = Date.now(); if (!force && now - last < 60000) return; last = now;
+    if (tell) label("Checking...");
     fetch("version.json?t=" + now, { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
-      if (j && j.v && j.v !== window.V60_VERSION) offer();
-    }).catch(function () {});
+      if (j && j.v && j.v !== window.V60_VERSION) { offer(); label("New version ready: " + when(j.v)); }
+      else if (tell) { label("Up to date · " + when(window.V60_VERSION)); setTimeout(function () { label(mineTxt); }, 4000); }
+    }).catch(function () { if (tell) { label("Could not check. Offline?"); setTimeout(function () { label(mineTxt); }, 4000); } });
   }
   window.__v60CheckUpdate = check;
+  if (chip && /^https?:$/.test(location.protocol) && window.V60_VERSION) {
+    label(mineTxt); chip.hidden = false;
+    chip.addEventListener("click", function () { if (bar && !bar.hidden) { refresh(); return; } check(true, true); });
+  }
   setTimeout(function () { check(true); }, 2000);
   document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") check(); });
   window.addEventListener("pageshow", function (e) { if (e.persisted) check(true); });
