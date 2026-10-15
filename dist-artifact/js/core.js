@@ -1275,6 +1275,7 @@
     MODS.forEach(function (m) { if (m.xp) try { x += m.xp(API) || 0; } catch (e) {} });
     return x;
   }
+  function hud() { if (window.V60_TRACK) { window.V60_TRACK.hud(); return; } var r = rankFor(xpTotal()); $("hudRank").textContent = "Lv " + r.lvl; $("hudRankName").textContent = r.name; }
   function rankFor(x) { var r = RANKS[0], i = 0; RANKS.forEach(function (k, j) { if (x >= k[0]) { r = k; i = j; } }); return { name: r[1], lvl: i + 1, at: r[0], next: RANKS[i + 1] || null }; }
   function chapterDone(c) { var A = acad(); return c.missions.filter(function (m) { return A.done[m.id] && A.done[m.id].outcome !== "skip"; }).length; }
   function prereq(i) { var c = CHAPTERS[i]; return CHAPTERS[c.after != null ? c.after : i - 1]; }
@@ -1286,19 +1287,18 @@
     return null;
   }
 
-  var aui = { view: "home", id: null, jobPicks: {}, jobAns: null };
+  var aui = { view: "home", id: null, jobPicks: {}, jobAns: null, root: "acadBody" };
+  function aroot() { return $(aui.root) || $("acadBody"); }
   function renderAcademy() {
     var x = xpTotal(), r = rankFor(x);
-    $("hudRank").textContent = "Lv " + r.lvl; $("hudRankName").textContent = r.name;
+    hud();
     if (aui.view === "mission") return renderMission(missionById(aui.id));
     if (aui.view === "job") return renderJob(JOBS.filter(function (j) { return j.id === aui.id; })[0]);
     var pct = r.next ? Math.round(100 * (x - r.at) / (r.next[0] - r.at)) : 100;
     var nm = nextMission();
     var badges = CHAPTERS.map(function (c) { var full = chapterDone(c) === c.missions.length; return '<span class="badge' + (full ? " on" : "") + '" title="' + esc(c.title) + '">' + esc(c.badge) + "</span>"; }).join("") +
       '<span class="badge' + (JOBS.every(function (j) { return acad().jobs[j.id]; }) ? " on" : "") + '">Career</span>';
-    var html = '<section class="player"><div class="pl-top"><div><div class="eyebrow">Level ' + r.lvl + '</div><div class="pl-rank">' + esc(r.name) + '</div></div><div class="pl-xp"><span class="v">' + x + '</span> XP</div></div>' +
-      '<div class="xpbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '" aria-label="Progress to next rank"><i style="width:' + pct + '%"></i></div>' +
-      '<div class="status">' + (r.next ? (r.next[0] - x) + " XP to " + esc(r.next[1]) : "Top rank reached") + '</div><div class="badges">' + badges + "</div>" +
+    var html = '<section class="player"><div class="badges">' + badges + "</div>" +
       (nm ? '<div class="row"><button type="button" data-mission="' + nm.id + '">Next mission: ' + esc(nm.title) + "</button></div>" : '<p>Every unlocked mission is complete.</p>') + "</section>";
     html += '<p class="lede">Self-paced. Nothing expires and there are no streaks. Field missions happen at the real car, and what you record there fills in the Bay, Records and Health tabs. Chapters unlock when you finish half of the one before.</p>';
     CHAPTERS.forEach(function (c, i) {
@@ -1306,14 +1306,14 @@
       html += '<section class="chap' + (un ? "" : " locked") + '"><div class="chap-h"><div><div class="eyebrow">Chapter ' + (i + 1) + (un ? "" : " · locked") + '</div><h3>' + esc(c.title) + '</h3></div><span class="status">' + d + " / " + c.missions.length + '</span></div><p class="lede">' + esc(c.blurb) + "</p>";
       if (un) html += '<ul class="mlist">' + c.missions.map(function (m) {
         var st = acad().done[m.id], q = acad().quiz[m.id];
-        return '<li><button type="button" class="mbtn" data-mission="' + m.id + '"><span class="pill ' + (st ? (st.outcome === "skip" ? "info" : "ok") : "none") + '">' + (st ? (st.outcome === "skip" ? "Later" : "Done") : ({ learn: "Learn", field: "Field", log: "Log" })[m.type]) + '</span><span class="mt">' + esc(m.title) + (q && q.perfect ? " ★" : "") + '</span><span class="status">' + m.xp + " XP · " + m.min + " min</span></button></li>";
+        return '<li><button type="button" class="mbtn" data-mission="' + m.id + '"><span class="pill ' + (st ? (st.outcome === "skip" ? "info" : "ok") : "none") + '">' + (st ? (st.outcome === "skip" ? "Later" : "Done") : ({ learn: "Learn", field: "Field", log: "Log" })[m.type]) + '</span><span class="mt">' + esc(m.title) + (q && q.perfect ? " ★" : "") + '</span><span class="status">' + m.min + " min</span></button></li>";
       }).join("") + "</ul>";
       else html += '<p class="status">Finish ' + Math.ceil(prereq(i).missions.length / 2) + " missions in " + esc(prereq(i).title) + " to unlock.</p>";
       html += "</section>";
     });
     var cu = careerUnlocked();
-    if (!window.V60_GATE || window.V60_GATE.feature("career")) html += '<section class="chap' + (cu ? "" : " locked") + '"><div class="chap-h"><div><div class="eyebrow">Career mode' + (cu ? "" : " · locked") + '</div><h3>Shop jobs</h3></div><span class="status">' + JOBS.filter(function (j) { return acad().jobs[j.id]; }).length + " / " + JOBS.length + '</span></div><p class="lede">A customer brings in a car with a complaint. Choose what to inspect, where every check costs shop time, then make the call. Fewer minutes and the right answer earn more XP. The cases are realistic, but they are practice, not your car\'s diagnosis.</p>' +
-      (cu ? '<ul class="mlist">' + JOBS.map(function (j) { var r2 = acad().jobs[j.id]; return '<li><button type="button" class="mbtn" data-job="' + j.id + '"><span class="pill ' + (r2 ? (r2.correct ? "ok" : "watch") : "none") + '">' + (r2 ? (r2.correct ? "Solved" : "Missed") : "Job") + '</span><span class="mt">' + esc(j.title) + '</span><span class="status">up to ' + j.xp + " XP</span></button></li>"; }).join("") + "</ul>"
+    if (!window.V60_GATE || window.V60_GATE.feature("career")) html += '<section class="chap' + (cu ? "" : " locked") + '"><div class="chap-h"><div><div class="eyebrow">Career mode' + (cu ? "" : " · locked") + '</div><h3>Shop jobs</h3></div><span class="status">' + JOBS.filter(function (j) { return acad().jobs[j.id]; }).length + " / " + JOBS.length + '</span></div><p class="lede">A customer brings in a car with a complaint. Choose what to inspect, where every check costs shop time, then make the call. Fewer minutes with the right answer is the goal. The cases are realistic, but they are practice, not your car\'s diagnosis.</p>' +
+      (cu ? '<ul class="mlist">' + JOBS.map(function (j) { var r2 = acad().jobs[j.id]; return '<li><button type="button" class="mbtn" data-job="' + j.id + '"><span class="pill ' + (r2 ? (r2.correct ? "ok" : "watch") : "none") + '">' + (r2 ? (r2.correct ? "Solved" : "Missed") : "Job") + '</span><span class="mt">' + esc(j.title) + '</span><span class="status">' + (r2 ? (r2.correct ? "solved" : "missed") : "open") + "</span></button></li>"; }).join("") + "</ul>"
         : '<p class="status">Unlocks after two missions in Plug in or Sixth sense.</p>') + "</section>";
     $("acadBody").innerHTML = html;
   }
@@ -1337,8 +1337,9 @@
     if (!m) { aui.view = "home"; return renderAcademy(); }
     var A = acad(), st = A.done[m.id], q = A.quiz[m.id];
     var fc = window.V60_FROMCASE;
-    var html = '<div class="row">' + (fc ? '<button type="button" data-jump="case:' + esc(fc.id) + '">Back to the case: ' + esc(fc.t) + "</button>" : '<button type="button" class="quiet" data-acad="home">All training</button>') + '<span class="status">' + (fc ? "Training for " + esc(fc.t) + " · " : "") + ({ learn: "Lesson", field: "Field mission", log: "Log" })[m.type] + " · " + m.xp + " XP · about " + m.min + " min</span></div>";
-    html += "<h2>" + esc(m.title) + "</h2>";
+    var inline = aui.root !== "acadBody";
+    var html = inline ? '<p class="status">' + ({ learn: "Lesson", field: "Field mission", log: "Log" })[m.type] + " · about " + m.min + " min</p>" : '<div class="row">' + (fc ? '<button type="button" data-jump="case:' + esc(fc.id) + '">Back to the case: ' + esc(fc.t) + "</button>" : '<button type="button" class="quiet" data-acad="home">All training</button>') + '<span class="status">' + (fc ? "Training for " + esc(fc.t) + " · " : "") + ({ learn: "Lesson", field: "Field mission", log: "Log" })[m.type] + " · about " + m.min + " min</span></div>";
+    if (!inline) html += "<h2>" + esc(m.title) + "</h2>";
     if (m.need) html += '<p><b>You need:</b> ' + esc(m.need) + "</p>";
     (m.body || []).forEach(function (p) { html += "<p>" + esc(p) + "</p>"; });
     if (m.safety) html += '<div class="note"><b>Safety.</b> ' + esc(m.safety) + "</div>";
@@ -1356,11 +1357,11 @@
       html += '<div class="field" style="max-width:40em"><label for="mNote">Notes (optional)</label><input id="mNote" type="text" maxlength="200" class="wide" value="' + esc(st && st.note || "") + '"></div>';
       html += '<div class="row">' + outs.map(function (o) { return '<button type="button" class="' + (o[0] === "good" ? "" : "quiet") + '" data-outcome="' + o[0] + '">' + esc(o[1]) + "</button>"; }).join("") + '<span class="status" id="mStatus">' + (st ? "Completed " + esc(st.date) + (st.outcome === "off" ? ", flagged" : "") : "") + "</span></div>";
     }
-    $("acadBody").innerHTML = '<section class="mission">' + html + "</section>";
-    var b = $("acadBody"); if (b.scrollIntoView) b.scrollIntoView({ block: "start" });
+    aroot().innerHTML = '<section class="mission">' + html + "</section>";
+    if (aui.root === "acadBody") { var b = $("acadBody"); if (b.scrollIntoView) b.scrollIntoView({ block: "start" }); }
   }
   function rate(ids, lv, note) { (ids || []).forEach(function (id) { if (partById(id)) state.rate[id] = { r: lv, d: todayStr(), n: ("Academy: " + note).slice(0, 200) }; }); }
-  function readInputs(m) { var vals = {}; document.querySelectorAll("#acadBody [data-in]").forEach(function (el) { if (el.value !== "") vals[el.getAttribute("data-in")] = el.type === "number" ? parseFloat(el.value) : el.value; }); return vals; }
+  function readInputs(m) { var vals = {}; aroot().querySelectorAll("[data-in]").forEach(function (el) { if (el.value !== "") vals[el.getAttribute("data-in")] = el.type === "number" ? parseFloat(el.value) : el.value; }); return vals; }
   function finishMission(m, outcome) {
     var A = acad(), vals = readInputs(m), note = ($("mNote") && $("mNote").value.trim()) || "", msg = "";
     A.data[m.id] = A.data[m.id] || {}; A.data[m.id].vals = vals;
@@ -1383,12 +1384,12 @@
     renderAll(); save();
     var after = rankFor(xpTotal());
     aui.view = "mission"; renderMission(m);
-    $("mStatus").textContent = (outcome === "skip" ? "Saved for later." : "+" + m.xp + " XP. ") + msg + (after.lvl > before.lvl ? " Rank up: " + after.name + "!" : "");
+    $("mStatus").textContent = (outcome === "skip" ? "Saved for later. " : "Done. ") + msg;
   }
   function gradeQuiz(m) {
     var right = 0, answered = 0;
     m.quiz.forEach(function (qq, i) {
-      var sel = document.querySelector('#acadBody input[name="q' + i + '"]:checked'), w = $("why" + i);
+      var sel = aroot().querySelector('input[name="q' + i + '"]:checked'), w = $("why" + i);
       if (sel) answered++;
       var ok = sel && +sel.value === qq.a; if (ok) right++;
       w.hidden = !sel; w.className = "why " + (ok ? "ok" : "bad"); w.textContent = (ok ? "Correct. " : "Not quite. The answer is: " + qq.o[qq.a] + ". ") + qq.why;
@@ -1400,25 +1401,25 @@
     var first = passed && !A.done[m.id];
     if (passed && !A.done[m.id]) A.done[m.id] = { date: todayStr(), outcome: "good", note: "" };
     save(); renderHealth();
-    var after = rankFor(xpTotal()); $("hudRank").textContent = "Lv " + after.lvl;
-    $("quizRes").textContent = right + " / " + m.quiz.length + ". " + (passed ? (first ? "+" + m.xp + " XP." : "Passed.") + (right === m.quiz.length && !prev.perfect ? " Perfect bonus +10 XP." : "") : "Need " + need + " to pass. Read the explanations and try again.") + (after.lvl > before.lvl ? " Rank up: " + after.name + "!" : "");
+    var after = rankFor(xpTotal()); hud();
+    $("quizRes").textContent = right + " / " + m.quiz.length + ". " + (passed ? "Passed." : "Need " + need + " to pass. Read the explanations and try again.");
   }
 
   function renderJob(j) {
     if (!j) { aui.view = "home"; return renderAcademy(); }
     var picks = aui.jobPicks[j.id] || {}, spent = 0, res = acad().jobs[j.id];
     j.checks.forEach(function (c, i) { if (picks[i]) spent += c[1]; });
-    var html = '<div class="row"><button type="button" class="quiet" data-acad="home">All training</button><span class="status">Shop job · up to ' + j.xp + " XP</span></div><h2>" + esc(j.title) + "</h2>";
+    var html = '<div class="row"><button type="button" class="quiet" data-acad="home">All training</button><span class="status">Shop job</span></div><h2>' + esc(j.title) + "</h2>";
     html += '<div class="note calm"><b>Customer says:</b> ' + esc(j.complaint) + "</div>";
     html += '<h4>Inspect</h4><p class="lede">Each check costs shop time. Clock: <b>' + spent + " min</b>. Par is " + j.best + " minutes.</p>";
     html += '<ul class="mlist">' + j.checks.map(function (c, i) { return "<li>" + (picks[i] ? '<div class="found"><b>' + esc(c[0]) + '</b><span class="status"> · ' + c[1] + " min</span><p>" + esc(c[2]) + "</p></div>" : '<button type="button" class="mbtn" data-check="' + j.id + ":" + i + '"><span class="pill none">' + c[1] + ' min</span><span class="mt">' + esc(c[0]) + "</span></button>") + "</li>"; }).join("") + "</ul>";
     html += '<h4>Your diagnosis</h4><div class="quiz"><fieldset><legend>What is wrong?</legend>' + j.options.map(function (o, k) { return '<label><input type="radio" name="jobAns" value="' + k + '"' + (res && res.pick === k ? " checked" : "") + "> " + esc(o) + "</label>"; }).join("") + "</fieldset></div>";
-    html += '<div class="row"><button type="button" data-jobgo="' + j.id + '">Submit diagnosis</button><button type="button" class="quiet" data-jobreset="' + j.id + '">Restart job</button><span class="status" id="jobRes">' + (res ? (res.correct ? "Solved in " + res.min + " min for " + res.xp + " XP." : "Last answer missed.") : "") + "</span></div>";
+    html += '<div class="row"><button type="button" data-jobgo="' + j.id + '">Submit diagnosis</button><button type="button" class="quiet" data-jobreset="' + j.id + '">Restart job</button><span class="status" id="jobRes">' + (res ? (res.correct ? "Solved in " + res.min + " min." : "Last answer missed.") : "") + "</span></div>";
     html += '<div id="jobWhy"' + (res ? "" : " hidden") + ' class="note calm">' + esc(j.why) + "</div>";
     $("acadBody").innerHTML = '<section class="mission">' + html + "</section>";
   }
   function submitJob(j) {
-    var sel = document.querySelector('#acadBody input[name="jobAns"]:checked');
+    var sel = aroot().querySelector('input[name="jobAns"]:checked');
     if (!sel) { $("jobRes").textContent = "Pick a diagnosis."; return; }
     var picks = aui.jobPicks[j.id] || {}, spent = 0, n = 0; j.checks.forEach(function (c, i) { if (picks[i]) { spent += c[1]; n++; } });
     if (!n) { $("jobRes").textContent = "Inspect at least one thing first. Guessing is how shops lose customers."; return; }
@@ -1426,9 +1427,9 @@
     var prev = acad().jobs[j.id];
     if (!prev || xp > (prev.xp || 0) || (correct && !prev.correct)) acad().jobs[j.id] = { correct: correct, xp: xp, min: spent, pick: +sel.value, date: todayStr() };
     save(); renderJob(j);
-    $("jobRes").textContent = (correct ? "Correct. " + spent + " min on the clock, " + xp + " XP." : "Not this time (+10 XP for the attempt). Read the explanation, restart, and try a different path.");
+    $("jobRes").textContent = (correct ? "Correct. " + spent + " min on the clock." : "Not this time. Read the explanation, restart, and try a different path.");
     $("jobWhy").hidden = false;
-    $("hudRank").textContent = "Lv " + rankFor(xpTotal()).lvl;
+    hud();
   }
 
   function academyClick(t) {
@@ -1444,7 +1445,7 @@
     return false;
   }
   function academyStep(t) {
-    if (!t.matches || !t.matches("#acadBody input[data-step]")) return false;
+    if (!t.matches || !t.matches("input[data-step]") || !aroot().contains(t)) return false;
     var A = acad(); A.data[aui.id] = A.data[aui.id] || {}; A.data[aui.id].steps = A.data[aui.id].steps || {}; A.data[aui.id].steps[t.getAttribute("data-step")] = t.checked; save(); return true;
   }
 
@@ -1569,7 +1570,7 @@
     var route = pick === "fan" ? "traffic" : (pick === "boost" ? (Math.random() < 0.5 ? "highway" : "mixed") : ["mixed", "city", "highway", "traffic"][Math.floor(Math.random() * 4)]);
     sim.mystery = { f: f, route: route, answer: pick, done: false, hint: false };
     $("simHint").disabled = false;
-    $("simQ").innerHTML = '<p class="lede">Route: <b>' + esc(ROUTES[route]) + '</b>. Read the charts and the findings, then name the fault. Solving it without the healthy reference earns 40 XP, and 25 with it.</p><fieldset class="quizset"><legend>What is wrong with this car?</legend>' +
+    $("simQ").innerHTML = '<p class="lede">Route: <b>' + esc(ROUTES[route]) + '</b>. Read the charts and the findings, then name the fault. Solving it without the healthy reference is the harder read.</p><fieldset class="quizset"><legend>What is wrong with this car?</legend>' +
       FAULTS.map(function (x) { return '<label><input type="radio" name="simAns" value="' + x.k + '"> ' + esc(x.n) + "</label>"; }).join("") + '<label><input type="radio" name="simAns" value="none"> Nothing, the car is healthy</label></fieldset>';
     $("simRes").textContent = ""; $("simReveal").hidden = true; $("simGuess").disabled = false;
     simRun();
@@ -1581,8 +1582,8 @@
     var A = acad(); A.sim = A.sim || { played: 0, correct: 0 }; A.sim.played++;
     var right = sel.value === M.answer, fx = FAULTS.filter(function (x) { return x.k === M.answer; })[0];
     if (right) { A.sim.correct++; if (!M.hint) A.sim.clean = (A.sim.clean || 0) + 1; }
-    save(); $("hudRank").textContent = "Lv " + rankFor(xpTotal()).lvl;
-    $("simRes").textContent = right ? (M.hint ? "Correct. +25 XP." : "Correct without the hint. +40 XP.") : "Not this time. It was: " + (fx ? fx.n : "nothing, a healthy car") + ".";
+    save(); hud();
+    $("simRes").textContent = right ? (M.hint ? "Correct." : "Correct without the hint.") : "Not this time. It was: " + (fx ? fx.n : "nothing, a healthy car") + ".";
     $("simHint").disabled = true; simRun();
     $("simReveal").hidden = false;
     $("simReveal").innerHTML = '<div class="note calm"><b>' + esc(fx ? fx.n + " at " + Math.round(M.f[M.answer] * 100) + "%" : "Healthy car") + ".</b> " + esc(fx ? fx.how : "Every line stays on top of the healthy baseline. A good log is the reference that makes future problems stand out.") + "</div>";
@@ -1989,10 +1990,10 @@
     var g = eb.game;
     if (g && eb.mode === "draw") {
       if (id === g.target.id) {
-        g.found++; var A = acad(); A.bayFound = A.bayFound || {}; var first = !A.bayFound[id]; A.bayFound[id] = 1; if (first) { save(); $("hudRank").textContent = "Lv " + rankFor(xpTotal()).lvl; }
+        g.found++; var A = acad(); A.bayFound = A.bayFound || {}; var first = !A.bayFound[id]; A.bayFound[id] = 1; if (first) { save(); hud(); }
         g.left = g.left.filter(function (x) { return x.id !== id; });
         if (!g.left.length) { eb.game = null; eb.sel = id; renderEngine(); $("ebGame").innerHTML = '<div class="note calm"><b>All found.</b> You can now point to every confirmed part in your engine bay. Next, check them on the real car with the Academy\'s "Find the key landmarks" mission.</div>'; return; }
-        g.target = g.left[Math.floor(Math.random() * g.left.length)]; g.msg = "Correct" + (first ? ", +10 XP." : ".");
+        g.target = g.left[Math.floor(Math.random() * g.left.length)]; g.msg = "Correct.";
       } else { var w = BAYITEMS.filter(function (x) { return x.id === id; })[0]; g.msg = "That is the " + (w ? w.n.toLowerCase() : "wrong part") + ". Try again."; }
       eb.sel = id; renderEngine(); return;
     }
@@ -2160,6 +2161,7 @@
     if (!$("p-" + name)) name = "car";
     ui.tab = name;
     document.querySelectorAll("main > .panel").forEach(function (p) { p.hidden = p.id !== "p-" + name; });
+    document.body.classList.toggle("inner", name !== "car"); /* inner pages get the one-row header */
     if (window.V60_GATE && window.V60_GATE.shown) window.V60_GATE.shown(name);
     renderNav(name);
     try { window.scrollTo(0, 0); } catch (e) {}
@@ -2209,7 +2211,10 @@
     acad: function () { return acad(); }, xp: function () { return xpTotal(); }, rankFor: rankFor, PARTS: PARTS, ITEMS: ITEMS, partById: partById, lastFor: lastFor, statusFor: statusFor, ratingOf: ratingOf,
     JOBS: JOBS, CHAPTERS: CHAPTERS, SPECS: SPECS, BAYITEMS: BAYITEMS, SCHEDULE: SCHEDULE, BUILD: BUILD, RECALLS: RECALLS, CODES: CODES, decodeCode: decodeCode, monthsSince: monthsSince,
     computeHealth: function () { return computeHealth(); }, loadDataset: function (ds, n) { loadDataset(ds, n); }, parseCSV: parseCSV, analyze: analyze, autoMap: autoMap,
-    bumpOdo: function (m) { bumpOdo(m); }, updateHud: function () { $("hudRank").textContent = "Lv " + rankFor(xpTotal()).lvl; $("hudRankName").textContent = rankFor(xpTotal()).name; },
+    bumpOdo: function (m) { bumpOdo(m); }, updateHud: function () { hud(); },
+    /* the part page mounts a Training lesson inside itself; reset puts Training back on its own page */
+    trainInto: function (rootId, id) { var m = missionById(id); if (!m || !$(rootId)) return false; aui.view = "mission"; aui.id = id; aui.root = rootId; renderMission(m); return true; },
+    trainReset: function () { if (aui.root !== "acadBody") { aui.root = "acadBody"; aui.view = "home"; } },
     mod: function (id) { if (!state.mods) state.mods = {}; return state.mods[id]; }, setMod: function (id, v) { if (!state.mods) state.mods = {}; state.mods[id] = v; },
     sample: function () { return sampleFn; }, assets: function () { return assetsNs; }, photoUrl: function (p) { return photoUrl(p); }, takePhotoTo: null,
     importLinkReport: function (R) { return importLinkReport(R); },
@@ -2372,7 +2377,7 @@
       if (lockB) { $("saveStatus").textContent = lockB.getAttribute("data-locked"); return; }
       var jmp = t.closest("[data-jump]");
       if (jmp) { jump(jmp.getAttribute("data-jump")); return; }
-      if (t.closest("#acadBody") && academyClick(t)) return;
+      if (aroot().contains(t) && academyClick(t)) return;
       var sysB = t.closest("[data-sys]");
       if (sysB) { ui.sys = sysB.getAttribute("data-sys"); renderBay(); return; }
       var rate = t.closest("button[data-rate]");

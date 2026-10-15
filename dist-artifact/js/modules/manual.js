@@ -138,7 +138,7 @@
   }
 
   /* ---------- gate: which old pages exist yet ---------- */
-  var ROOTS = { car: 1, view: 1, item: 1, chapter: 1, story: 1, today: 1, academy: 1 };
+  var ROOTS = { car: 1, view: 1, item: 1, index: 1, story: 1, today: 1, academy: 1 };
   var GO_TAB = { mission: "academy", kb: "kb", diy: "diy", tree: "trouble", tsb: "bulletins", bay: "engine", part: "bay", tab: null };
   function neededTabs(api) {
     var x = compute(api), set = {};
@@ -215,7 +215,7 @@
   }
 
   /* ---------- UI state ---------- */
-  var ui = { view: null, item: null, chapter: null, selView: null, arrange: false, from: null };
+  var ui = { view: null, item: null, openCh: null, openStep: null, selView: null, arrange: false, from: null };
   var SOS = [["Red warning light (oil, brakes, temperature)", "kb:a-lights"], ["Check-engine light, steady or flashing", "tree:cel"], ["Temperature high, steam or a sweet smell", "tree:hot"], ["Oil warning or message", "tree:oil"], ["Brakes feel or sound wrong", "tree:brakes"], ["Won't start", "tree:nostart"], ["Tire light, or a flat tire", "tree:tpms"], ["Flat tire: sealing kit and spare", "kb:a-tirekit"], ["Shaking or vibration", "tree:vibe"], ["Start/stop acting strange", "tree:ss"], ["Something else", "tab:trouble"]];
   function sosHtml() { return '<details class="mn-sos"><summary><span class="mn-sosi" aria-hidden="true"></span>Something\'s wrong with the car</summary><p class="status">Red warning lights come first: Volvo\'s manual says stop for those.</p><ul>' + SOS.map(function (x) { return '<li><button type="button" class="mn-row" data-jump="' + x[1] + '">' + esc(x[0]) + "</button></li>"; }).join("") + "</ul></details>"; }
   function segs(api, it) { return '<div class="mn-segs" aria-hidden="true">' + it.chapters.map(function (c) { return '<i class="' + chStatus(api, c) + '"></i>'; }).join("") + "</div>"; }
@@ -231,7 +231,7 @@
     ui.selView = sel;
     var pre = chStatus(api, PREFACE), nOpen = ITEMS.filter(function (it) { return itemOpen(api, it); }).length, nNew = newList(api).length, rc = resumeChapter(api);
     var at = function (it) { return { bay: [70, 74], wheel: [84, 156], cabin: [181, 76], under: [180, 174], body: [334, 116] }[it.id]; };
-    var h = '<div class="mn-kick"><span>The car</span><span>' + nOpen + " of " + ITEMS.length + " items open" + (nNew ? ' · <b class="mn-amber">' + nNew + " new</b>" : "") + "</span></div>" + toastHtml();
+    var h = '<div class="mn-kick"><span>The car</span><span>' + nOpen + " of " + ITEMS.length + " parts open" + (nNew ? ' · <b class="mn-amber">' + nNew + " new</b>" : "") + "</span></div>" + toastHtml();
     if (pre !== "closed") {
       var pc = PREFACE.steps.filter(function (s, i) { return info(api, PREFACE, i).done; }).length;
       h += '<article class="mn-sheet mn-pre"><div class="mn-kick"><span>CHAPTER 0 · START HERE</span><span class="mn-mono">' + pc + " / " + PREFACE.steps.length + '</span></div><h3>' + esc(PREFACE.n) + "</h3><p>" + esc(PREFACE.d) + '</p><p class="status">Every view opens after this one. ' + esc(PREFACE.time) + '.</p><button type="button" data-ch="0" class="mn-cta">' + (pc ? "Continue chapter 0" : "Open chapter 0") + ' <span aria-hidden="true">→</span></button></article>';
@@ -239,14 +239,14 @@
     h += '<div class="mn-figwrap"><div class="mn-kick"><span>FIG. 1 · SIDE VIEW · TAP TO LOOK INSIDE</span><button type="button" class="mn-link" data-ch="legend">Key</button></div>' + figure(api, { id: "home", n: "The car", fig: "side" }, vi, sel, at) + "</div>";
     var sv = vi.filter(function (q) { return q.id === sel; })[0];
     if (sv) {
-      var v = sv.v, open = sv.status !== "locked", items = v.items, nc = items.filter(function (it) { return itemStatus(api, it) === "closed"; }).length, first = items.filter(function (it) { return itemOpen(api, it); })[0];
+      var v = sv.v, open = sv.status !== "locked", items = v.items, nc = items.filter(function (it) { return itemStatus(api, it) === "closed"; }).length;
       var nx = null; items.forEach(function (it) { if (!nx) { var c = nextChapter(api, it); if (c && (chStatus(api, c) === "new" || chStatus(api, c) === "resume")) nx = c; } }); if (!nx) items.forEach(function (it) { if (!nx) nx = nextChapter(api, it); });
       var cases = (window.V60_STORY ? window.V60_STORY.cases : []).filter(function (c) { return (CASE_OPENS[c.id] || []).some(function (id) { return CH[id] && CH[id].item && CH[id].item.view === v.id; }) && window.V60_STORY.available(c) && !(storyD(api).closed || {})[c.id]; });
-      h += '<article class="mn-sheet"><div class="mn-kick"><span>VIEW ' + v.num + "</span><span class=\"mn-mono\">" + (open ? nc + " of " + items.length + " items closed" : items.length + " items") + "</span></div><h3>" + esc(v.n) + "</h3>" +
+      h += '<article class="mn-sheet"><div class="mn-kick"><span>VIEW ' + v.num + "</span><span class=\"mn-mono\">" + (open ? nc + " of " + items.length + " parts closed" : items.length + " parts") + "</span></div><h3>" + esc(v.n) + "</h3>" +
         '<div class="mn-segs" aria-hidden="true">' + items.map(function (it) { return '<i class="' + itemStatus(api, it) + '"></i>'; }).join("") + "</div>" +
         "<p>" + esc(open && nx ? ({ "new": "New: ", resume: "Pick up at ", open: "Next: ", closed: "", locked: "" })[chStatus(api, nx)] + nx.item.num + " " + nx.item.n + ", " + nx.t + ". " + nx.d : v.d) + "</p>" +
         (cases.length ? '<p class="status">Pointed at by the case <b>' + cases.map(function (c) { return esc(c.t); }).join(", ") + "</b></p>" : "") +
-        (open ? '<button type="button" class="mn-cta" data-view="' + v.id + '">' + esc(v.enter) + ' <span aria-hidden="true">→</span></button>' : '<p class="mn-locked">Locked. ' + esc(firstWhy(api, v)) + "</p>") + "</article>";
+        (open ? '<div class="row">' + (nx ? '<button type="button" class="mn-cta" data-ch="' + nx.id + '">' + esc(nx.item.num + " " + nx.item.n) + ' <span aria-hidden="true">→</span></button>' : "") + '<button type="button" class="' + (nx ? "quiet" : "mn-cta") + '" data-view="' + v.id + '">' + esc(v.enter) + "</button></div>" : '<p class="mn-locked">Locked. ' + esc(firstWhy(api, v)) + "</p>") + "</article>";
     }
     /* now */
     var now = [];
@@ -259,25 +259,30 @@
     var notes = 0; (window.V60_MODULES || []).forEach(function (m) { if (m.id === "today" || m.id === "story" || m.id === "manual" || !m.today) return; if (m.tabs && m.tabs.length && !m.tabs.some(function (t) { return window.V60_GATE.visible(t.id); })) return; try { notes += (m.today(api) || []).length; } catch (e) {} });
     if (notes) now.push('<button type="button" class="mn-row" data-jump="tab:today"><span class="mn-pill">Notes</span><span>' + notes + (notes === 1 ? " note" : " notes") + " for today, from Lars and the garage</span></button>");
     if (now.length) h += '<section class="mn-list"><div class="mn-kick"><span>NOW</span></div>' + now.join("") + "</section>";
-    /* contents */
-    h += '<section class="mn-list"><div class="mn-kick"><span>CONTENTS</span></div>' +
-      '<button type="button" class="mn-ix ' + pre + '" data-ch="0"><span class="n">0</span><span>' + esc(PREFACE.n) + '</span><span class="st">' + (pre === "closed" ? "CLOSED" : (pre === "resume" ? "● " : "") + PREFACE.steps.filter(function (s, i) { return info(api, PREFACE, i).done; }).length + " / " + PREFACE.steps.length) + "</span></button>" +
-      vi.map(function (q) {
-        var v = q.v, n = v.items.filter(function (it) { return itemClosedN(api, it) === it.chapters.length; }).length, stat;
-        if (q.status === "locked") stat = "after " + firstGate(api, v); else if (q.status === "new") { var nw = newList(api).filter(function (c) { return c.item && c.item.view === v.id; })[0]; stat = "NEW · " + (nw ? nw.id : ""); } else if (q.status === "resume") { stat = "● " + (rc ? rc.id : ""); } else stat = n + " / " + v.items.length;
-        return '<button type="button" class="mn-ix ' + q.status + '" data-view="' + v.id + '"' + (q.status === "locked" ? ' aria-disabled="true"' : "") + '><span class="n">' + v.num + "</span><span>" + esc(v.n) + ' · ' + v.items.length + ' items</span><span class="st">' + esc(stat) + "</span></button>";
-      }).join("") + "</section>" + backMatter(api);
+    /* the certification track, one tap away */
+    if (window.V60_TRACK) h += window.V60_TRACK.strip();
+    /* everything else lives on one Index page */
+    h += '<div class="row mn-homefoot"><button type="button" class="quiet" data-jump="tab:index">Index: every page</button></div>';
     h += sosHtml();
     $("mnHome").innerHTML = h;
   }
+  /* ---------- the index: every other page, grouped by what you want to do ---------- */
+  function renderIndex(api) {
+    sweep(api);
+    var h = '<div class="mn-top"><div class="mn-kick"><button type="button" class="mn-link" data-jump="tab:car">← The car</button><span>INDEX</span></div><h2 class="mn-h1">Every page</h2><p>The car is the menu; this is the back of the book. Only pages the story has opened are listed.</p></div>';
+    h += '<section class="mn-list"><div class="mn-kick"><span>THE CAR</span></div><button type="button" class="mn-ix ' + chStatus(api, PREFACE) + '" data-ch="0"><span class="n">0</span><span>' + esc(PREFACE.n) + '</span><span class="st">' + (chStatus(api, PREFACE) === "closed" ? "CLOSED" : PREFACE.steps.filter(function (s, i) { return info(api, PREFACE, i).done; }).length + " / " + PREFACE.steps.length) + "</span></button>" +
+      VIEWS.map(function (v) { var st = viewStatus(api, v), n = v.items.filter(function (it) { return itemClosedN(api, it) === it.chapters.length; }).length; return '<button type="button" class="mn-ix ' + st + '" data-view="' + v.id + '"' + (st === "locked" ? ' aria-disabled="true"' : "") + '><span class="n">' + v.num + "</span><span>" + esc(v.n) + " · " + v.items.length + ' parts</span><span class="st">' + (st === "locked" ? "after " + esc(firstGate(api, v)) : n + " / " + v.items.length) + "</span></button>"; }).join("") + "</section>";
+    h += backMatter(api) + sosHtml();
+    $("mnIndex").innerHTML = h;
+  }
   function firstGate(api, v) { var id = v.items.length ? v.items[0].chapters[0].id : ""; var froms = []; CHLIST.forEach(function (o) { if ((o.opens || []).indexOf(id) >= 0) froms.push(o.id); }); return froms.length ? froms[0] : "the story"; }
   function firstWhy(api, v) { var c = v.items.length ? v.items[0].chapters[0] : null; return c ? why(api, c) : ""; }
-  var BACK = [["kb", "Library"], ["cards", "Flashcards"], ["exam", "Exam"], ["academy", "Training library"], ["health", "Health score"], ["records", "Service log"], ["fuel", "Fuel & costs"], ["lab", "Data lab"], ["sim", "Simulator"], ["diy", "All DIY jobs"], ["trouble", "Troubleshoot"], ["bulletins", "Bulletins"], ["upgrades", "Upgrades"], ["my", "My V60 & photos"], ["bay", "Whole-car parts list"], ["engine", "Engine bay map"], ["skills", "Skill tree"], ["achieve", "Achievements"], ["today", "Today's notes"]];
+  var BACK = [["kb", "Library"], ["cards", "Flashcards"], ["track", "Certification track"], ["academy", "Training library"], ["health", "Health score"], ["records", "Service log"], ["fuel", "Fuel & costs"], ["lab", "Data lab"], ["sim", "Simulator"], ["diy", "All DIY jobs"], ["trouble", "Troubleshoot"], ["bulletins", "Bulletins"], ["upgrades", "Upgrades"], ["my", "My V60 & photos"], ["bay", "Whole-car parts list"], ["engine", "Engine bay map"], ["achieve", "Achievements"], ["today", "Today's notes"], ["index", "Index"]];
   /* every other page, grouped by what you want to do; only pages the story has opened are listed */
-  var INDEX = [["Your car", ["engine", "bay", "health", "my", "upgrades", "bulletins"]], ["Fix & maintain", ["records", "diy", "trouble", "fuel", "unlocks"]], ["Learn", ["academy", "learn", "kb", "cards", "exam"]], ["Data", ["lab", "diag", "sim"]], ["Progress", ["skills", "achieve", "today"]]];
+  var INDEX = [["Your car", ["engine", "bay", "health", "my", "upgrades", "bulletins"]], ["Fix & maintain", ["records", "diy", "trouble", "fuel", "unlocks"]], ["Learn", ["track", "academy", "learn", "kb", "cards"]], ["Data", ["lab", "diag", "sim"]], ["Progress", ["achieve", "today"]]];
   /* "see also" on each view and on the other three roots */
   var ALSO = { bay: ["bay", "diy", "records"], wheel: ["diy", "records", "bulletins"], cabin: ["live", "diag", "trouble"], under: ["trouble", "diy"], body: ["upgrades", "diy", "bulletins"],
-    glove: ["records", "fuel", "docs", "bulletins"], live: ["lab", "diag", "sim", "health"], story: ["academy", "kb", "cards", "exam", "skills", "achieve"] };
+    glove: ["records", "fuel", "docs", "bulletins"], live: ["lab", "diag", "sim", "health"], story: ["track", "academy", "kb", "cards", "achieve"] };
   function seen(tab) { return !!($("p-" + tab) && (!window.V60_GATE || window.V60_GATE.visible(tab))); }
   function pageName(tab) { var b = BACK.filter(function (x) { return x[0] === tab; })[0]; return NAMES[tab] || (b && b[1]) || tab; }
   function alsoHtml(tabs, kick) {
@@ -333,29 +338,89 @@
     return '<section class="mn-sheet"><div class="mn-kick"><span>YOUR PHOTO AS THE FIGURE</span></div><p>' + esc(v.hint) + '</p>' + (ph.length ? '<div class="mn-thumbs">' + ph.map(function (p) { return '<button type="button" data-usephoto="' + p.id + '"><img src="' + esc(api.photoUrl(p)) + '" alt="' + esc(p.kind) + " photo from " + esc(p.date) + '"><span>' + esc(p.date) + "</span></button>"; }).join("") + "</div><p class=\"status\">Tap one. The points start where they sit on the drawing; drag each to where it is on your car.</p>" : '<p class="status">No matching photo saved yet.</p>') + '<button type="button" class="quiet" data-jump="tab:my">Add a photo</button></section>';
   }
 
-  /* ---------- an item ---------- */
+  /* ---------- a part: its whole manual on one page. Chapters are sections; each step opens in place with the article,
+     the lesson, the job or the troubleshooter inside it, so nothing sends you to another page to read. ---------- */
+  var TREE_UI = {};
+  function kid(k) { return "mn-train-" + k.replace(/[^a-z0-9]/gi, "_"); }
+  function goBtn(o, k) { return '<button type="button" class="' + (o.done ? "quiet" : "") + '" data-go="' + esc(o.go) + '" data-k="' + esc(k) + '">' + (o.done ? "Open again" : "Go") + "</button>"; }
+  function manBtn(s, k) { return '<button type="button" class="quiet" data-man="' + esc(s.manual || k) + '">Mark done</button>'; }
+  function treeHtml(api, id, k) {
+    var tr = tree(id); if (!tr) return "";
+    var path = TREE_UI[k] || [tr.start], node = tr.n[path[path.length - 1]], h = '<div class="mn-inl mn-tree"><p class="mn-mono status">' + esc(tr.t.toUpperCase()) + "</p>";
+    path.slice(0, -1).forEach(function (pid, i) { var pn = tr.n[pid]; h += '<p class="status">' + esc(pn.q) + " <b>" + (path[i + 1] === pn.y ? "Yes" : "No") + "</b></p>"; });
+    if (node.q) h += "<p><b>" + esc(node.q) + '</b></p><div class="row"><button type="button" data-tree="' + esc(k) + ':y">Yes</button><button type="button" data-tree="' + esc(k) + ':n">No</button>' + (path.length > 1 ? '<button type="button" class="quiet" data-tree="' + esc(k) + ':back">Back</button>' : "") + "</div>";
+    else h += '<div class="mn-note sev-' + esc(node.sev || "watch") + '"><p>' + esc(node.r) + "</p>" + (node.cost ? '<p class="status">' + esc(node.cost) + "</p>" : "") + '<div class="row">' + (node.go || []).map(function (g) { return '<button type="button" class="quiet" data-jump="' + esc(g[1]) + '">' + esc(g[0]) + "</button>"; }).join("") + '<button type="button" class="quiet" data-tree="' + esc(k) + ':restart">Start over</button></div></div>';
+    return h + "</div>";
+  }
+  function stepBody(api, c, i, o, k) {
+    var s = c.steps[i], h = "";
+    if (o.why) h += "<p>" + esc(o.why) + "</p>";
+    if (s.kb) { var a = article(s.kb); h += a && window.V60_KB ? '<div class="mn-inl kbart">' + window.V60_KB.articleHtml(api, a) + "</div>" : '<div class="row">' + goBtn(o, k) + "</div>"; }
+    else if (s.mission) h += '<div class="mn-inl mn-train" id="' + kid(k) + '"></div>';
+    else if (s.diy) h += window.V60_DIYUI ? '<div class="mn-inl">' + window.V60_DIYUI.html(api, s.diy) + "</div>" : '<div class="row">' + goBtn(o, k) + "</div>";
+    else if (s.tree) h += treeHtml(api, s.tree, k);
+    else h += '<div class="row">' + (o.go ? goBtn(o, k) : "") + (o.manual && !o.done ? manBtn(s, k) : "") + "</div>";
+    return h;
+  }
+  function chapterHtml(api, c, d, x) {
+    var st = chStatus(api, c), done = c.steps.filter(function (s, i) { return info(api, c, i).done; }).length, it = c.item;
+    var right = st === "closed" ? '<span class="mn-stamp">CLOSED ' + esc((d.closed[c.id] || "").slice(5).replace("-", "·")) + "</span>" : st === "locked" ? '<span class="mn-mono">AFTER ' + esc(lockedAfter(api, c)) + "</span>" : st === "new" ? '<span class="mn-mono mn-amber">NEW</span>' : st === "resume" ? '<span class="mn-mono mn-amber">● ' + done + " / " + c.steps.length + "</span>" : '<span class="mn-mono">' + done + " / " + c.steps.length + "</span>";
+    var h = '<section class="mn-chs ' + st + '" id="ch-' + esc(c.id) + '"><div class="mn-chh2"><span class="mn-num' + (st === "new" || st === "resume" ? " amber" : "") + '">' + esc(c.id) + '</span><div class="b"><h3>' + esc(c.t) + (it ? ' <span class="mn-tier">' + esc(TIER[c.tier].split(" ")[0]) + "</span>" : "") + "</h3><p>" + esc(c.d) + (c.time ? ' <span class="mn-mono">' + esc(c.time) + "</span>" : "") + "</p></div>" + right + "</div>";
+    if (st === "locked") return h + '<p class="mn-locked">' + esc(why(api, c)) + "</p></section>";
+    h += '<div class="mn-steps">' + c.steps.map(function (s, i) {
+      var o = info(api, c, i), k = stepKey(c, i), open = ui.openStep === k;
+      return '<details class="mn-stepx' + (o.done ? " done" : "") + '" data-k="' + esc(k) + '"' + (open ? " open" : "") + '><summary><span class="n">' + (i + 1) + '</span><span class="b"><span class="t">' + esc(o.t) + '</span><span class="kind">' + esc(o.kind.toUpperCase()) + (o.optional ? " · OPTIONAL" : "") + "</span></span><span class=\"mn-tick\" aria-label=\"" + (o.done ? "done" : "not yet") + '">' + (o.done ? "✓" : "") + "</span></summary><div class=\"mn-stepb\">" + (open ? stepBody(api, c, i, o, k) : "") + "</div></details>";
+    }).join("") + "</div>";
+    var cs = caseStepsFor(api, c), opens = (c.opens || []).map(function (id) { return CH[id]; }).filter(Boolean), nx = it ? it.chapters[c.idx + 1] : null, lines = [];
+    cs.forEach(function (q) { lines.push("<b>Case:</b> step " + (q.k + 1) + " of " + q.c.steps.length + " in <b>" + esc(q.c.t) + "</b>"); });
+    var un = (nx ? [nx] : []).concat(opens); if (un.length) lines.push("<b>Unlocks:</b> " + un.map(function (q) { return esc(longLabel(q)); }).join(" · "));
+    if (lines.length) h += '<p class="status mn-chnote">' + lines.join("<br>") + "</p>";
+    return h + "</section>";
+  }
+  /* after something inside an open step changes (a quiz graded, a job ticked), update the ticks without redrawing the page */
+  function refreshTicks(api) {
+    bust(); var x = compute(api), root = $("mnItem"); if (!root) return;
+    root.querySelectorAll("details.mn-stepx").forEach(function (dt) {
+      var k = dt.getAttribute("data-k"), c = CH[k.split(":")[0]], i = +k.split(":")[1]; if (!c || !c.steps[i]) return;
+      var o = info(api, c, i), tick = dt.querySelector(".mn-tick"); dt.classList.toggle("done", o.done); if (tick) { tick.textContent = o.done ? "✓" : ""; tick.setAttribute("aria-label", o.done ? "done" : "not yet"); }
+    });
+    CHLIST.forEach(function (c) { var sec = $("ch-" + c.id); if (!sec) return; var st = chStatus(api, c); ["new", "resume", "open", "closed", "locked"].forEach(function (k) { sec.classList.toggle(k, st === k); }); });
+    if (sweep(api)) renderItem(api);
+  }
+  function mountOpen(api) {
+    /* the open step's lesson is rendered by Training into its container; an open article counts as read */
+    if (!ui.openStep) return;
+    var c = CH[ui.openStep.split(":")[0]], i = +ui.openStep.split(":")[1], s = c && c.steps[i]; if (!s) return;
+    if (s.mission && api.trainInto) api.trainInto(kid(ui.openStep), s.mission);
+    if (s.kb && window.V60_KNOW && window.V60_KNOW.discover && !window.V60_KNOW.read(s.kb)) { window.V60_KNOW.discover("a", s.kb); api.save(); }
+  }
   function renderItem(api) {
     sweep(api);
-    var it = ITEMS.filter(function (q) { return q.id === ui.item; })[0]; if (!it) { api.go("car"); return; }
-    var v = it.viewObj, nc = itemClosedN(api, it), d = D(api), x = compute(api);
-    var h = '<div class="mn-top"><div class="mn-kick"><button type="button" class="mn-link" data-view="' + v.id + '">← ' + esc(v.n) + "</button><span>ITEM " + esc(it.num) + " · VIEW " + v.num + "</span></div>" +
-      '<h2 class="mn-h1">' + esc(it.n) + '</h2><div class="mn-prog">' + segs(api, it) + '<span class="mn-mono">' + nc + " / " + it.chapters.length + " closed</span></div></div>" + toastHtml();
-    h += "<p>" + esc(it.d) + "</p>";
-    var spec = (it.spec || []).slice(); var dot = lastDot(api, it);
-    if (dot) spec.push(["DOT read from your photo", dot + " (unconfirmed)"]);
-    if (spec.length) h += '<div class="mn-kick" style="margin-top:14px"><span>YOUR CAR</span>' + (dot ? '<span class="mn-amber">UNCONFIRMED WHERE SAID</span>' : "") + '</div><dl class="mn-spec">' + spec.map(function (s) { return "<div><dt>" + esc(s[0]) + "</dt><dd>" + esc(s[1]) + "</dd></div>"; }).join("") + "</dl>";
-    h += '<section class="mn-list"><div class="mn-kick"><span>CHAPTERS · IN ORDER OF DIFFICULTY</span></div>' + it.chapters.map(function (c) {
-      var st = chStatus(api, c), n = c.steps.filter(function (s, i) { return info(api, c, i).done; }).length;
-      var right = st === "closed" ? '<span class="mn-stamp">CLOSED ' + esc((d.closed[c.id] || "").slice(5).replace("-", "·")) + "</span>" : st === "locked" ? "AFTER " + esc(lockedAfter(api, c)) : st === "new" ? "NEW →" : st === "resume" ? "● " + n + " / " + c.steps.length : n + " / " + c.steps.length + " →";
-      return '<button type="button" class="mn-ch ' + st + '" data-ch="' + c.id + '"' + (st === "locked" ? ' aria-disabled="true"' : "") + '><span class="n">' + c.id + '</span><span class="b"><span class="t">' + esc(c.t) + '</span><span class="d">' + esc(c.d) + '</span></span><span class="s">' + right + "</span></button>";
-    }).join("") + "</section>";
-    /* glossary */
-    var facts = glossary(it), known = facts.filter(function (f) { return !window.V60_KNOW || window.V60_KNOW.fact(f); });
-    if (facts.length) h += '<section class="mn-list"><div class="mn-kick"><span>GLOSSARY · ' + known.length + " OF " + facts.length + ' UNLOCKED</span></div><div class="mn-chips">' + facts.map(function (f) { var k = known.indexOf(f) >= 0; return k ? '<button type="button" class="mn-chip" data-jump="ask:' + esc(f.q) + '">' + esc(f.q.replace(/\?$/, "")) + "</button>" : '<span class="mn-chip locked" aria-label="locked term">' + "■".repeat(Math.max(4, Math.min(10, Math.round(f.q.length / 4)))) + "</span>"; }).join("") + "</div>" + (known.length < facts.length ? '<p class="status">Locked terms open with the chapters.</p>' : "") + "</section>";
-    /* evidence */
-    var ph = (api.state.photos || []).filter(function (p) { return (it.photo || []).indexOf(p.kind) >= 0 || (it.part && p.part === it.part); }).slice(-4).reverse();
-    h += '<section class="mn-list"><div class="mn-kick"><span>EVIDENCE ON FILE</span></div>' + (ph.length ? '<div class="mn-thumbs">' + ph.map(function (p) { return '<button type="button" data-jump="tab:my"><img src="' + esc(api.photoUrl(p)) + '" alt="' + esc(p.kind) + " photo from " + esc(p.date) + '"><span>' + esc(p.date) + "</span></button>"; }).join("") + "</div>" : '<p class="status">No photos of this part yet.</p>') + '<button type="button" class="quiet" data-jump="tab:my">Photos</button></section>';
+    var d = D(api), x = compute(api), it = ui.item === "0" ? null : ITEMS.filter(function (q) { return q.id === ui.item; })[0];
+    if (ui.item !== "0" && !it) { api.go("car"); return; }
+    var chapters = it ? it.chapters : [PREFACE], v = it ? it.viewObj : null, nc = chapters.filter(function (c) { return x.closed[c.id]; }).length;
+    /* arriving at a chapter opens it (the glow stops) and makes it the one to pick up */
+    if (ui.openCh && CH[ui.openCh] && x.open[ui.openCh]) { var oc = CH[ui.openCh]; if (!d.opened[oc.id]) d.opened[oc.id] = api.todayStr(); if (!x.closed[oc.id]) d.last = oc.id; if (!ui.openStep) for (var i = 0; i < oc.steps.length; i++) if (!info(api, oc, i).done) { ui.openStep = stepKey(oc, i); break; } api.save(); bust(); x = compute(api); }
+    var areas = it && window.V60_TRACK ? window.V60_TRACK.areaOf(it.id) : [];
+    var h = '<div class="mn-top"><div class="mn-kick"><button type="button" class="mn-link" ' + (v ? 'data-view="' + v.id + '">← ' + esc(v.n) : 'data-jump="tab:car">← The car') + "</button><span>" + (it ? "PART " + esc(it.num) + " · VIEW " + v.num : "CHAPTER 0") + "</span></div>" +
+      '<h2 class="mn-h1">' + esc(it ? it.n : PREFACE.n) + '</h2><div class="mn-prog">' + segs(api, { chapters: chapters }) + '<span class="mn-mono">' + nc + " / " + chapters.length + " closed</span></div>" +
+      (areas.length ? '<div class="mn-chips mn-areas">' + areas.map(function (a) { return '<button type="button" class="mn-chip" data-jump="track:' + a.id + '">' + esc(a.letter + " · " + a.n) + " · " + Math.round(window.V60_TRACK.areaReady(a.id) * 100) + " %</button>"; }).join("") + "</div>" : "") + "</div>" + toastHtml();
+    if (it) {
+      h += "<p>" + esc(it.d) + "</p>";
+      var spec = (it.spec || []).slice(), dot = lastDot(api, it); if (dot) spec.push(["DOT read from your photo", dot + " (unconfirmed)"]);
+      if (spec.length) h += '<details class="mn-fold"' + (spec.length <= 3 ? " open" : "") + '><summary><span class="mn-kick"><span>YOUR CAR · ' + spec.length + " FACTS</span>" + (dot ? '<span class="mn-amber">UNCONFIRMED WHERE SAID</span>' : "") + '</span></summary><dl class="mn-spec">' + spec.map(function (s) { return "<div><dt>" + esc(s[0]) + "</dt><dd>" + esc(s[1]) + "</dd></div>"; }).join("") + "</dl></details>";
+    }
+    h += chapters.map(function (c) { return chapterHtml(api, c, d, x); }).join("");
+    if (it) {
+      var facts = glossary(it), known = facts.filter(function (f) { return !window.V60_KNOW || window.V60_KNOW.fact(f); });
+      var ph = (api.state.photos || []).filter(function (p) { return (it.photo || []).indexOf(p.kind) >= 0 || (it.part && p.part === it.part); }).slice(-4).reverse();
+      h += '<details class="mn-fold"><summary><span class="mn-kick"><span>GLOSSARY · ' + known.length + " OF " + facts.length + "</span><span>EVIDENCE · " + ph.length + " PHOTO" + (ph.length === 1 ? "" : "S") + "</span></span></summary>" +
+        (facts.length ? '<div class="mn-chips">' + facts.map(function (f) { var k = known.indexOf(f) >= 0; return k ? '<button type="button" class="mn-chip" data-jump="ask:' + esc(f.q) + '">' + esc(f.q.replace(/\?$/, "")) + "</button>" : '<span class="mn-chip locked" aria-label="locked term">' + "■".repeat(Math.max(4, Math.min(10, Math.round(f.q.length / 4)))) + "</span>"; }).join("") + "</div>" + (known.length < facts.length ? '<p class="status">Locked terms open with the chapters.</p>' : "") : "") +
+        (ph.length ? '<div class="mn-thumbs">' + ph.map(function (p) { return '<button type="button" data-jump="tab:my"><img src="' + esc(api.photoUrl(p)) + '" alt="' + esc(p.kind) + " photo from " + esc(p.date) + '"><span>' + esc(p.date) + "</span></button>"; }).join("") + "</div>" : '<p class="status">No photos of this part yet.</p>') + '<button type="button" class="quiet" data-jump="tab:my">Photos</button></details>';
+    }
     $("mnItem").innerHTML = h;
+    mountOpen(api);
+    if (ui.openCh) { var sec = $("ch-" + ui.openCh); ui.openCh = null; if (sec && sec.scrollIntoView) setTimeout(function () { sec.scrollIntoView({ block: "start" }); }, 0); }
   }
   /* the item's glossary: facts on its topics, the ones that mention the part first, eight at most */
   function glossary(it) {
@@ -374,40 +439,11 @@
   }
   function lastDot(api, it) { if ((it.photo || []).indexOf("sidewall") < 0) return null; var ps = (api.state.photos || []).filter(function (p) { return p.ai && p.ai.dot; }); return ps.length ? ps[ps.length - 1].ai.dot : null; }
   function lockedAfter(api, c) { var prev = c.item && c.idx > 0 ? c.item.chapters[c.idx - 1] : null; if (prev) return prev.id; var w = []; CHLIST.forEach(function (o) { if ((o.opens || []).indexOf(c.id) >= 0) w.push(o.id); }); return w[0] || "the story"; }
-
-  /* ---------- a chapter ---------- */
   function caseStepsFor(api, c) {
     var out = []; if (!window.V60_STORY) return out;
     var gos = c.steps.map(function (s, i) { return info(api, c, i).go; });
     window.V60_STORY.cases.forEach(function (cs) { cs.steps.forEach(function (s, k) { if (s.go && gos.indexOf(s.go) >= 0 && !out.some(function (o) { return o.c === cs; })) out.push({ c: cs, k: k }); }); });
     return out;
-  }
-  function renderChapter(api) {
-    sweep(api);
-    var c = CH[ui.chapter]; if (!c) { api.go("car"); return; }
-    var d = D(api), x = compute(api), st = chStatus(api, c), it = c.item;
-    if (x.open[c.id] && !d.opened[c.id]) { d.opened[c.id] = api.todayStr(); api.save(); }
-    if (x.open[c.id] && !x.closed[c.id] && d.last !== c.id) { d.last = c.id; api.save(); }
-    bust(); st = chStatus(api, c);
-    var back = it ? '<button type="button" class="mn-link" data-item="' + it.id + '">← ' + esc(it.num + " " + it.n) + "</button>" : '<button type="button" class="mn-link" data-jump="tab:car">← The car</button>';
-    var h = '<div class="mn-top"><div class="mn-kick">' + back + "<span>" + (st === "closed" ? "CLOSED" : st === "new" ? '<b class="mn-amber">NEW CHAPTER</b>' : st === "locked" ? "LOCKED" : "CHAPTER " + (it ? TIER[c.tier].toUpperCase() : "0")) + "</span></div>" +
-      '<div class="mn-chh"><span class="mn-num' + (st === "new" || st === "resume" ? " amber" : "") + '">' + c.id + '</span><h2 class="mn-h1">' + esc(c.t) + "</h2></div>" +
-      "<p>" + esc(c.d) + "</p>" + (c.time ? '<p class="mn-mono status">' + esc(c.time.toUpperCase()) + "</p>" : "") + "</div>" + toastHtml();
-    if (st === "locked") h += '<p class="mn-locked">Locked. ' + esc(why(api, c)) + "</p>";
-    var done = c.steps.filter(function (s, i) { return info(api, c, i).done; }).length;
-    h += '<section class="mn-list"><div class="mn-kick"><span>PROCEDURE · ' + done + " OF " + c.steps.length + '</span></div>' + c.steps.map(function (s, i) {
-      var o = info(api, c, i), k = stepKey(c, i);
-      return '<div class="mn-step' + (o.done ? " done" : "") + '"><span class="n">' + (i + 1) + '</span><div class="b"><p><b>' + esc(o.t) + "</b>" + (o.why ? " " + esc(o.why) : "") + '</p><p class="mn-mono status">' + esc(o.kind.toUpperCase()) + (o.optional ? " · OPTIONAL" : "") + '</p><div class="row">' +
-        (o.go && st !== "locked" ? '<button type="button" class="' + (o.done ? "quiet" : "") + '" data-go="' + esc(o.go) + '" data-k="' + esc(k) + '">' + (o.done ? "Open again" : "Go") + "</button>" : "") +
-        (o.manual && !o.done && st !== "locked" ? '<button type="button" class="quiet" data-man="' + esc(s.manual || k) + '">Mark done</button>' : "") + "</div></div><span class=\"mn-tick\" aria-label=\"" + (o.done ? "done" : "not yet") + '">' + (o.done ? "✓" : "") + "</span></div>";
-    }).join("") + "</section>";
-    var cs = caseStepsFor(api, c), opens = (c.opens || []).map(function (id) { return CH[id]; }).filter(Boolean), nx = it ? it.chapters[c.idx + 1] : null;
-    var lines = [];
-    cs.forEach(function (q) { lines.push("<b>Case:</b> step " + (q.k + 1) + " of " + q.c.steps.length + " in <b>" + esc(q.c.t) + "</b>"); });
-    var un = (nx ? [nx] : []).concat(opens); if (un.length) lines.push("<b>Unlocks:</b> " + un.map(function (q) { return esc(longLabel(q)); }).join(" · "));
-    if (lines.length) h += '<div class="mn-note">' + lines.join("<br>") + "</div>";
-    if (st === "closed") h += '<p class="status">Closed on ' + esc(d.closed[c.id] || api.todayStr()) + ". Everything here can be opened again; the stamp stays.</p>";
-    $("mnChapter").innerHTML = h;
   }
 
   /* ---------- crumb: "← Back to …" on every page that is not one of the four roots or the manual itself ----------
@@ -416,8 +452,7 @@
   var TAB_ROOT = { car: 1, story: 1, glove: 1, live: 1 }, trail = [], here = null, goingBack = false;
   function where(tab) {
     if (tab === "view") { var v = VIEWS.filter(function (q) { return q.id === ui.view; })[0]; return v && { tab: "view", id: v.id, label: v.n }; }
-    if (tab === "item") { var it = ITEMS.filter(function (q) { return q.id === ui.item; })[0]; return it && { tab: "item", id: it.id, label: it.num + " " + it.n }; }
-    if (tab === "chapter") { var c = CH[ui.chapter]; return c && { tab: "chapter", id: c.id, label: label(c) }; }
+    if (tab === "item") { if (ui.item === "0") return { tab: "item", id: "0", label: "0 " + PREFACE.n }; var it = ITEMS.filter(function (q) { return q.id === ui.item; })[0]; return it && { tab: "item", id: it.id, label: it.num + " " + it.n }; }
     var b = BACK.filter(function (x) { return x[0] === tab; })[0];
     return { tab: tab, label: NAMES[tab] || (b && b[1]) || tab };
   }
@@ -430,20 +465,20 @@
     if (trail.length > 20) trail = trail.slice(-20);
     ui.from = trail.length ? trail[trail.length - 1] : null;
     if (!el) return;
-    if (tab === "view" || tab === "item" || tab === "chapter" || TAB_ROOT[tab] || !ui.from) { el.hidden = true; el.innerHTML = ""; return; }
+    if (tab === "view" || tab === "item" || TAB_ROOT[tab] || !ui.from) { el.hidden = true; el.innerHTML = ""; return; }
     el.hidden = false; el.innerHTML = '<button type="button" class="mn-link" data-back="1">← Back to ' + esc(ui.from.label) + "</button>";
   }
   function goBack(api) {
     var f = trail.pop(); goingBack = true;
     if (!f) { api.go("car"); return; }
-    if (f.tab === "chapter") { ui.chapter = f.id; api.go("chapter"); } else if (f.tab === "item") { ui.item = f.id; api.go("item"); } else if (f.tab === "view") { ui.view = f.id; api.go("view"); } else api.go(f.tab);
+    if (f.tab === "item") { ui.item = f.id; api.go("item"); } else if (f.tab === "view") { ui.view = f.id; api.go("view"); } else api.go(f.tab);
   }
 
   /* ---------- wiring ---------- */
   function open(api, kind, id) {
     if (kind === "view") { ui.view = id; ui.item = null; ui.arrange = false; ui.fm = null; api.go("view"); }
-    else if (kind === "item") { var it = ITEMS.filter(function (q) { return q.id === id; })[0]; if (!it) return; ui.item = id; ui.view = it.view; api.go("item"); }
-    else if (kind === "ch") { if (id === "legend") { legend(api); return; } ui.chapter = id; if (CH[id] && CH[id].item) { ui.item = CH[id].item.id; ui.view = CH[id].item.view; } api.go("chapter"); }
+    else if (kind === "item") { var it = ITEMS.filter(function (q) { return q.id === id; })[0]; if (!it) return; if (ui.item !== id) ui.openStep = null; ui.item = id; ui.view = it.view; api.go("item"); }
+    else if (kind === "ch") { if (id === "legend") { legend(api); return; } if (!CH[id]) return; ui.openCh = id; ui.openStep = null; if (CH[id].item) { ui.item = CH[id].item.id; ui.view = CH[id].item.view; } else ui.item = "0"; api.go("item"); }
   }
   function legend(api) {
     var el = $("mnHome"); if (!el) return; var k = el.querySelector(".mn-legend"); if (k) { k.remove(); return; }
@@ -468,10 +503,17 @@
     d.views[v.id] = { photo: photoId, pins: pins }; ui.arrange = true; ui.fm = null; api.save();
   }
   function wire(api) {
-    ["mnHome", "mnView", "mnItem", "mnChapter"].forEach(function (id) {
+    ["mnHome", "mnView", "mnItem", "mnIndex"].forEach(function (id) {
       var root = $(id);
+      root.addEventListener("toggle", function (e) {
+        var dt = e.target; if (!dt.matches || !dt.matches("details.mn-stepx")) return;
+        var k = dt.getAttribute("data-k");
+        if (dt.open) { if (ui.openStep === k) return; ui.openStep = k; var c = CH[k.split(":")[0]], d = D(api); if (c) { if (!d.opened[c.id]) d.opened[c.id] = api.todayStr(); if (!compute(api).closed[c.id]) d.last = c.id; api.save(); bust(); } renderItem(api); }
+        else if (ui.openStep === k) { ui.openStep = null; if (api.trainReset) api.trainReset(); }
+      }, true);
       root.addEventListener("click", function (e) {
         var t = e.target, b;
+        if (id === "mnItem" && t.closest && t.closest(".mn-train")) { setTimeout(function () { refreshTicks(api); }, 0); return; }
         if ((b = t.closest("[data-hs]"))) {
           if (ui.arrange) return;
           var fig = b.closest(".mn-fig").getAttribute("data-fig"), hs = b.getAttribute("data-hs");
@@ -482,7 +524,15 @@
         if ((b = t.closest("[data-item]"))) { if (b.getAttribute("aria-disabled") === "true") { ui.item = b.getAttribute("data-item"); renderView(api); return; } open(api, "item", b.getAttribute("data-item")); return; }
         if ((b = t.closest("[data-ch]"))) { if (b.getAttribute("aria-disabled") === "true") return; open(api, "ch", b.getAttribute("data-ch")); return; }
         if ((b = t.closest("[data-go]"))) { D(api).went[b.getAttribute("data-k")] = 1; api.save(); api.jump(b.getAttribute("data-go")); return; }
-        if ((b = t.closest("[data-man]"))) { D(api).manual[b.getAttribute("data-man")] = api.todayStr(); api.save(); bust(); renderChapter(api); api.updateHud(); return; }
+        if ((b = t.closest("[data-man]"))) { D(api).manual[b.getAttribute("data-man")] = api.todayStr(); api.save(); bust(); renderItem(api); api.updateHud(); return; }
+        if ((b = t.closest("[data-djdone]"))) { if (window.V60_DIYUI) window.V60_DIYUI.done(api, b.getAttribute("data-djdone")); bust(); renderItem(api); return; }
+        if ((b = t.closest("[data-tree]"))) {
+          var spec = b.getAttribute("data-tree"), cut = spec.lastIndexOf(":"), k2 = spec.slice(0, cut), act = spec.slice(cut + 1), c2 = CH[k2.split(":")[0]], s2 = c2 && c2.steps[+k2.split(":")[1]], tr = s2 && tree(s2.tree); if (!tr) return;
+          var path = TREE_UI[k2] || [tr.start], node = tr.n[path[path.length - 1]];
+          if (act === "restart") path = [tr.start]; else if (act === "back") path = path.slice(0, -1); else if (node && node[act]) path = path.concat([node[act]]);
+          TREE_UI[k2] = path; var nn = tr.n[path[path.length - 1]]; if (nn && !nn.q) { D(api).went[k2] = 1; api.save(); bust(); }
+          renderItem(api); return;
+        }
         if ((b = t.closest("[data-fm]"))) { var m = b.getAttribute("data-fm"), v = VIEWS.filter(function (q) { return q.id === ui.view; })[0]; if (!v) return; if (m === "draw") { var dd = D(api); delete dd.views[v.id]; ui.arrange = false; ui.fm = null; api.save(); } else ui.fm = "photo"; renderView(api); return; }
         if ((b = t.closest("[data-arrange]"))) { ui.arrange = !ui.arrange; renderView(api); return; }
         if ((b = t.closest("[data-usephoto]"))) { var v2 = VIEWS.filter(function (q) { return q.id === ui.view; })[0]; if (v2) usePhoto(api, v2, b.getAttribute("data-usephoto")); renderView(api); return; }
@@ -503,13 +553,13 @@
     tabs: [
       { id: "car", section: "car", label: "The car", order: 1, html: '<div id="mnHome" class="mn"></div>' },
       { id: "view", section: "car", label: "View", order: 2, hidden: true, html: '<div id="mnView" class="mn"></div>' },
-      { id: "item", section: "car", label: "Item", order: 3, hidden: true, html: '<div id="mnItem" class="mn"></div>' },
-      { id: "chapter", section: "car", label: "Chapter", order: 4, hidden: true, html: '<div id="mnChapter" class="mn"></div>' }
+      { id: "item", section: "car", label: "Part", order: 3, hidden: true, html: '<div id="mnItem" class="mn"></div>' },
+      { id: "index", section: "car", label: "Index", order: 4, hidden: true, html: '<div id="mnIndex" class="mn"></div>' }
     ],
     init: function (api) { API = api; installGate(); wire(api); },
-    render: function (api, tab) { bust(); if (tab === "car") renderHome(api); else if (tab === "view") renderView(api); else if (tab === "item") renderItem(api); else if (tab === "chapter") renderChapter(api); },
+    render: function (api, tab) { bust(); if (tab === "car") renderHome(api); else if (tab === "view") renderView(api); else if (tab === "item") renderItem(api); else if (tab === "index") renderIndex(api); },
     refresh: function (api) { bust(); },
-    shown: function (api, tab) { crumb(api, tab); rootAlso(tab); },
+    shown: function (api, tab) { crumb(api, tab); rootAlso(tab); if (tab !== "item" && api.trainReset) api.trainReset(); },
     clean: function (v) { return v && typeof v === "object" ? v : {}; },
     xp: function (api) { var d = api.mod("manual"); if (!d || !d.closed) return 0; return Object.keys(d.closed).length * 15 + (d.closed["0"] ? 15 : 0); },
     jump: function (api, kind, id) { if (kind === "view" || kind === "item" || kind === "ch") { open(api, kind, id); return true; } return false; }
