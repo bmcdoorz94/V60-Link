@@ -7,7 +7,7 @@
   var T = window.V60_TRACK_DATA, AREAS = T.areas, OWN = T.owner, API = null;
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function $(id) { return document.getElementById(id); }
-  function D(api) { var d = api.mod("track"); if (!d) { d = {}; api.setMod("track", d); } ["quiz", "g1", "seen"].forEach(function (k) { if (!d[k] || typeof d[k] !== "object") d[k] = {}; }); return d; }
+  function D(api) { var d = api.mod("track"); if (!d) { d = {}; api.setMod("track", d); } ["quiz", "g1", "seen", "read"].forEach(function (k) { if (!d[k] || typeof d[k] !== "object") d[k] = {}; }); return d; }
   function area(id) { return AREAS.filter(function (a) { return a.id === id; })[0]; }
   function M() { return window.V60_MANUAL; }
   function items(a) { var data = M() && M().data; return (data ? a.items.map(function (id) { return data.items.filter(function (it) { return it.id === id; })[0]; }) : []).filter(Boolean); }
@@ -29,19 +29,28 @@
     var b = (api.mod("cards") || { b: {} }).b || {}, fs = facts(a), done = fs.filter(function (f) { return b[f.id] && b[f.id][0] >= 4; }).length;
     return { done: done, total: fs.length };
   }
+  /* the G1 task list: entries are the study guide; a task counts as studied once its entry has been opened */
+  function tasks(a) { return (window.V60_G1_TASKS || []).filter(function (t) { return t.area === a.id; }); }
+  function entry(t) { return (window.V60_G1_ENTRIES || {})[t.id] || null; }
+  function study(api, a) { var d = D(api), ts = tasks(a), withEntry = ts.filter(function (t) { return !!entry(t); }), read = withEntry.filter(function (t) { return !!d.read[t.id]; }).length; return { read: read, written: withEntry.length, total: ts.length }; }
+  function taskQs(a, rung) {
+    var out = []; tasks(a).forEach(function (t) { var e = entry(t); if (!e || !e.qs) return; e.qs.forEach(function (q, i) { if (q && q.o && q.o.length === 4) out.push({ id: t.id + "#" + i, q: q.q, o: q.o, a: q.a, why: q.why, src: q.src, item: t.item || null, task: t.id, kind: "written", area: a.id }); }); });
+    return out;
+  }
   function quizRec(api, a, rung) { return D(api).quiz[a.id + ":" + rung] || { best: 0, tries: 0, passed: null }; }
   function bank(a, rung) {
-    var w = (window.V60_QUIZ || []).filter(function (q) { return q.area === a.id && q.rung <= rung; }).map(function (q) { return { id: q.id, q: q.q, o: q.o, a: q.a, why: q.why, src: q.src, item: q.item, kind: "written", area: a.id }; });
+    var w = (window.V60_QUIZ || []).filter(function (q) { return q.area === a.id && q.rung <= rung; }).map(function (q) { return { id: q.id, q: q.q, o: q.o, a: q.a, why: q.why, src: q.src, item: q.item, task: q.task || null, kind: "written", area: a.id }; }).concat(taskQs(a, rung));
     var r = rung === 1 ? facts(a).filter(function (f) { return f.exam && f.exam.length >= 3; }).map(function (f) { return { id: f.id, q: f.q, o: [f.a].concat(f.exam.slice(0, 3)), a: 0, why: f.more || f.a, src: f.src, item: null, kind: "recall", area: a.id }; }) : [];
     return { written: w, recall: r };
   }
   function ownerEarned(api, a) { var h = hands(a, 1); return (a.noCar || (h.total > 0 && h.done === h.total)) && !!quizRec(api, a, 1).passed; }
   function techEarned(api, a) { var h = hands(a, 2); return ownerEarned(api, a) && h.total > 0 && h.done === h.total && !!quizRec(api, a, 2).passed; }
   function rung(api, a) { return techEarned(api, a) ? 2 : ownerEarned(api, a) ? 1 : 0; }
+  /* readiness: 30 % hands-on chapters closed, 30 % task entries studied, 40 % best quiz score; areas with no hands-on step weigh the other two */
   function ready(api, a) {
-    var h = hands(a, 1), r = recall(api, a), q = quizRec(api, a, 1), parts = [];
-    if (!a.noCar && h.total) parts.push([0.4, h.done / h.total]);
-    if (r.total) parts.push([0.2, r.done / r.total]);
+    var h = hands(a, 1), st = study(api, a), q = quizRec(api, a, 1), parts = [];
+    if (!a.noCar && h.total) parts.push([0.3, h.done / h.total]);
+    parts.push([0.3, st.total ? st.read / st.total : 0]);
     parts.push([0.4, q.best / 100]);
     var wsum = parts.reduce(function (s, p) { return s + p[0]; }, 0);
     return parts.reduce(function (s, p) { return s + p[0] * p[1]; }, 0) / wsum;
@@ -55,12 +64,17 @@
   var ui = { mode: "home", area: null, rung: 1, qs: [], i: 0, ans: [], timer: null, ends: 0, mock: false };
   function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   function withOpts(q) { var idx = shuffle(q.o.map(function (_, i) { return i; })); return { q: q, opts: idx.map(function (i) { return q.o[i]; }), right: idx.indexOf(q.a) }; }
+  /* one question per task where possible, so a round covers the area instead of one corner of it */
+  function spread(list, n) {
+    var by = {}, keys = []; shuffle(list).forEach(function (q) { var k = q.task || q.item || q.id; if (!by[k]) { by[k] = []; keys.push(k); } by[k].push(q); });
+    var out = []; keys = shuffle(keys);
+    while (out.length < n && keys.some(function (k) { return by[k].length; })) keys.forEach(function (k) { if (out.length < n && by[k].length) out.push(by[k].shift()); });
+    return out;
+  }
   function draw(a, rg, n) {
-    var b = bank(a, rg), w = shuffle(b.written), r = shuffle(b.recall), out = [];
-    var nw = Math.min(w.length, Math.ceil(n * 0.6)), nr = Math.min(r.length, n - nw);
-    if (nw + nr < n) nw = Math.min(w.length, n - nr);
-    out = w.slice(0, nw).concat(r.slice(0, nr));
-    return shuffle(out).map(withOpts);
+    var b = bank(a, rg), nw = Math.min(b.written.length, Math.ceil(n * 0.7)), nr = Math.min(b.recall.length, n - nw);
+    if (nw + nr < n) nw = Math.min(b.written.length, n - nr);
+    return shuffle(spread(b.written, nw).concat(shuffle(b.recall).slice(0, nr))).map(withOpts);
   }
   function startQuiz(api, a, rg) {
     ui.mode = "quiz"; ui.area = a.id; ui.rung = rg; ui.mock = false; ui.qs = draw(a, rg, 10); ui.i = 0; ui.ans = []; stopTimer(); render(api); window.scrollTo(0, 0);
@@ -81,12 +95,12 @@
   }
   function next(api) { ui.i++; if (ui.i >= ui.qs.length) finish(api); else { render(api); window.scrollTo(0, 0); } }
   function grade() {
-    var right = 0, byArea = {}, byItem = {}, missed = [];
+    var right = 0, byArea = {}, byItem = {}, byTask = {}, missed = [];
     ui.qs.forEach(function (x, i) {
       var ok = ui.ans[i] === x.right, a = x.q.area; byArea[a] = byArea[a] || [0, 0]; byArea[a][1]++;
-      if (ok) { right++; byArea[a][0]++; } else { missed.push(x); if (x.q.item) byItem[x.q.item] = (byItem[x.q.item] || 0) + 1; }
+      if (ok) { right++; byArea[a][0]++; } else { missed.push(x); if (x.q.item) byItem[x.q.item] = (byItem[x.q.item] || 0) + 1; if (x.q.task) byTask[x.q.task] = (byTask[x.q.task] || 0) + 1; }
     });
-    return { right: right, n: ui.qs.length, p: ui.qs.length ? Math.round(100 * right / ui.qs.length) : 0, byArea: byArea, byItem: byItem, missed: missed };
+    return { right: right, n: ui.qs.length, p: ui.qs.length ? Math.round(100 * right / ui.qs.length) : 0, byArea: byArea, byItem: byItem, byTask: byTask, missed: missed };
   }
   function finish(api) {
     stopTimer();
@@ -109,7 +123,7 @@
   function rungLabel(r) { return r === 2 ? "Technician" : r === 1 ? "Owner" : "Not yet"; }
   function renderHome(api) {
     var d = D(api), g = g1ready(api), g1 = d.g1, nOwner = AREAS.filter(function (a) { return ownerEarned(api, a); }).length, nTech = AREAS.filter(function (a) { return techEarned(api, a); }).length;
-    var h = '<div class="mn-top"><div class="mn-kick"><button type="button" class="mn-link" data-jump="tab:car">← The car</button><span>CERTIFICATION TRACK</span></div><h2 class="mn-h1">' + esc(T.test.n) + ' readiness</h2><p>' + esc(T.test.full) + ": " + T.test.scored + " scored questions in " + T.test.minutes + " minutes, across seven areas. Each area is a level; its meter is 40 % hands-on work on your car, 20 % flashcards mastered and 40 % your best quiz score. The test weights the areas unevenly, so this number does too.</p></div>";
+    var h = '<div class="mn-top"><div class="mn-kick"><button type="button" class="mn-link" data-jump="tab:car">← The car</button><span>CERTIFICATION TRACK</span></div><h2 class="mn-h1">' + esc(T.test.n) + ' readiness</h2><p>' + esc(T.test.full) + ": " + T.test.scored + " scored questions in " + T.test.minutes + " minutes, across seven areas. Each area is a level; its meter is 30 % hands-on work on your car, 30 % of ASE&#39;s task list studied and 40 % your best quiz score. The test weights the areas unevenly, so this number does too.</p></div>";
     h += '<section class="tk-big"><div class="tk-num">' + pct(g) + '<small>%</small></div><div class="tk-bigr"><div class="mn-kick"><span>G1 READINESS</span></div>' + meterHtml(g, "tall") + '<p class="status">' + nOwner + " of 7 areas at Owner · " + nTech + " at Technician" + (g1.passed ? " · mock G1 passed " + esc(g1.passed) : g1.best ? " · best mock G1 " + g1.best + " %" : "") + "</p></div></section>";
     h += '<section class="mn-list"><div class="mn-kick"><span>AREAS · IN TEST ORDER</span><span class="mn-mono">QUESTIONS</span></div>' + AREAS.map(function (a) {
       var r = rung(api, a), rd = ready(api, a), hs = hands(a, 1), st = r === 2 ? "closed" : r === 1 ? "open" : quizOpen(api, a, 1) ? "new" : "open";
@@ -125,10 +139,10 @@
     return h;
   }
   function renderArea(api, a) {
-    var r = rung(api, a), h1 = hands(a, 1), h2 = hands(a, 2), rc = recall(api, a), q1 = quizRec(api, a, 1), q2 = quizRec(api, a, 2), b1 = bank(a, 1), b2 = bank(a, 2), rd = ready(api, a);
+    var r = rung(api, a), h1 = hands(a, 1), h2 = hands(a, 2), st = study(api, a), q1 = quizRec(api, a, 1), q2 = quizRec(api, a, 2), b1 = bank(a, 1), b2 = bank(a, 2), rd = ready(api, a);
     var h = '<div class="mn-top"><div class="mn-kick"><button type="button" class="mn-link" data-tk="home">← Track</button><span>AREA ' + a.letter + " · " + a.q + " OF " + T.test.scored + ' QUESTIONS</span></div><h2 class="mn-h1">' + esc(a.n) + '</h2><p>' + esc(a.d) + "</p>" + (a.noCar ? '<p class="mn-locked">' + esc(a.noCar) + "</p>" : "") + "</div>";
     h += '<section class="tk-big"><div class="tk-num">' + pct(rd) + '<small>%</small></div><div class="tk-bigr"><div class="mn-kick"><span>READY · ' + esc(rungLabel(r).toUpperCase()) + "</span></div>" + meterHtml(rd, "tall") +
-      '<dl class="tk-parts">' + (a.noCar ? "" : "<div><dt>Hands-on</dt><dd>" + h1.done + " / " + h1.total + " chapters</dd></div>") + "<div><dt>Recall</dt><dd>" + rc.done + " / " + rc.total + " cards</dd></div><div><dt>Quiz</dt><dd>" + (q1.tries ? q1.best + " % best" : "not taken") + "</dd></div></dl></div></section>";
+      '<dl class="tk-parts">' + (a.noCar ? "" : "<div><dt>Hands-on</dt><dd>" + h1.done + " / " + h1.total + " chapters</dd></div>") + "<div><dt>Studied</dt><dd>" + st.read + " / " + st.total + " tasks</dd></div><div><dt>Quiz</dt><dd>" + (q1.tries ? q1.best + " % best" : "not taken") + "</dd></div></dl></div></section>";
     /* rung 1 */
     var open1 = quizOpen(api, a, 1);
     h += '<article class="mn-sheet tk-rung' + (ownerEarned(api, a) ? " done" : "") + '"><div class="mn-kick"><span>RUNG 1 · OWNER</span><span class="mn-mono">' + (q1.passed ? "PASSED " + esc(q1.passed) : open1 ? "QUIZ OPEN" : "LOCKED") + '</span></div><h3>Know it and check it on your car, then the Owner quiz</h3>' +
@@ -141,14 +155,38 @@
       (ownerEarned(api, a) ? (h2.missing.length ? '<p class="status">Still to close: ' + h2.missing.slice(0, 6).map(function (m) { return '<button type="button" class="mn-link" data-jump="ch:' + m.c.id + '">' + esc(m.c.id + " " + m.it.n + ", " + m.c.t) + "</button>"; }).join(" · ") + "</p>" : '<p class="status">Every chapter in this area is closed.</p>') : '<p class="status">Earn the Owner rung first.</p>') +
       '<p class="status">' + b2.written.filter(function (q) { return (window.V60_QUIZ || []).some(function (z) { return z.id === q.id && z.rung === 2; }); }).length + " diagnosis questions in the bank so far; the round also draws from the Owner questions.</p>" +
       (open2 ? '<button type="button" class="mn-cta" data-quiz="2">' + (q2.tries ? "Take the Technician quiz again" : "Take the Technician quiz") + ' <span aria-hidden="true">→</span></button>' : "") + "</article>";
+    /* the task list: the study guide proper */
+    h += taskListHtml(api, a, st);
     /* parts */
     h += '<section class="mn-list"><div class="mn-kick"><span>PARTS IN THIS AREA</span></div>' + items(a).map(function (it) { var n = it.chapters.filter(function (c) { return M().closed(c.id); }).length, st = M().status ? "" : ""; return '<button type="button" class="mn-ix" data-jump="item:' + it.id + '"><span class="n">' + esc(it.num) + "</span><span>" + esc(it.n) + '</span><span class="st">' + (n === it.chapters.length ? "CLOSED" : n + " / " + it.chapters.length) + "</span></button>"; }).join("") + "</section>";
     /* weak spots */
     var last = q1.last || q2.last; if (last && last.missed && last.missed.length) {
-      var byItem = {}; last.missed.forEach(function (id) { var z = (window.V60_QUIZ || []).filter(function (q) { return q.id === id; })[0]; if (z && z.item) byItem[z.item] = (byItem[z.item] || 0) + 1; });
-      var ks = Object.keys(byItem); if (ks.length) h += '<section class="mn-list"><div class="mn-kick"><span>WEAK SPOTS · LAST ROUND</span></div><div class="mn-chips">' + ks.map(function (k) { var it = items(a).filter(function (x) { return x.id === k; })[0] || (M().data.items.filter(function (x) { return x.id === k; })[0]); return it ? '<button type="button" class="mn-chip" data-jump="item:' + it.id + '">' + esc(it.n) + " · " + byItem[k] + " missed</button>" : ""; }).join("") + "</div></section>";
+      var byTask = {}, byItem = {}; last.missed.forEach(function (id) { var m = /^([A-G]\d+)#/.exec(id); if (m) { byTask[m[1]] = (byTask[m[1]] || 0) + 1; return; } var z = (window.V60_QUIZ || []).filter(function (q) { return q.id === id; })[0]; if (z && z.task) byTask[z.task] = (byTask[z.task] || 0) + 1; else if (z && z.item) byItem[z.item] = (byItem[z.item] || 0) + 1; });
+      var kt = Object.keys(byTask), ki = Object.keys(byItem);
+      if (kt.length || ki.length) h += '<section class="mn-list"><div class="mn-kick"><span>WEAK SPOTS · LAST ROUND</span></div><div class="mn-chips">' +
+        kt.map(function (k) { var t = (window.V60_G1_TASKS || []).filter(function (x) { return x.id === k; })[0]; return t ? '<button type="button" class="mn-chip" data-task="' + esc(k) + '">' + esc(k + " · " + t.t) + " · " + byTask[k] + " missed</button>" : ""; }).join("") +
+        ki.map(function (k) { var it = M().data.items.filter(function (x) { return x.id === k; })[0]; return it ? '<button type="button" class="mn-chip" data-jump="item:' + it.id + '">' + esc(it.n) + " · " + byItem[k] + " missed</button>" : ""; }).join("") + "</div></section>";
     }
     return h;
+  }
+  function taskHtml(api, t, open) {
+    var e = entry(t), d = D(api), read = !!d.read[t.id];
+    var h = '<details class="tk-task' + (read ? " read" : "") + (e ? "" : " empty") + '" data-task-id="' + esc(t.id) + '"' + (open ? " open" : "") + '><summary><span class="n">' + esc(t.id) + '</span><span class="b"><span class="t">' + esc(t.t) + "</span>" + (t.car && !e ? '<span class="status">' + esc(t.car) + "</span>" : "") + '</span><span class="mn-tick" aria-label="' + (read ? "studied" : "not yet") + '">' + (read ? "✓" : "") + '</span></summary><div class="tk-taskb">';
+    if (!e) h += '<p class="status">No sourced entry yet.</p>';
+    else {
+      h += (e.body || []).map(function (l) { return "<p>" + esc(l) + "</p>"; }).join("");
+      if (e.car || t.car) h += '<p class="tk-car"><b>On your car:</b> ' + esc(e.car || t.car) + "</p>";
+      if (e.src && e.src.length) h += '<p class="status">Sources: ' + e.src.map(function (s) { return srcHtml(api, s); }).join(" · ") + "</p>";
+      if (e.qs && e.qs.length) h += '<p class="status">' + e.qs.length + (e.qs.length === 1 ? " question" : " questions") + " on this task in the quiz bank.</p>";
+    }
+    return h + "</div></details>";
+  }
+  function taskListHtml(api, a, st) {
+    var ts = tasks(a), groups = [], seen = {};
+    ts.forEach(function (t) { var g = t.g || ""; if (!seen[g]) { seen[g] = true; groups.push(g); } });
+    var h = '<section class="mn-list tk-tasks"><div class="mn-kick"><span>THE G1 TASK LIST · ' + ts.length + ' TASKS</span><span class="mn-mono">' + st.read + " STUDIED · " + st.written + ' WRITTEN</span></div><p class="status">ASE&#39;s task list for this area, in ASE&#39;s order and numbering, in this app&#39;s words. Open a task to study it; an opened task counts as studied. Tasks your car does not have are still on the test.</p>';
+    groups.forEach(function (g) { if (g) h += '<p class="tk-group">' + esc(g) + "</p>"; h += ts.filter(function (t) { return (t.g || "") === g; }).map(function (t) { return taskHtml(api, t, ui.openTask === t.id); }).join(""); });
+    return h + "</section>";
   }
   function renderQuiz(api) {
     var x = ui.qs[ui.i], picked = ui.ans[ui.i], a = ui.area ? area(ui.area) : null;
@@ -196,7 +234,8 @@
   window.V60_TRACK = {
     ready: function () { return API ? g1ready(API) : 0; }, areaReady: function (id) { return API && area(id) ? ready(API, area(id)) : 0; }, rung: function (id) { return API && area(id) ? rung(API, area(id)) : 0; },
     passedG1: function () { return !!(API && D(API).g1.passed); }, strip: function () { return API ? stripHtml(API) : ""; }, hud: function () { if (API) hud(API); },
-    areaOf: function (itemId) { return AREAS.filter(function (a) { return a.items.indexOf(itemId) >= 0; }); }
+    areaOf: function (itemId) { return AREAS.filter(function (a) { return a.items.indexOf(itemId) >= 0; }); },
+    tasksFor: function (itemId) { return (window.V60_G1_TASKS || []).filter(function (t) { return t.item === itemId; }); }
   };
   /* perks: Mechanic detail level after the first Owner rung; the Timeline after three services or receipts */
   window.V60_PERK = function (name) {
@@ -209,12 +248,18 @@
   (window.V60_MODULES = window.V60_MODULES || []).push({
     id: "track",
     tabs: [{ id: "track", section: "learn", label: "Certification track", order: 5, hidden: true, html: '<div id="tkBody" class="mn track"></div>' }],
-    clean: function (v) { return v && typeof v === "object" ? { quiz: v.quiz || {}, g1: v.g1 || {}, seen: v.seen || {} } : null; },
+    clean: function (v) { return v && typeof v === "object" ? { quiz: v.quiz || {}, g1: v.g1 || {}, seen: v.seen || {}, read: v.read || {} } : null; },
     init: function (api) {
       API = api;
+      api.$("tkBody").addEventListener("toggle", function (e) {
+        var dt = e.target; if (!dt.matches || !dt.matches("details.tk-task") || !dt.open) return;
+        var tid = dt.getAttribute("data-task-id"), d = D(api); ui.openTask = tid;
+        if (!d.read[tid] && (window.V60_G1_ENTRIES || {})[tid]) { d.read[tid] = api.todayStr(); api.save(); dt.classList.add("read"); var tk = dt.querySelector(".mn-tick"); if (tk) tk.textContent = "✓"; hud(api); var m = dt.closest("#tkBody"); var kick = m && m.querySelector(".tk-tasks .mn-kick .mn-mono"); if (kick && ui.area) { var st = study(api, area(ui.area)); kick.textContent = st.read + " STUDIED · " + st.written + " WRITTEN"; } }
+      }, true);
       api.$("tkBody").addEventListener("click", function (e) {
         var t = e.target, b;
-        if ((b = t.closest("[data-area]"))) { stopTimer(); ui.mode = "area"; ui.area = b.getAttribute("data-area"); render(api); window.scrollTo(0, 0); return; }
+        if ((b = t.closest("[data-task]"))) { var tid = b.getAttribute("data-task"), tk = (window.V60_G1_TASKS || []).filter(function (x) { return x.id === tid; })[0]; if (!tk) return; stopTimer(); ui.mode = "area"; ui.area = tk.area; ui.openTask = tid; render(api); var el = document.querySelector('#tkBody [data-task-id="' + tid + '"]'); if (el && el.scrollIntoView) el.scrollIntoView({ block: "start" }); return; }
+        if ((b = t.closest("[data-area]"))) { stopTimer(); ui.mode = "area"; ui.area = b.getAttribute("data-area"); ui.openTask = null; render(api); window.scrollTo(0, 0); return; }
         if ((b = t.closest("[data-quiz]"))) { var a = area(ui.area); if (a) startQuiz(api, a, +b.getAttribute("data-quiz")); return; }
         if ((b = t.closest("[data-mock]"))) { startMock(api); return; }
         if ((b = t.closest("[data-opt]")) && !b.disabled) { answer(api, +b.getAttribute("data-opt")); return; }
@@ -223,7 +268,9 @@
     },
     render: function (api) { render(api); hud(api); },
     shown: function (api, tab) { if (tab !== "track") stopTimer(); else if (ui.mode === "quiz" && ui.mock && !ui.timer) { if (Date.now() >= ui.ends) finish(api); else tick(api); } hud(api); },
-    jump: function (api, kind, id) { if (kind !== "track") return false; stopTimer(); if (id === "g1") { api.go("track"); startMock(api); return true; } ui.mode = id && area(id) ? "area" : "home"; ui.area = id && area(id) ? id : ui.area; api.go("track"); return true; },
+    jump: function (api, kind, id) {
+      if (kind === "task") { var tk = (window.V60_G1_TASKS || []).filter(function (x) { return x.id === id; })[0]; if (!tk) return false; stopTimer(); ui.mode = "area"; ui.area = tk.area; ui.openTask = id; api.go("track"); var el = document.querySelector('#tkBody [data-task-id="' + id + '"]'); if (el && el.scrollIntoView) setTimeout(function () { el.scrollIntoView({ block: "start" }); }, 0); return true; }
+      if (kind !== "track") return false; stopTimer(); if (id === "g1") { api.go("track"); startMock(api); return true; } ui.mode = id && area(id) ? "area" : "home"; ui.area = id && area(id) ? id : ui.area; api.go("track"); return true; },
     xp: function () { return 0; }
   });
 })();

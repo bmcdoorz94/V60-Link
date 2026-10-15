@@ -3,6 +3,8 @@
  "js/data/articles.js": "dist-artifact/js/data/articles.js",
  "js/data/codebook.js": "dist-artifact/js/data/codebook.js",
  "js/data/facts.js": "dist-artifact/js/data/facts.js",
+ "js/data/g1entries.js": "dist-artifact/js/data/g1entries.js",
+ "js/data/g1tasks.js": "dist-artifact/js/data/g1tasks.js",
  "js/data/manual.js": "dist-artifact/js/data/manual.js",
  "js/data/quiz.js": "dist-artifact/js/data/quiz.js",
  "js/data/toolprices.js": "dist-artifact/js/data/toolprices.js",

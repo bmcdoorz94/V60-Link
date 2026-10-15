@@ -740,6 +740,24 @@ ul.sched li { display: grid; grid-template-columns: minmax(10em, 13em) 1fr; gap:
 .tk-segs i { display: block; background: var(--line); min-width: 4px; }
 .tk-segs i.r1 { background: var(--none); }
 .tk-segs i.r2 { background: var(--done); }
+/* the G1 task list on an area page */
+.tk-group { font-family: var(--font-data); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding: 12px 0 2px; border-bottom: 1px solid var(--line); }
+.tk-task { border-bottom: 1px solid var(--line); }
+.tk-task > summary { list-style: none; cursor: pointer; display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; min-height: 44px; }
+.tk-task > summary::-webkit-details-marker { display: none; }
+.tk-task > summary .n { font-family: var(--font-data); font-size: 12.5px; font-weight: 500; color: var(--muted); width: 2.6em; flex: none; padding-top: 2px; }
+.tk-task > summary .b { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.tk-task > summary .t { font-size: 14.5px; line-height: 1.35; font-weight: 500; }
+.tk-task.read > summary .t { color: var(--muted); }
+.tk-task.read .mn-tick { border-color: var(--done); }
+.tk-task.empty > summary .t { color: var(--muted); font-weight: 400; }
+.tk-task[open] > summary .t { color: var(--ink); }
+.tk-taskb { padding: 0 0 14px 2.6em; display: flex; flex-direction: column; gap: 8px; border-left: 0; }
+.tk-taskb p { font-size: 14.5px; line-height: 1.5; }
+.tk-taskb .tk-car { border-left: 3px solid var(--ink); padding: 4px 10px; background: var(--panel); }
+.tk-taskb .tk-car b { font-weight: 600; }
+.tk-task:not([open]) .tk-taskb { display: none; }
+@media (max-width: 600px) { .tk-taskb { padding-left: 0; } }
 
 /* ===== module styles (library, cards, exam, story, fuel, glovebox, diy, troubleshoot, achievements, live) ===== */
 .askbar.light input { background: var(--panel); border: 1px solid var(--line); }

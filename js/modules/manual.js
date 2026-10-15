@@ -411,6 +411,10 @@
       if (spec.length) h += '<details class="mn-fold"' + (spec.length <= 3 ? " open" : "") + '><summary><span class="mn-kick"><span>YOUR CAR · ' + spec.length + " FACTS</span>" + (dot ? '<span class="mn-amber">UNCONFIRMED WHERE SAID</span>' : "") + '</span></summary><dl class="mn-spec">' + spec.map(function (s) { return "<div><dt>" + esc(s[0]) + "</dt><dd>" + esc(s[1]) + "</dd></div>"; }).join("") + "</dl></details>";
     }
     h += chapters.map(function (c) { return chapterHtml(api, c, d, x); }).join("");
+    if (it && window.V60_TRACK && window.V60_TRACK.tasksFor) {
+      var g1 = window.V60_TRACK.tasksFor(it.id);
+      if (g1.length) h += '<details class="mn-fold"><summary><span class="mn-kick"><span>ON THE G1 · ' + g1.length + (g1.length === 1 ? " TASK" : " TASKS") + '</span></span></summary><div class="mn-list">' + g1.map(function (t) { return '<button type="button" class="mn-ix" data-jump="task:' + esc(t.id) + '"><span class="n">' + esc(t.id) + "</span><span>" + esc(t.t) + "</span></button>"; }).join("") + "</div></details>";
+    }
     if (it) {
       var facts = glossary(it), known = facts.filter(function (f) { return !window.V60_KNOW || window.V60_KNOW.fact(f); });
       var ph = (api.state.photos || []).filter(function (p) { return (it.photo || []).indexOf(p.kind) >= 0 || (it.part && p.part === it.part); }).slice(-4).reverse();
