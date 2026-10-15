@@ -29,6 +29,7 @@
 .fg-arch { fill: var(--bg); stroke: var(--ink); stroke-width: 2; }
 .fg-ground { stroke: var(--line); stroke-width: 1; }
 .fg-text { font-family: var(--font-data); font-size: 13px; fill: var(--ink); }
+.fg-label { font-family: var(--font-data); font-size: 7px; letter-spacing: .14em; fill: var(--muted); }
 .mn-hs { position: absolute; width: 42px; height: 42px; margin: -21px 0 0 -21px; padding: 0; border-radius: 50%; border: 2px solid var(--ink); background: var(--bg); color: var(--ink); font-family: var(--font-data); font-weight: 500; font-size: 14px; line-height: 1; display: flex; align-items: center; justify-content: center; cursor: pointer; min-height: 0; }
 .mn-hs.locked { border-style: dashed; border-color: var(--none); color: var(--none); background: color-mix(in srgb, var(--bg) 85%, transparent); }
 .mn-hs.closed { background: var(--ink); color: var(--bg); }

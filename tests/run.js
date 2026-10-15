@@ -10,7 +10,7 @@ const ROOT = path.resolve(__dirname, '..');
 const args = process.argv.slice(2);
 const flags = new Set(args.filter((a) => a.startsWith('--')));
 const pick = args.filter((a) => !a.startsWith('--')).map((a) => a.replace(/\.js$/, ''));
-const ALL = fs.readdirSync(__dirname).filter((f) => f.endsWith('.js') && !['run.js', 'engine.js'].includes(f)).map((f) => f.slice(0, -3)).sort();
+const ALL = fs.readdirSync(__dirname).filter((f) => f.endsWith('.js') && !['run.js', 'engine.js', 'figshot.js'].includes(f)).map((f) => f.slice(0, -3)).sort();
 const tests = pick.length ? pick : ALL;
 const unknown = tests.filter((t) => !ALL.includes(t));
 if (unknown.length) { console.error('No such test:', unknown.join(', '), '\nTests:', ALL.join(', ')); process.exit(2); }

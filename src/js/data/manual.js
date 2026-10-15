@@ -71,7 +71,7 @@ window.V60_MANUAL_DATA = (function () {
         { tier: "K", t: "Know it", d: "Where it is, what the level means, and why you don't just top it up.", steps: [{ bay: "brake", t: "Find the reservoir on the map" }] },
         { tier: "C", t: "Check it", d: "Between MIN and MAX with the cap closed. Low means get the brakes looked at.", steps: [{ diy: "j-fluids" }] }
       ] },
-    { id: "washer", view: "bay", num: "1.7", n: "Washer fluid", d: "The one fluid you can always top up yourself.", bay: "washer", part: "wipers", tags: ["Fluids"], at: [330, 184],
+    { id: "washer", view: "bay", num: "1.7", n: "Washer fluid", d: "The one fluid you can always top up yourself.", bay: "washer", part: "wipers", tags: ["Fluids"], at: [330, 174],
       spec: [["Capacity", "6.8 US qt with headlight washers, 4.7 without"]],
       chapters: [
         { tier: "K", t: "Know it", d: "Where the filler is and why washer fluid, not water.", steps: [{ bay: "washer", t: "Find the washer filler on the map" }] },
