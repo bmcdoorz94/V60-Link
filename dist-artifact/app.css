@@ -761,10 +761,25 @@ label.inl { display: inline-flex; gap: 8px; align-items: center; font-weight: 70
 .gbman[open] summary { margin-bottom: 10px; }
 .warnc { color: var(--warn) !important; font-weight: 700; }
 .tools { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 6px; }
-.tool { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--bg); }
-.tool input { margin-top: 3px; flex: none; }
-.tool span { display: flex; flex-direction: column; }
+.tool { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--bg); min-width: 0; }
+.tool .tcheck { display: flex; gap: 10px; align-items: flex-start; min-height: 36px; cursor: pointer; }
+.tool .tcheck input { margin-top: 3px; flex: none; width: 20px; height: 20px; }
+.tool .tcheck span { display: flex; flex-direction: column; min-width: 0; }
 .tool small { color: var(--muted); font-size: 12.5px; }
+.tool.have .tprice summary { color: var(--muted); }
+.ttier { display: flex; flex-direction: column; gap: 6px; margin-top: 14px; }
+.ttier:first-child { margin-top: 4px; }
+.ttier h4 { margin: 0; display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+.ttier h4 .status { text-transform: none; letter-spacing: 0; font-family: var(--font-body, inherit); font-size: 13px; }
+.ttier > p.status { margin: 0 0 4px; }
+.tprice { border-top: 1px solid var(--line); padding-top: 4px; margin-left: 30px; }
+.tprice summary { cursor: pointer; min-height: 36px; display: flex; align-items: center; font-size: 13px; }
+.tprice[open] summary { margin-bottom: 6px; }
+.tprice .tpsrc { margin: 0 0 6px; padding-left: 18px; font-size: 13.5px; overflow-wrap: anywhere; }
+.tprice .tpsrc li + li { margin-top: 4px; }
+.tprice .tpmine { align-items: flex-end; gap: 8px; }
+.tprice .tpmine input { width: 120px; }
+.tprice .tpmine button { min-height: 36px; }
 
 /* diy */
 .joblist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
