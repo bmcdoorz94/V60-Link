@@ -4,6 +4,569 @@
    A task with no entry yet shows "No sourced entry yet" in the app. Never write an entry from memory: fetch the source first.
    Merge researched entries with tools/gen/g1merge.py; it validates ids, sources and questions. */
 window.V60_G1_ENTRIES = {
+ "D42": {
+  "body": [
+   "A car that pulls or drifts to one side on a flat, straight road, a steering wheel that sits off center while driving straight, and uneven wear on the inner or outer tread edges are the common signs of misalignment.",
+   "Michelin also lists a vague or wandering feel through the steering as a reason to have the alignment checked; NHTSA describes alignment as what keeps a car from veering left or right on a straight, level road.",
+   "Pull and wander are not always alignment faults: MOOG lists pulling and wandering among signs of worn steering and suspension, and free play in the steering gear or linkage sockets can make a car wander side to side and need constant correction.",
+   "Tread wear points to the angle: feathered edges point to wrong toe, faster wear on the inner or outer ribs points to excessive camber, and cupped dips point to worn or bent suspension parts.",
+   "Vibration through the steering wheel can come from misalignment, but also from worn parts or tire imbalance.",
+   "An alignment check is due after a pothole or curb strike, a collision, a ride-height change, or any replacement of steering or suspension parts, including struts."
+  ],
+  "car": "Volvo's 2016 V60 manual lists incorrect front end alignment among the factors that decrease gas mileage and says correct front wheel alignment is very important for tire economy. It does not describe alignment symptoms.",
+  "src": [
+   [
+    "Discover the what, why and how of car alignment",
+    "https://www.moogparts.com/en-eu/support/the-problem-solver/technical-support/educational-articles/why-what-how-wheel-alignment.html"
+   ],
+   [
+    "Wheel Alignment & Balancing Explained - Michelin USA",
+    "https://www.michelinman.com/auto/auto-tips-and-advice/tire-maintenance/wheel-alignment-wheel-balancing"
+   ],
+   [
+    "Tires | NHTSA",
+    "https://www.nhtsa.gov/vehicle-safety/tires"
+   ],
+   [
+    "When to inspect your steering and suspension system | MOOG",
+    "https://www.moogparts.com/en-eu/support/the-problem-solver/technical-support/educational-articles/inspect-steering-suspension.html"
+   ],
+   [
+    "Why Does My Steering Feel Loose?",
+    "https://www.moogparts.com/en-ca/parts-matter/why-does-my-steering-feel-loose.html"
+   ],
+   [
+    "MOOG Easy Solutions Bulletin PRMMO1506-EN: Wheel alignment",
+    "https://www.moogparts.com/content/dam/marketing/emea/moog/pdf/technical-tips/lv/en/tt-wheel-alignment-en.pdf"
+   ],
+   [
+    "Importance of Alignment After Strut Replacement",
+    "https://www.monroe.com/technical-resources/tech-tips/importance-of-alignment-shock-strut-replacement.html"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Each of the following can point to a wheel alignment problem EXCEPT:",
+    "o": [
+     "The car drifts to one side on a straight road",
+     "The inner ribs of one front tire wear faster than the rest",
+     "The edges of the tread are feathered",
+     "Wear concentrated in the center ribs of the tread"
+    ],
+    "a": 3,
+    "why": "MOOG traces center wear to overinflation, while drift, one-sided rib wear (camber) and feathering (toe) are alignment signs.",
+    "src": [
+     "MOOG Easy Solutions Bulletin PRMMO1506-EN: Wheel alignment",
+     "https://www.moogparts.com/content/dam/marketing/emea/moog/pdf/technical-tips/lv/en/tt-wheel-alignment-en.pdf"
+    ]
+   },
+   {
+    "q": "A car wanders from side to side and needs constant steering correction. Technician A says looseness in the steering gear or the linkage sockets could cause this. Technician B says wander is always cured by an alignment alone. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "MOOG ties wander and constant correction to free play in the steering gear or linkage sockets, which are worn parts found by inspection, not by setting angles.",
+    "src": [
+     "Why Does My Steering Feel Loose?",
+     "https://www.moogparts.com/en-ca/parts-matter/why-does-my-steering-feel-loose.html"
+    ]
+   }
+  ]
+ },
+ "D43": {
+  "body": [
+   "Before an alignment, the car is inspected for loose or worn steering and suspension parts that would prevent a correct alignment; Hunter's aligner flags excessive total toe as a sign of such parts.",
+   "John Bean's pre-alignment checklist covers tire size, damage, wear, tread depth and pressure, rim condition, ride height against the maker's specification, and play in the steering and suspension.",
+   "Ride height matters because sagging springs change front toe and camber, and sagging rear springs hurt caster and camber, giving poor handling and tire wear.",
+   "Tire pressure is set before measuring, and Hunter says not to run the procedure on a car with uneven or out-of-round tires.",
+   "The car sits on a level lift with the wheels straight ahead and the turnplate and slip-plate pins in; targets are mounted on all four wheels and the car is rolled to compensate for runout of the wheel, adaptor and target.",
+   "For rolling compensation Hunter has the parking brake released, the transmission in neutral and the car pushed by the left rear tire, never by the front wheels; the aligner then recalls the maker's specifications by vehicle or VIN and saves the first readings as before measurements."
+  ],
+  "car": "Volvo's 2016 V60 manual says the brakes, front wheel alignment and steering gear should be checked only by a trained and qualified Volvo service technician; the tire pressures to set first are on the decal in the driver's door opening.",
+  "src": [
+   [
+    "WinAlign® Alignment Software Operation Manual, Version 16 (Hunter Engineering Form 3850-T)",
+    "https://www.hunter.com/globalassets/hunter/products/alignment-systems/winalign-standard/documents/align-winalign-ops-3850-t.pdf"
+   ],
+   [
+    "Make the Most of Your John Bean® Wheel Aligner with These Pro Tips",
+    "https://pages.diagnosticsmarketing.snapon.com/Equipment-Focus-Wheel-Alignment-Quick-Tips"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "On the first aligner reading, a car shows excessive total toe before any adjustment. This most likely indicates:",
+    "o": [
+     "Loose or worn steering or suspension parts",
+     "Correct ride height",
+     "An uncalibrated steering angle sensor only",
+     "Tire pressure set 1 psi high"
+    ],
+    "a": 0,
+    "why": "Hunter's manual says excessive total toe at the start is a good indication of loose or worn parts, which must be found before aligning.",
+    "src": [
+     "WinAlign® Alignment Software Operation Manual, Version 16 (Hunter Engineering Form 3850-T)",
+     "https://www.hunter.com/globalassets/hunter/products/alignment-systems/winalign-standard/documents/align-winalign-ops-3850-t.pdf"
+    ]
+   },
+   {
+    "q": "Which step is LEAST likely to be part of the pre-alignment preparation?",
+    "o": [
+     "Checking ride height against specification",
+     "Setting tire pressures",
+     "Checking for loose or worn suspension parts",
+     "Resetting the steering angle sensor"
+    ],
+    "a": 3,
+    "why": "Hunter prompts for the steering system reset only after all adjustments are made and checked; inspection, tire pressure and ride height come first.",
+    "src": [
+     "WinAlign® Alignment Software Operation Manual, Version 16 (Hunter Engineering Form 3850-T)",
+     "https://www.hunter.com/globalassets/hunter/products/alignment-systems/winalign-standard/documents/align-winalign-ops-3850-t.pdf"
+    ]
+   }
+  ]
+ },
+ "D44": {
+  "body": [
+   "Camber is the inward or outward tilt of the top of the wheel from vertical, seen from the front, measured in degrees: positive when the top leans outward, negative when it leans inward.",
+   "Hunter's adjustment order is rear camber, rear toe, front camber and caster, then front toe, each only where the car is adjustable.",
+   "Excessive camber wears the inner or outer ribs faster than the rest; MOOG's remedy is to align the wheels and check the shock absorbers, ball joints and control arm bushings.",
+   "Many late-model cars have little factory camber adjustment; MOOG's order is to follow the maker's procedure, then inspect and replace worn or damaged parts, and only then fit aftermarket adjusting parts such as adjustable ball joints, cam bolts or rear shims.",
+   "When an angle the maker says is non-adjustable reads out of specification, Hunter treats it as a sign of a suspension or steering problem to diagnose and repair.",
+   "New struts can change camber, so Monroe recommends an alignment whenever struts or other steering and suspension parts are replaced."
+  ],
+  "car": "Volvo's 2016 V60 owner's manual gives no alignment specifications or adjustment procedures; it only says correct front wheel alignment is very important for tire life and that the front wheel alignment should be checked by a trained and qualified Volvo service technician. Whether the V60's camber is adjustable is unconfirmed.",
+  "src": [
+   [
+    "WinAlign® Alignment Software Operation Manual, Version 16 (Hunter Engineering Form 3850-T)",
+    "https://www.hunter.com/globalassets/hunter/products/alignment-systems/winalign-standard/documents/align-winalign-ops-3850-t.pdf"
+   ],
+   [
+    "MOOG Easy Solutions Bulletin PRMMO1506-EN: Wheel alignment",
+    "https://www.moogparts.com/content/dam/marketing/emea/moog/pdf/technical-tips/lv/en/tt-wheel-alignment-en.pdf"
+   ],
+   [
+    "How to Adjust Camber and Caster on Non-Adjustable Vehicles",
+    "https://www.moogparts.com/technical/bulletins/tech-tips/How-to-Adjust-Camber-and-Caster-on-Non-Adjustable-Vehicles.html"
+   ],
+   [
+    "Alignment Camber Adjustment Bolt | MOOG Parts",
+    "https://www.moogparts.com/parts/suspension/alignment-parts/adjustment-cams-and-cam-bolts.html"
+   ],
+   [
+    "Front End Alignment & Camber Shims | MOOG Parts",
+    "https://www.moogparts.com/parts/suspension/alignment-parts/rear-contact-shims.html"
+   ],
+   [
+    "Importance of Alignment After Strut Replacement",
+    "https://www.monroe.com/technical-resources/tech-tips/importance-of-alignment-shock-strut-replacement.html"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Viewed from the front, the top of the left front wheel leans in toward the engine. This is:",
+    "o": [
+     "Positive camber",
+     "Negative camber",
+     "Positive caster",
+     "Toe-in"
+    ],
+    "a": 1,
+    "why": "Hunter defines camber as negative when the top of the wheel tilts inward and positive when it tilts outward.",
+    "src": [
+     "WinAlign® Alignment Software Operation Manual, Version 16 (Hunter Engineering Form 3850-T)",
+     "https://www.hunter.com/globalassets/hunter/products/alignment-systems/winalign-standard/documents/align-winalign-ops-3850-t.pdf"
+    ]
+   },
+   {
+    "q": "A car's front camber is out of specification and the maker provides no camber adjustment. Technician A says the angle can be ignored because it is not adjustable. Technician B says the steering and suspension should be inspected for worn or damaged parts before fitting an aftermarket adjusting part. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "MOOG says to inspect for and replace worn or damaged parts, realign, and only then use an adjustable part if the car is still out of specification.",
+    "src": [
+     "How to Adjust Camber and Caster on Non-Adjustable Vehicles",
+     "https://www.moogparts.com/technical/bulletins/tech-tips/How-to-Adjust-Camber-and-Caster-on-Non-Adjustable-Vehicles.html"
+    ]
+   }
+  ]
+ },
+ "D45": {
+  "body": [
+   "Caster is the forward or rearward tilt of the steering axis from vertical, seen from the side, measured in degrees: positive when the top of the steering axis leans rearward, negative when it leans forward.",
+   "The aligner measures caster by having the technician steer the front wheels left, then right, then back to straight ahead while it records; the standard procedure locks the brakes with a pedal depressor, and steering too fast causes a data error.",
+   "Total toe greater than 2 inches or 4 degrees should be corrected before the caster steer.",
+   "The same steer can measure steering axis inclination (the line through the upper and lower steering pivots against vertical, seen from the front) and included angle (SAI plus camber), which help find bent suspension or steering parts.",
+   "Wrong caster can make it hard to keep the car on a straight course and affects steering return and stability.",
+   "Where caster is adjustable by shims at the control-arm pivots, each shim change moves camber and caster together; many late-model cars have limited caster adjustment."
+  ],
+  "car": "Volvo's 2016 V60 owner's manual gives no alignment specifications or adjustment procedures; it only says correct front wheel alignment is very important for tire life and that the front wheel alignment should be checked by a trained and qualified Volvo service technician.",
+  "src": [
+   [
+    "WinAlign® Alignment Software Operation Manual, Version 16 (Hunter Engineering Form 3850-T)",
+    "https://www.hunter.com/globalassets/hunter/products/alignment-systems/winalign-standard/documents/align-winalign-ops-3850-t.pdf"
+   ],
+   [
+    "Importance of Alignment After Strut Replacement",
+    "https://www.monroe.com/technical-resources/tech-tips/importance-of-alignment-shock-strut-replacement.html"
+   ],
+   [
+    "How to Adjust Camber and Caster on Non-Adjustable Vehicles",
+    "https://www.moogparts.com/technical/bulletins/tech-tips/How-to-Adjust-Camber-and-Caster-on-Non-Adjustable-Vehicles.html"
+   ],
+   [
+    "Understanding Wheel Alignment: A guide for independent garages",
+    "https://pages.diagnosticsmarketing.snapon.com/2024-SOE-Essential-Guide-to-Wheel-Alignment-1"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Before the caster steer, the aligner shows front total toe of 5 degrees. The technician should FIRST:",
+    "o": [
+     "Proceed with the caster steer",
+     "Correct the toe before steering for caster",
+     "Reset the steering angle sensor",
+     "Raise the tire pressures"
+    ],
+    "a": 1,
+    "why": "Hunter's manual says total toe greater than 2 inches or 4 degrees should be corrected before steering caster.",
+    "src": [
+     "WinAlign® Alignment Software Operation Manual, Version 16 (Hunter Engineering Form 3850-T)",
+     "https://www.hunter.com/globalassets/hunter/products/alignment-systems/winalign-standard/documents/align-winalign-ops-3850-t.pdf"
+    ]
+   },
+   {
+    "q": "Incorrect caster is most likely to cause:",
+    "o": [
+     "Difficulty keeping the car on a straight course",
+     "Wear in the center of the tread only",
+     "A pulsating brake pedal",
+     "A tire pressure warning"
+    ],
+    "a": 0,
+    "why": "Monroe says incorrect caster can make it difficult to keep the vehicle on a straight course.",
+    "src": [
+     "Importance of Alignment After Strut Replacement",
+     "https://www.monroe.com/technical-resources/tech-tips/importance-of-alignment-shock-strut-replacement.html"
+    ]
+   }
+  ]
+ },
+ "D46": {
+  "body": [
+   "Toe is the direction a wheel points relative to the car's reference line, seen from above: toe-in when lines through the wheels meet ahead of the wheel, toe-out when they meet behind it. It is measured in degrees and may be shown in inches or millimeters.",
+   "Total toe is the angle between the two wheels on the same axle.",
+   "Front toe is the last adjustment, after rear camber, rear toe and front camber and caster.",
+   "On cars with a tie rod for each front wheel, toe is set side by side at the tie rods with the steering wheel held level; after each change the front is jounced, the adjuster locked, and the reading checked again.",
+   "Before locking, each ball-and-socket joint in the steering linkage should be able to rotate the same distance in either direction.",
+   "Wrong toe feathers the tread edges, and toe that is far off can wear tires quickly."
+  ],
+  "car": "Volvo's 2016 V60 owner's manual gives no alignment specifications or adjustment procedures; it only says correct front wheel alignment is very important for tire life and that the front wheel alignment should be checked by a trained and qualified Volvo service technician.",
+  "src": [
+   [
+    "WinAlign® Alignment Software Operation Manual, Version 16 (Hunter Engineering Form 3850-T)",
+    "https://www.hunter.com/globalassets/hunter/products/alignment-systems/winalign-standard/documents/align-winalign-ops-3850-t.pdf"
+   ],
+   [
+    "MOOG Easy Solutions Bulletin PRMMO1506-EN: Wheel alignment",
+    "https://www.moogparts.com/content/dam/marketing/emea/moog/pdf/technical-tips/lv/en/tt-wheel-alignment-en.pdf"
+   ],
+   [
+    "Importance of Alignment After Strut Replacement",
+    "https://www.monroe.com/technical-resources/tech-tips/importance-of-alignment-shock-strut-replacement.html"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Seen from above, lines drawn through the two front wheels meet ahead of the car. The wheels have:",
+    "o": [
+     "Toe-out",
+     "Toe-in",
+     "Negative camber",
+     "Positive caster"
+    ],
+    "a": 1,
+    "why": "Hunter defines toe-in as the lines through the wheels intersecting in front of the wheels.",
+    "src": [
+     "WinAlign® Alignment Software Operation Manual, Version 16 (Hunter Engineering Form 3850-T)",
+     "https://www.hunter.com/globalassets/hunter/products/alignment-systems/winalign-standard/documents/align-winalign-ops-3850-t.pdf"
+    ]
+   },
+   {
+    "q": "Both front tires show feathered tread edges. The most likely cause is:",
+    "o": [
+     "Incorrect toe",
+     "Overinflation",
+     "Worn shock absorbers",
+     "Incorrect caster"
+    ],
+    "a": 0,
+    "why": "MOOG names incorrect toe as the cause of feathering and says to correct the toe and check the front suspension bushings.",
+    "src": [
+     "MOOG Easy Solutions Bulletin PRMMO1506-EN: Wheel alignment",
+     "https://www.moogparts.com/content/dam/marketing/emea/moog/pdf/technical-tips/lv/en/tt-wheel-alignment-en.pdf"
+    ]
+   }
+  ]
+ },
+ "D47": {
+  "body": [
+   "John Bean notes that many technicians who skip its toe-guidance step end up with a crooked steering wheel after the alignment.",
+   "Hunter's method levels the wheel before toe adjustment: with the engine running on power steering cars, the technician rocks the steering wheel left and right in shrinking arcs so the gear sits at the middle of its lash and power steering valve travel.",
+   "The level position is marked with chalk on the column, the engine is switched off, and the technician gets out without touching the wheel.",
+   "The steering wheel is centered by setting each front wheel's toe separately at its tie rod relative to the leveled wheel; Hunter's WinToe does this without a steering wheel holder.",
+   "To verify, the wheels are steered straight ahead and the steering wheel must read level; if not, the toe procedure is repeated.",
+   "If the rear thrust line is not parallel to the geometric centerline, aligning the front to the centerline can still leave the wheel off center when driving straight; aligning the front to the thrust line avoids this."
+  ],
+  "car": "Volvo's 2016 V60 owner's manual gives no alignment specifications or adjustment procedures; it only says correct front wheel alignment is very important for tire life and that the front wheel alignment should be checked by a trained and qualified Volvo service technician.",
+  "src": [
+   [
+    "Make the Most of Your John Bean® Wheel Aligner with These Pro Tips",
+    "https://pages.diagnosticsmarketing.snapon.com/Equipment-Focus-Wheel-Alignment-Quick-Tips"
+   ],
+   [
+    "WinAlign® Alignment Software Operation Manual, Version 16 (Hunter Engineering Form 3850-T)",
+    "https://www.hunter.com/globalassets/hunter/products/alignment-systems/winalign-standard/documents/align-winalign-ops-3850-t.pdf"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "After a front-only alignment to the geometric centerline, the steering wheel is off center while the car drives straight. The most likely cause is:",
+    "o": [
+     "The rear thrust line is not parallel to the geometric centerline",
+     "Front camber is within specification",
+     "The tire pressures were set before measuring",
+     "The brake pedal depressor was used"
+    ],
+    "a": 0,
+    "why": "Hunter says that when the rear wheels create a thrust line not parallel to the geometric centerline, the steering wheel may not be centered as the car moves straight.",
+    "src": [
+     "WinAlign® Alignment Software Operation Manual, Version 16 (Hunter Engineering Form 3850-T)",
+     "https://www.hunter.com/globalassets/hunter/products/alignment-systems/winalign-standard/documents/align-winalign-ops-3850-t.pdf"
+    ]
+   },
+   {
+    "q": "Technician A says the steering wheel should be rocked in shrinking arcs before it is leveled so the steering gear sits mid-lash. Technician B says the steering wheel must be locked with a holder during Hunter's WinToe procedure. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Hunter describes the shrinking-arc leveling and states that locking the steering wheel is not necessary with WinToe.",
+    "src": [
+     "WinAlign® Alignment Software Operation Manual, Version 16 (Hunter Engineering Form 3850-T)",
+     "https://www.hunter.com/globalassets/hunter/products/alignment-systems/winalign-standard/documents/align-winalign-ops-3850-t.pdf"
+    ]
+   }
+  ]
+ },
+ "D48": {
+  "body": [
+   "Rear toe uses the same definition as front toe: the angle of each rear wheel to the car's reference line, seen from above.",
+   "The rear thrust line is the line that bisects the rear axle's total toe.",
+   "In a total four-wheel alignment, rear individual toe is measured and adjusted to the factory specification so the thrust line becomes parallel to the geometric centerline; the front wheels are then aligned to that thrust line.",
+   "Rear camber and rear toe are adjusted before any front angle.",
+   "On rear suspensions without factory adjustment, MOOG full-contact rear shims can set camber, toe, or both, to a tenth of a degree.",
+   "Rear slip plates must be used when adjusting rear toe or camber."
+  ],
+  "car": "Volvo's 2016 V60 owner's manual gives no alignment specifications or adjustment procedures; it only says correct front wheel alignment is very important for tire life and that the front wheel alignment should be checked by a trained and qualified Volvo service technician.",
+  "src": [
+   [
+    "WinAlign® Alignment Software Operation Manual, Version 16 (Hunter Engineering Form 3850-T)",
+    "https://www.hunter.com/globalassets/hunter/products/alignment-systems/winalign-standard/documents/align-winalign-ops-3850-t.pdf"
+   ],
+   [
+    "Front End Alignment & Camber Shims | MOOG Parts",
+    "https://www.moogparts.com/parts/suspension/alignment-parts/rear-contact-shims.html"
+   ],
+   [
+    "Make the Most of Your John Bean® Wheel Aligner with These Pro Tips",
+    "https://pages.diagnosticsmarketing.snapon.com/Equipment-Focus-Wheel-Alignment-Quick-Tips"
+   ],
+   [
+    "Handling Problems : Symptom Poor Alignment | Michelin USA",
+    "https://www.michelinman.com/auto/auto-tips-and-advice/tire-damage/handling-problems/symptom-poor-alignment"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "In a total four-wheel alignment, adjusting rear toe to specification results in:",
+    "o": [
+     "A thrust line parallel to the geometric centerline",
+     "Zero front camber",
+     "Equal caster side to side",
+     "A reset steering angle sensor"
+    ],
+    "a": 0,
+    "why": "Hunter says correctly adjusted rear toe makes the rear thrust line parallel to the geometric centerline.",
+    "src": [
+     "WinAlign® Alignment Software Operation Manual, Version 16 (Hunter Engineering Form 3850-T)",
+     "https://www.hunter.com/globalassets/hunter/products/alignment-systems/winalign-standard/documents/align-winalign-ops-3850-t.pdf"
+    ]
+   },
+   {
+    "q": "Technician A says rear toe is adjusted before front toe. Technician B says a thrust line alignment adjusts rear toe to specification. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Hunter's order puts rear toe before front toe, and in a thrust line alignment rear toe is measured but not adjusted.",
+    "src": [
+     "WinAlign® Alignment Software Operation Manual, Version 16 (Hunter Engineering Form 3850-T)",
+     "https://www.hunter.com/globalassets/hunter/products/alignment-systems/winalign-standard/documents/align-winalign-ops-3850-t.pdf"
+    ]
+   }
+  ]
+ },
+ "D49": {
+  "body": [
+   "The geometric centerline is a line through the midpoints of the front and rear axles; the thrust line is the bisector of the rear axle's total toe.",
+   "Thrust angle is the angle between the geometric centerline and the thrust line, measured and displayed in degrees.",
+   "Hunter names three alignment types: geometric centerline (front toe set to the centerline), thrust line (rear toe measured, front aligned to the thrust line), and total four-wheel (rear toe adjusted, then front aligned to the thrust line).",
+   "Thrust line and total four-wheel alignments give a straight steering wheel; only total four-wheel alignment corrects dog-tracking.",
+   "A rear subframe (cradle) out of position can change rear camber, toe and thrust angle, causing dog-tracking and early tire wear."
+  ],
+  "car": "Volvo's 2016 V60 owner's manual gives no alignment specifications or adjustment procedures; it only says correct front wheel alignment is very important for tire life and that the front wheel alignment should be checked by a trained and qualified Volvo service technician.",
+  "src": [
+   [
+    "WinAlign® Alignment Software Operation Manual, Version 16 (Hunter Engineering Form 3850-T)",
+    "https://www.hunter.com/globalassets/hunter/products/alignment-systems/winalign-standard/documents/align-winalign-ops-3850-t.pdf"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Thrust angle is the angle between:",
+    "o": [
+     "The geometric centerline and the thrust line",
+     "The steering axis and vertical, seen from the side",
+     "The two front wheels on the same axle",
+     "The wheel and vertical, seen from the front"
+    ],
+    "a": 0,
+    "why": "Hunter defines thrust angle as the angle formed by the geometric centerline and the thrust line of an axle.",
+    "src": [
+     "WinAlign® Alignment Software Operation Manual, Version 16 (Hunter Engineering Form 3850-T)",
+     "https://www.hunter.com/globalassets/hunter/products/alignment-systems/winalign-standard/documents/align-winalign-ops-3850-t.pdf"
+    ]
+   },
+   {
+    "q": "A car dog-tracks down the road. Which alignment type can correct this?",
+    "o": [
+     "Geometric centerline alignment",
+     "Thrust line alignment",
+     "Total four-wheel alignment",
+     "Front toe only"
+    ],
+    "a": 2,
+    "why": "Hunter says total four-wheel alignment corrects a dog-tracking condition because rear toe is adjusted to make the thrust line parallel to the centerline.",
+    "src": [
+     "WinAlign® Alignment Software Operation Manual, Version 16 (Hunter Engineering Form 3850-T)",
+     "https://www.hunter.com/globalassets/hunter/products/alignment-systems/winalign-standard/documents/align-winalign-ops-3850-t.pdf"
+    ]
+   }
+  ]
+ },
+ "D50": {
+  "body": [
+   "The steering angle sensor reports the driver's steering input to the car's computers; according to Hunter, every vehicle built for the US market since 2012 has one.",
+   "After an alignment the sensor's position is unknown, so many makers require a steering system reset as part of the alignment.",
+   "Electronic stability control uses steering input together with lateral force, yaw rate and wheel speed; lane keeping and blind spot systems also use it.",
+   "The reset comes after all mechanical adjustments are made and checked: a scan tool on the OBD-II port runs the maker's procedure and sets the sensor to the new thrust line, and some cars also need torque angle or yaw rate sensors reset.",
+   "Hunter's software stresses following the on-screen reset instructions precisely and in order; codes in the related systems are read and cleared, and a post-scan and printout record the work."
+  ],
+  "car": "Volvo's 2016 V60 manual describes Electronic Stability Control (with Active Yaw Control) and Lane Keeping Aid but gives no steering angle sensor reset procedure; whether this car needs a reset after alignment is unconfirmed.",
+  "src": [
+   [
+    "Performing a Steering Angle Sensor Reset | Hunter Engineering Company®",
+    "https://hunter.com/media-center/industry-insight/steering-angle-sensor-reset"
+   ],
+   [
+    "WinAlign® Alignment Software Operation Manual, Version 16 (Hunter Engineering Form 3850-T)",
+    "https://www.hunter.com/globalassets/hunter/products/alignment-systems/winalign-standard/documents/align-winalign-ops-3850-t.pdf"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Why do many makers require a steering angle sensor reset after a wheel alignment?",
+    "o": [
+     "The sensor's position is unknown after the alignment",
+     "The sensor wears out with every alignment",
+     "Tire pressures change during alignment",
+     "The battery must be disconnected for alignment"
+    ],
+    "a": 0,
+    "why": "Hunter states that after a wheel alignment the position of the steering angle sensor is unknown, so a reset is required by many makers.",
+    "src": [
+     "Performing a Steering Angle Sensor Reset | Hunter Engineering Company®",
+     "https://hunter.com/media-center/industry-insight/steering-angle-sensor-reset"
+    ]
+   },
+   {
+    "q": "Technician A says the steering angle sensor is reset after all mechanical alignment adjustments are finished. Technician B says some vehicles also need related sensors, such as yaw rate, reset. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Hunter says the reset is prompted once mechanical adjustments are complete, and that some vehicles also require torque angle or yaw rate sensor resets.",
+    "src": [
+     "Performing a Steering Angle Sensor Reset | Hunter Engineering Company®",
+     "https://hunter.com/media-center/industry-insight/steering-angle-sensor-reset"
+    ]
+   }
+  ]
+ },
  "D51": {
   "body": [
    "Reading a wear pattern means looking at how the tread has worn across its width and around the tire, then matching the shape to a cause before fitting a new tire, because a replacement on the same uncorrected cause wears the same way.",
