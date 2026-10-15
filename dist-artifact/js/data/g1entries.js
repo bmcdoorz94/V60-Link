@@ -3492,6 +3492,410 @@ window.V60_G1_ENTRIES = {
    }
   ]
  },
+ "E1": {
+  "body": [
+   "Brake complaint diagnosis starts by placing the driver's report into one symptom: low or spongy pedal, high pedal effort, pulling, grabbing, dragging, noise or vibration.",
+   "Bendix lists air in the hydraulic system, low master cylinder fluid and contaminated fluid among the causes of a low or spongy pedal, and worn or glazed pads, frozen calipers and booster failure among the causes of high pedal effort.",
+   "A pull to one side under braking points to contaminated or mismatched pads, a seized caliper or a collapsed brake hose; dragging brakes can come from a blocked master cylinder bypass port or a sticking wheel cylinder.",
+   "A high-pitched squeal or grind usually means worn pads, often the metal wear tab touching the rotor; pulsation through the pedal sends the technician to the rotors first, then to uneven pad wear.",
+   "Volvo notes that a pedal that travels farther than normal and needs more foot pressure means a longer stopping distance, and a warning light comes on for the fault."
+  ],
+  "car": "Volvo's manual says the V60 has two separate hydraulic brake circuits, so the car can still stop on one if the other fails. Water from rain, slush or a car wash can delay braking until light pedal applications dry the discs and pads.",
+  "src": [
+   [
+    "Brake Problems | Bendix Brakes",
+    "https://www.bendix.com.au/faqs/brake-problems"
+   ],
+   [
+    "Spotting Brake System Failures | Bendix Brakes",
+    "https://www.bendix.com.au/news-events/spotting-brake-system-failures"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A car pulls to one side only when the brakes are applied. Which is the most likely cause?",
+    "o": [
+     "Air in the hydraulic system",
+     "A seized caliper",
+     "Low fluid in the master cylinder",
+     "A failed brake booster"
+    ],
+    "a": 1,
+    "why": "Bendix lists a seized caliper and contaminated or mismatched pads as causes of brake pull. Air and low fluid give a low pedal, and booster failure gives high pedal effort.",
+    "src": [
+     "Brake Problems | Bendix Brakes",
+     "https://www.bendix.com.au/faqs/brake-problems"
+    ]
+   },
+   {
+    "q": "A customer reports a spongy brake pedal. Technician A says air in the hydraulic system could cause it. Technician B says worn, glazed pads are the most likely cause. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Bendix links a low or spongy pedal to air in the system, low fluid or contaminated fluid. Worn or glazed pads are listed under high pedal effort, not a spongy pedal.",
+    "src": [
+     "Brake Problems | Bendix Brakes",
+     "https://www.bendix.com.au/faqs/brake-problems"
+    ]
+   }
+  ]
+ },
+ "E2": {
+  "body": [
+   "The master cylinder reservoir is checked for fluid level, fluid condition and signs of leakage at the reservoir, its cap and the master cylinder body.",
+   "FMVSS 135 requires a separate reservoir compartment for each brake subsystem, so a leak from one compartment cannot drain the other, and the level must be checkable without opening the reservoir.",
+   "The same standard requires a permanent label within 100 mm of the filler cap that begins 'WARNING: Clean filler cap before removing' and names the correct fluid type.",
+   "Brembo says dark or cloudy fluid carries impurities and should be replaced; ATE recommends testing the fluid's boiling point and replacing it when the reading is below 180 °C.",
+   "A low level can mean a leak, so the lines and fittings are inspected next; Cardone also says to check the master cylinder for leaking fluid before fitting a new brake booster."
+  ],
+  "car": "The V60's reservoir sits under a round cover at the rear of the engine compartment; Volvo says to check that the level is between MIN and MAX without removing the cap, and not to drive if it is below MIN. Volvo specifies DOT 4 fluid with a boiling point above 536 °F (280 °C).",
+  "src": [
+   [
+    "49 CFR 571.135 -- Standard No. 135; Light vehicle brake systems.",
+    "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-V/part-571/subpart-B/section-571.135"
+   ],
+   [
+    "Which brake fluid do I need for my car?",
+    "https://www.bremboparts.com/america/en/support/car/how-to-choose-the-right-product/which-is-the-right-brake-fluid-for-my-car-195105"
+   ],
+   [
+    "Brake fluids from ATE – The safe solution for every brake system",
+    "https://www.ate-brakes.com/media/2310/download_broschuere_bremsfluessigkeit_en.pdf"
+   ],
+   [
+    "Spotting Brake System Failures | Bendix Brakes",
+    "https://www.bendix.com.au/news-events/spotting-brake-system-failures"
+   ],
+   [
+    "Power Brake Boosters (Cardone 931199-53)",
+    "https://www.cardone.com/content/Products/931199-53%20Power%20Brake%20Boosters%20Digital%20English.pdf"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "On a 2016 V60, the brake fluid is below the MIN mark and a brake message is shown in the display. According to Volvo, what is the correct action?",
+    "o": [
+     "Top up to MAX and drive normally",
+     "Do not drive; have the car towed and the brakes inspected",
+     "Drive slowly to the nearest workshop",
+     "Pump the pedal until the message clears"
+    ],
+    "a": 1,
+    "why": "Volvo's manual says that if the level is below MIN or a brake message is shown, the car must not be driven and should be towed to a Volvo technician for inspection.",
+    "src": [
+     "Volvo 2016 V60 US Owner's Manual (TP20238)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   },
+   {
+    "q": "A boiling-point tester reads 165 °C on a sample from the reservoir. Following ATE's guidance, what should be done?",
+    "o": [
+     "Nothing; the fluid is acceptable",
+     "Replace the brake fluid",
+     "Add fresh fluid on top to raise the boiling point",
+     "Bleed only the front calipers"
+    ],
+    "a": 1,
+    "why": "ATE recommends replacing brake fluid when the measured boiling point is below 180 °C.",
+    "src": [
+     "Brake fluids from ATE – The safe solution for every brake system",
+     "https://www.ate-brakes.com/media/2310/download_broschuere_bremsfluessigkeit_en.pdf"
+    ]
+   }
+  ]
+ },
+ "E3": {
+  "body": [
+   "Flexible hoses carry fluid from the fixed brake lines to the calipers; they must flex with the steering and suspension without swelling under pressure.",
+   "Bendix lists cracks of any size, bubbles or bulges, leaks or stains, and corroded fittings as reasons to replace a hose; most vehicle makers set no replacement interval.",
+   "Hoses are checked by eye and by feel, and a helper pumping the pedal shows whether a hose balloons under pressure.",
+   "Lines and fittings are checked for leaks and damage; a collapsed hose can cause a pull to one side, and kinked or clogged lines and hoses can make the brakes grab.",
+   "Under DOT rules and SAE J1401, a hose must hold 4,000 psi of water pressure for two minutes, and its end fitting must show no base-metal corrosion after 24 hours of salt spray."
+  ],
+  "car": null,
+  "src": [
+   [
+    "Brake hoses are a small component with a big job says Bendix | Bendix Brakes",
+    "https://www.bendix.com.au/news-events/brake-hoses-are-a-small-component-with-a-big-job-says-bendix"
+   ],
+   [
+    "Spotting Brake System Failures | Bendix Brakes",
+    "https://www.bendix.com.au/news-events/spotting-brake-system-failures"
+   ],
+   [
+    "Brake Problems | Bendix Brakes",
+    "https://www.bendix.com.au/faqs/brake-problems"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "While a helper pumps the brake pedal, a front brake hose visibly swells. What is the correct action?",
+    "o": [
+     "Replace the hose",
+     "Bleed the brakes",
+     "Tighten the hose fitting",
+     "No action; hoses are meant to expand under pressure"
+    ],
+    "a": 0,
+    "why": "Bendix says a hose should not change shape under braking pressure, and bubbles or other deformities mean it must be replaced.",
+    "src": [
+     "Brake hoses are a small component with a big job says Bendix | Bendix Brakes",
+     "https://www.bendix.com.au/news-events/brake-hoses-are-a-small-component-with-a-big-job-says-bendix"
+    ]
+   },
+   {
+    "q": "Technician A says most vehicle makers set a fixed replacement interval for brake hoses. Technician B says corrosion on a hose end fitting is a reason to replace the hose. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "Bendix says most makers have no set hose replacement schedule, and lists corroded fittings among the flaws that call for replacement.",
+    "src": [
+     "Brake hoses are a small component with a big job says Bendix | Bendix Brakes",
+     "https://www.bendix.com.au/news-events/brake-hoses-are-a-small-component-with-a-big-job-says-bendix"
+    ]
+   }
+  ]
+ },
+ "E4": {
+  "body": [
+   "FMVSS 135 requires a brake warning indicator that lights for low fluid in any reservoir compartment, a gross loss of fluid pressure, an electrical failure in the ABS, or an applied parking brake.",
+   "The lamps are tested at key-on: each indicator must light as a function check when the ignition is turned on with the engine off, and must stay lit for as long as its fault exists.",
+   "The standard calls for red on the main brake warning and yellow on the ABS warning, labelled 'Brake' and 'ABS' (or 'Antilock'/'Anti-lock').",
+   "Volvo says that when the ABS lamp lights, the normal brakes still work; the check is to stop, switch off, restart, and have the car inspected if the lamp stays on.",
+   "The ABS circuits are fused; the 2016 V60 engine-compartment fuse box has ABS pump (40 A), ABS valves (20 A) and ABS (5 A) fuses."
+  ],
+  "car": "On the 2016 V60 all warning symbols light in ignition mode II or at start and should go out once the engine runs, except the parking brake symbol. If the red brake and yellow ABS symbols light together, Volvo says brake force distribution may be at fault.",
+  "src": [
+   [
+    "49 CFR 571.135 -- Standard No. 135; Light vehicle brake systems.",
+    "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-V/part-571/subpart-B/section-571.135"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Under FMVSS 135, the brake warning indicator must light for all of these conditions EXCEPT:",
+    "o": [
+     "Fluid in a reservoir compartment below the safe level",
+     "An electrical failure in the antilock system",
+     "Application of the parking brake",
+     "Worn pads on a vehicle with no electrical lining-wear warning"
+    ],
+    "a": 3,
+    "why": "FMVSS 135 requires the indicator for low reservoir fluid, ABS electrical failure and parking brake application; lining wear is covered only where the maker uses an electrical wear warning device.",
+    "src": [
+     "49 CFR 571.135 -- Standard No. 135; Light vehicle brake systems.",
+     "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-V/part-571/subpart-B/section-571.135"
+    ]
+   },
+   {
+    "q": "On a 2016 V60, the red brake and yellow ABS symbols come on together. After a restart both stay lit, but the brake fluid level is normal. According to Volvo, what is correct?",
+    "o": [
+     "Do not drive; tow the car",
+     "The car can be driven with great care to a Volvo workshop",
+     "This is a normal self-test; ignore it",
+     "Top up the fluid above MAX"
+    ],
+    "a": 1,
+    "why": "Volvo's manual says that if the fluid level is normal but both symbols stay lit, the car can be driven with great care to an authorized Volvo workshop for a brake check.",
+    "src": [
+     "Volvo 2016 V60 US Owner's Manual (TP20238)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   }
+  ]
+ },
+ "E5": {
+  "body": [
+   "The parking brake lamp tells the driver the parking brake is applied; FMVSS 135 requires the brake warning indicator to light whenever the parking brake is applied with the ignition on.",
+   "The standard allows the parking brake indicator to be checked by applying the parking brake with the ignition on, and allows it to read 'Park' or 'Parking Brake'.",
+   "The lamp test is to switch the ignition on, apply the parking brake and confirm the lamp lights, then release it and confirm the lamp goes out.",
+   "FMVSS 135 also requires a friction parking brake that stays engaged by purely mechanical means.",
+   "No sourced procedure for testing the switch or its wiring was found yet."
+  ],
+  "car": "The 2016 V60 has an electric parking brake: its symbol flashes while it applies and glows steadily once set, and a flashing symbol at any other time means a fault. Volvo lists the messages 'Park brake not fully released', 'Parking brake not applied' and 'Parking brake Service required', and notes the brake cannot be applied or released if the battery voltage is too low.",
+  "src": [
+   [
+    "49 CFR 571.135 -- Standard No. 135; Light vehicle brake systems.",
+    "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-V/part-571/subpart-B/section-571.135"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "On a parked 2016 V60, the parking brake symbol is flashing although no one is applying the parking brake. What does this most likely mean?",
+    "o": [
+     "A fault in the parking brake system",
+     "The parking brake is being applied normally",
+     "The bulb check is running",
+     "The brake fluid is due for replacement"
+    ],
+    "a": 0,
+    "why": "Volvo's manual says the symbol flashes while the brake is being applied; a flashing symbol in any other situation means a fault, and the display message should be read.",
+    "src": [
+     "Volvo 2016 V60 US Owner's Manual (TP20238)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   },
+   {
+    "q": "Technician A says FMVSS 135 allows the parking brake indicator to be checked by applying the parking brake with the ignition on. Technician B says the standard allows a parking brake that is held engaged only by hydraulic pressure. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "FMVSS 135 lets the parking brake indicator be checked by applying the parking brake with the ignition on, and requires the parking brake to stay engaged by solely mechanical means.",
+    "src": [
+     "49 CFR 571.135 -- Standard No. 135; Light vehicle brake systems.",
+     "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-V/part-571/subpart-B/section-571.135"
+    ]
+   }
+  ]
+ },
+ "E6": {
+  "body": [
+   "Bleeding removes air from the hydraulic system; flushing replaces the old fluid with new fluid through the same bleeder valves.",
+   "Bendix's procedure starts at the rear wheel farthest from the master cylinder: a hose goes on the bleeder valve, the valve is opened, and fluid is drawn through until the bubbles stop and clean, lighter fluid runs; the valve is then closed and the next wheel done.",
+   "The reservoir level drops during the job and is topped up to the fill line between wheels.",
+   "Pressure bleeders feed fluid in from the reservoir end; ATE's FB 5e offers 1.0 and 2.0 bar settings, which ATE says match leading carmakers' requirements, and uses a pulsing flow to help flush electronic brake systems.",
+   "After all four wheels the pedal may have extra travel and the ABS lamp may light; Bendix says to pump the pedal until it is firm, cycle the ignition so the lamp goes out, then road test."
+  ],
+  "car": "Volvo's manual says brake fluid changes on the V60 should be done by a trained Volvo technician, lists the brake fluid volume as 0.63 US qts (0.6 liters), and says hard driving such as mountain use may call for more frequent changes. The change interval is in Volvo's Warranty and Service Records Information booklet and is unconfirmed here.",
+  "src": [
+   [
+    "Bendix's tips for brake fluid change and bleeding using a brake bleeder kit | Bendix Brakes",
+    "https://www.bendix.com.au/news-events/bendixs-tips-for-brake-fluid-change-and-bleeding-using-a-brake-bleeder-kit"
+   ],
+   [
+    "Brake service equipment and tools WK 2019 (ATE)",
+    "https://www.ate-brakes.com/media/3523/ate-wk2019_en.pdf"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Following Bendix's bleeding procedure with a bleeder kit, which wheel is bled first?",
+    "o": [
+     "The left front",
+     "The rear wheel farthest from the master cylinder",
+     "The wheel closest to the master cylinder",
+     "Any wheel; the order does not matter"
+    ],
+    "a": 1,
+    "why": "Bendix's procedure begins at the rear wheel farthest from the master cylinder and then works through the other wheels.",
+    "src": [
+     "Bendix's tips for brake fluid change and bleeding using a brake bleeder kit | Bendix Brakes",
+     "https://www.bendix.com.au/news-events/bendixs-tips-for-brake-fluid-change-and-bleeding-using-a-brake-bleeder-kit"
+    ]
+   },
+   {
+    "q": "After all four wheels are bled, the pedal has extra travel and the ABS lamp is on. Technician A says to pump the pedal until it firms up, then cycle the ignition. Technician B says the ABS control unit must be replaced. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Bendix says extra pedal travel and an ABS lamp can follow bleeding; pumping the pedal firms it up, and the lamp should go out after the ignition is turned off and on.",
+    "src": [
+     "Bendix's tips for brake fluid change and bleeding using a brake bleeder kit | Bendix Brakes",
+     "https://www.bendix.com.au/news-events/bendixs-tips-for-brake-fluid-change-and-bleeding-using-a-brake-bleeder-kit"
+    ]
+   }
+  ]
+ },
+ "E7": {
+  "body": [
+   "FMVSS 116 sets minimum dry and wet boiling points: DOT 3 205 °C (401 °F) and 140 °C (284 °F); DOT 4 230 °C (446 °F) and 155 °C (311 °F); DOT 5 grade, which covers silicone DOT 5 and non-silicone DOT 5.1, 260 °C (500 °F) and 180 °C (356 °F).",
+   "DOT 3, DOT 4 and DOT 5.1 are colorless to amber; silicone DOT 5 is purple; hydraulic system mineral oil is green and is not compatible with the rubber parts of brake systems built for DOT fluids.",
+   "Glycol brake fluids are hygroscopic: they absorb water over time, the boiling point falls, and under hard braking vapor bubbles can form and the pedal can drop to the floor.",
+   "Every container must warn to follow the vehicle maker's recommendations, keep the fluid clean and dry, store it only in its original tightly closed container, and never refill the container or use it for other liquids.",
+   "Brembo warns that switching to a lower DOT grade than the vehicle maker specifies is dangerous, while moving from DOT 3 to DOT 4 is acceptable."
+  ],
+  "car": "Volvo specifies DOT 4 with a boiling point above 536 °F (280 °C) for the V60, well above the FMVSS 116 minimum of 230 °C (446 °F) for DOT 4, and says DOT 4 should never be mixed with any other type of brake fluid. Continental calls its ATE DOT 5.1 compatible with DOT 3 and DOT 4 but advises against mixing; for this car, Volvo's no-mixing rule applies.",
+  "src": [
+   [
+    "49 CFR 571.116 -- Standard No. 116; Motor vehicle brake fluids.",
+    "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-V/part-571/subpart-B/section-571.116"
+   ],
+   [
+    "Brake fluids from ATE – The safe solution for every brake system",
+    "https://www.ate-brakes.com/media/2310/download_broschuere_bremsfluessigkeit_en.pdf"
+   ],
+   [
+    "Which brake fluid do I need for my car?",
+    "https://www.bremboparts.com/america/en/support/car/how-to-choose-the-right-product/which-is-the-right-brake-fluid-for-my-car-195105"
+   ],
+   [
+    "Replacing brake fluid: What you should know",
+    "https://www.continental-aftermarket.com/en-en/magazine/technology-products/replacing-brake-fluid-what-you-should-know"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A container of brake fluid is purple. It is most likely:",
+    "o": [
+     "DOT 3",
+     "DOT 4",
+     "DOT 5 silicone base",
+     "DOT 5.1 non-silicone base"
+    ],
+    "a": 2,
+    "why": "FMVSS 116 requires silicone-base DOT 5 fluid to be purple; DOT 3, DOT 4 and DOT 5.1 are colorless to amber.",
+    "src": [
+     "49 CFR 571.116 -- Standard No. 116; Motor vehicle brake fluids.",
+     "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-V/part-571/subpart-B/section-571.116"
+    ]
+   },
+   {
+    "q": "Technician A says DOT 4 must have a higher minimum wet boiling point than DOT 3. Technician B says brake fluid may be stored in any clean container that seals. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "FMVSS 116 sets the minimum wet boiling point at 155 °C for DOT 4 and 140 °C for DOT 3, and requires containers to warn that fluid be stored only in its original container.",
+    "src": [
+     "49 CFR 571.116 -- Standard No. 116; Motor vehicle brake fluids.",
+     "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-V/part-571/subpart-B/section-571.116"
+    ]
+   }
+  ]
+ },
  "E8": {
   "body": [
    "This task covers removing a brake drum, cleaning off the brake dust safely, checking the drum for damage and measuring its inside diameter to decide whether it can be reused, machined or must be replaced.",
@@ -4954,6 +5358,289 @@ window.V60_G1_ENTRIES = {
     "src": [
      "How to replace brake pad. Brake pad assembly instruction",
      "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-disassembly-and-installation-of-brake-pads-for-car-commercial-vehicles-280496"
+    ]
+   }
+  ]
+ },
+ "E30": {
+  "body": [
+   "This task compares pedal travel and feel with the engine off and with it running, to confirm the power booster is adding assist.",
+   "Cardone's test: with the engine off, pump the pedal 5 times to use up stored vacuum, hold moderate pressure, then start the engine; the pedal should drop about 1 inch.",
+   "If the vacuum supply is adequate and the pedal stays hard when the engine starts, the booster may have an internal fault.",
+   "Without engine power the assist is gone, so the pedal feels harder and needs much more force; Volvo warns against letting the car roll to a stop with the engine off.",
+   "After a booster replacement, Cardone calls for adjusting pedal free play or the brake light switch if needed."
+  ],
+  "car": "Volvo's manual says the V60's power brakes use vacuum created only while the engine runs, and that after the car has been parked for some time the pedal may sink more than usual at start-up, which is normal. The pedal also moves slightly when the electric parking brake applies or releases.",
+  "src": [
+   [
+    "Diagnosing a Vacuum Brake Booster (Cardone ProTech PT54-0006)",
+    "https://www.cardone.com/content/Products/PT54-0006.pdf"
+   ],
+   [
+    "Power Brake Boosters (Cardone 931199-53)",
+    "https://www.cardone.com/content/Products/931199-53%20Power%20Brake%20Boosters%20Digital%20English.pdf"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "With the engine off, the pedal is pumped five times and held. When the engine starts the pedal does not move, and the vacuum supply tests normal. What is the most likely cause?",
+    "o": [
+     "An internal booster fault",
+     "Air in the hydraulic system",
+     "Worn rear pads",
+     "A faulty brake light switch"
+    ],
+    "a": 0,
+    "why": "Cardone says the pedal should fall about 1 inch when the engine starts; if vacuum supply is adequate and the pedal stays hard, the booster may have an internal problem.",
+    "src": [
+     "Diagnosing a Vacuum Brake Booster (Cardone ProTech PT54-0006)",
+     "https://www.cardone.com/content/Products/PT54-0006.pdf"
+    ]
+   },
+   {
+    "q": "A 2016 V60 is rolling with its engine switched off. Compared with normal driving, the brake pedal will most likely:",
+    "o": [
+     "Feel harder and need more pressure",
+     "Sink to the floor",
+     "Feel the same",
+     "Pulsate from ABS activity"
+    ],
+    "a": 0,
+    "why": "Volvo's manual says the power brakes rely on vacuum made only with the engine running; without it the pedal feels harder and needs considerably more pressure.",
+    "src": [
+     "Volvo 2016 V60 US Owner's Manual (TP20238)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   }
+  ]
+ },
+ "E31": {
+  "body": [
+   "A vacuum booster needs a steady vacuum supply, usually a hose from the intake manifold.",
+   "Cardone says boosters need 18-21 in. of vacuum, measured with a gauge in the booster supply line; a lower reading calls for engine diagnosis, since worn internal engine parts or a large camshaft can reduce vacuum.",
+   "Supply hoses age: they can turn brittle and crack, or go soft and collapse, cutting vacuum to the booster.",
+   "Engines whose intake manifold cannot make enough vacuum, such as direct-injection, turbocharged and variable-valve-timing engines, use a separate vacuum pump; MS Motorservice says these pumps produce about 0.7-0.9 bar of vacuum and are mostly vane pumps on the end of the camshaft.",
+   "ATE's pressure gauge unit reads vacuum from 0 to -1.0 bar and can test the vacuum system, including the brake booster, for leaks and correct operation."
+  ],
+  "car": "Volvo's manual says the V60's power brakes use vacuum created when the engine runs. Whether the B4204T11 turbo engine feeds the booster from the manifold or from a separate vacuum pump is unconfirmed.",
+  "src": [
+   [
+    "Diagnosing a Vacuum Brake Booster (Cardone ProTech PT54-0006)",
+    "https://www.cardone.com/content/Products/PT54-0006.pdf"
+   ],
+   [
+    "Vacuum pumps | MS Motorservice",
+    "https://www.ms-motorservice.com/tr/en/technipedia/vacuum-pumps-4"
+   ],
+   [
+    "Brake service equipment and tools WK 2019 (ATE)",
+    "https://www.ate-brakes.com/media/3523/ate-wk2019_en.pdf"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A vacuum gauge in the booster supply line reads well below 18 in. at idle. According to Cardone, what is the next step?",
+    "o": [
+     "Replace the booster",
+     "Diagnose the engine for the cause of low vacuum",
+     "Bleed the brakes",
+     "Replace the master cylinder"
+    ],
+    "a": 1,
+    "why": "Cardone says the reading at the booster supply line should be 18-21 in.; a lower reading calls for further engine diagnosis.",
+    "src": [
+     "Diagnosing a Vacuum Brake Booster (Cardone ProTech PT54-0006)",
+     "https://www.cardone.com/content/Products/PT54-0006.pdf"
+    ]
+   },
+   {
+    "q": "A separate vacuum pump may be fitted for the brake booster on all of these engines EXCEPT:",
+    "o": [
+     "Direct-injection engines",
+     "Turbocharged engines",
+     "Engines with variable valve timing",
+     "Engines whose intake manifold makes enough vacuum"
+    ],
+    "a": 3,
+    "why": "MS Motorservice says vacuum pumps are fitted where the intake manifold cannot produce enough vacuum, naming direct-injection, turbo and variable-valve-timing engines.",
+    "src": [
+     "Vacuum pumps | MS Motorservice",
+     "https://www.ms-motorservice.com/tr/en/technipedia/vacuum-pumps-4"
+    ]
+   }
+  ]
+ },
+ "E32": {
+  "body": [
+   "The vacuum booster multiplies the driver's pedal force and pushes on the master cylinder, working on the difference between engine vacuum and atmospheric pressure.",
+   "The booster has a one-way check valve; a faulty check valve can cause a hard pedal.",
+   "A constant hissing sound can point to a vacuum leak, and a cracked or torn vacuum hose often leads to a booster being wrongly blamed.",
+   "Operation test: with the engine off, pump the pedal several times and hold it down; when the engine starts, the pedal should drop slightly.",
+   "Before a booster is replaced, Cardone says to check the master cylinder for leaking fluid and replace it if it leaks, to protect the new booster."
+  ],
+  "car": "Volvo's manual describes the V60's power brakes as vacuum-assisted, working only while the engine runs.",
+  "src": [
+   [
+    "Diagnosing a Vacuum Brake Booster (Cardone ProTech PT54-0006)",
+    "https://www.cardone.com/content/Products/PT54-0006.pdf"
+   ],
+   [
+    "Power Brake Boosters (Cardone 931199-53)",
+    "https://www.cardone.com/content/Products/931199-53%20Power%20Brake%20Boosters%20Digital%20English.pdf"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A vacuum booster's one-way check valve has failed. Which symptom is most likely?",
+    "o": [
+     "A hard brake pedal",
+     "A pull to one side",
+     "Brake squeal",
+     "Pedal pulsation"
+    ],
+    "a": 0,
+    "why": "Cardone says vacuum boosters use a one-way check valve and that a faulty check valve can lead to a hard brake pedal.",
+    "src": [
+     "Diagnosing a Vacuum Brake Booster (Cardone ProTech PT54-0006)",
+     "https://www.cardone.com/content/Products/PT54-0006.pdf"
+    ]
+   },
+   {
+    "q": "Technician A says a constant hissing sound near the booster can indicate a vacuum leak. Technician B says a damaged booster vacuum hose can lead to a misdiagnosed booster. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Cardone lists a constant hissing sound as a sign of a possible vacuum leak and warns that a damaged vacuum hose often leads to misdiagnosis of the booster.",
+    "src": [
+     "Power Brake Boosters (Cardone 931199-53)",
+     "https://www.cardone.com/content/Products/931199-53%20Power%20Brake%20Boosters%20Digital%20English.pdf"
+    ]
+   }
+  ]
+ },
+ "E33": {
+  "body": [
+   "Electric-hydraulic assist replaces engine vacuum with an electric motor that builds brake pressure, so the vehicle needs no vacuum pump or vacuum booster.",
+   "In Bosch's Integrated Power Brake, sensors read the driver's pedal request, the brake circuits are separated from the pedal and a pedal-feel simulator takes its place, and an electric motor drives a hydraulic piston that sends pressure to the wheel brakes.",
+   "Bosch's iBooster uses a pedal travel sensor and an electric motor with a three-stage gear unit to push on a standard master cylinder; it runs above 9.8 V and gives up to 6.2 kN of assist.",
+   "No sourced leak-check procedure for electric-hydraulic units was found yet."
+  ],
+  "car": "Volvo's manual describes the V60's power brakes as using engine vacuum, not electric assist.",
+  "src": [
+   [
+    "Integrated power brake (Bosch Mobility)",
+    "https://www.bosch-mobility.com/en/solutions/driving-safety/integrated-power-brake/"
+   ],
+   [
+    "iBooster (Bosch Mobility)",
+    "https://www.bosch-mobility.com/en/solutions/driving-safety/ibooster/"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Which component is NOT needed on a vehicle fitted with Bosch's Integrated Power Brake?",
+    "o": [
+     "A vacuum brake booster",
+     "Wheel brakes",
+     "Brake fluid",
+     "An electric motor"
+    ],
+    "a": 0,
+    "why": "Bosch says the Integrated Power Brake removes the need for a vacuum pump, vacuum brake booster and separate ESP, while its motor still sends pressure through brake fluid to the wheel brakes.",
+    "src": [
+     "Integrated power brake (Bosch Mobility)",
+     "https://www.bosch-mobility.com/en/solutions/driving-safety/integrated-power-brake/"
+    ]
+   },
+   {
+    "q": "Technician A says Bosch's iBooster acts on a standard master cylinder. Technician B says the iBooster needs engine vacuum to build pressure. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Bosch describes the iBooster as a vacuum-independent electromechanical booster whose motor force becomes hydraulic pressure in a standard master brake cylinder.",
+    "src": [
+     "iBooster (Bosch Mobility)",
+     "https://www.bosch-mobility.com/en/solutions/driving-safety/ibooster/"
+    ]
+   }
+  ]
+ },
+ "E34": {
+  "body": [
+   "Hydro-boost uses pressure from the power steering pump, not engine vacuum, to assist the brakes.",
+   "Cardone's test: with the engine off, apply and release the pedal 5 to 10 times to empty the accumulator, then hold light pedal pressure and start the engine; the pedal should drop and then push back against the foot.",
+   "Accumulator check: with the engine running, turn the steering lightly against its stop for 5 seconds, return to straight ahead and switch off; at least one power-assisted brake application should remain.",
+   "Cardone lists a slipping belt, low pump pressure or a restriction for a hard pedal, contamination in the booster for a pedal that stays down, and a hydraulic brake fault for a long or no pedal.",
+   "For leaks and contamination, damaged hydraulic lines and rubber hoses more than 4 years old are replaced; pedal kickback, grabbing or hissing while braking can come from contaminated fluid, which a flush through an in-line filter may clear."
+  ],
+  "car": "Volvo's manual describes the V60's power brakes as vacuum-assisted, so hydro-boost does not apply to this car.",
+  "src": [
+   [
+    "Hydro-Boost Tips & Hints (Cardone ProTech PT52-0001)",
+    "https://www.cardone.com/content/Products/PT52-0001.pdf"
+   ],
+   [
+    "Hydro-Boost Flush Procedure (Cardone ProTech PT52-0002)",
+    "https://www.cardone.com/content/Products/PT52-0002.pdf"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "On a hydro-boost system, the brake pedal stays down after it is applied. What is the most likely cause?",
+    "o": [
+     "Contamination in the booster",
+     "A slipping drive belt",
+     "Low engine vacuum",
+     "Worn front pads"
+    ],
+    "a": 0,
+    "why": "Cardone lists contamination in the booster as the cause of a pedal that stays down; a slipping belt is listed for a hard pedal.",
+    "src": [
+     "Hydro-Boost Tips & Hints (Cardone ProTech PT52-0001)",
+     "https://www.cardone.com/content/Products/PT52-0001.pdf"
+    ]
+   },
+   {
+    "q": "Technician A says a hydro-boost accumulator should give at least one power-assisted application after the engine is switched off. Technician B says a slipping power steering belt can cause a hard brake pedal. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Cardone's accumulator test expects at least one power-assisted application with the engine off, and it lists a slipping belt among the causes of a hard pedal.",
+    "src": [
+     "Hydro-Boost Tips & Hints (Cardone ProTech PT52-0001)",
+     "https://www.cardone.com/content/Products/PT52-0001.pdf"
     ]
    }
   ]
