@@ -1499,6 +1499,845 @@ window.V60_G1_ENTRIES = {
    }
   ]
  },
+ "D28": {
+  "body": [
+   "This task covers tracing rear suspension noise, poor handling or wrong ride height to its cause, and making an air suspension safe before work.",
+   "Monroe's inspection starts with the history and a road test: harsh hits over potholes, bouncing or floating, dive, squat, roll or sway, abrupt bottoming or topping out, and odd suspension noises.",
+   "For a rear noise, Moog puts the car on a drive-on rack, has a helper push the rear up and down, and looks underneath for missing, worn or damaged parts.",
+   "Static ride height alone can mislead: Monroe notes a car can sit at an acceptable height yet bottom out when moving or loaded, usually from worn or damaged coil springs.",
+   "On an air suspension, the usual failure is one corner or axle that no longer holds pressure, so the car leans and rides harshly; leaks show as bubbles under soapy water or as hissing, and codes and system pressure are checked against the maker's figures.",
+   "No sourced procedure for switching an air suspension off before lifting the car was found yet."
+  ],
+  "car": "Volvo's Sept 2016 V60 spec sheet lists the rear as independent with coil springs, hydraulic shock absorbers and a stabilizer bar, and the 2016 owner's manual describes only an optional Four-C system that adjusts the shock absorbers; neither document describes an air suspension. The spec sheet is a European one, so the match to this US car is unconfirmed.",
+  "src": [
+   [
+    "Inspecting Shocks & Struts | Monroe Shocks & Struts",
+    "https://www.monroe.com/technical-resources/tech-tips/how-to-conduct-a-shock-strut-inspection.html"
+   ],
+   [
+    "How to Isolate Suspension Noises",
+    "https://www.moogparts.com/technical/bulletins/tech-tips/How-to-Isolate-Suspension-Noises.html"
+   ],
+   [
+    "Diagnosing Bad Coil Springs | Monroe Shocks & Struts",
+    "https://www.monroe.com/technical-resources/servicegrams/how-to-know-if-coil-springs-are-worn.html"
+   ],
+   [
+    "Signs of Bad Air Suspension | Monroe Shocks & Struts",
+    "https://www.monroe.com/technical-resources/shocks-101/what-is-an-air-suspension.html"
+   ],
+   [
+    "Air Suspension Problems | Monroe Shocks & Struts",
+    "https://www.monroe.com/technical-resources/tech-tips/diagnosing-common-air-suspension-problems.html"
+   ],
+   [
+    "Volvo V60 specifications, Sept 2016 (Volvo Cars press PDF)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ],
+   [
+    "Volvo V60 Owner's Manual MY16, TP 20238 (English - USA & Canada)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A car's rear ride height measures within specification while parked, but it bottoms out over dips when loaded. Which is the most likely cause?",
+    "o": [
+     "A worn wheel bearing",
+     "Worn or damaged coil springs",
+     "A loose outer tie rod end",
+     "Low brake fluid"
+    ],
+    "a": 1,
+    "why": "Monroe notes that a car with acceptable static ride height can still bottom out in motion or under load, and that worn or damaged coil springs are often the cause.",
+    "src": [
+     "Diagnosing Bad Coil Springs | Monroe Shocks & Struts",
+     "https://www.monroe.com/technical-resources/servicegrams/how-to-know-if-coil-springs-are-worn.html"
+    ]
+   },
+   {
+    "q": "An air-suspended car sags at one rear corner. Technician A says spraying soapy water on the air lines and springs will show a leak as bubbles. Technician B says a leak makes the compressor work harder to hold pressure. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Monroe lists soapy water and bubbles as the leak check, and says air leaks wear the compressor by making it work harder to keep pressure.",
+    "src": [
+     "Air Suspension Problems | Monroe Shocks & Struts",
+     "https://www.monroe.com/technical-resources/tech-tips/diagnosing-common-air-suspension-problems.html"
+    ]
+   }
+  ]
+ },
+ "D29": {
+  "body": [
+   "Coil springs carry the car's weight, compress to soak up bumps, and hold the ride height the maker set.",
+   "Monroe's signs of worn springs are worn, smashed or missing jounce bumpers, marks where a bumper has hit its stop, rust or corrosion, uneven spring ramp angles or kinks, and sagging, leaning or swaying, most of all when loaded.",
+   "Monroe says a 15% drop in ride height can make the car visibly sag and upset the alignment, and that left and right spring rates can differ, so replacements must match the original application.",
+   "Air springs use a flexible rubber or plastic bellows; cracks and tears from age, dirt and chemicals are the leading cause of failure, and one side sitting low points to the spring on that side.",
+   "The upper spring seat must go back in its original orientation, because it sets which way the spring bows; turned wrong, the spring can rub the inner fender."
+  ],
+  "car": "Volvo's Sept 2016 V60 spec sheet lists coil springs at the rear (independent suspension), not air springs.",
+  "src": [
+   [
+    "About Car Coil Springs | Monroe Shocks & Struts",
+    "https://www.monroe.com/technical-resources/tech-tips/What-Every-Technician-Needs-to-Know-About-Coil-Springs.html"
+   ],
+   [
+    "Diagnosing Bad Coil Springs | Monroe Shocks & Struts",
+    "https://www.monroe.com/technical-resources/servicegrams/how-to-know-if-coil-springs-are-worn.html"
+   ],
+   [
+    "Signs of Bad Air Springs | Monroe Shocks & Struts",
+    "https://www.monroe.com/technical-resources/tech-tips/diagnosing-air-spring-problems.html"
+   ],
+   [
+    "Shock & Strut Installation Tips | Monroe Shocks & Struts",
+    "https://www.monroe.com/technical-resources/tech-tips/troubleshooting-installation-issues.html"
+   ],
+   [
+    "Volvo V60 specifications, Sept 2016 (Volvo Cars press PDF)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "All of these are signs of a worn coil spring EXCEPT:",
+    "o": [
+     "Marks on the suspension stop where the jounce bumper hits",
+     "A kink or uneven ramp angle in the coils",
+     "A smashed jounce bumper",
+     "A grinding noise that gets louder when turning one way"
+    ],
+    "a": 3,
+    "why": "Monroe's list of worn-spring signs covers bumper marks, kinks or uneven ramp angles, smashed bumpers, rust and sagging; a turn-sensitive grinding noise is not on it.",
+    "src": [
+     "Diagnosing Bad Coil Springs | Monroe Shocks & Struts",
+     "https://www.monroe.com/technical-resources/servicegrams/how-to-know-if-coil-springs-are-worn.html"
+    ]
+   },
+   {
+    "q": "Technician A says cracks and tears in the bellows are the leading cause of air spring failure. Technician B says one side of the car sitting lower can point to a bad air spring on that side. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Monroe names wear, cracks and tears in the rubber bellows as the main cause of failure, and lists one low side as a sign of a bad spring on that side.",
+    "src": [
+     "Signs of Bad Air Springs | Monroe Shocks & Struts",
+     "https://www.monroe.com/technical-resources/tech-tips/diagnosing-air-spring-problems.html"
+    ]
+   }
+  ]
+ },
+ "D30": {
+  "body": [
+   "This task covers checking the arms and links that locate each rear wheel, with their bushings and mounting points.",
+   "Moog describes a control arm as a body, a ball joint and a bushing: the bushing mounts it to the frame and the ball joint to the wheel, and an independent rear suspension uses a similar layout.",
+   "Arms are damaged by potholes, curbs and road salt; signs are a clunk over bumps (often the bushing knocking), wandering or pulling, wear on the inner or outer tread edge, vibration and a rougher ride.",
+   "For a rear noise, Moog has a helper push the rear up and down on a drive-on rack while the technician looks for missing, worn or damaged parts.",
+   "Rubber bushings must be tightened with the suspension at ride height; tightened with the wheels hanging, they twist too far and wear out early.",
+   "On a track bar with a ball joint, Moog's check is to disconnect the bar and swing the stud: it should move smoothly, and catching, binding or a sudden release means replacement."
+  ],
+  "car": "Volvo's Sept 2016 V60 spec sheet lists an independent rear suspension with coil springs but does not name the individual links or arms, so the V60's exact rear link layout is unconfirmed here.",
+  "src": [
+   [
+    "Bad Control Arm Symptoms | MOOG Parts",
+    "https://www.moogparts.com/parts-matter/Signs-of-a-Failing-Control-Arm.html"
+   ],
+   [
+    "How to Isolate Suspension Noises",
+    "https://www.moogparts.com/technical/bulletins/tech-tips/How-to-Isolate-Suspension-Noises.html"
+   ],
+   [
+    "Rubber Bushing Torquing Tip | MOOG Parts",
+    "https://www.moogparts.com/technical/bulletins/tech-tips/how-to-torque-rubber-suspension-bushings.html"
+   ],
+   [
+    "Track Bar Ball Joint Solves Front End Shimmy | MOOG Parts",
+    "https://www.moogparts.com/technical/bulletins/tech-tips/track-bar-ball-joint-solves-front-end-shimmy.html"
+   ],
+   [
+    "Volvo V60 specifications, Sept 2016 (Volvo Cars press PDF)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A new control arm with rubber bushings was installed and the bushing bolts were torqued with the wheels hanging. What is the most likely result?",
+    "o": [
+     "Nothing; bushings are always torqued unloaded",
+     "The bushings twist too far and wear out early",
+     "The wheel bearing preload increases",
+     "The ABS sensor gap closes"
+    ],
+    "a": 1,
+    "why": "Moog says torquing rubber bushings with the suspension hanging leaves them at too steep an angle, so they twist and fail early; they must be torqued at ride height.",
+    "src": [
+     "Rubber Bushing Torquing Tip | MOOG Parts",
+     "https://www.moogparts.com/technical/bulletins/tech-tips/how-to-torque-rubber-suspension-bushings.html"
+    ]
+   },
+   {
+    "q": "A clunk is heard over bumps and the suspension arm is suspected. Which part of the arm is most likely making the noise?",
+    "o": [
+     "The bushing",
+     "The paint coating",
+     "The wheel stud",
+     "The brake hose bracket"
+    ],
+    "a": 0,
+    "why": "Moog says the clunk from a bad control arm is typically the bushing knocking between the frame and the arm.",
+    "src": [
+     "Bad Control Arm Symptoms | MOOG Parts",
+     "https://www.moogparts.com/parts-matter/Signs-of-a-Failing-Control-Arm.html"
+    ]
+   }
+  ]
+ },
+ "D31": {
+  "body": [
+   "A stabilizer bar (also called a sway bar or anti-roll bar) is a steel bar running across the car that ties the two sides together to cut body roll and lean in turns.",
+   "Links join the bar ends to the suspension; at the rear they attach to the control arms or the frame, and a car with bars front and rear can have four links.",
+   "Signs of worn links are a metallic clunk or knock over bumps, a loose or vague feel when turning, instability in lane changes, uneven tire wear and more body roll.",
+   "Links fail from rust and corrosion, impacts such as potholes and curbs, and overloading.",
+   "Moog notes that many original bars have welded ends that can rust and split, and that over-tightening a bolt-style link can overstress and break its stud."
+  ],
+  "car": "Volvo's Sept 2016 V60 spec sheet lists a stabilizer bar on both the front and the rear suspension.",
+  "src": [
+   [
+    "Bad Sway Bar Link Signs | MOOG Parts",
+    "https://www.moogparts.com/parts-matter/Symptoms-of-Bad-Sway-Bar-Links.html"
+   ],
+   [
+    "Restoring Handling with MOOG Solid Sway Bar Kit | MOOG Parts",
+    "https://www.moogparts.com/technical/bulletins/tech-tips/restoring-handling-with-moog-solid-sway-bar-kit.html"
+   ],
+   [
+    "Avoiding Sway Bar Link Damage | MOOG Parts",
+    "https://www.moogparts.com/technical/bulletins/tech-tips/avoiding-sway-bar-link-damage-due-to-overtightening.html"
+   ],
+   [
+    "Volvo V60 specifications, Sept 2016 (Volvo Cars press PDF)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "All of these are symptoms of a worn sway bar link EXCEPT:",
+    "o": [
+     "A metallic knock over bumps",
+     "Extra body roll in turns",
+     "A loose feel when turning",
+     "Humming that rises at 30-45 mph"
+    ],
+    "a": 3,
+    "why": "Moog lists knocking over bumps, extra body roll, a loose feel when turning, instability and uneven tire wear as sway bar link symptoms; speed-related humming is not among them.",
+    "src": [
+     "Bad Sway Bar Link Signs | MOOG Parts",
+     "https://www.moogparts.com/parts-matter/Symptoms-of-Bad-Sway-Bar-Links.html"
+    ]
+   },
+   {
+    "q": "An older car's original sway bar has broken at one end. What is the most likely cause?",
+    "o": [
+     "The welded end rusted and split",
+     "The bar was made too long",
+     "Low tire pressure",
+     "A worn wheel bearing"
+    ],
+    "a": 0,
+    "why": "Moog notes that many original sway bars have welded ends that rust and fail, splitting the bar at the weld.",
+    "src": [
+     "Restoring Handling with MOOG Solid Sway Bar Kit | MOOG Parts",
+     "https://www.moogparts.com/technical/bulletins/tech-tips/restoring-handling-with-moog-solid-sway-bar-kit.html"
+    ]
+   }
+  ]
+ },
+ "D32": {
+  "body": [
+   "This task covers inspecting leaf springs and the hardware that mounts them, on vehicles built with leaf springs.",
+   "Volvo's Sept 2016 V60 spec sheet lists an independent rear suspension with coil springs, so the V60 has no leaf springs.",
+   "No sourced procedure found yet."
+  ],
+  "car": "Volvo's Sept 2016 V60 spec sheet lists coil springs front and rear; there are no leaf springs on this car.",
+  "src": [
+   [
+    "Volvo V60 specifications, Sept 2016 (Volvo Cars press PDF)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Which spring type does Volvo's V60 specification list for the rear suspension?",
+    "o": [
+     "Leaf springs",
+     "Torsion bars",
+     "Coil springs",
+     "Air springs"
+    ],
+    "a": 2,
+    "why": "Volvo's spec sheet describes the V60 rear as an independent suspension with coil springs, hydraulic shock absorbers and a stabilizer bar.",
+    "src": [
+     "Volvo V60 specifications, Sept 2016 (Volvo Cars press PDF)",
+     "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+    ]
+   }
+  ]
+ },
+ "D33": {
+  "body": [
+   "A jounce bumper sits around the damper's piston rod and only comes into play at the end of compression travel, cushioning a bottom-out so the suspension, body and damper are not damaged.",
+   "A rebound bumper sits inside the strut and cushions the top of the stroke when the suspension fully extends, preventing internal damage and metal-on-metal topping-out noise.",
+   "Monroe lists worn, smashed or missing jounce bumpers, and marks on the stop where a bumper hits, among the signs of worn coil springs, so a damaged bumper is a reason to check the springs too.",
+   "Monroe makes its jounce bumpers from polyurethane for resistance to weather and abrasion."
+  ],
+  "car": null,
+  "src": [
+   [
+    "Essential Components Every Strut Assembly Needs | Monroe Shocks & Struts",
+    "https://www.monroe.com/technical-resources/tech-tips/7-essential-components-every-quality-strut-assembly-needs.html"
+   ],
+   [
+    "Diagnosing Bad Coil Springs | Monroe Shocks & Struts",
+    "https://www.monroe.com/technical-resources/servicegrams/how-to-know-if-coil-springs-are-worn.html"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A rear jounce bumper is smashed and there are fresh marks on the stop it hits. Which part should be checked next?",
+    "o": [
+     "The coil spring",
+     "The wheel bearing",
+     "The cabin air filter",
+     "The parking brake switch"
+    ],
+    "a": 0,
+    "why": "Monroe lists smashed jounce bumpers and marks where the bumper hits its stop as warning signs of worn coil springs.",
+    "src": [
+     "Diagnosing Bad Coil Springs | Monroe Shocks & Struts",
+     "https://www.monroe.com/technical-resources/servicegrams/how-to-know-if-coil-springs-are-worn.html"
+    ]
+   },
+   {
+    "q": "Technician A says the jounce bumper works at the end of compression travel. Technician B says the rebound bumper works when the suspension fully extends. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Monroe describes the jounce bumper as cushioning excessive compression and the rebound bumper as cushioning full extension at the top of the stroke.",
+    "src": [
+     "Essential Components Every Strut Assembly Needs | Monroe Shocks & Struts",
+     "https://www.monroe.com/technical-resources/tech-tips/7-essential-components-every-quality-strut-assembly-needs.html"
+    ]
+   }
+  ]
+ },
+ "D34": {
+  "body": [
+   "A strut is a structural part: it takes the place of the upper control arm and upper ball joint, holds the spring, keeps the tire aligned and takes side loads, with a damper inside its housing.",
+   "A bare strut needs a spring compressor to move the spring across; a complete strut assembly comes with the spring, mount and other parts already fitted.",
+   "The upper mount has a rubber bushing that cushions it against the body and a seal that keeps dirt out of the mount bearing; Monroe ties noise over bumps to the upper mounting plate and noise while turning to the upper bearing.",
+   "To install, fit one or two upper nuts loosely, bolt the strut to the knuckle, lower the car onto its tires, torque the lower bolts, then torque the upper nuts in an alternating pattern with a torque wrench.",
+   "Monroe recommends an alignment after strut replacement, because camber, toe and caster can change."
+  ],
+  "car": "Volvo's Sept 2016 V60 spec sheet lists McPherson struts at the front only; the rear is listed as independent with coil springs and hydraulic shock absorbers.",
+  "src": [
+   [
+    "Difference Between Shocks & Struts | Monroe Shocks & Struts",
+    "https://www.monroe.com/technical-resources/shocks-101/shocks-vs-struts.html"
+   ],
+   [
+    "Parts of Strut Assembly | Monroe Shocks & Struts",
+    "https://www.monroe.com/technical-resources/shocks-101/what-is-a-strut-assembly.html"
+   ],
+   [
+    "Essential Components Every Strut Assembly Needs | Monroe Shocks & Struts",
+    "https://www.monroe.com/technical-resources/tech-tips/7-essential-components-every-quality-strut-assembly-needs.html"
+   ],
+   [
+    "Noise With New Shocks & Struts | Monroe Shocks & Struts",
+    "https://www.monroe.com/technical-resources/tech-tips/diagnosing-noise-with-new-shock-struts.html"
+   ],
+   [
+    "Shock & Strut Installation Tips | Monroe Shocks & Struts",
+    "https://www.monroe.com/technical-resources/tech-tips/troubleshooting-installation-issues.html"
+   ],
+   [
+    "Alignment After Strut Replacement | Monroe Shocks & Struts",
+    "https://www.monroe.com/technical-resources/tech-tips/importance-of-alignment-shock-strut-replacement.html"
+   ],
+   [
+    "Volvo V60 specifications, Sept 2016 (Volvo Cars press PDF)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "After strut replacement, a strut makes noise only while the wheel is being turned. Which part is most likely at fault?",
+    "o": [
+     "The upper bearing",
+     "The jounce bumper",
+     "The coil spring coating",
+     "The brake rotor"
+    ],
+    "a": 0,
+    "why": "Monroe says noise while turning points to the upper bearing assembly, while noise over bumps points to the upper mounting plate.",
+    "src": [
+     "Noise With New Shocks & Struts | Monroe Shocks & Struts",
+     "https://www.monroe.com/technical-resources/tech-tips/diagnosing-noise-with-new-shock-struts.html"
+    ]
+   },
+   {
+    "q": "Technician A says the upper strut nuts should be fully torqued before the car's weight is on the tires. Technician B says the lower bolts are torqued with the weight on the tires, then the upper nuts in an alternating pattern. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "Monroe warns that fully tightening the upper nuts before the car rests on its tires can stretch studs or crush the bearing, and gives Technician B's order.",
+    "src": [
+     "Shock & Strut Installation Tips | Monroe Shocks & Struts",
+     "https://www.monroe.com/technical-resources/tech-tips/troubleshooting-installation-issues.html"
+    ]
+   }
+  ]
+ },
+ "D35": {
+  "body": [
+   "This task covers checking a solid (one-piece) rear axle for damage and for sitting square to the car.",
+   "Moog says a thrust alignment is usually recommended for vehicles with a solid rear axle; the thrust measurement compares the rear axle's direction with the car's centerline and checks that the front and rear axles are parallel.",
+   "A four-wheel alignment, which also sets the rear wheel angles, is typical for front-wheel-drive cars with an adjustable or independent rear suspension.",
+   "Volvo's Sept 2016 V60 spec sheet lists an independent rear suspension, so the V60 has no solid rear axle.",
+   "No sourced procedure for checking a solid axle housing for damage was found yet."
+  ],
+  "car": "Volvo lists the V60 rear as independent, which by Moog's description puts it in the four-wheel alignment group rather than the solid-axle thrust alignment group.",
+  "src": [
+   [
+    "Performing a Car Alignment | MOOG Parts",
+    "https://www.moogparts.com/parts-matter/adjusting-your-car-alignment.html"
+   ],
+   [
+    "Volvo V60 specifications, Sept 2016 (Volvo Cars press PDF)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Which alignment type does Moog say is usually recommended for a vehicle with a solid rear axle?",
+    "o": [
+     "Front-end only",
+     "Thrust alignment",
+     "Camber-only alignment",
+     "No alignment is possible"
+    ],
+    "a": 1,
+    "why": "Moog says a thrust alignment is usually recommended for vehicles with a solid rear axle, squaring all four wheels to each other.",
+    "src": [
+     "Performing a Car Alignment | MOOG Parts",
+     "https://www.moogparts.com/parts-matter/adjusting-your-car-alignment.html"
+    ]
+   },
+   {
+    "q": "The thrust measurement during an alignment compares:",
+    "o": [
+     "Front toe left to right",
+     "Tire pressure front to rear",
+     "The rear axle's direction with the car's centerline",
+     "Caster left to right"
+    ],
+    "a": 2,
+    "why": "Moog describes thrust as comparing the rear axle direction to the vehicle centerline and checking that the axles are parallel.",
+    "src": [
+     "Performing a Car Alignment | MOOG Parts",
+     "https://www.moogparts.com/parts-matter/adjusting-your-car-alignment.html"
+    ]
+   }
+  ]
+ },
+ "D36": {
+  "body": [
+   "A ball joint is a ball stud in a grease-filled socket with internal bearings, sealed by a rubber boot; it lets the suspension pivot while the wheel moves up and down.",
+   "Many original ball joints are built as sealed units, so a split boot lets in water and dirt that wear the joint quickly; boots are part of the inspection.",
+   "Load-carrying joints support the car's weight and tend to wear faster; follower joints do not carry weight but take load in cornering and braking.",
+   "To check for play, raise the wheel so the joint is unloaded, lever the tire upward with a pry bar for vertical play, and push and pull the tire for side play; a dial indicator measures it.",
+   "Signs of wear are a faint, intermittent clunk from one corner, worse over bumps or in turns, and wear on the inner or outer tread edge; severe wear can let the stud pull out of the housing.",
+   "Moog notes that play within a maker's allowance can still upset alignment and handling, and that joints should be checked before an alignment."
+  ],
+  "car": null,
+  "src": [
+   [
+    "All About Ball Joints | MOOG Parts",
+    "https://www.moogparts.com/parts-matter/all-about-ball-joints.html"
+   ],
+   [
+    "Symptoms of Bad Ball Joints | MOOG Parts",
+    "https://www.moogparts.com/parts-matter/symptoms-of-bad-ball-joints.html"
+   ],
+   [
+    "Signs of Loose Ball Joints | MOOG Parts",
+    "https://www.moogparts.com/technical/bulletins/tech-tips/how-to-inspect-ball-joints-for-looseness.html"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Both edges of a tire are worn more than the center. Which is the most likely cause?",
+    "o": [
+     "A worn ball joint",
+     "Underinflation",
+     "A worn wheel bearing",
+     "A broken sway bar link"
+    ],
+    "a": 1,
+    "why": "Moog says wear on one edge points to ball joints, but wear on both edges faster than the middle points to underinflation.",
+    "src": [
+     "Symptoms of Bad Ball Joints | MOOG Parts",
+     "https://www.moogparts.com/parts-matter/symptoms-of-bad-ball-joints.html"
+    ]
+   },
+   {
+    "q": "Technician A says ball joints should be checked for looseness before a wheel alignment. Technician B says play within the maker's allowance can never affect handling. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Moog says to check ball joints before an alignment and warns that looseness within specification can still cause alignment and handling problems.",
+    "src": [
+     "Signs of Loose Ball Joints | MOOG Parts",
+     "https://www.moogparts.com/technical/bulletins/tech-tips/how-to-inspect-ball-joints-for-looseness.html"
+    ]
+   }
+  ]
+ },
+ "D37": {
+  "body": [
+   "A steering tie rod has an inner rod with an inline ball joint at the rack and an outer end at the knuckle; worn ends cause one-sided tire wear, misalignment, play or shake at the wheel, and a knock when turning slowly.",
+   "At installation, keep the stud centred in its socket and torque the nut to the maker's figure; over-tightening a steel stud into an aluminium knuckle deforms the knuckle.",
+   "Toe is the angle at which the tires point in or out seen from above, and a toe setting that is well off wears tires quickly.",
+   "Moog says an outer tie rod job is not complete until the car is aligned, and the steering angle sensor is then recalibrated so driver-assist systems read straight-ahead correctly.",
+   "The sources found cover front steering tie rods; no sourced procedure for rear toe links was found yet."
+  ],
+  "car": null,
+  "src": [
+   [
+    "What Do Tie Rods Do? | MOOG Parts",
+    "https://www.moogparts.com/parts-matter/all-about-tie-rods.html"
+   ],
+   [
+    "Symptoms of Bad Tie Rods | MOOG Parts",
+    "https://www.moogparts.com/parts-matter/symptoms-of-bad-tie-rods.html"
+   ],
+   [
+    "Installing Tie Rods | MOOG Parts",
+    "https://www.moogparts.com/technical/bulletins/tech-tips/tie-rod-installation-tips.html"
+   ],
+   [
+    "Alignment After Strut Replacement | Monroe Shocks & Struts",
+    "https://www.monroe.com/technical-resources/tech-tips/importance-of-alignment-shock-strut-replacement.html"
+   ],
+   [
+    "Alignment & Outer Tie Rods | MOOG Parts",
+    "https://www.moogparts.com/technical/bulletins/tech-tips/Why-an-Alignment-is-Needed-After-an-Outer-Tie-Rod-Replacement.html"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "An outer tie rod is replaced on a car with lane keeping and automatic emergency braking. After the alignment, what else is needed?",
+    "o": [
+     "Bleed the brakes",
+     "Recalibrate the steering angle sensor",
+     "Replace the cabin filter",
+     "Reset the oil life monitor"
+    ],
+    "a": 1,
+    "why": "Moog says the steering angle sensor must be recalibrated after the alignment so driver-assist systems know the new straight-ahead position.",
+    "src": [
+     "Alignment & Outer Tie Rods | MOOG Parts",
+     "https://www.moogparts.com/technical/bulletins/tech-tips/Why-an-Alignment-is-Needed-After-an-Outer-Tie-Rod-Replacement.html"
+    ]
+   },
+   {
+    "q": "A tie rod end nut was over-tightened into an aluminium knuckle. What is the most likely result?",
+    "o": [
+     "The knuckle deforms, and vibration wears the socket bearing",
+     "The tire pressure light comes on",
+     "The toe setting becomes self-correcting",
+     "Nothing; over-torque only affects steel knuckles"
+    ],
+    "a": 0,
+    "why": "Moog warns that over-torquing the nut deforms an aluminium knuckle, and the resulting vibration damages the socket bearing over time.",
+    "src": [
+     "Installing Tie Rods | MOOG Parts",
+     "https://www.moogparts.com/technical/bulletins/tech-tips/tie-rod-installation-tips.html"
+    ]
+   }
+  ]
+ },
+ "D38": {
+  "body": [
+   "The knuckle carries the wheel hub; Moog notes the hub assembly mounts to it either bolted on or pressed in.",
+   "Over-tightening a ball joint or tie rod nut, often with an impact gun, damages the knuckle's tapered hole: the stud sits lower and has play, and the castle nut runs past the cotter pin hole.",
+   "Washers do not fix a damaged taper; Moog says the knuckle has to be replaced, and recommends a torque wrench to prevent it.",
+   "Before a new hub goes in, burrs and loose metal are cleaned from the knuckle's bearing bore so the hub seats square.",
+   "Moog sells complete knuckle assemblies with the hub already fitted, which avoids pressing bearings."
+  ],
+  "car": null,
+  "src": [
+   [
+    "All About Wheel Hub Assemblies | MOOG Parts",
+    "https://www.moogparts.com/parts-matter/all-about-hub-assemblies.html"
+   ],
+   [
+    "Ball Joint Tightening Tip | MOOG Parts",
+    "https://www.moogparts.com/technical/bulletins/tech-tips/how-to-avoid-steering-knuckle-damage-from-overtightening.html"
+   ],
+   [
+    "How to Install a Hub Assembly | MOOG Parts",
+    "https://www.moogparts.com/technical/bulletins/tech-tips/How-to-Install-a-Hub-Assembly.html"
+   ],
+   [
+    "Complete Steering Knuckle & Hub Assemblies | MOOG Parts",
+    "https://www.moogparts.com/parts/wheel-end/complete-knuckle-assemblies.html"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "After a ball joint was installed with an impact gun, the castle nut has run past the cotter pin hole and the stud has play. What is the correct repair?",
+    "o": [
+     "Add washers under the nut",
+     "Replace the knuckle",
+     "Drill a new cotter pin hole",
+     "Re-torque with the impact gun"
+    ],
+    "a": 1,
+    "why": "Moog says washers are not a fix: the taper is damaged and the knuckle must be replaced.",
+    "src": [
+     "Ball Joint Tightening Tip | MOOG Parts",
+     "https://www.moogparts.com/technical/bulletins/tech-tips/how-to-avoid-steering-knuckle-damage-from-overtightening.html"
+    ]
+   },
+   {
+    "q": "Before a new hub assembly is installed in a knuckle, the technician should:",
+    "o": [
+     "Paint the bearing bore",
+     "Remove burrs and loose metal from the bearing bore",
+     "Grease the brake rotor face",
+     "Loosen the ball joint nut"
+    ],
+    "a": 1,
+    "why": "Moog's hub instructions say to clean burrs and loose metal from the knuckle bore so the hub seats in proper alignment.",
+    "src": [
+     "How to Install a Hub Assembly | MOOG Parts",
+     "https://www.moogparts.com/technical/bulletins/tech-tips/How-to-Install-a-Hub-Assembly.html"
+    ]
+   }
+  ]
+ },
+ "D39": {
+  "body": [
+   "A shock absorber does not carry weight; it slows spring and suspension movement by forcing oil through small holes in a piston, turning motion into heat, and resists harder the faster the suspension moves.",
+   "Inspection looks for a bent, rusted or scratched rod, oil running down the body, damaged or missing bushings and cupped tires, plus bouncing, swaying or bottoming on a road test.",
+   "A light film carried past the rod seal is weepage and is normal; a body that is mostly wet or dripping is leakage, and the shock must be replaced.",
+   "Monroe recommends replacing shocks in pairs on an axle, because one new and one old shock give uneven damping.",
+   "Shocks go in with the suspension at ride height, since shock length often limits wheel travel; twin-tube shocks must not be mounted upside down, and a clunk after replacement usually means loose or worn mounting hardware."
+  ],
+  "car": "Volvo's Sept 2016 V60 spec sheet lists hydraulic shock absorbers at the rear, and the 2016 owner's manual describes an optional Four-C system that adjusts the shock absorbers (Comfort, Sport, Advanced); whether this car has Four-C is unconfirmed.",
+  "src": [
+   [
+    "Difference Between Shocks & Struts | Monroe Shocks & Struts",
+    "https://www.monroe.com/technical-resources/shocks-101/shocks-vs-struts.html"
+   ],
+   [
+    "Inspecting Shocks & Struts | Monroe Shocks & Struts",
+    "https://www.monroe.com/technical-resources/tech-tips/how-to-conduct-a-shock-strut-inspection.html"
+   ],
+   [
+    "Shock Weepage vs Leakage | Monroe Shocks & Struts",
+    "https://www.monroe.com/technical-resources/servicegrams/weepage-vs-leakage-shocks-struts.html"
+   ],
+   [
+    "Replacing Shocks in Pairs | Monroe Shocks & Struts",
+    "https://www.monroe.com/technical-resources/shocks-101/should-shocks-and-struts-be-replaced-in-pairs.html"
+   ],
+   [
+    "Shock & Strut Installation Tips | Monroe Shocks & Struts",
+    "https://www.monroe.com/technical-resources/tech-tips/troubleshooting-installation-issues.html"
+   ],
+   [
+    "Noise With New Shocks & Struts | Monroe Shocks & Struts",
+    "https://www.monroe.com/technical-resources/tech-tips/diagnosing-noise-with-new-shock-struts.html"
+   ],
+   [
+    "Volvo V60 specifications, Sept 2016 (Volvo Cars press PDF)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ],
+   [
+    "Volvo V60 Owner's Manual MY16, TP 20238 (English - USA & Canada)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A rear shock has a thin film of oil near the top seal, but the rest of the body is dry. What is the most likely conclusion?",
+    "o": [
+     "Leakage; replace the shock",
+     "Weepage; no replacement needed",
+     "The shock is mounted upside down",
+     "The coil spring is broken"
+    ],
+    "a": 1,
+    "why": "Monroe calls a small amount of oil pulled past the seal weepage, which is acceptable; only a mostly wet or dripping unit is leakage.",
+    "src": [
+     "Shock Weepage vs Leakage | Monroe Shocks & Struts",
+     "https://www.monroe.com/technical-resources/servicegrams/weepage-vs-leakage-shocks-struts.html"
+    ]
+   },
+   {
+    "q": "One rear shock is leaking. Technician A says only the leaking shock needs replacing. Technician B says both rear shocks should be replaced. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "Monroe recommends replacing shocks in pairs on an axle so both sides damp the same.",
+    "src": [
+     "Replacing Shocks in Pairs | Monroe Shocks & Struts",
+     "https://www.monroe.com/technical-resources/shocks-101/should-shocks-and-struts-be-replaced-in-pairs.html"
+    ]
+   }
+  ]
+ },
+ "D40": {
+  "body": [
+   "A wheel hub assembly is a pre-built unit of bearings, seals and often the ABS wheel speed sensor; on most cars since 1998 it is replaced as a whole, while older separate bearings can be serviced.",
+   "Moog's symptoms of a failing hub are growling, humming, squeaking, chirping or squealing at 30-45 mph, and an ABS light if the sensor signal is lost.",
+   "A bearing grinding noise that is louder in one turning direction points to the wheel bearing rather than other rotating parts.",
+   "Replacement: remove the wheel, caliper and rotor, clean the knuckle bore, fit the hub, connect the ABS sensor and check its signal with the key on, then torque the hub bolts and, where fitted, a new axle nut to the maker's figure.",
+   "Moog says to torque the axle nut with a torque wrench while the hub is unloaded and never with an impact wrench, which over-tightens and damages the bearing.",
+   "A badly worn hub is dangerous: the wheel can stop turning smoothly and, if the steel fractures, come off."
+  ],
+  "car": null,
+  "src": [
+   [
+    "All About Wheel Hub Assemblies | MOOG Parts",
+    "https://www.moogparts.com/parts-matter/all-about-hub-assemblies.html"
+   ],
+   [
+    "Grinding Noises When Driving | MOOG Parts",
+    "https://www.moogparts.com/parts-matter/what-causes-grinding-noise-under-my-car.html"
+   ],
+   [
+    "How to Install a Hub Assembly | MOOG Parts",
+    "https://www.moogparts.com/technical/bulletins/tech-tips/How-to-Install-a-Hub-Assembly.html"
+   ],
+   [
+    "Hub Assembly Tip | MOOG Parts",
+    "https://www.moogparts.com/technical/bulletins/tech-tips/how-to-properly-tighten-axle-nut-on-wheel-hub-bearing.html"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A grinding noise gets noticeably louder in right turns than in left turns. Which part is most likely failing?",
+    "o": [
+     "A wheel bearing",
+     "The water pump",
+     "The A/C compressor",
+     "The alternator"
+    ],
+    "a": 0,
+    "why": "Moog's road test says a grinding noise that is louder turning one way than the other most likely comes from a failing wheel bearing.",
+    "src": [
+     "Grinding Noises When Driving | MOOG Parts",
+     "https://www.moogparts.com/parts-matter/what-causes-grinding-noise-under-my-car.html"
+    ]
+   },
+   {
+    "q": "Technician A says the axle nut on a new hub can be run down with an impact wrench. Technician B says it is torqued with a torque wrench while the hub is unloaded. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "Moog says never to use an impact wrench on the axle nut and to torque it to specification with the vehicle raised and the hub unloaded.",
+    "src": [
+     "Hub Assembly Tip | MOOG Parts",
+     "https://www.moogparts.com/technical/bulletins/tech-tips/how-to-properly-tighten-axle-nut-on-wheel-hub-bearing.html"
+    ]
+   }
+  ]
+ },
+ "D41": {
+  "body": [
+   "Driver-assist systems matter in suspension and steering work: Moog notes that lane keeping, stability control and automatic emergency braking rely on the steering angle sensor, which is recalibrated after an alignment.",
+   "Volvo's City Safety uses a laser sensor at the top of the windshield and brakes automatically between about 2 and 30 mph (4-50 km/h); it can help avoid a collision only when the speed difference is under about 9 mph (15 km/h), and it switches back on at every engine start.",
+   "The 2016 V60 manual marks Collision Warning with Full Auto Brake and Pedestrian and Cyclist Detection, BLIS with Cross Traffic Alert, Road Sign Information, Active High Beams, Park Assist Pilot and the Four-C active chassis as options, and calls Adaptive Cruise Control (which includes Distance Alert) an optional system.",
+   "The Driver Alert System pairs Driver Alert Control with Lane Departure Warning on 5- and 6-cylinder models or Lane Keeping Aid on 4-cylinder models; it works above 40 mph (65 km/h), drops out below 37 mph (60 km/h), and needs painted lane lines.",
+   "Park assist uses ultrasonic sensors in the bumpers and is described as an information aid, not a safety system.",
+   "Volvo recommends replacing, not repairing, a windshield with a crack, scratch or chip in front of the City Safety sensor, and using the correct windshield type."
+  ],
+  "car": "The B4204T11 is a four-cylinder, so by the manual's footnote this car's Driver Alert System uses Lane Keeping Aid rather than Lane Departure Warning. Which optional systems this car actually has is unconfirmed.",
+  "src": [
+   [
+    "Volvo V60 Owner's Manual MY16, TP 20238 (English - USA & Canada)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "Alignment & Outer Tie Rods | MOOG Parts",
+    "https://www.moogparts.com/technical/bulletins/tech-tips/Why-an-Alignment-is-Needed-After-an-Outer-Tie-Rod-Replacement.html"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "According to the 2016 V60 owner's manual, which lane function does a V60 with a four-cylinder engine use in its Driver Alert System?",
+    "o": [
+     "Lane Departure Warning",
+     "Lane Keeping Aid",
+     "Both Lane Departure Warning and Lane Keeping Aid",
+     "Neither; the system is not offered"
+    ],
+    "a": 1,
+    "why": "The manual's footnotes limit Lane Departure Warning to 5- and 6-cylinder models and Lane Keeping Aid to 4-cylinder models.",
+    "src": [
+     "Volvo V60 Owner's Manual MY16, TP 20238 (English - USA & Canada)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   },
+   {
+    "q": "A 2016 V60 has a stone chip in the windshield directly in front of the City Safety laser sensor. What does Volvo recommend?",
+    "o": [
+     "Fill the chip with resin",
+     "Ignore it; the sensor is behind the mirror",
+     "Replace the whole windshield with the correct type",
+     "Switch City Safety off permanently"
+    ],
+    "a": 2,
+    "why": "The manual recommends that damage in front of the laser sensor not be repaired, and that the whole windshield be replaced with the correct Volvo type.",
+    "src": [
+     "Volvo V60 Owner's Manual MY16, TP 20238 (English - USA & Canada)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   }
+  ]
+ },
  "D42": {
   "body": [
    "A car that pulls or drifts to one side on a flat, straight road, a steering wheel that sits off center while driving straight, and uneven wear on the inner or outer tread edges are the common signs of misalignment.",
