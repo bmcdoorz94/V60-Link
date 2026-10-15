@@ -29,6 +29,8 @@
     return out.join("");
   }
   var kb = { view: "home", q: "", art: null, ctl: null };
+  /* the part page renders an article inline with this */
+  window.V60_KB = { articleHtml: function (api, a) { return bodyHTML(api, a.body) + '<h4>Sources</h4><ul class="src plain">' + srcLinks(api, a.src) + "</ul>"; } };
   function factCard(api, f, big) {
     var s = typeof f.src === "string" ? window.V60_SOURCES[f.src] : f.src;
     return '<article class="ans' + (big ? " best" : "") + '">' + (big ? '<p class="ans-k">Answer</p>' : "") + "<h3>" + api.esc(f.q) + '</h3><p class="ans-a">' + api.esc(f.a) + "</p>" + (s ? '<p class="status">Source: <a href="' + api.esc(s[1]) + '" target="_blank" rel="noopener">' + api.esc(s[0]) + "</a></p>" : "") + "</article>";
@@ -94,5 +96,5 @@
       return [{ order: 40, html: '<article class="tcard"><h3>Know your car</h3><p class="status">' + api.esc(f.q) + '</p><p class="bigline sm">' + api.esc(f.a) + '</p><button type="button" class="quiet" data-jump="tab:kb">Open the library</button></article>' }];
     }
   });
-  window.V60_KB = { search: search, toks: toks };
+  window.V60_KB.search = search; window.V60_KB.toks = toks;
 })();

@@ -45,6 +45,7 @@ The car is the menu (manual shell), Live link works on the real car in Bluefy, G
   - Contents of TJ30087
 
 ## Decisions
+- 2026-10-15 (menus within menus; Kyle's answers): three levels only, the car → a view → a part, with every chapter's content inline on the part page; progression rebuilt around ASE's G1 "and more in depth": seven areas as levels with Owner and Technician rungs, readiness meters, quizzes that open hands-on first, a mock G1; XP, ranks, the skill tree and the V60 Master exam retired; screenshots from a working draft on the `g1-track` branch before merging.
 - 2026-10-12 (redesign, Kyle's answers): the car is the menu, organised by area; progression-based unlocks stay and work both ways (chapter chain and story cases); each area opens a view "as if looking inside" (hood open, inside the cabin); glow on first open only, with a quieter "pick up here" marker; light and dark; Live link and the Data lab keep an instrument look; "make it my vehicle as much as possible" is done with the owner's own photos as the figures (no drawing of Volvo's actual design), points placed automatically from the drawing and adjustable by hand; density between dense and roomy; item count per view as mocked (about 4 to 9). Mockup approved before the build.
 - 2026-10-11: Guided mode (Kyle's answers): full-screen walkthrough (Claude's pick), levels change without asking but are announced with an undo, guidance fades per area (Claude's pick), no read-aloud needed in the walkthrough.
 - 2026-10-11 (scanner, Kyle's answers): the shop's own name, address and phone stay visible on receipts (outlined, one tap hides them); always confirm before saving; Glovebox VIN and plate keep syncing to the private repo (no preference); on-device reading only, no API-key AI read (no preference, so the simpler option).
@@ -71,6 +72,12 @@ The car is the menu (manual shell), Live link works on the real car in Bluefy, G
 - [ ] Retire the Today tab once its remaining cards (welcome back, protect your progress, the garage map) have a home elsewhere. The home's Now strip already counts the notes and links there.
 - [ ] Wheel and underside figures: better drawings, or photos.
 - [ ] Desktop: consider the figure and the sheet side by side above 1000 px.
+
+## Next (draft on branch g1-track, awaiting Kyle's approval)
+- [ ] Merge g1-track once approved; run `npm test` on the PC for the WebKit side.
+- [ ] Grow the quiz bank: Automatic transmission (3), Manual drivetrain (2) and HVAC (2) are thin, so the mock G1 draws 42 of 55. Technician questions exist only for Engine, Suspension, Brakes and Electrical.
+- [ ] Heating & A/C has no part of its own (it shares coolant and the cabin filter); a Cabin item for the climate system would give it hands-on steps.
+- [ ] Retire the Today tab's remaining cards into the home (the Now strip already counts them).
 
 ## Done
 - 2026-10-15 (Kyle: bring in the ASE chat; tool prices from real stores, updatable): **ASE article** (`a-ase`, Ownership): tiers, 2026 fees from ase.com, the experience rule (claims work not listed; unconfirmed whether ASE would credit it), G1's seven areas mapped to this manual's items, where ASE shows up in mechanical VSC claims listings. Unlocked with The Belt (next to Volvo-capable shops). **Tool inventory** in Glovebox: three tiers (Checking, First jobs, Wheels off; 23 tools, 8 new from the chat), each with store prices from fetched retailer pages in `src/js/data/toolprices.js` (date checked shown), a Your price field that replaces the store price (saved and synced as `glove.price`), and per-tier "still need · about $" totals. To refresh prices: re-check the store pages and edit `toolprices.js` (items and `checked`). tests/tools.js. Not brought in from that chat (Kyle chose the article only): the salary figures, the monthly OK/Flag walkaround sheet with a mileage log, the YouTube channels and Cars & Coffee list.

@@ -61,21 +61,29 @@
   ];
   var dj = { open: null };
   function data(api) { var d = api.mod("diy"); if (!d) { d = { done: {} }; api.setMod("diy", d); } return d; }
+  function tn(t) { var TN = {}; (window.V60_TOOLS || []).forEach(function (x) { TN[x[0]] = x[1]; }); return TN[t] || t; }
+  /* one job card; inline = on a part page (no "All jobs" button, ids suffixed so two cards never share one) */
+  function jobHtml(api, j, inline) {
+    var esc = api.esc, d = data(api), g = api.mod("glove") || { tools: {} }, miss = j.tools.filter(function (t) { return !(g.tools || {})[t]; }), cid = inline ? "djCard-" + j.id : "djCard";
+    return '<article class="jobcard" id="' + cid + '"><div class="row">' + (inline ? "" : '<button type="button" class="quiet" data-dj="back">All jobs</button>') + '<button type="button" class="quiet sm" data-speak="#' + cid + '">Listen</button></div>' + (inline ? "" : "<h3>" + esc(j.t) + "</h3>") + '<div class="jobmeta"><span class="pill info">Level ' + j.lvl + '</span><span class="status">About ' + j.min + " min · " + esc(j.cost) + " · " + (j.pgLabel ? esc(j.pgLabel) : "Manual p. " + esc(j.pg)) + "</span></div>" + (j.tools.length ? '<p class="status">Tools: ' + j.tools.map(function (t) { return esc(tn(t)); }).join(", ") + (miss.length ? ' <span class="warnc">(not in your Glovebox tool list: ' + esc(miss.map(tn).join(", ")) + ")</span>" : "") + "</p>" : "") + '<ol class="jsteps">' + j.steps.map(function (s) { return "<li><label><input type=\"checkbox\"> <span>" + esc(s) + "</span></label></li>"; }).join("") + "</ol>" + j.warn.map(function (w) { return '<div class="note">' + esc(w) + "</div>"; }).join("") + '<div class="row"><button type="button" data-djdone="' + j.id + '">' + (d.done[j.id] ? "Done again" : "Mark done") + '</button><span class="status">' + (d.done[j.id] ? "Last done " + esc(d.done[j.id]) : "") + "</span></div></article>";
+  }
+  function markDone(api, id) {
+    var d = data(api), j = JOBS.filter(function (x) { return x.id === id; })[0]; if (!j) return;
+    d.done[id] = api.todayStr(); if (j.part && api.partById(j.part) && !api.state.rate[j.part]) api.state.rate[j.part] = { r: 4, d: api.todayStr(), n: "DIY job: " + j.t }; api.save(); api.updateHud();
+  }
+  window.V60_DIYUI = { html: function (api, id) { var j = JOBS.filter(function (x) { return x.id === id; })[0]; return j ? jobHtml(api, j, true) : ""; }, done: function (api, id) { markDone(api, id); } };
   function render(api) {
-    var $ = api.$, esc = api.esc, d = data(api), g = api.mod("glove") || { tools: {} };
-    var list = $("djList"), TN = {}; (window.V60_TOOLS || []).forEach(function (t) { TN[t[0]] = t[1]; });
-    function tn(t) { return TN[t] || t; }
+    var $ = api.$, esc = api.esc, d = data(api), list = $("djList");
     if (dj.open) {
       var j = JOBS.filter(function (x) { return x.id === dj.open; })[0];
-      var miss = j.tools.filter(function (t) { return !(g.tools || {})[t]; });
-      list.innerHTML = '<article class="jobcard" id="djCard"><div class="row"><button type="button" class="quiet" data-dj="back">All jobs</button><button type="button" class="quiet sm" data-speak="#djCard">Listen</button></div><h3>' + esc(j.t) + '</h3><div class="jobmeta"><span class="pill info">Level ' + j.lvl + '</span><span class="status">About ' + j.min + " min · " + esc(j.cost) + " · " + (j.pgLabel ? esc(j.pgLabel) : "Manual p. " + esc(j.pg)) + "</span></div>" + (j.tools.length ? '<p class="status">Tools: ' + j.tools.map(function (t) { return esc(tn(t)); }).join(", ") + (miss.length ? ' <span class="warnc">(not in your Glovebox tool list: ' + esc(miss.map(tn).join(", ")) + ")</span>" : "") + "</p>" : "") + '<ol class="jsteps">' + j.steps.map(function (s) { return "<li><label><input type=\"checkbox\"> <span>" + esc(s) + "</span></label></li>"; }).join("") + "</ol>" + j.warn.map(function (w) { return '<div class="note">' + esc(w) + "</div>"; }).join("") + '<div class="row"><button type="button" data-djdone="' + j.id + '">' + (d.done[j.id] ? "Done again" : "Mark done") + '</button><span class="status" id="djStatus">' + (d.done[j.id] ? "Last done " + esc(d.done[j.id]) : "") + "</span></div></article>";
+      list.innerHTML = jobHtml(api, j, false);
       return;
     }
     list.innerHTML = '<ul class="joblist">' + JOBS.map(function (j) { return '<li><button type="button" class="mbtn" data-dj="' + j.id + '"><span class="pill ' + (d.done[j.id] ? "ok" : "none") + '">' + (d.done[j.id] ? "Done" : "Level " + j.lvl) + '</span><span class="mt">' + esc(j.t) + '</span><span class="status">' + j.min + " min</span></button></li>"; }).join("") + "</ul>";
   }
   (window.V60_MODULES = window.V60_MODULES || []).push({
     id: "diy",
-    tabs: [{ id: "diy", section: "car", label: "DIY jobs", order: 35, html: '<section><h2>DIY jobs</h2><p class="lede">Step-by-step jobs for your car, sorted by difficulty. Each card names its source: Volvo\'s manual unless it says otherwise. Tick steps as you go. Marking a job done logs it and earns XP.</p></section><div id="djList"></div>' }],
+    tabs: [{ id: "diy", section: "car", label: "DIY jobs", order: 35, html: '<section><h2>DIY jobs</h2><p class="lede">Step-by-step jobs for your car, sorted by difficulty. Each card names its source: Volvo\'s manual unless it says otherwise. Tick steps as you go. Marking a job done logs it and closes the matching chapter.</p></section><div id="djList"></div>' }],
     clean: function (v) { return v && typeof v === "object" ? { done: v.done || {} } : null; },
     render: function (api) { render(api); },
     init: function (api) {
@@ -85,7 +93,7 @@
         if (k === "back") { dj.open = null; render(api); return; }
         if (k) { dj.open = k; render(api); window.scrollTo(0, 0); return; }
         var dn = b.getAttribute("data-djdone");
-        if (dn) { var d = data(api), j = JOBS.filter(function (x) { return x.id === dn; })[0]; d.done[dn] = api.todayStr(); if (j.part && api.partById(j.part) && !api.state.rate[j.part]) api.state.rate[j.part] = { r: 4, d: api.todayStr(), n: "DIY job: " + j.t }; api.save(); api.updateHud(); render(api); }
+        if (dn) { markDone(api, dn); render(api); }
       });
     },
     xp: function (api) { var d = api.mod("diy"); if (!d) return 0; return Object.keys(d.done).reduce(function (s, k) { var j = JOBS.filter(function (x) { return x.id === k; })[0]; return s + (j ? 25 * j.lvl : 0); }, 0); },

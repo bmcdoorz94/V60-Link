@@ -48,7 +48,7 @@ ok(st2.closed.signal,'real report closes The Signal');
 ok(st2.revealed.health && st2.revealed.bay && st2.revealed.cards,'Act 1 reward: health, bay, cards');
 ok(st2.revealed.records && st2.revealed.glove,'The Belt reveals records and glove');
 ok(!st2.revealed.fuel,'The Thirst not yet available');
-ok(await p.isVisible('.cockpit .gauge'),'health gauge shows after Act 1');
+await p.evaluate(()=>__v60.go('car')); ok(await p.isVisible('.cockpit .gauge'),'health gauge shows on the home after Act 1'); await p.evaluate(()=>__v60.go('story'));
 ok(await p.evaluate(()=>window.V60_KNOW.article('a-belt') && !window.V60_KNOW.article('a-polestar')),'knowledge unlocks follow the story');
 // known risk on belt
 await p.evaluate(()=>{window.__x=1}); await p.click('[data-case="belt"]').catch(()=>{});
@@ -60,14 +60,13 @@ ok(await p.evaluate(()=>!!V60.mod('story').revealed.fuel),'next case (The Thirst
 await p.click('[data-case="thirst"]');
 ok(await p.isVisible('.case.open details.brief'),'briefing visible');
 await p.evaluate(()=>{document.getElementById('stOpts').open=true});
-ok(await p.isDisabled('[data-depth="mech"]'),'Mechanic detail locked until the Scholar skill');
-await p.evaluate(()=>{const c=V60.mod('cards')||{b:{},rev:{},newDay:{}}; window.V60_FACTS.slice(0,25).forEach(f=>c.b[f.id]=[4,'2099-01-01']); V60.setMod('cards',c); V60.save(); __v60.go('story'); document.getElementById('stOpts').open=true;});
-await p.click('[data-depth="mech"]'); ok(await p.locator('.case.open .mech').count()>0,'Scholar perk unlocks mechanic detail');
+ok(await p.isDisabled('[data-depth="mech"]'),'Mechanic detail locked until an area reaches Owner on the track');
+await p.evaluate(()=>{const t=V60.mod('track')||{quiz:{},g1:{},seen:{}}; t.quiz['mdt:1']={best:80,tries:1,passed:V60.todayStr()}; V60.setMod('track',t); V60.save(); __v60.go('story'); document.getElementById('stOpts').open=true;});
+await p.click('[data-depth="mech"]'); ok(await p.locator('.case.open .mech').count()>0,'an Owner rung unlocks mechanic detail');
 await p.click('[data-depth="det"]');
 await p.click('[data-view="timeline"]'); ok(/Locked|Case closed/.test(await p.textContent('#stV-timeline')),'timeline view renders (locked or filled)');
 await p.click('[data-view="cases"]');
-ok(await p.evaluate(()=>!!V60.mod('story').revealed.skills),'skill tree revealed after Act 1');
-await p.evaluate(()=>__v60.go('skills')); ok(/skills earned/.test(await p.textContent('#skSum')),'skill tree renders: '+await p.textContent('#skSum'));
+await p.evaluate(()=>V60.jump('track:')); ok(/G1 readiness/.test(await p.textContent('#tkBody')),'certification track renders');
 await p.screenshot({path:SH+'s-skills-'+nm+'.png',fullPage:true});
 await p.evaluate(()=>__v60.go('story'));
 await p.click('[data-case="safe"]'); await p.locator('.case.open [data-qz]').first().click();
