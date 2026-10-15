@@ -58,7 +58,7 @@
   var EMAIL = /[\w.+-]+@[\w-]+\.[\w.-]+/g;
   var CARD = /\b(?:\d[ -]?){12,18}\d\b/g;
   var MASKED = /(?:[X*•#]{4}[ -]?){1,3}\d{4}\b|\b(?:ending|ends)\s+(?:in\s+)?\d{4}\b|\b(?:visa|mastercard|amex|discover)\b\W{0,3}[X*\d][X*\d -]{3,}/gi;
-  var VIN = /\b[A-Z0-9]{17}\b/gi;
+  var VIN = /\b[A-Z0-9]{16,18}\b/gi; /* 17 characters, give or take one the reader dropped or added (seen: 1HGBH… read as 1THGBH…) */
   var LABEL = /\b(?:customer(?:\s*name)?|cust\.?|name|bill(?:ed)?\s+to|sold\s+to|ship\s+to|owner|insured|driver|plate|lic(?:ense)?(?:\s*(?:plate|no\.?|number|#))?|tag\s*(?:no\.?|#)|vin|policy(?:\s*(?:no\.?|number|#))?|acct\.?(?:\s*(?:no\.?|#))?|account(?:\s*(?:no\.?|number|#))?|member(?:\s*id)?|card(?:\s*(?:no\.?|number|#))?|phone|tel|cell|e-?mail|address|addr)\b\s*[:#.]?/gi;
   var KIND_NAME = { vin: "VIN", phone: "phone number", email: "email address", card: "card number", address: "address", label: "word after a label", mine: "word on your hide list", hand: "hidden by you", shop: "shop detail" };
 

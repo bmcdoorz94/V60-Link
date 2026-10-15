@@ -101,7 +101,7 @@ These are the app icons, unchanged unless noted. `tools/apply_handoff.py` decode
 
 %s
 """ % (now, sh("git", "rev-parse", "--short", "HEAD"), sh("git", "log", "-1", "--format=%cs %s"), version(), len(fl), len(bins), format(total, ","), state, "\n".join(rows), "\n".join(blocks), "\n".join(bins))
-    with open(dest, "w", encoding="utf-8") as fh: fh.write(doc)
+    with open(dest, "w", encoding="utf-8", newline="\n") as fh: fh.write(doc)
     print("wrote", dest, format(len(doc.encode()), ","), "bytes,", len(fl), "text files,", len(bins), "binary")
 
 def version():

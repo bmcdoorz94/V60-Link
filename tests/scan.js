@@ -32,8 +32,11 @@ const srv = http.createServer((q, r) => {
     rb.forEach(b => { (b.redact ? hidden : shown)[b.li] = 1; });
     const shop = { shown: Object.keys(shown).join(","), hidden: Object.keys(hidden).join(",") };
     const door = S._parse("MFD BY VOLVO CAR CORPORATION 11/15 GVWR 2390 KG", "", S._classify("MFD BY VOLVO CAR CORPORATION 11/15 GVWR"));
-    return { hid, door, shop, cls: S._classify("REPAIR ORDER ... TOTAL 12.00") };
+    /* a VIN with no label, read one character long or short, is still caught as a VIN */
+    const misread = ["Stock 1THGBH41JXMN109186 ok", "Stock 1HGBH41JXMN10918 ok"].map(L).map(l => S._detect([l], []).map(b => b.kind + ":" + l.words[b.wi].text).join());
+    return { hid, door, shop, misread, cls: S._classify("REPAIR ORDER ... TOTAL 12.00") };
   });
+  ok(unit.misread.join("|") === "vin:1THGBH41JXMN109186|vin:1HGBH41JXMN10918", "VIN read with a character too many or too few is hidden (" + unit.misread.join("|") + ")");
   ok((unit.hid[0] || []).join(" ") === "Jordan Sample", "name after Customer: hidden");
   ok((unit.hid[1] || []).indexOf("1HGBH41JXMN109186") >= 0, "VIN hidden");
   ok((unit.hid[2] || []).join(" ") === "(512) 555-0142", "phone hidden");

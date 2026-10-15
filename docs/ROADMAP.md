@@ -2,8 +2,8 @@
 
 Living tracker. Update it at the end of every work session: move finished items to Done, add new ideas, record answers to open questions.
 
-## Status (2026-10-10)
-Story case board shipped. 24 tabs across Today, Learn, Car, Check and Data. Tests pass on phone, desktop and dark.
+## Status (2026-10-14)
+The car is the menu (manual shell), Live link works on the real car in Bluefy, Glovebox documents intake shipped. Work now also happens in Claude Code on Kyle's Windows PC (docs/LOCAL_SETUP.md). `npm test` runs all 12 test files in Chromium and in iPhone WebKit (Bluefy's engine): 24 of 24 pass.
 
 ## Next
 - [ ] Auto-read uploads with privacy redaction (on-device OCR in Bluefy, black out VIN/plate/name/address/phone/card before saving or syncing). Full spec in docs/HANDOFF_STATE.md, step 2.
@@ -73,6 +73,7 @@ Story case board shipped. 24 tabs across Today, Learn, Car, Check and Data. Test
 - [ ] Desktop: consider the figure and the sheet side by side above 1000 px.
 
 ## Done
+- 2026-10-14: Tests run on the iPhone engine. `tests/run.js` (`npm test`) builds and runs every test in Chromium and in WebKit dressed as an iPhone 13, in parallel (about 80 s). regression.js and features.js now fail with exit code 1 instead of only printing. Found while doing it: the on-device reader can add or drop a character in a VIN (1HGBH… read as 1THGBH…), which slipped past the 17-character VIN rule; scan.js now treats 16 to 18 characters as a VIN (tests/scan.js covers both). Windows fixes: `.gitattributes` pins LF, the Python tools write UTF-8 with LF, and files.json uses forward slashes on every OS.
 - 2026-10-13: Readings from Kyle's 18 photos (2026-10-12) added as "Your car" rows, marked as from his photos: door label date 08/15, market code 31, colour code 717-46, GVWR/GAWR; placard 215/50R17 at 38 psi, no spare; Sentury UHP 215/50ZR17 95W extra load, DOT week 43 of 2023; coolant cap 145 kPa; A/C R-134a 800 g PAG with tracer dye; emission label T2B5 / ULEV 125, engine family GVVXV02.0U3T; engine cover B4204T11; leather seats. The bay schematic now matches a photo taken from the bumper (driver side on the right); old bay-map pins are mirrored when imported.
 - 2026-10-13: The owner's manual folded into the thin items: three new articles (electric parking brake; starting and the three ignition modes; steering, steering force and Volvo's economical-driving list), 14 new facts, and Check-it chapters for 2.4, 3.2 and 4.3 that walk the procedure from Volvo's own pages. Glossary terms now unlock with an item's chapters, and an article an open chapter points at is in the Library at once.
 - 2026-10-13: Cases page in the manual's dress (act headings, → § labels to the items a case points at, stamps, the Next box); the home's Now strip counts today's notes; item glossaries limited to the eight facts closest to the part.

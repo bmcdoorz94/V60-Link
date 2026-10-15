@@ -39,5 +39,5 @@ console.log('upg first',await p.textContent('.upg li h3'));
 await p.evaluate(()=>{document.querySelector('.upg details').open=true}); await p.click('[data-upq="tires:0"]');
 console.log('upg verdict',await p.textContent('.upg li .verdict'));
 console.log('health actions',await p.evaluate(()=>V60.computeHealth().actions.map(a=>a.text.slice(0,60))));
-console.log('errs',errs);
+console.log('errs',errs); if(errs.length){console.log('FAIL page errors');process.exitCode=1;}
 await b.close();})();

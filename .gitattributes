@@ -1,0 +1,5 @@
+# Keep LF line endings on every machine (Windows checkouts included), so builds and handoffs match byte for byte.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.pdf binary

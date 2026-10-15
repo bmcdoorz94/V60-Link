@@ -17,5 +17,6 @@ for (const t of tabs){await p.evaluate(t=>__v60.go(t),t);await p.waitForTimeout(
 // data-jump targets
 const bad=await p.evaluate((tabs)=>{const s=new Set();document.querySelectorAll('[data-jump^="tab:"]').forEach(e=>{const t=e.getAttribute('data-jump').slice(4); if(!tabs.includes(t)) s.add(t)}); return [...s];},tabs);
 console.log(nm,'tabs',tabs.length,tabs.join(','),'\n errs',errs,'\n overflow',JSON.stringify(ovs),'\n badjump',bad);
+if(errs.length||Object.keys(ovs).length||bad.length){console.log('FAIL',nm);process.exitCode=1;}
 await ctx.close();}
 await b.close();})();

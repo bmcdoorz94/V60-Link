@@ -73,7 +73,7 @@ Update 2026-10-12: Kyle reports it still drops with the OBDLink app closed and a
    - Test on a real iPhone: first-use download time and reading speed.
 6. **Guided mode:** tune the thresholds (4 points for assisted, 10 for on your own) after Kyle uses it.
 7. **Kyle's feedback pending** on the 3D trailer (sound mix, phone smoothness, drop lines) and on guided mode.
-8. **After any change:** build, run the tests, check `tests/shots/`, and update ROADMAP.md, GAME_DESIGN.md and this file. Push small commits so the `handoff` branch stays current.
+8. **After any change:** build, run the tests (`npm test` where `npm install` is done: both Chromium and iPhone WebKit), check `tests/shots/` (the `-iphone.png` shots first), and update ROADMAP.md, GAME_DESIGN.md and this file. Push small commits so the `handoff` branch stays current.
 
 ## 3. Pending Logic & Blockers
 - **OBDLink CX facts.** Source: OBDLink's "OBDLink CX adapter notes" support article.

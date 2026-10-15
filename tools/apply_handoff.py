@@ -73,7 +73,7 @@ def main():
                 if not dry: os.remove(fp)
     parts = [section(outside, t) for t in ("1. Current Active Objective", "2. Immediate Next Steps", "3. Pending Logic & Blockers")]
     if all(parts) and not dry:
-        open(os.path.join(ROOT, "docs", "HANDOFF_STATE.md"), "w", encoding="utf-8").write("\n\n".join(parts) + "\n")
+        open(os.path.join(ROOT, "docs", "HANDOFF_STATE.md"), "w", encoding="utf-8", newline="\n").write("\n\n".join(parts) + "\n")
     print(("DRY RUN: " if dry else "") + "%d changed, %d identical, %d refused, %d deleted" % (len(changed), len(same), len(refused), len(deleted)))
     for c in changed: print("  changed", c[0], c[1])
     for r in refused: print("  refused (build output or outside repo)", r)

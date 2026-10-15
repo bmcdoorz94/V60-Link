@@ -21,7 +21,7 @@ def read(*p):
 
 def write(path, text):
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w", encoding="utf-8") as f:
+    with open(path, "w", encoding="utf-8", newline="\n") as f:
         f.write(text)
 
 def main():
@@ -112,10 +112,10 @@ self.addEventListener("fetch", function (e) {
     if os.path.isdir(art): shutil.rmtree(art)
     write(os.path.join(art, "garage.html"), "<title>V60 Garage</title>\n" + fonts + '\n<link rel="stylesheet" href="app.css">\n' + body + "\n" + verjs + "\n" + "\n".join('<script src="%s"></script>' % f for f in js_files) + "\n")
     write(os.path.join(art, "app.css"), css)
-    files = {"app.css": os.path.join("dist-artifact", "app.css")}
+    files = {"app.css": "dist-artifact/app.css"}
     for f in js_files:
         write(os.path.join(art, *f.split("/")), read("js", *f.split("/")[1:]))
-        files[f] = os.path.join("dist-artifact", *f.split("/"))
+        files[f] = "dist-artifact/" + f
     write(os.path.join(art, "files.json"), json.dumps(files, indent=1))
     print("built", ver, "modules:", ", ".join(mods), "data:", ", ".join(DATA))
 
