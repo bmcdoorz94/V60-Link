@@ -2652,5 +2652,844 @@ window.V60_G1_ENTRIES = {
     ]
    }
   ]
+ },
+ "E17": {
+  "body": [
+   "Some rear calipers have the parking brake built in, so the piston cannot just be pushed straight back the way a plain hydraulic piston is.",
+   "On calipers with a mechanical parking brake and clearance adjuster, Brembo returns the piston by turning it or by using an adjustment screw, depending on the caliper type.",
+   "For electric parking brake calipers, Brembo's instructions connect a diagnostic tool and enter maintenance mode as the vehicle maker specifies; after an electrical failure, the actuator is removed and the piston pulled back by turning its Torx screw clockwise.",
+   "ZF warns not to press an electric parking brake piston back while rotating it, because that damages the spindle, and says the notches on the piston have no function.",
+   "Pushing any piston back sends fluid up into the reservoir, so the cap is opened and the level watched to stop an overflow that can damage paint."
+  ],
+  "car": "Volvo says the V60's rear brake linings must be replaced at a workshop because of the electric parking brake's design, and recommends an authorized Volvo workshop. The owner's manual adds that the parking brake can be neither applied nor released if battery voltage is too low.",
+  "src": [
+   [
+    "How to replace brake pad. Brake pad assembly instruction",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-disassembly-and-installation-of-brake-pads-for-car-commercial-vehicles-280496"
+   ],
+   [
+    "Instructions for replacing brake rotors and pads: Greenance Kit",
+    "https://www.bremboparts.com/america/en/support/assembly-instructions/CarAM_EvKit"
+   ],
+   [
+    "Instructions for replacing the brake calipers on cars and light commercial vehicles",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-replacing-the-brake-calipers-on-cars-and-light-commercial-vehicles-280504"
+   ],
+   [
+    "The best electric parking brake",
+    "https://aftermarket.zf.com/en/aftermarket-portal/whats-new/expert-blog/inbrief-trw-epb-actuators/"
+   ],
+   [
+    "Instructions for replacing the brake caliper",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-replacing-the-brake-caliper-280503"
+   ],
+   [
+    "V60 Parking brake | Volvo Support AU",
+    "https://www.volvocars.com/au/support/car/v60/14w20/article/063c7e8bf78eea4dc0a801e800a131f7/"
+   ],
+   [
+    "Volvo V60 2016 Owner's Manual, Web Edition (TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A technician is retracting the piston of a rear caliper fitted with an electric parking brake actuator. Which action is MOST likely to damage the actuator spindle?",
+    "o": [
+     "Entering the maintenance mode with a diagnostic tool first",
+     "Pressing the piston back while rotating it",
+     "Opening the reservoir cap before retracting",
+     "Supporting the caliper so the hose is not stretched"
+    ],
+    "a": 1,
+    "why": "ZF warns that pressing an electric parking brake piston back while rotating it damages the spindle.",
+    "src": [
+     "The best electric parking brake",
+     "https://aftermarket.zf.com/en/aftermarket-portal/whats-new/expert-blog/inbrief-trw-epb-actuators/"
+    ]
+   },
+   {
+    "q": "A rear caliper has a mechanical parking brake with an automatic clearance adjuster. How is its piston MOST likely returned before fitting new pads?",
+    "o": [
+     "By turning the piston or using the adjustment screw, as the caliper type requires",
+     "By opening the bleeder and pumping the brake pedal",
+     "By applying the parking brake with the pads removed",
+     "By pulling the piston out and refitting it deeper"
+    ],
+    "a": 0,
+    "why": "Brembo's pad instructions say that on calipers with a mechanical parking brake adjustment feature, the piston is returned by turning it or with an adjustment screw, depending on the type.",
+    "src": [
+     "How to replace brake pad. Brake pad assembly instruction",
+     "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-disassembly-and-installation-of-brake-pads-for-car-commercial-vehicles-280496"
+    ]
+   }
+  ]
+ },
+ "E18": {
+  "body": [
+   "Before the caliper comes off, the reservoir cap is opened and the fluid level checked, because pushing the pistons back raises the level.",
+   "For pad or rotor work the caliper's fluid hose stays connected, and the caliper is supported from the chassis so the hose is not stretched, kinked or clamped.",
+   "When the caliper itself is being replaced, Brembo puts a spacer between the seat and the brake pedal to hold the hydraulic circuit closed, loosens the supply line, removes the fastening screws and keeps the detached line raised to limit leakage.",
+   "Inspection covers the caliper and its sliding parts for wear; a caliper showing fluid contamination or damage is replaced.",
+   "Brake fluid irritates skin and eyes and damages paint, so spills are wiped up at once and cleaned with water."
+  ],
+  "car": "Volvo's manual says that if the fluid is below the MIN mark or a brake system message shows, the V60 must not be driven and should be towed to a Volvo technician for a brake inspection.",
+  "src": [
+   [
+    "Instructions for replacing the brake caliper",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-replacing-the-brake-caliper-280503"
+   ],
+   [
+    "How to replace brake pad. Brake pad assembly instruction",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-disassembly-and-installation-of-brake-pads-for-car-commercial-vehicles-280496"
+   ],
+   [
+    "How to replace brake rotors - Brembo Instruction",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-replacement-of-brake-disc-278446"
+   ],
+   [
+    "Volvo V60 2016 Owner's Manual, Web Edition (TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Only the pads are being replaced. Technician A says the caliper is unbolted and hung from the chassis with the fluid hose still connected. Technician B says the fluid hose is disconnected so the caliper can be set on the bench. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Brembo's pad instructions say the caliper fluid hose must not be disconnected and the caliper must be supported so the hose is not stretched, kinked or clamped.",
+    "src": [
+     "How to replace brake pad. Brake pad assembly instruction",
+     "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-disassembly-and-installation-of-brake-pads-for-car-commercial-vehicles-280496"
+    ]
+   },
+   {
+    "q": "With the pads removed, a caliper body is found wet with brake fluid. What is the MOST likely correct action?",
+    "o": [
+     "Clean it and refit it with new pads",
+     "Replace the caliper",
+     "Top up the reservoir and road test",
+     "Grease the piston boot"
+    ],
+    "a": 1,
+    "why": "Brembo says a caliper showing brake fluid contamination or damage is to be replaced.",
+    "src": [
+     "How to replace brake pad. Brake pad assembly instruction",
+     "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-disassembly-and-installation-of-brake-pads-for-car-commercial-vehicles-280496"
+    ]
+   }
+  ]
+ },
+ "E19": {
+  "body": [
+   "The pad seat, bracket, caliper body and guides are cleaned with a cleaner that contains no mineral oil, using a damp cloth; compressed air and hard brushes are not used.",
+   "Cracked or damaged dust boots are replaced, and so are corroded guide bolts.",
+   "On a floating caliper the pins and guide bushes must slide smoothly; damaged rubber parts are replaced.",
+   "Slide guides get a light coat of the grease the vehicle or caliper maker specifies; Brembo's bracket kit greases the inside of the boots, the bushes and their seats, and grease must never reach the braking surfaces.",
+   "Petrol and similar solvents are kept off the boots because they damage them.",
+   "Sticking caliper sliding parts are one of the causes Brembo names for brake noise and vibration."
+  ],
+  "car": null,
+  "src": [
+   [
+    "How to replace brake pad. Brake pad assembly instruction",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-disassembly-and-installation-of-brake-pads-for-car-commercial-vehicles-280496"
+   ],
+   [
+    "How to replace brake rotors - Brembo Instruction",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-replacement-of-brake-disc-278446"
+   ],
+   [
+    "Instructions for replacing the caliper bracket on cars and light commercial vehicles",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-replacing-the-caliper-bracket-on-cars-and-light-commercial-vehicles-280505"
+   ],
+   [
+    "Noises and vibrations - Maintenance",
+    "https://www.bremboparts.com/america/en/support/car/maintenance/noises-and-vibrations-113941"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "During a pad job, one guide bolt of a floating caliper is found corroded. What is the MOST likely correct action?",
+    "o": [
+     "Replace the guide bolt",
+     "Wire-brush it and refit it dry",
+     "Coat it with engine oil",
+     "Leave it, since only the pads are being replaced"
+    ],
+    "a": 0,
+    "why": "Brembo's pad instructions say corroded guide bolts are replaced.",
+    "src": [
+     "How to replace brake pad. Brake pad assembly instruction",
+     "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-disassembly-and-installation-of-brake-pads-for-car-commercial-vehicles-280496"
+    ]
+   },
+   {
+    "q": "All of the following are acceptable when cleaning a caliper bracket and guides EXCEPT:",
+    "o": [
+     "Wiping with a damp cloth",
+     "Using a cleaner without mineral oil",
+     "Blowing the dust off with compressed air",
+     "Replacing a cracked dust boot"
+    ],
+    "a": 2,
+    "why": "Brembo says brake parts are not cleaned with compressed air or hard brushes; a damp cloth and a non-mineral-oil cleaner are used instead.",
+    "src": [
+     "How to replace brake pad. Brake pad assembly instruction",
+     "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-disassembly-and-installation-of-brake-pads-for-car-commercial-vehicles-280496"
+    ]
+   }
+  ]
+ },
+ "E20": {
+  "body": [
+   "The position of every part is noted before removal, and one side of the axle is done at a time so the other side serves as a reference.",
+   "Pad springs are released under control; Brembo fits new pad springs at every pad change and replaces worn shims, and its noise guidance says old anti-noise shims should not be reused.",
+   "Brembo's fitting instructions replace all pads on the axle when friction material is under 2 mm or the wear indicator has come on; its owner article gives new pads as about 10-12 mm and calls for replacement below 3 mm.",
+   "Uneven wear points to damaged discs, incorrect assembly or a caliper malfunction, and the color and surface of removed pads and rotors can reveal caliper, pad or bearing problems.",
+   "Pads touched by grease or oil are replaced, always as an axle set."
+  ],
+  "car": "Volvo's manual says pad condition is checked by raising the V60, removing the wheel and looking at the pads, after letting hot parts cool. Volvo also says the rear linings must be replaced at a workshop because of the electric parking brake.",
+  "src": [
+   [
+    "How to replace brake pad. Brake pad assembly instruction",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-disassembly-and-installation-of-brake-pads-for-car-commercial-vehicles-280496"
+   ],
+   [
+    "Noises and vibrations - Maintenance",
+    "https://www.bremboparts.com/america/en/support/car/maintenance/noises-and-vibrations-113941"
+   ],
+   [
+    "Worn brake pads? Solutions and remedies",
+    "https://www.bremboparts.com/america/en/support/car/maintenance/how-can-i-tell-if-my-brake-pads-are-worn-335458"
+   ],
+   [
+    "When to replace disc brake rotors. Car repair and maintenance",
+    "https://www.bremboparts.com/america/en/support/maintenance/indications-and-bedding-in-90374"
+   ],
+   [
+    "Instructions for replacing brake rotors and pads: Greenance Kit",
+    "https://www.bremboparts.com/america/en/support/assembly-instructions/CarAM_EvKit"
+   ],
+   [
+    "Volvo V60 2016 Owner's Manual, Web Edition (TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "V60 Parking brake | Volvo Support AU",
+    "https://www.volvocars.com/au/support/car/v60/14w20/article/063c7e8bf78eea4dc0a801e800a131f7/"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "On one front wheel the inner pad is worn far more than the outer pad. Which is the MOST likely cause?",
+    "o": [
+     "A caliper malfunction",
+     "Brake fluid that is due for replacement",
+     "Wheel bolts tightened in a star pattern",
+     "DOT 4 fluid in the reservoir"
+    ],
+    "a": 0,
+    "why": "Brembo lists a caliper malfunction, along with damaged discs and incorrect assembly, as a cause of uneven pad wear.",
+    "src": [
+     "Worn brake pads? Solutions and remedies",
+     "https://www.bremboparts.com/america/en/support/car/maintenance/how-can-i-tell-if-my-brake-pads-are-worn-335458"
+    ]
+   },
+   {
+    "q": "One front pad has 1.5 mm of friction material left; the other three front pads have more. Technician A says only that pad needs replacing. Technician B says all pads on the front axle are replaced. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "Brembo replaces all pads on the axle when friction material is under 2 mm, and says pads are always replaced across the axle.",
+    "src": [
+     "How to replace brake pad. Brake pad assembly instruction",
+     "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-disassembly-and-installation-of-brake-pads-for-car-commercial-vehicles-280496"
+    ]
+   }
+  ]
+ },
+ "E21": {
+  "body": [
+   "Caliper inspection covers the pistons, seals, dust boots and sliding parts for damage, corrosion and free movement.",
+   "A caliper showing fluid contamination or damage is replaced, and parts fixed to the piston are not taken apart; Brembo leaves their repair to an authorized workshop.",
+   "Caliper parts are cleaned with agents free of mineral oil, solvents that attack rubber are avoided, and sharp tools are never used to fit rubber parts.",
+   "A replacement caliper is bolted on to the vehicle maker's torque, the line reconnected, and the system bled; Brembo's torque table is a reference only.",
+   "ZF recommends replacing calipers in pairs, replacing an electric parking brake actuator alone only once the caliper is confirmed sound, and calibrating the parking brake after either job."
+  ],
+  "car": "Volvo's manual says a \"Parking brake Service required\" message means a fault: try applying and releasing, and contact a Volvo workshop if it remains. Volvo also routes rear lining replacement on the V60 to a workshop.",
+  "src": [
+   [
+    "Noises and vibrations - Maintenance",
+    "https://www.bremboparts.com/america/en/support/car/maintenance/noises-and-vibrations-113941"
+   ],
+   [
+    "How to replace brake pad. Brake pad assembly instruction",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-disassembly-and-installation-of-brake-pads-for-car-commercial-vehicles-280496"
+   ],
+   [
+    "Instructions for replacing brake rotors and pads: Greenance Kit",
+    "https://www.bremboparts.com/america/en/support/assembly-instructions/CarAM_EvKit"
+   ],
+   [
+    "Instructions for replacing the brake caliper",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-replacing-the-brake-caliper-280503"
+   ],
+   [
+    "The best electric parking brake",
+    "https://aftermarket.zf.com/en/aftermarket-portal/whats-new/expert-blog/inbrief-trw-epb-actuators/"
+   ],
+   [
+    "Volvo V60 2016 Owner's Manual, Web Edition (TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "V60 Parking brake | Volvo Support AU",
+    "https://www.volvocars.com/au/support/car/v60/14w20/article/063c7e8bf78eea4dc0a801e800a131f7/"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A rear caliper with an electric parking brake actuator has just been replaced. What is MOST likely required before the job is finished?",
+    "o": [
+     "Calibrating the parking brake system",
+     "Replacing the brake master cylinder",
+     "Adjusting a parking brake cable",
+     "Removing the actuator from the new caliper"
+    ],
+    "a": 0,
+    "why": "ZF states that the parking brake system must be calibrated after electric parking brake calipers or actuators are replaced.",
+    "src": [
+     "The best electric parking brake",
+     "https://aftermarket.zf.com/en/aftermarket-portal/whats-new/expert-blog/inbrief-trw-epb-actuators/"
+    ]
+   },
+   {
+    "q": "Which cleaner is MOST appropriate for a caliper body and its guides?",
+    "o": [
+     "Petrol",
+     "A cleaning agent containing no mineral oil",
+     "Engine oil",
+     "Any mineral-based solvent"
+    ],
+    "a": 1,
+    "why": "Brembo specifies cleaning the caliper body and guides with non-mineral-oil cleaning agents, since mineral oil must never reach the friction material.",
+    "src": [
+     "Instructions for replacing brake rotors and pads: Greenance Kit",
+     "https://www.bremboparts.com/america/en/support/assembly-instructions/CarAM_EvKit"
+    ]
+   }
+  ]
+ },
+ "E22": {
+  "body": [
+   "Rotor thickness is measured with a gauge at four or more points, and the lowest reading is compared with the MIN TH value stamped on the disc in millimetres.",
+   "A disc under MIN TH is replaced, on both sides of the axle; Brembo also replaces discs with deep scoring, radial cracks, blue or dark spots, or significant deformation.",
+   "Lateral runout is read with a dial gauge set 5 mm in from the outer edge, with the disc held by several wheel nuts; Brembo's limit is 0.10 mm for cars.",
+   "If runout is too high, the disc is refitted in a different position on the hub and measured again; if it is still high, the hub face is measured, with a limit about half the disc's (0.050 mm in Brembo's noise guide).",
+   "Raybestos and Pro-Cut aim for 0.002 in of runout or less as installed, and Pro-Cut names excess runout as the root cause of thickness variation and pedal pulsation.",
+   "A machined rotor must still be above the maker's minimum or machine-to thickness."
+  ],
+  "car": null,
+  "src": [
+   [
+    "Minimum brake disc thickness - Maintenance",
+    "https://www.bremboparts.com/europe/is/support/car/maintenance/minimum-brake-disc-thickness-212337"
+   ],
+   [
+    "When to replace disc brake rotors. Car repair and maintenance",
+    "https://www.bremboparts.com/america/en/support/maintenance/indications-and-bedding-in-90374"
+   ],
+   [
+    "How to replace brake rotors - Brembo Instruction",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-replacement-of-brake-disc-278446"
+   ],
+   [
+    "Noises and vibrations - Maintenance",
+    "https://www.bremboparts.com/america/en/support/car/maintenance/noises-and-vibrations-113941"
+   ],
+   [
+    "Bulletin BPI 12-01: Importance of On-Vehicle Brake Lathe Use",
+    "https://www.procutusa.com/pdf/oem/Raybestor-Bulletin-BPI-12-01.pdf"
+   ],
+   [
+    "PFM Quick Start Training Guide",
+    "https://www.procutusa.com/pdf/trainsmart_pfm-training_guide.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A new rotor shows 0.15 mm of lateral runout on a car where the limit is 0.10 mm. Technician A says to refit the rotor in a different position on the hub and measure again. Technician B says that if runout is still high, the hub mounting face is measured next. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Brembo's disc instructions say to refit the disc in a different position and re-measure, and if runout is still unacceptable, to measure the hub face and replace the hub if needed.",
+    "src": [
+     "How to replace brake rotors - Brembo Instruction",
+     "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-replacement-of-brake-disc-278446"
+    ]
+   },
+   {
+    "q": "A rotor is measured at four points around the disc. Which reading is compared with the MIN TH stamped on the rotor?",
+    "o": [
+     "The highest reading",
+     "The average of the four",
+     "The lowest reading",
+     "The reading nearest the valve stem"
+    ],
+    "a": 2,
+    "why": "Brembo says to measure at least four points and use the lowest value as the reference for the whole disc.",
+    "src": [
+     "Minimum brake disc thickness - Maintenance",
+     "https://www.bremboparts.com/europe/is/support/car/maintenance/minimum-brake-disc-thickness-212337"
+    ]
+   }
+  ]
+ },
+ "E23": {
+  "body": [
+   "The wheel and pads come off, the pistons are retracted, and the caliper is removed from its mount without disconnecting the hose and is supported from the chassis; the carrier is removed if needed, then the disc.",
+   "The hub mounting face is cleaned of rust and deposits and checked for damage, and the new disc's mounting face is cleaned and kept free of oil and grease.",
+   "The wheel bearings are checked for smooth rotation and correct end float before the new disc goes on, and directional vented discs are fitted the right way round.",
+   "Both discs on the axle are replaced together, with new pads, and the brake pedal and parking brake are never applied while the system is apart.",
+   "After fitting, disc runout is checked, the caliper refitted with its slides checked, the pads fitted, the pedal pumped until it feels right, and the fluid level checked."
+  ],
+  "car": "Volvo's manual says to clean the contact surfaces on the wheel and hub before refitting a V60 wheel, then tighten the bolts crosswise to 103 ft. lbs. (140 Nm).",
+  "src": [
+   [
+    "How to replace brake rotors - Brembo Instruction",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-replacement-of-brake-disc-278446"
+   ],
+   [
+    "Volvo V60 2016 Owner's Manual, Web Edition (TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "One front rotor is cracked and the other is in good condition. Technician A says both front rotors are replaced along with the pads. Technician B says the brake pedal may be pressed while the caliper is off to check the master cylinder. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Brembo says both discs on the axle are always replaced together with the pads, and that the brake pedal and parking brake must never be applied while the system is open.",
+    "src": [
+     "How to replace brake rotors - Brembo Instruction",
+     "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-replacement-of-brake-disc-278446"
+    ]
+   },
+   {
+    "q": "Before a new rotor is mounted, which step does MOST to prevent excess runout once it is installed?",
+    "o": [
+     "Greasing the hub face",
+     "Cleaning rust and deposits from the hub mounting face",
+     "Pumping the brake pedal",
+     "Overfilling the brake fluid reservoir"
+    ],
+    "a": 1,
+    "why": "Brembo has the hub mounting face cleaned of rust and deposits and checked for deformation before fitting, then checks runout; grease or oil must not touch the mounting face.",
+    "src": [
+     "How to replace brake rotors - Brembo Instruction",
+     "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-replacement-of-brake-disc-278446"
+    ]
+   }
+  ]
+ },
+ "E24": {
+  "body": [
+   "Before machining, the rotor is checked for cracks, severe discoloration or corrosion and its thickness measured to confirm it is serviceable.",
+   "A Raybestos bulletin says some carmakers, including Honda, Hyundai, Mazda and Volkswagen, stress the on-vehicle lathe as the only way to resurface rotors.",
+   "On an on-car lathe, the hub, rotor and adapter mating faces are cleaned, the adapter nuts are tightened evenly (no more than 20-25 ft-lb in Pro-Cut's PFM guide), and the lathe compensates for runout before it cuts.",
+   "Pro-Cut's PFM guide gives a cut of .004 to .020 in per side, with .005 in per side at most on thin solid or drilled or slotted rotors, and a runout target under .002 in.",
+   "After the cut, runout and thickness are rechecked before the adapter comes off, the rotor must still be above minimum thickness, and it is washed with warm soapy water and wiped until clean to remove metal grit.",
+   "If the rotor has to come off afterwards, it is match-marked to the hub so the runout correction is kept."
+  ],
+  "car": null,
+  "src": [
+   [
+    "Bulletin BPI 12-01: Importance of On-Vehicle Brake Lathe Use",
+    "https://www.procutusa.com/pdf/oem/Raybestor-Bulletin-BPI-12-01.pdf"
+   ],
+   [
+    "PFM Quick Start Training Guide",
+    "https://www.procutusa.com/pdf/trainsmart_pfm-training_guide.pdf"
+   ],
+   [
+    "Pro-Cut 9.0 Technical Manual",
+    "https://www.procutusa.com/pdf/90-technical-manual.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "After an on-car lathe cut, the rotor faces are covered in fine metal dust. What is the MOST appropriate cleaning method?",
+    "o": [
+     "Blowing the dust off with compressed air",
+     "Washing with hot soapy water and a brush",
+     "Wiping with a shop rag and brake grease",
+     "Leaving it for the pads to clean off"
+    ],
+    "a": 1,
+    "why": "The Raybestos bulletin says machined rotors are washed with hot, soapy water and a brush to remove grit.",
+    "src": [
+     "Bulletin BPI 12-01: Importance of On-Vehicle Brake Lathe Use",
+     "https://www.procutusa.com/pdf/oem/Raybestor-Bulletin-BPI-12-01.pdf"
+    ]
+   },
+   {
+    "q": "Technician A says a rotor machined on the car is match-marked to the hub if it must be removed afterwards. Technician B says no pulsation on the road test proves the runout was corrected. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Pro-Cut's guide says to match-mark and refit the rotor in the same position to keep the runout correction, and warns that pulsation can take 5,000-7,000 miles to appear, so a clean test drive proves nothing.",
+    "src": [
+     "PFM Quick Start Training Guide",
+     "https://www.procutusa.com/pdf/trainsmart_pfm-training_guide.pdf"
+    ]
+   }
+  ]
+ },
+ "E25": {
+  "body": [
+   "New pads must move freely in their seats, with friction material facing the disc and any direction arrow pointing the way the wheel turns going forward.",
+   "Grease goes only on the backing plate where it touches the guides and pistons, as the vehicle maker specifies; the back is skipped if the pad has a noise shim, and friction surfaces stay clean.",
+   "Caliper fastening screws are tightened to the vehicle maker's torque, and self-locking screws are replaced with new ones.",
+   "If the hydraulic line was opened, each bleeder is bled into a container through a clear tube: open the bleeder, press the pedal, hold it down, close the bleeder, release, and repeat until the fluid has no bubbles and the pedal feels normal.",
+   "The pedal is then pumped until its travel settles at about one-third of full travel, and with the engine running a firm pedal check confirms no leaks and that the brake lights come on."
+  ],
+  "car": "Volvo's manual says to always leave brake fluid changes to a trained and qualified Volvo service technician, and specifies DOT 4 fluid for the V60.",
+  "src": [
+   [
+    "How to replace brake pad. Brake pad assembly instruction",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-disassembly-and-installation-of-brake-pads-for-car-commercial-vehicles-280496"
+   ],
+   [
+    "How to replace brake rotors - Brembo Instruction",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-replacement-of-brake-disc-278446"
+   ],
+   [
+    "Instructions for replacing brake rotors and pads: Greenance Kit",
+    "https://www.bremboparts.com/america/en/support/assembly-instructions/CarAM_EvKit"
+   ],
+   [
+    "Instructions for replacing the brake caliper",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-replacing-the-brake-caliper-280503"
+   ],
+   [
+    "Instructions for replacing the brake calipers on cars and light commercial vehicles",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-replacing-the-brake-calipers-on-cars-and-light-commercial-vehicles-280504"
+   ],
+   [
+    "Volvo V60 2016 Owner's Manual, Web Edition (TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "When new disc brake pads are installed, where is grease MOST likely applied?",
+    "o": [
+     "On the friction material",
+     "On the rotor braking surface",
+     "On the metal backing plate where it contacts the guides and pistons",
+     "Inside the bleeder screw"
+    ],
+    "a": 2,
+    "why": "Brembo applies grease only to the pad's metal backing and back, as the vehicle maker specifies, and never to friction surfaces.",
+    "src": [
+     "How to replace brake pad. Brake pad assembly instruction",
+     "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-disassembly-and-installation-of-brake-pads-for-car-commercial-vehicles-280496"
+    ]
+   },
+   {
+    "q": "A caliper is being bled with a clear tube from the bleeder into a container. When is the bleeder MOST likely closed?",
+    "o": [
+     "While the pedal is held down",
+     "Just after the pedal is released",
+     "Only once the reservoir is empty",
+     "Before the pedal is first pressed"
+    ],
+    "a": 0,
+    "why": "Brembo's procedure holds the pedal down, closes the bleeder, then releases the pedal and repeats until the fluid runs free of bubbles.",
+    "src": [
+     "Instructions for replacing the brake caliper",
+     "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-replacing-the-brake-caliper-280503"
+    ]
+   }
+  ]
+ },
+ "E26": {
+  "body": [
+   "After reassembly, calipers with a built-in parking brake or automatic clearance adjustment are applied a few times to restore clearance, following the vehicle or caliper maker.",
+   "Brembo requires a caliper with parking brake adjustment to have free travel after repeated applications.",
+   "On a cable-operated caliper, the cable is reconnected, the lever locking pin removed, and the parking brake applied repeatedly until the lever stroke comes back to its minimum.",
+   "The piston must not be moved by the pedal or the parking brake lever while the caliper body is off or the pads are out.",
+   "After electric parking brake caliper or actuator work, the system is reset or calibrated with a diagnostic tool, as the vehicle maker specifies."
+  ],
+  "car": "The V60's parking brake is electric; Volvo's manual notes a faint motor sound when it applies and during its automatic function check, and that the brake pedal moves slightly when it applies or releases. Volvo says the rear linings must be replaced at a workshop because of this design.",
+  "src": [
+   [
+    "How to replace brake pad. Brake pad assembly instruction",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-disassembly-and-installation-of-brake-pads-for-car-commercial-vehicles-280496"
+   ],
+   [
+    "Instructions for replacing brake rotors and pads: Greenance Kit",
+    "https://www.bremboparts.com/america/en/support/assembly-instructions/CarAM_EvKit"
+   ],
+   [
+    "Instructions for replacing the brake calipers on cars and light commercial vehicles",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-replacing-the-brake-calipers-on-cars-and-light-commercial-vehicles-280504"
+   ],
+   [
+    "Instructions for replacing the caliper bracket on cars and light commercial vehicles",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-replacing-the-caliper-bracket-on-cars-and-light-commercial-vehicles-280505"
+   ],
+   [
+    "The best electric parking brake",
+    "https://aftermarket.zf.com/en/aftermarket-portal/whats-new/expert-blog/inbrief-trw-epb-actuators/"
+   ],
+   [
+    "Volvo V60 2016 Owner's Manual, Web Edition (TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "V60 Parking brake | Volvo Support AU",
+    "https://www.volvocars.com/au/support/car/v60/14w20/article/063c7e8bf78eea4dc0a801e800a131f7/"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "New pads have been fitted to a rear caliper with a cable-operated integral parking brake, and the cable is reconnected. What is MOST likely the next step?",
+    "o": [
+     "Apply the parking brake repeatedly until the lever stroke returns to minimum",
+     "Bleed the caliper with the parking brake applied",
+     "Lengthen the cable until the lever is slack",
+     "Drive the car with the parking brake applied to seat the pads"
+    ],
+    "a": 0,
+    "why": "Brembo's caliper instructions reconnect the parking cable, remove the lever locking pin, and apply the parking brake repeatedly until the lever stroke returns to minimum.",
+    "src": [
+     "Instructions for replacing the brake calipers on cars and light commercial vehicles",
+     "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-replacing-the-brake-calipers-on-cars-and-light-commercial-vehicles-280504"
+    ]
+   },
+   {
+    "q": "Technician A says that after a cable-operated integral parking brake caliper is reconnected, nothing more is needed because it adjusts on the first drive. Technician B says that after electric parking brake caliper work, a reset is performed with a diagnostic tool as the vehicle maker specifies. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "Brembo's instructions cycle the parking brake repeatedly after reconnecting the cable, and for electric parking brake calipers finish with a reset done through the diagnostic tool per the vehicle maker.",
+    "src": [
+     "Instructions for replacing the brake calipers on cars and light commercial vehicles",
+     "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-replacing-the-brake-calipers-on-cars-and-light-commercial-vehicles-280504"
+    ]
+   }
+  ]
+ },
+ "E27": {
+  "body": [
+   "The reservoir is topped up to between MIN and MAX with new fluid of the grade the vehicle specifies, and the cap, membrane and diaphragm are cleaned before refitting.",
+   "Brake fluid absorbs moisture over time, which lowers its boiling point and can lead to vapour lock; dark or cloudy fluid is replaced.",
+   "Brembo's general rule is to replace fluid every 2 to 3 years or as the vehicle maker says, and never to switch to a lower DOT grade than the maker specifies.",
+   "The pedal is pumped until its stroke stabilizes; if a firm, steady pedal cannot be reached, the whole system is rechecked for leaks and fluid level and the car is not driven.",
+   "On cars with an electric parking brake, the reset and any internal counters are handled with a diagnostic tool, as the vehicle maker specifies."
+  ],
+  "car": "Volvo specifies DOT 4 fluid with a boiling point above 536 °F (280 °C), 0.63 US qts (0.6 liters), in a reservoir under a round cover at the rear of the engine compartment; it says DOT 4 should never be mixed with any other type of brake fluid. Volvo also says to leave brake fluid changes to a trained and qualified Volvo service technician.",
+  "src": [
+   [
+    "How to replace brake pad. Brake pad assembly instruction",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-disassembly-and-installation-of-brake-pads-for-car-commercial-vehicles-280496"
+   ],
+   [
+    "Which brake fluid do I need for my car?",
+    "https://www.bremboparts.com/america/en/support/car/how-to-choose-the-right-product/which-is-the-right-brake-fluid-for-my-car-195105"
+   ],
+   [
+    "Instructions for replacing the brake calipers on cars and light commercial vehicles",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-replacing-the-brake-calipers-on-cars-and-light-commercial-vehicles-280504"
+   ],
+   [
+    "Volvo V60 2016 Owner's Manual, Web Edition (TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Which fluid does Volvo specify for topping up the brake reservoir on a 2016 V60?",
+    "o": [
+     "DOT 3",
+     "DOT 4 with a boiling point above 536 °F (280 °C)",
+     "Power steering fluid",
+     "Any mix of DOT 4 and DOT 5"
+    ],
+    "a": 1,
+    "why": "The owner's manual specifies DOT 4 with a boiling point above 536 °F (280 °C) and says DOT 4 should never be mixed with any other type of brake fluid.",
+    "src": [
+     "Volvo V60 2016 Owner's Manual, Web Edition (TP 20238)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   },
+   {
+    "q": "Four-year-old brake fluid looks dark and cloudy. Technician A says the fluid has absorbed moisture, which lowers its boiling point. Technician B says the fluid should be replaced. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Brembo explains that fluid absorbs moisture, lowering its boiling point and risking vapour lock, and that dark or cloudy fluid should be replaced.",
+    "src": [
+     "Which brake fluid do I need for my car?",
+     "https://www.bremboparts.com/america/en/support/car/how-to-choose-the-right-product/which-is-the-right-brake-fluid-for-my-car-195105"
+    ]
+   }
+  ]
+ },
+ "E28": {
+  "body": [
+   "The wheel and hub contact surfaces are cleaned, the nuts or bolts are run in by hand, snugged crosswise, and the final torque is applied crosswise with the car back on the ground.",
+   "A torque wrench is used in a star pattern; an impact gun at full power can damage threads and the hub.",
+   "Too little torque lets bolts loosen, too much can distort the rotor or break bolts, and uneven tightening can cause vibration in the steering wheel and pedal and uneven pad wear.",
+   "Before driving, the pedal is pumped until it is firm, the fluid level is checked, and the brake warning lights are confirmed to work.",
+   "Brembo's rotor instructions also call for balancing the wheel after it is refitted."
+  ],
+  "car": "Volvo's manual gives 103 ft. lbs. (140 Nm) for the V60's wheel bolts, tightened alternately crosswise after the car is lowered.",
+  "src": [
+   [
+    "Volvo V60 2016 Owner's Manual, Web Edition (TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "Tightening torques - Maintenance",
+    "https://www.bremboparts.com/america/en/support/car/maintenance/tightening-torques-198994"
+   ],
+   [
+    "How to replace brake rotors - Brembo Instruction",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-replacement-of-brake-disc-278446"
+   ],
+   [
+    "How to replace brake pad. Brake pad assembly instruction",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-disassembly-and-installation-of-brake-pads-for-car-commercial-vehicles-280496"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "What final torque does Volvo give for the wheel bolts on a 2016 V60?",
+    "o": [
+     "76 ft. lbs. (103 Nm)",
+     "103 ft. lbs. (140 Nm)",
+     "129 ft. lbs. (175 Nm)",
+     "150 ft. lbs. (203 Nm)"
+    ],
+    "a": 1,
+    "why": "The owner's manual says to lower the car and tighten the bolts alternately crosswise to 103 ft. lbs. (140 Nm).",
+    "src": [
+     "Volvo V60 2016 Owner's Manual, Web Edition (TP 20238)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   },
+   {
+    "q": "Technician A says the wheel nuts get their final tightening with an impact gun at full power. Technician B says they get their final torque with a torque wrench in a star pattern. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "Brembo calls for a torque wrench and a star pattern, and warns that air or electric guns at maximum power can damage threads and the hub.",
+    "src": [
+     "Tightening torques - Maintenance",
+     "https://www.bremboparts.com/america/en/support/car/maintenance/tightening-torques-198994"
+    ]
+   }
+  ]
+ },
+ "E29": {
+  "body": [
+   "Braking can be weaker when new parts are first used, so the road test starts with low-speed trial stops at moderate speed.",
+   "During the test the pedal is not held down for more than 3 seconds at a time, and the technician listens and feels for noise or vibration.",
+   "The vehicle maker's bedding-in instructions come first; without them, Brembo calls for at least 200 km (125 miles) of gentle, sparing braking without triggering ABS.",
+   "Brembo's maintenance guidance describes bedding-in as about 300 km of brief, gradual applications, and warns that hard braking can overheat the pad and rotor friction material.",
+   "Brakes that are not bedded in properly may not work as they should, and Pro-Cut notes that pulsation from runout can take 5,000-7,000 miles to appear, so a smooth test drive does not prove the rotors are true."
+  ],
+  "car": null,
+  "src": [
+   [
+    "How to replace brake rotors - Brembo Instruction",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-replacement-of-brake-disc-278446"
+   ],
+   [
+    "How to replace brake pad. Brake pad assembly instruction",
+    "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-disassembly-and-installation-of-brake-pads-for-car-commercial-vehicles-280496"
+   ],
+   [
+    "When to replace disc brake rotors. Car repair and maintenance",
+    "https://www.bremboparts.com/america/en/support/maintenance/indications-and-bedding-in-90374"
+   ],
+   [
+    "Instructions for replacing brake rotors and pads: Greenance Kit",
+    "https://www.bremboparts.com/america/en/support/assembly-instructions/CarAM_EvKit"
+   ],
+   [
+    "PFM Quick Start Training Guide",
+    "https://www.procutusa.com/pdf/trainsmart_pfm-training_guide.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "New pads and rotors are fitted, and the vehicle maker gives no bedding-in procedure. Which procedure is MOST in line with Brembo's guidance?",
+    "o": [
+     "Ten hard stops from highway speed to activate ABS",
+     "At least 200 km (125 miles) of gentle, sparing braking without triggering ABS",
+     "Holding the brake pedal down for 30 seconds at a stop",
+     "Driving with the parking brake partly applied"
+    ],
+    "a": 1,
+    "why": "Brembo's disc instructions say that without the maker's procedure, the brakes are run in over at least 200 km (125 miles) with gentle, sparing braking and no ABS activation.",
+    "src": [
+     "How to replace brake rotors - Brembo Instruction",
+     "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-replacement-of-brake-disc-278446"
+    ]
+   },
+   {
+    "q": "All of the following are part of Brembo's road test after a pad replacement EXCEPT:",
+    "o": [
+     "Keeping the pedal down no more than 3 seconds at a time",
+     "Checking for noise or vibration",
+     "Making low-speed trial stops first",
+     "Repeated hard stops to finish bedding-in quickly"
+    ],
+    "a": 3,
+    "why": "Brembo's pad instructions call for reduced speed, no sudden braking, pedal applications of no more than 3 seconds and checks for noise or vibration, then the maker's bedding-in or gentle braking.",
+    "src": [
+     "How to replace brake pad. Brake pad assembly instruction",
+     "https://www.bremboparts.com/america/en/support/car/car-fitting/instructions-for-disassembly-and-installation-of-brake-pads-for-car-commercial-vehicles-280496"
+    ]
+   }
+  ]
  }
 };
