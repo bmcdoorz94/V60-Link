@@ -443,6 +443,8 @@ button.sm { min-height: 32px; padding: 4px 12px; font-size: 13px; }
 .dvt { border: 1px solid rgba(238,243,246,.14); border-radius: 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-width: 0; }
 .dvt b { font-family: var(--font-display); font-weight: 800; font-size: clamp(48px, 16vw, 140px); line-height: 1; font-variant-numeric: tabular-nums; color: #ffd84a; }
 .dvt span { font-size: 15px; font-weight: 700; color: rgba(238,243,246,.7); }
+.dvmsg { margin: 12px 0; min-height: 1.4em; text-align: center; font-size: 17px; color: #eef3f6; }
+.dvmsg:empty { margin: 4px 0; }
 .dvx { min-height: 52px; background: #13222c; color: #eef3f6; border: 1px solid rgba(238,243,246,.2); font-size: 16px; }
 @media (orientation: landscape) { .dvg { grid-template-columns: repeat(4, 1fr); } }
 

@@ -1,6 +1,8 @@
 ## 1. Current Active Objective
 **The redesign: the car is the menu.** Shipped 2026-10-12 as the new shell (see docs/GAME_DESIGN.md, "The manual"). Home = side view with five points → views → items → chapters. `src/js/data/manual.js` holds the spine; `src/js/modules/manual.js` the engine and UI; `src/css/manual.css` and `theme.css` the look. `tests/manual.js` covers it. Next: Kyle's photos as the figures (he will take them), the Cases page in the new dress, fold Today's cards into the home. Everything below this paragraph predates the redesign and still applies.
 
+**First real health check saved (Kyle, 2026-10-15):** P0171 stored, pending and permanent, check-engine light on, all 8 readiness monitors ready; freeze frame warm at idle (916 rpm, coolant 83 °C) with short-term trim +48.4 % and long-term +14.8 %. The Dashboard and Drive mode did not show numbers: fixed the same day (own Start gauges button; Drive mode no longer a perk and starts the gauges itself). Kyle to confirm on the car.
+
 **Live link works on the real car (Kyle, 2026-10-14):** it connected in Bluefy and held for his drive to work after the FFF0 service fix (2026-10-13). The log from that drive was lost to a page reload, so the log is now kept in localStorage `v60-link-log` and shown under the Connect buttons. Still to confirm: whether it stayed connected the whole drive, and whether Kyle saved a report (which closes The Signal). Earlier history follows.
 
 Kyle's OBDLink CX connected in the official OBDLink app. In V60 Garage (Bluefy, Live link) it connected and then dropped instantly.

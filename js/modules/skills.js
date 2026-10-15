@@ -1,5 +1,6 @@
 /* Skill tree: four branches of real-world skill, each node earned by evidence already logged elsewhere in the app.
-   Some nodes grant perks (features that open when the skill is earned): Timeline view, Mechanic detail level, Drive mode.
+   Some nodes grant perks (features that open when the skill is earned): Timeline view, Mechanic detail level.
+   (Drive mode used to be a perk here; it is open to everyone since 2026-10-15, because a locked button read as broken.)
    Revealed by the story at the end of Act 1. */
 (function () {
   var API = null, sel = null;
@@ -16,7 +17,7 @@
     { id: "h4", b: "hands", tier: 4, t: "Wrench", req: "Finish 3 DIY jobs.", ok: function () { return diy() >= 3; }, prog: function () { return Math.min(3, diy()) + " of 3"; } },
     { id: "d1", b: "diag", tier: 1, t: "Listener", req: "Run a health check with Live link (the simulated car counts).", ok: function () { return (mod("live", { scans: [] }).scans || []).length > 0 || !!API.state.lastScan; } },
     { id: "d2", b: "diag", tier: 2, t: "Decoder", req: "Decode 10 entries in the Codebook.", ok: function () { return window.V60_CB && window.V60_CB.count() >= 10; }, prog: function () { return Math.min(10, window.V60_CB ? window.V60_CB.count() : 0) + " of 10"; } },
-    { id: "d3", b: "diag", tier: 3, t: "Data reader", req: "Save 3 real drives in the Data lab.", ok: function () { return API.state.runs.length >= 3; }, prog: function () { return Math.min(3, API.state.runs.length) + " of 3"; }, perk: ["drive", "Drive mode in Live link: oversized gauges for a phone mount"] },
+    { id: "d3", b: "diag", tier: 3, t: "Data reader", req: "Save 3 real drives in the Data lab.", ok: function () { return API.state.runs.length >= 3; }, prog: function () { return Math.min(3, API.state.runs.length) + " of 3"; } },
     { id: "d4", b: "diag", tier: 4, t: "Diagnostician", req: "Solve 5 simulator mystery cars, or get 3 shop jobs right.", ok: function () { var A = API.acad(), jobs = Object.keys(A.jobs || {}).filter(function (k) { return A.jobs[k] && A.jobs[k].correct; }).length; return n((A.sim || {}).correct) >= 5 || jobs >= 3; } },
     { id: "k1", b: "know", tier: 1, t: "Reader", req: "Read 5 Library articles.", ok: function () { return Object.keys(story().read || {}).length >= 5; }, prog: function () { return Math.min(5, Object.keys(story().read || {}).length) + " of 5"; } },
     { id: "k2", b: "know", tier: 2, t: "Scholar", req: "Master 25 flashcards.", ok: function () { return mastered() >= 25; }, prog: function () { return Math.min(25, mastered()) + " of 25"; }, perk: ["mech", "Mechanic detail level: part numbers, specs and bulletin details in every case"] },

@@ -45,23 +45,50 @@
     });
   }
 
-  /* ---------------- drive mode: oversized readouts for a phone mount (perk: Data reader skill) ---------------- */
-  var drive = { el: null };
+  /* ---------------- the dashboard's own start button: the gauges fill only while live data is being read ----------------
+     It drives the same recording as Live data's Start recording, so the two always agree (a MutationObserver keeps the label in step). */
+  function dashSync() {
+    var go = $("dashGo"); if (!go) return;
+    go.disabled = !link; go.textContent = live.on ? "Stop gauges" : "Start gauges";
+    $("driveSt").textContent = !link ? "Connect the adapter first." : (live.on ? "Reading the car." : "Connected. Tap Start gauges.");
+    if (drive && drive.el && !drive.el.hidden) $("dvMsg").textContent = !link ? "Not connected. Exit, connect the adapter, then open Drive mode again." : (live.on ? "" : "Starting...");
+  }
+  function startGauges(chans) {
+    if (!link || live.on) return;
+    (chans || []).forEach(function (p) { if (pidSupported(p)) live.sel[p] = true; });
+    renderCluster(); $("btnLive").click();
+  }
+  $("dashGo").addEventListener("click", function () { if (live.on) $("btnLive").click(); else startGauges(); });
+  new MutationObserver(dashSync).observe($("btnLive"), { attributes: true, childList: true, characterData: true, subtree: true });
+
+  /* ---------------- drive mode: oversized readouts for a phone mount ----------------
+     Open to everyone (it was a skill perk until 2026-10-15; a locked button read as broken). Opening it starts the gauges
+     with speed, RPM, coolant and voltage if the adapter is connected, and stops them again on exit if it started them. */
+  var drive = { el: null, started: false };
   var DRV = [["spd", "mph", function (r) { return isNum(r[0x0D]) ? Math.round(r[0x0D] * 0.621371) : null; }], ["rpm", "rpm", function (r) { return isNum(r[0x0C]) ? Math.round(r[0x0C] / 10) * 10 : null; }], ["cool", "coolant °F", function (r) { return isNum(r[0x05]) ? Math.round(r[0x05] * 1.8 + 32) : null; }], ["volt", "volts", function (r) { return isNum(r[0x42]) ? r[0x42].toFixed(1) : null; }]];
   function driveOpen() {
-    if (window.V60_PERK && !window.V60_PERK("drive")) { $("driveSt").textContent = "Earn the Data reader skill (3 saved drives) to unlock Drive mode."; return; }
     if (!drive.el) {
       drive.el = document.createElement("div"); drive.el.className = "drivemode"; drive.el.id = "lk-drive"; drive.el.setAttribute("role", "dialog"); drive.el.setAttribute("aria-label", "Drive mode");
-      drive.el.innerHTML = '<div class="dvg">' + DRV.map(function (d) { return '<div class="dvt"><b id="lk-dv2-' + d[0] + '">--</b><span>' + d[1] + "</span></div>"; }).join("") + '</div><button type="button" class="dvx" id="lk-driveX">Exit drive mode</button>';
+      drive.el.innerHTML = '<div class="dvg">' + DRV.map(function (d) { return '<div class="dvt"><b id="lk-dv2-' + d[0] + '">--</b><span>' + d[1] + "</span></div>"; }).join("") + '</div><p class="dvmsg" id="lk-dvMsg" role="status"></p><button type="button" class="dvx" id="lk-driveX">Exit drive mode</button>';
       document.body.appendChild(drive.el);
       drive.el.addEventListener("click", function (e) { if (e.target.closest(".dvx")) driveClose(); });
     }
+    DRV.forEach(function (d) { var el = document.getElementById("lk-dv2-" + d[0]); if (el) el.textContent = "--"; });
     drive.el.hidden = false; document.body.classList.add("cine-open"); wake(true);
-    if (!live.on) $("driveSt").textContent = "Start recording to fill the gauges.";
+    drive.started = false;
+    if (link && !live.on) { drive.started = true; startGauges([0x0D, 0x0C, 0x05, 0x42]); }
+    dashSync();
   }
-  function driveClose() { if (drive.el) drive.el.hidden = true; document.body.classList.remove("cine-open"); if (!live.on) wake(false); }
+  function driveClose() {
+    if (drive.el) drive.el.hidden = true; document.body.classList.remove("cine-open");
+    if (drive.started && live.on) $("btnLive").click();
+    drive.started = false;
+    if (!live.on) wake(false);
+    dashSync();
+  }
   function driveUpdate(row) { if (!drive.el || drive.el.hidden) return; DRV.forEach(function (d) { var v = d[2](row), el = document.getElementById("lk-dv2-" + d[0]); if (el && v != null) el.textContent = v; }); }
   $("driveBtn").addEventListener("click", driveOpen);
+  dashSync();
 
   /* ---------------- 0-60 timer ---------------- */
   var zero = { armed: false, running: false, start: 0, prevT: 0, prevMph: 0 };

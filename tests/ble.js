@@ -18,9 +18,12 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
         const rx = { uuid: '0000fff1-0000-1000-8000-00805f9b34fb', properties: { notify: true }, addEventListener: (t, f) => { notify = f; }, startNotifications: () => {
           if (m === 'drop-always' || (m === 'drop-once' && connects === 1)) setTimeout(() => { gatt.connected = false; dev.dispatchEvent(new Event('gattserverdisconnected')); }, 30);
           return Promise.resolve(); } };
+        /* live values like Kyle's car at idle on 2026-10-15: 915 rpm, 5 km/h, coolant 83 °C, long-term trim +14.8 %, 14.3 V */
+        const LIVE = { '010C': '7E8 04 41 0C 0E 4C', '010D': '7E8 03 41 0D 05', '0105': '7E8 03 41 05 7B', '0107': '7E8 03 41 07 93', '0142': '7E8 04 41 42 37 DC', '0120': '7E8 06 41 20 00 00 00 01', '0140': '7E8 06 41 40 40 00 00 00' };
         const reply = cmd => {
           if (/^0100/.test(cmd)) return '7E8 06 41 00 BE 3F A8 13 00\r\r>';
           if (/^ATDPN/.test(cmd)) return 'A6\r\r>';
+          if (LIVE[cmd.slice(0, 4)]) return LIVE[cmd.slice(0, 4)] + '\r\r>';
           if (/^01/.test(cmd)) return 'NO DATA\r\r>';
           return 'OK\r\r>';
         };
@@ -55,6 +58,21 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
       ok(/retrying once/.test(log) && /GATT reconnected/.test(log), 'log shows the drop and the retry');
       ok(/using known service fff0: notify fff1, write fff2/.test(log) && /service fef5:/.test(log), 'picked the CX serial service over the firmware-update one, whatever the letter case: ' + (log.match(/using [^\n]*/) || [''])[0]);
       ok(await p.evaluate(() => window.__connects()) === 2, 'reconnected without a second picker');
+      /* the dashboard has its own start button and its gauges fill with the car's numbers */
+      ok(await p.evaluate(() => { const g = document.getElementById('lk-dashGo'); return !g.disabled && /Start gauges/.test(g.textContent); }), 'Start gauges is ready once connected');
+      await p.click('#lk-dashGo');
+      const dials = await p.waitForFunction(() => { const v = id => (document.getElementById('lk-dv-' + id) || {}).textContent; return /\d/.test(v('rpm')) && /\d/.test(v('cool')) && /\d/.test(v('ltft')) ? { rpm: v('rpm'), spd: v('spd'), cool: v('cool'), volt: v('volt'), ltft: v('ltft') } : null; }, null, { timeout: 15000 }).then(h => h.jsonValue()).catch(() => null);
+      ok(dials && dials.rpm === '920' && dials.cool === '181' && dials.ltft === '+14.8' && dials.spd === '3', 'gauges show the car: ' + JSON.stringify(dials));
+      ok(/Stop gauges/.test(await p.textContent('#lk-dashGo')) && /Stop recording/.test(await p.textContent('#lk-btnLive')), 'Dashboard and Live data agree that it is reading');
+      await p.click('#lk-dashGo'); await p.waitForTimeout(300);
+      ok(/Start gauges/.test(await p.textContent('#lk-dashGo')) && /Start recording/.test(await p.textContent('#lk-btnLive')), 'Stop gauges stops the reading');
+      /* drive mode opens for everyone, starts the gauges itself, and stops them on exit */
+      await p.click('#lk-driveBtn');
+      ok(await p.isVisible('#lk-drive'), 'Drive mode opens (no skill needed)');
+      const big = await p.waitForFunction(() => { const v = id => document.getElementById('lk-dv2-' + id).textContent; return /\d/.test(v('rpm')) && /\d/.test(v('spd')) ? { spd: v('spd'), rpm: v('rpm'), cool: v('cool'), volt: v('volt') } : null; }, null, { timeout: 15000 }).then(h => h.jsonValue()).catch(() => null);
+      ok(big && big.rpm === '920' && big.spd === '3' && big.cool === '181' && big.volt === '14.3', 'Drive mode fills its big numbers by itself: ' + JSON.stringify(big));
+      await p.click('#lk-driveX'); await p.waitForTimeout(300);
+      ok(!(await p.isVisible('#lk-drive')) && /Start recording/.test(await p.textContent('#lk-btnLive')), 'leaving Drive mode stops the reading it started');
     } else if (mode === 'drop-after-atz') {
       const t0 = Date.now();
       await p.waitForFunction(() => /Connected to/.test(document.getElementById('lk-connText').textContent), null, { timeout: 30000 }).catch(() => {});
@@ -67,6 +85,10 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
       const txt = await p.textContent('#lk-connText');
       ok(/Close the OBDLink app/.test(txt), 'keeps dropping: plain advice shown (' + txt + ')'); if (!/Close the OBDLink/.test(txt)) console.log(await p.inputValue('#lk-log'));
       ok(!(await p.evaluate(() => document.getElementById('lk-connFail').hidden)), 'copy-the-log button shown after the failure');
+      ok(await p.evaluate(() => document.getElementById('lk-dashGo').disabled), 'Start gauges stays off while not connected');
+      await p.click('#lk-driveBtn');
+      ok(await p.isVisible('#lk-drive') && /Not connected/.test(await p.textContent('#lk-dvMsg')), 'Drive mode without a connection says so on the big screen');
+      await p.click('#lk-driveX');
       await p.reload(); await p.waitForTimeout(600); await p.evaluate(() => __v60.go('live'));
       const kept = await p.inputValue('#lk-log');
       ok(/connect failed/.test(kept) && /page loaded/.test(kept), 'adapter log survives a reload');
