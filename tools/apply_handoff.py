@@ -13,7 +13,7 @@ Paths must stay inside the repo; build outputs (index.html at root, js/, dist-ar
 import base64, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-REFUSE = re.compile(r"^(index\.html|app\.css|sw\.js|link\.html|manifest\.webmanifest|js/|dist-artifact/)")
+REFUSE = re.compile(r"^(index\.html|version\.json|app\.css|sw\.js|link\.html|manifest\.webmanifest|js/|dist-artifact/)")
 
 def scan(md):
     """Walk the file line by line. Returns (files, outside) where files are (path, is_base64, body) for every

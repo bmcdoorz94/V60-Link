@@ -26,12 +26,12 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A index.html app.css js sw.js manifest.webmanifest link.html dist-artifact
+          git add -A index.html version.json app.css js sw.js manifest.webmanifest link.html dist-artifact
           if git diff --cached --quiet; then echo "No changes"; exit 0; fi
           git commit -m "Build site from source [automated]"
           # another push can land while this build runs; rebase onto it (keeping this build's output) and try again
           for i in 1 2 3; do
             git push && exit 0
-            git fetch origin main && git rebase -X theirs origin/main || { git rebase --abort; python3 tools/build.py; git add -A index.html app.css js sw.js manifest.webmanifest link.html dist-artifact; git commit --amend --no-edit; }
+            git fetch origin main && git rebase -X theirs origin/main || { git rebase --abort; python3 tools/build.py; git add -A index.html version.json app.css js sw.js manifest.webmanifest link.html dist-artifact; git commit --amend --no-edit; }
           done
           git push

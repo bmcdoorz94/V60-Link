@@ -63,19 +63,45 @@ def main():
 </head>
 <body>
 """ % (fonts, h)
+    # Update notice. Bluefy (and other iOS browsers built on WKWebView) has no service worker, so the bar must not depend
+    # on one: the page also compares its own version with version.json whenever it is opened or comes back to the front.
     sw_reg = """<script>
-if ("serviceWorker" in navigator && location.protocol === "https:") {
-  navigator.serviceWorker.register("sw.js").then(function (reg) {
-    function offer(w) { var b = document.getElementById("updateBar"); if (!b) return; b.hidden = false; b.querySelector("button").onclick = function () { w.postMessage("skip"); }; }
-    if (reg.waiting && navigator.serviceWorker.controller) offer(reg.waiting);
-    reg.addEventListener("updatefound", function () { var w = reg.installing; w.addEventListener("statechange", function () { if (w.state === "installed" && navigator.serviceWorker.controller) offer(w); }); });
-    setInterval(function () { reg.update().catch(function () {}); }, 30 * 60 * 1000);
-  });
-  var reloaded = false;
-  navigator.serviceWorker.addEventListener("controllerchange", function () { if (reloaded) return; reloaded = true; location.reload(); });
-}
+(function () {
+  var bar = document.getElementById("updateBar"), waiting = null, reloaded = false;
+  function offer(w) { if (w) waiting = w; if (!bar) return; bar.hidden = false; bar.querySelector("button").onclick = refresh; }
+  function refresh() {
+    if (waiting) { waiting.postMessage("skip"); setTimeout(hard, 1500); return; }
+    hard();
+  }
+  /* a fresh address skips the 10-minute browser cache GitHub Pages allows on index.html */
+  function hard() { if (reloaded) return; reloaded = true; location.replace(location.pathname + "?u=" + Date.now() + location.hash); }
+  try { if (/[?&]u=\\d+/.test(location.search)) history.replaceState(null, "", location.pathname + location.hash); } catch (e) {}
+  var last = 0;
+  function check(force) {
+    if (!/^https?:$/.test(location.protocol) || !window.V60_VERSION) return;
+    var now = Date.now(); if (!force && now - last < 60000) return; last = now;
+    fetch("version.json?t=" + now, { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
+      if (j && j.v && j.v !== window.V60_VERSION) offer();
+    }).catch(function () {});
+  }
+  window.__v60CheckUpdate = check;
+  setTimeout(function () { check(true); }, 2000);
+  document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") check(); });
+  window.addEventListener("pageshow", function (e) { if (e.persisted) check(true); });
+  window.addEventListener("focus", function () { check(); });
+  setInterval(function () { check(true); }, 10 * 60 * 1000);
+  if ("serviceWorker" in navigator && location.protocol === "https:") {
+    navigator.serviceWorker.register("sw.js").then(function (reg) {
+      if (reg.waiting && navigator.serviceWorker.controller) offer(reg.waiting);
+      reg.addEventListener("updatefound", function () { var w = reg.installing; w.addEventListener("statechange", function () { if (w.state === "installed" && navigator.serviceWorker.controller) offer(w); }); });
+      setInterval(function () { reg.update().catch(function () {}); }, 30 * 60 * 1000);
+    }).catch(function () {});
+    navigator.serviceWorker.addEventListener("controllerchange", function () { if (reloaded) return; reloaded = true; location.reload(); });
+  }
+})();
 </script>"""
     write(os.path.join(ROOT, "index.html"), pwa_head + body + "\n" + verjs + "\n" + scripts + "\n" + sw_reg + "\n</body>\n</html>\n")
+    write(os.path.join(ROOT, "version.json"), json.dumps({"v": ver}) + "\n")
 
     shell = ["./", "index.html", "app.css", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "icons/icon-180.png"] + js_files
     sw = """/* V60 Garage service worker, version %s */
