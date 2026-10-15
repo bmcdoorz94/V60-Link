@@ -33,7 +33,7 @@
     ];
     var shown = Z.filter(function (z) { return document.getElementById("p-" + z[1]) && vis(z[1]); });
     $("tdQuick").innerHTML = '<svg class="gmap" viewBox="0 0 360 200" role="group" aria-label="Your garage. Lit areas are open."><path class="gbody" d="M40 30 H300 Q348 34 350 100 Q348 166 300 170 H40 Q12 166 10 100 Q12 34 40 30 Z"/>' +
-      Z.map(function (z) { var on = shown.indexOf(z) >= 0; return '<g class="gz ' + (on ? "on" : "off") + '"' + (on ? ' role="button" tabindex="0" data-jump="tab:' + z[1] + '" aria-label="' + esc(z[4]) + '"' : ' aria-hidden="true"') + ">" + z[2] + "</g>"; }).join("") +
+      Z.map(function (z) { var on = shown.indexOf(z) >= 0; return '<g class="gz ' + (on ? "on" : "off") + '"' + (on ? ' role="button" tabindex="0" data-jump="tab:' + z[1] + '" aria-label="' + esc(z[4]) + '"' : ' aria-hidden="true"') + ">" + (on ? '<circle class="ghit" cx="' + z[3][0] + '" cy="' + (z[3][1] - 4) + '" r="20"/>' : "") + z[2] + "</g>"; }).join("") + /* ghit: a finger-sized tap area at each label */
       shown.map(function (z) { return '<text class="glab" x="' + z[3][0] + '" y="' + z[3][1] + '" text-anchor="middle">' + esc(z[4]) + "</text>"; }).join("") + "</svg>" +
       '<p class="gmhint">' + shown.length + " of " + Z.length + " areas open. Tap a lit area.</p>";
     var lb = null; try { lb = localStorage.getItem("v60-garage-lastbackup"); } catch (e) {}

@@ -85,13 +85,32 @@ def main():
   }
   function label(t) { if (chip) chip.textContent = t; }
   var mineTxt = "Version " + when(window.V60_VERSION);
+  /* Kyle's choice (2026-10-15): update by itself when the app is opened, never in the middle of something.
+     "Opened" = the first seconds after loading with no tap or key yet, or coming back after 5+ minutes away.
+     Never while the adapter is connected, Drive mode or the photo review is open, or a field is being typed in.
+     One try per version: if the reload still serves the old page (a cache), the bar is offered instead of looping. */
+  var hiddenAt = 0, opening = true;
+  ["pointerdown", "keydown"].forEach(function (t) { window.addEventListener(t, function () { opening = false; }, true); });
+  setTimeout(function () { opening = false; }, 12000);
+  function busy() {
+    var q = function (id) { return document.getElementById(id); }, a = document.activeElement;
+    if (q("lk-btnDisconnect") && !q("lk-btnDisconnect").disabled) return true;
+    if ((q("lk-drive") && !q("lk-drive").hidden) || (q("scanOv") && !q("scanOv").hidden)) return true;
+    return !!(a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.type !== "checkbox" && a.type !== "radio");
+  }
+  function tried(v) { try { return sessionStorage.getItem("v60-autoupd") === v; } catch (e) { return true; } }
+  function autoUpdate(v) {
+    if (!opening || busy() || tried(v)) return false;
+    try { sessionStorage.setItem("v60-autoupd", v); } catch (e) { return false; }
+    label("Updating to " + when(v) + "..."); hard(); return true;
+  }
   var last = 0;
   function check(force, tell) {
     if (!/^https?:$/.test(location.protocol) || !window.V60_VERSION) return;
     var now = Date.now(); if (!force && now - last < 60000) return; last = now;
     if (tell) label("Checking...");
     fetch("version.json?t=" + now, { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
-      if (j && j.v && j.v !== window.V60_VERSION) { offer(); label("New version ready: " + when(j.v)); }
+      if (j && j.v && j.v !== window.V60_VERSION) { if (tell || !autoUpdate(j.v)) { offer(); label("New version ready: " + when(j.v)); } }
       else if (tell) { label("Up to date · " + when(window.V60_VERSION)); setTimeout(function () { label(mineTxt); }, 4000); }
     }).catch(function () { if (tell) { label("Could not check. Offline?"); setTimeout(function () { label(mineTxt); }, 4000); } });
   }
@@ -101,7 +120,11 @@ def main():
     chip.addEventListener("click", function () { if (bar && !bar.hidden) { refresh(); return; } check(true, true); });
   }
   setTimeout(function () { check(true); }, 2000);
-  document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") check(); });
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "hidden") { hiddenAt = Date.now(); return; }
+    if (hiddenAt && Date.now() - hiddenAt >= 5 * 60 * 1000) { opening = true; setTimeout(function () { opening = false; }, 12000); check(true); } else check();
+    hiddenAt = 0;
+  });
   window.addEventListener("pageshow", function (e) { if (e.persisted) check(true); });
   window.addEventListener("focus", function () { check(); });
   setInterval(function () { check(true); }, 10 * 60 * 1000);

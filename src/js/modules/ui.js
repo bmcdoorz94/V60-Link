@@ -43,6 +43,28 @@
     return out.join("").replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").replace(/\n[ \t]+/g, "\n").trim();
   }
   window.V60_FILE = { save: saveFile, textOf: textOf, ios: IOS, bluefy: BLUEFY, canPrint: !IOS };
+
+  /* Tables on an upright phone: every cell gets its column name (data-label) so the CSS can stack each row as a small
+     card instead of a 600 px table scrolling sideways. Re-run whenever a page redraws a table. */
+  function labelTables() {
+    document.querySelectorAll(".scroll table").forEach(function (t) {
+      var head = t.tHead && t.tHead.rows[0]; if (!head) return;
+      var names = Array.prototype.map.call(head.cells, function (c) { return c.textContent.trim(); });
+      Array.prototype.forEach.call(t.tBodies, function (tb) {
+        Array.prototype.forEach.call(tb.rows, function (tr) {
+          var col = 0;
+          Array.prototype.forEach.call(tr.cells, function (td) {
+            if (td.colSpan > 1) td.setAttribute("data-wide", ""); else if (!td.hasAttribute("data-label")) td.setAttribute("data-label", names[col] || "");
+            col += td.colSpan || 1;
+          });
+        });
+      });
+    });
+  }
+  var tq = 0;
+  function queueTables() { if (tq) return; tq = requestAnimationFrame(function () { tq = 0; labelTables(); }); }
+  if (window.MutationObserver) new MutationObserver(queueTables).observe(document.documentElement, { childList: true, subtree: true });
+  queueTables();
   function daysSince(d) { if (!d) return null; return Math.floor((Date.now() - new Date(String(d).slice(0, 10) + "T12:00:00").getTime()) / 864e5); }
   function pulse(api) {
     var el = document.getElementById("pulse"); if (!el) return;
