@@ -667,6 +667,838 @@ window.V60_G1_ENTRIES = {
    }
   ]
  },
+ "D14": {
+  "body": [
+   "Diagnosing a front noise, handling, ride height or ride quality complaint begins with the vehicle's history: past repairs, how it handles, how it is used, and whether the shocks or struts have 50,000 miles (80,000 km) or more on them.",
+   "A road test checks for harshness over bumps, bouncing or floating, diving, squatting or rolling in maneuvers, poor stability on rough roads, abrupt topping out or bottoming out, and unusual suspension noise.",
+   "Moog's symptom chart lists coil springs, strut assemblies, sway bar bushings and sway bar links among the parts behind body lean when turning, accelerating or braking.",
+   "Ride height is checked against the factory service manual before parts are replaced or the car is aligned, because camber and toe readings are only accurate at the correct ride height.",
+   "On Volvos with leveling control (air suspension), Volvo says to turn leveling control off before lifting the car with a jack, because the height change can cause problems in the pneumatic suspension; the V90 menu path is Settings, My Car, Parking Brake and Suspension, Disable Leveling Control."
+  ],
+  "car": "Volvo's V60 specification lists the front suspension as McPherson struts with coil springs, hydraulic shock absorbers and a stabilizer bar, so there is no air suspension to disable on this car.",
+  "src": [
+   [
+    "How to Conduct a Shock or Strut Inspection",
+    "https://www.monroe.com/technical-resources/tech-tips/how-to-conduct-a-shock-strut-inspection.html"
+   ],
+   [
+    "Car Suspension & Steering Diagrams | MOOG Parts",
+    "https://www.moogparts.com/technical/diagnostic-center/car-crossover.html"
+   ],
+   [
+    "THE IMPACTS OF AGED, OVERLOADED AND MODIFIED SUSPENSIONS – WHAT YOU NEED TO KNOW FOR A SUCCESSFUL INSPECTION AND REPAIR - Mevotech",
+    "https://www.mevotech.com/article/the-impacts-of-aged-overloaded-and-modified-suspensions-what-you-need-to-know-for-a-successful-inspection-and-repair/"
+   ],
+   [
+    "V90 Leveling control settings | Volvo Support US",
+    "https://www.volvocars.com/us/support/car/v90/article/68aee4d18e50b791c0a80151549e8abd/"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A car is going in for a wheel alignment after a suspension repair. Technician A says ride height should be checked against the service manual first. Technician B says that on a Volvo with leveling control, leveling control should be turned off before the car is lifted with a jack. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Mevotech says alignments are accurate only at the correct ride height, checked by the factory method, and Volvo says to turn off leveling control before jacking because the height change can upset the pneumatic suspension.",
+    "src": [
+     "V90 Leveling control settings | Volvo Support US",
+     "https://www.volvocars.com/us/support/car/v90/article/68aee4d18e50b791c0a80151549e8abd/"
+    ]
+   },
+   {
+    "q": "A customer says the car leans excessively when cornering and braking. Which part is LEAST likely to cause this?",
+    "o": [
+     "Coil springs",
+     "Strut assemblies",
+     "Sway bar links",
+     "Wheel hub assembly"
+    ],
+    "a": 3,
+    "why": "Moog's diagnostic chart ties lean in turns, acceleration and braking to coil springs, strut assemblies, sway bar bushings and links; hub assemblies are listed for vibration, shimmy and ABS light complaints instead.",
+    "src": [
+     "Car Suspension & Steering Diagrams | MOOG Parts",
+     "https://www.moogparts.com/technical/diagnostic-center/car-crossover.html"
+    ]
+   }
+  ]
+ },
+ "D15": {
+  "body": [
+   "A control arm is made up of the arm body, a bushing that attaches it to the frame, and a ball joint that attaches it to the wheel; many front suspensions have an upper and a lower arm on each side.",
+   "Worn control arm bushings show up as a clunk over bumps or when accelerating or braking, pulling or wandering, loose steering in corners, steering wheel shimmy, and wear on the inner or outer tread edges.",
+   "Mevotech says control arm bushings take most of the force during braking, accelerating and cornering, and lists pulling under braking or acceleration and camber-type tire wear as signs they are failing.",
+   "The check includes a road test (accelerate from a stop and feel for a clunk) and a look at each bushing for cracks, tears, leaks, wear and excess movement.",
+   "Know Your Parts warns that pry bars and pliers are rarely called for in manufacturer procedures and can give misleading readings, so bushings and joints are checked by hand and by eye."
+  ],
+  "car": "Volvo's V60 specification lists McPherson struts at the front; Mevotech describes that design as pivoting on the upper strut mount and a lower ball joint.",
+  "src": [
+   [
+    "Signs & Symptoms of a Failing Control Arm",
+    "https://www.moogparts.com/parts-matter/Signs-of-a-Failing-Control-Arm.html"
+   ],
+   [
+    "Top 5 Indicators of Bushing Failure and What to do About Them - Mevotech",
+    "https://www.mevotech.com/article/5-indicators-of-bushing-failure/"
+   ],
+   [
+    "Accurate Diagnoses: How to Check for Worn or Loose Chassis Parts - Mevotech",
+    "https://www.mevotech.com/article/accurate-diagnoses-how-to-check-for-worn-or-loose-chassis-parts/"
+   ],
+   [
+    "Ball Joint, Control Arm, and Tie Rod Inspection Tips | KnowYourParts",
+    "https://www.knowyourparts.com/technical-resources/ride-control/ball-joint-control-arm-and-tie-rod-inspection-tips/"
+   ],
+   [
+    "Suspension 101: The Pros & Cons of Common Suspension Types - Mevotech",
+    "https://www.mevotech.com/article/suspension-101-the-pros-cons-of-common-suspension-types/"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A car clunks from the front when pulling away from a stop and pulls slightly under braking. The front tires show camber-type wear. Which is the most likely cause?",
+    "o": [
+     "Worn control arm bushings",
+     "A worn wheel hub bearing",
+     "A leaking strut boot",
+     "Low brake fluid"
+    ],
+    "a": 0,
+    "why": "Mevotech lists a clunk when accelerating or braking, pulling under braking or acceleration, and camber wear as indicators of control arm bushing failure.",
+    "src": [
+     "Top 5 Indicators of Bushing Failure and What to do About Them - Mevotech",
+     "https://www.mevotech.com/article/5-indicators-of-bushing-failure/"
+    ]
+   },
+   {
+    "q": "Technician A says a large pry bar is the standard tool for checking control arm bushings and ball joints. Technician B says pry bar checks can give misleading readings and cause damage. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "Know Your Parts says manufacturer procedures rarely call for a pry bar and that using one can cause damage and skewed readings, so inspection is done by hand and eye.",
+    "src": [
+     "Ball Joint, Control Arm, and Tie Rod Inspection Tips | KnowYourParts",
+     "https://www.knowyourparts.com/technical-resources/ride-control/ball-joint-control-arm-and-tie-rod-inspection-tips/"
+    ]
+   }
+  ]
+ },
+ "D16": {
+  "body": [
+   "The jounce bumper (KYB calls it a strut bumper) limits suspension travel so the strut does not bottom out; the strut boot covers the polished piston rod.",
+   "A missing or damaged bumper or boot is replaced to avoid early strut failure; the boot keeps dirt, salt and debris off the rod, which helps prevent leaks and rod corrosion.",
+   "Monroe's Strut-Mate boot kit is a direct replacement for a damaged jounce bumper or boot, and its bumper is closed-cell urethane meant to soften severe impacts.",
+   "On a road test, abrupt topping out or bottoming out of the suspension is one of the faults Monroe lists for a shock or strut inspection.",
+   "KYB recommends replacing the strut boot (and mount) whenever the struts are replaced. No sourced procedure for rebound bumpers specifically was found yet."
+  ],
+  "car": null,
+  "src": [
+   [
+    "KYB Strut Mounts & Boots | OE-Quality Suspension Components",
+    "https://www.kyb.com/products/strut-mounts-and-boots/"
+   ],
+   [
+    "Strut Accessories | Monroe Shocks & Struts",
+    "https://www.monroe.com/products/restore-your-ride/accessories.html"
+   ],
+   [
+    "How to Conduct a Shock or Strut Inspection",
+    "https://www.monroe.com/technical-resources/tech-tips/how-to-conduct-a-shock-strut-inspection.html"
+   ],
+   [
+    "Should I replace other parts while having my struts replaced? - KYB Americas LLC",
+    "https://www.kyb.com/resource/faqs/should-i-replace-other-parts-while-having-my-struts-replaced/"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "During strut replacement, the old jounce bumper is found crumbled and the boot is torn. Technician A says these should be replaced because they protect the new strut. Technician B says the bumper only reduces noise and can be left out. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "KYB says the bumper limits travel so the strut does not bottom out and the boot keeps contaminants off the shaft; Monroe says replacing missing or damaged bumpers and boots helps avoid premature strut failure.",
+    "src": [
+     "KYB Strut Mounts & Boots | OE-Quality Suspension Components",
+     "https://www.kyb.com/products/strut-mounts-and-boots/"
+    ]
+   },
+   {
+    "q": "What is the main job of a strut boot?",
+    "o": [
+     "To set ride height",
+     "To keep dirt and debris off the polished piston rod",
+     "To act as the steering pivot bearing",
+     "To hold the coil spring in compression"
+    ],
+    "a": 1,
+    "why": "KYB says boots protect the strut shaft from contaminants, and Monroe says its boot protects the piston rod from rust and corrosion.",
+    "src": [
+     "Strut Accessories | Monroe Shocks & Struts",
+     "https://www.monroe.com/products/restore-your-ride/accessories.html"
+    ]
+   }
+  ]
+ },
+ "D17": {
+  "body": [
+   "Track bars and radius arms are suspension linkages that connect the chassis to the suspension, in the same family as control arms.",
+   "The federal minimum periodic inspection standard (49 CFR 396, Appendix A) rejects any part of a torque, radius or tracking component assembly, or its attaching parts, that is cracked, loose, broken or missing.",
+   "That same standard notes that loose bushings in torque or track rods are not, by themselves, a reject item under that rule.",
+   "No sourced step-by-step procedure for this task was found yet."
+  ],
+  "car": "Volvo's V60 specification lists the front suspension as McPherson struts, coil springs, hydraulic shock absorbers and a stabilizer bar; no track bar or radius arm is listed.",
+  "src": [
+   [
+    "Suspension 101: The Pros & Cons of Common Suspension Types - Mevotech",
+    "https://www.mevotech.com/article/suspension-101-the-pros-cons-of-common-suspension-types/"
+   ],
+   [
+    "Appendix A to Part 396—Minimum Periodic Inspection Standards",
+    "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-396/appendix-Appendix%20A%20to%20Part%20396"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Under the federal minimum periodic inspection standards, which radius or tracking component condition is NOT listed as a reject item on its own?",
+    "o": [
+     "A cracked radius arm",
+     "A missing attaching bolt",
+     "A broken track bar",
+     "A loose bushing in a track rod"
+    ],
+    "a": 3,
+    "why": "Appendix A to Part 396 rejects cracked, loose, broken or missing torque, radius or tracking components but excludes loose bushings in torque or track rods.",
+    "src": [
+     "Appendix A to Part 396—Minimum Periodic Inspection Standards",
+     "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-396/appendix-Appendix%20A%20to%20Part%20396"
+    ]
+   }
+  ]
+ },
+ "D18": {
+  "body": [
+   "A ball joint has a housing, a ball stud, bearings, an end cover and a Belleville washer or spring that keeps axial play at zero as it wears; the spring cannot take up sideways wear, which affects camber and tire wear.",
+   "Load-carrying joints are checked with the arm supported so the joint is unloaded, using a dial indicator for axial (up-down) movement and moving the knuckle for lateral movement.",
+   "On a strut suspension the lower joint is a follower joint: the strut is let fully extend with a stand under the cradle to read axial play, then a jack under the joint and a turn of the steering wheel show lateral play.",
+   "A joint with a built-in wear indicator is checked with the vehicle on its wheels; on some joints with grease fittings, a grease gun that will no longer couple to the fitting means the joint is worn out.",
+   "A torn boot lets water and road debris into the socket and leads to wear; the commercial-vehicle inspection standard rejects any non-rotational motion over 1/4 inch between a linkage member and its attachment point."
+  ],
+  "car": "Volvo's V60 specification lists McPherson struts at the front; Mevotech describes that design as pivoting on the upper strut mount and a lower ball joint.",
+  "src": [
+   [
+    "Ball Joint, Control Arm, and Tie Rod Inspection Tips | KnowYourParts",
+    "https://www.knowyourparts.com/technical-resources/ride-control/ball-joint-control-arm-and-tie-rod-inspection-tips/"
+   ],
+   [
+    "Socket-Style Chassis Parts | MOOG Parts",
+    "https://www.moogparts.com/parts-matter/Whats-Inside-a-Socket-Style-Part.html"
+   ],
+   [
+    "Appendix A to Part 396—Minimum Periodic Inspection Standards",
+    "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-396/appendix-Appendix%20A%20to%20Part%20396"
+   ],
+   [
+    "Suspension 101: The Pros & Cons of Common Suspension Types - Mevotech",
+    "https://www.mevotech.com/article/suspension-101-the-pros-cons-of-common-suspension-types/"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A ball joint has a built-in wear indicator. How should it be checked?",
+    "o": [
+     "With the vehicle raised and the wheel hanging",
+     "With the vehicle on its wheels",
+     "With a pry bar under the tire",
+     "With the strut removed"
+    ],
+    "a": 1,
+    "why": "Know Your Parts says a joint with a built-in wear indicator is checked for play with the vehicle on its wheels.",
+    "src": [
+     "Ball Joint, Control Arm, and Tie Rod Inspection Tips | KnowYourParts",
+     "https://www.knowyourparts.com/technical-resources/ride-control/ball-joint-control-arm-and-tie-rod-inspection-tips/"
+    ]
+   },
+   {
+    "q": "Technician A says the lower ball joint on a MacPherson strut suspension is a follower joint. Technician B says a ball joint's Belleville spring takes up sideways wear as well as axial wear. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Know Your Parts lists the strut-suspension lower joint under follower (unloaded) joint inspection and says the Belleville washer keeps axial play at zero but cannot compensate for lateral wear.",
+    "src": [
+     "Ball Joint, Control Arm, and Tie Rod Inspection Tips | KnowYourParts",
+     "https://www.knowyourparts.com/technical-resources/ride-control/ball-joint-control-arm-and-tie-rod-inspection-tips/"
+    ]
+   }
+  ]
+ },
+ "D19": {
+  "body": [
+   "A solid axle is a dependent suspension: both wheels are tied to one beam and move together; it comes in driven and non-driven forms and is used for heavy loads.",
+   "Mevotech lists high load capacity and easy maintenance as its strengths and poor handling, weight and limited adjustment as its weaknesses.",
+   "The federal minimum periodic inspection standard rejects a front axle beam with any crack or any obvious welded repair.",
+   "No sourced procedure for measuring solid-axle misalignment was found yet."
+  ],
+  "car": "Volvo's V60 specification lists the front suspension as McPherson struts with coil springs, hydraulic shock absorbers and a stabilizer bar, not a solid axle. The sheet uses the word independent only for the rear suspension.",
+  "src": [
+   [
+    "Suspension 101: The Pros & Cons of Common Suspension Types - Mevotech",
+    "https://www.mevotech.com/article/suspension-101-the-pros-cons-of-common-suspension-types/"
+   ],
+   [
+    "Appendix A to Part 396—Minimum Periodic Inspection Standards",
+    "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-396/appendix-Appendix%20A%20to%20Part%20396"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Which statement about a solid front axle is correct?",
+    "o": [
+     "Each front wheel moves independently of the other",
+     "Both wheels are joined by a common beam and move together",
+     "It is the usual design on light unibody cars",
+     "It pivots on an upper strut mount and a lower ball joint"
+    ],
+    "a": 1,
+    "why": "Mevotech describes a solid axle as a dependent suspension whose wheels are connected by a common beam and move together; the strut-mount pivot describes a MacPherson strut.",
+    "src": [
+     "Suspension 101: The Pros & Cons of Common Suspension Types - Mevotech",
+     "https://www.mevotech.com/article/suspension-101-the-pros-cons-of-common-suspension-types/"
+    ]
+   },
+   {
+    "q": "A front axle beam shows a neat weld across one section. Under the federal periodic inspection standard, this is:",
+    "o": [
+     "Acceptable if painted",
+     "Acceptable if the weld is under 1/4 inch",
+     "A reject item",
+     "Only a concern if the tires show wear"
+    ],
+    "a": 2,
+    "why": "Appendix A to Part 396 lists any crack or any obvious welded repair in the front axle beam as a reject condition.",
+    "src": [
+     "Appendix A to Part 396—Minimum Periodic Inspection Standards",
+     "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-396/appendix-Appendix%20A%20to%20Part%20396"
+    ]
+   }
+  ]
+ },
+ "D20": {
+  "body": [
+   "The steering knuckle holds the hub or spindle, mounts the brake caliper, ABS sensor and wheel bearing, and carries the tie rod end and the upper and lower pivot connections.",
+   "Every attachment point is inspected for bends, cracks and breaks; curb or pothole hits can bend a knuckle enough to throw off alignment.",
+   "The knuckle is checked whenever a ball joint or control arm is replaced; a ball stud hole that is worn, corroded or distorted means the knuckle is replaced, and after torquing no gap should show between the ball stud and the knuckle.",
+   "Mating surfaces are cleaned before assembly, since rust at a pivot point can change camber; pinch bolts and ball studs are never hammered into place.",
+   "The federal periodic inspection standard rejects any crack or obvious welded repair in steering components and any loose or missing nut on a steering arm or tie rod arm."
+  ],
+  "car": null,
+  "src": [
+   [
+    "All You Need to Know About Knuckles: Inspecting, Cleaning and When to Replace - Mevotech",
+    "https://www.mevotech.com/article/all-you-need-to-know-about-knuckles-inspecting-cleaning-and-when-to-replace/"
+   ],
+   [
+    "Handling Issues? Check the 3 Potential Causes of Steering Knuckle Failure - Mevotech",
+    "https://www.mevotech.com/article/handling-issues-check-the-3-potential-causes-of-steering-knuckle-failure/"
+   ],
+   [
+    "Appendix A to Part 396—Minimum Periodic Inspection Standards",
+    "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-396/appendix-Appendix%20A%20to%20Part%20396"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "After a hard curb strike, a car pulls to one side and the steering wheel is off center. All of these knuckle checks are correct EXCEPT:",
+    "o": [
+     "Inspect the attachment points for cracks and bends",
+     "Check the ball stud hole for wear or distortion",
+     "Hammer the ball stud into the knuckle to seat it",
+     "Clean rust from the mating surfaces before assembly"
+    ],
+    "a": 2,
+    "why": "Mevotech says never to hammer a pinch bolt or ball joint stud into place, while the other three are part of its knuckle inspection and cleaning advice.",
+    "src": [
+     "All You Need to Know About Knuckles: Inspecting, Cleaning and When to Replace - Mevotech",
+     "https://www.mevotech.com/article/all-you-need-to-know-about-knuckles-inspecting-cleaning-and-when-to-replace/"
+    ]
+   },
+   {
+    "q": "Technician A says the knuckle should be inspected whenever a ball joint is replaced. Technician B says a visible gap between the ball stud and the knuckle after torquing is normal. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Mevotech says to inspect the knuckle when replacing a ball joint or control arm and that no gap should be visible between the ball stud and the knuckle after torquing.",
+    "src": [
+     "Handling Issues? Check the 3 Potential Causes of Steering Knuckle Failure - Mevotech",
+     "https://www.mevotech.com/article/handling-issues-check-the-3-potential-causes-of-steering-knuckle-failure/"
+    ]
+   }
+  ]
+ },
+ "D21": {
+  "body": [
+   "Springs carry the vehicle's weight and absorb bumps; coil, leaf, torsion bar and air springs are the common types.",
+   "Aged springs sag or break; a car that rides lower than it used to may have worn struts, springs or strut mounts, and ride height is checked against the factory service manual.",
+   "A broken coil spring or a deflated air suspension (leak or system failure) is a reject item under the federal periodic inspection standard.",
+   "Spring isolators (insulators) sit between the spring and its seats; Monroe's Strut-Mate kit includes upper and lower isolators, and KYB's Strut-Plus assemblies come with the spring, top mount and insulators already fitted.",
+   "On Volvos with air suspension (leveling control), leveling control is turned off before jacking the car."
+  ],
+  "car": "Volvo's V60 specification lists coil springs and hydraulic shock absorbers at the front, so this car has no front air springs.",
+  "src": [
+   [
+    "Suspension 101: The Pros & Cons of Common Suspension Types - Mevotech",
+    "https://www.mevotech.com/article/suspension-101-the-pros-cons-of-common-suspension-types/"
+   ],
+   [
+    "THE IMPACTS OF AGED, OVERLOADED AND MODIFIED SUSPENSIONS – WHAT YOU NEED TO KNOW FOR A SUCCESSFUL INSPECTION AND REPAIR - Mevotech",
+    "https://www.mevotech.com/article/the-impacts-of-aged-overloaded-and-modified-suspensions-what-you-need-to-know-for-a-successful-inspection-and-repair/"
+   ],
+   [
+    "Shock & Strut Buying Guide | Monroe Shocks & Struts",
+    "https://www.monroe.com/technical-resources/shocks-101/shock-strut-assembly-buying-guide.html"
+   ],
+   [
+    "Appendix A to Part 396—Minimum Periodic Inspection Standards",
+    "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-396/appendix-Appendix%20A%20to%20Part%20396"
+   ],
+   [
+    "Strut Accessories | Monroe Shocks & Struts",
+    "https://www.monroe.com/products/restore-your-ride/accessories.html"
+   ],
+   [
+    "KYB Strut-Plus complete strut assemblies - KYB Americas LLC",
+    "https://www.kyb.com/products/strut-plus/"
+   ],
+   [
+    "V90 Leveling control settings | Volvo Support US",
+    "https://www.volvocars.com/us/support/car/v90/article/68aee4d18e50b791c0a80151549e8abd/"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A customer says the front of the car sits lower than it used to. Which is LEAST likely to be the cause?",
+    "o": [
+     "Sagging coil springs",
+     "Worn struts",
+     "Worn strut mounts",
+     "A worn wheel hub bearing"
+    ],
+    "a": 3,
+    "why": "Monroe says a car riding lower than before points to the strut, springs or strut mount, and Mevotech lists sagging springs as an aged-suspension fault; a hub bearing does not hold the car's height.",
+    "src": [
+     "Shock & Strut Buying Guide | Monroe Shocks & Struts",
+     "https://www.monroe.com/technical-resources/shocks-101/shock-strut-assembly-buying-guide.html"
+    ]
+   },
+   {
+    "q": "Technician A says a broken coil spring is a reject item under the federal periodic inspection standard. Technician B says a deflated air suspension is also a reject item. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Appendix A to Part 396 lists both a broken coil spring and a deflated air suspension from leak or system failure under spring assembly defects.",
+    "src": [
+     "Appendix A to Part 396—Minimum Periodic Inspection Standards",
+     "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-396/appendix-Appendix%20A%20to%20Part%20396"
+    ]
+   }
+  ]
+ },
+ "D22": {
+  "body": [
+   "Leaf springs are one of the spring types used to carry a vehicle's weight, mostly on solid-axle and heavy-duty designs.",
+   "The federal periodic inspection standard rejects any broken or missing leaf, a broken main leaf, and any leaf displaced so it could contact a tire, rim, brake drum or frame.",
+   "The same standard rejects any cracked, broken, loose or missing U-bolt, spring hanger or other axle positioning part.",
+   "No sourced step-by-step procedure for this task was found yet."
+  ],
+  "car": "Not on this car: Volvo's V60 specification lists coil springs at both the front and rear.",
+  "src": [
+   [
+    "Suspension 101: The Pros & Cons of Common Suspension Types - Mevotech",
+    "https://www.mevotech.com/article/suspension-101-the-pros-cons-of-common-suspension-types/"
+   ],
+   [
+    "Appendix A to Part 396—Minimum Periodic Inspection Standards",
+    "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-396/appendix-Appendix%20A%20to%20Part%20396"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Under the federal periodic inspection standard, all of these leaf spring conditions are reject items EXCEPT:",
+    "o": [
+     "A broken main leaf",
+     "A loose U-bolt",
+     "A leaf shifted so it could touch the tire",
+     "Surface rust on an intact leaf"
+    ],
+    "a": 3,
+    "why": "Appendix A to Part 396 lists broken or missing leaves, a broken main leaf, displaced leaves that could contact a tire, and loose or broken U-bolts; surface rust is not listed.",
+    "src": [
+     "Appendix A to Part 396—Minimum Periodic Inspection Standards",
+     "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-396/appendix-Appendix%20A%20to%20Part%20396"
+    ]
+   }
+  ]
+ },
+ "D23": {
+  "body": [
+   "A torsion bar is a spring that carries vehicle weight by twisting; Mevotech lists it with coil, leaf and air springs as the main spring types.",
+   "A stabilizer (anti-roll) bar is also a torsional spring, but its job is to control side-to-side load transfer and body roll, not to carry the vehicle's weight.",
+   "The federal periodic inspection standard rejects a broken torsion bar spring in a torsion bar suspension.",
+   "No sourced procedure for inspecting or adjusting torsion bars and their mounts was found yet."
+  ],
+  "car": "Not on this car: Volvo's V60 specification lists coil springs as the front springs.",
+  "src": [
+   [
+    "Suspension 101: The Pros & Cons of Common Suspension Types - Mevotech",
+    "https://www.mevotech.com/article/suspension-101-the-pros-cons-of-common-suspension-types/"
+   ],
+   [
+    "SLOW YOUR ROLL: ALL ABOUT ANTI-ROLL SYSTEMS! - Mevotech",
+    "https://www.mevotech.com/article/slow-your-roll-all-about-anti-roll-systems/"
+   ],
+   [
+    "Appendix A to Part 396—Minimum Periodic Inspection Standards",
+    "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-III/subchapter-B/part-396/appendix-Appendix%20A%20to%20Part%20396"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Technician A says a torsion bar is a type of spring that carries vehicle weight. Technician B says a stabilizer bar is a torsional spring that controls body roll. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Mevotech lists the torsion bar among the springs that carry vehicle weight and describes the anti-roll bar as a torsional spring that controls left-right load transfer and body roll.",
+    "src": [
+     "SLOW YOUR ROLL: ALL ABOUT ANTI-ROLL SYSTEMS! - Mevotech",
+     "https://www.mevotech.com/article/slow-your-roll-all-about-anti-roll-systems/"
+    ]
+   }
+  ]
+ },
+ "D24": {
+  "body": [
+   "The stabilizer (sway or anti-roll) bar is a torsional spring that limits body roll; bushings mount it to the chassis, and end links connect each end to a moving suspension part such as the control arm, knuckle or strut.",
+   "Worn links or bushings cause clunks, pops or rattles over bumps, loose or vague steering, an unsettled feel in lane changes, and excess body roll.",
+   "Links and bushings are checked with the wheels on the ground at ride height: grip a link at its rod and shake it hard in every direction, and grasp the bar near each bushing and push it up, down and sideways while looking for gaps between bar and bushing.",
+   "Free play at either end of a link, or a cracked, worn, dried-out or loose bushing, means replacement.",
+   "Bushing hardware is torqued at static ride height to the service manual value; most bushings go in dry but some need grease, and they should not be over-compressed."
+  ],
+  "car": "Volvo's V60 specification lists a stabilizer bar in the front suspension.",
+  "src": [
+   [
+    "SLOW YOUR ROLL: ALL ABOUT ANTI-ROLL SYSTEMS! - Mevotech",
+    "https://www.mevotech.com/article/slow-your-roll-all-about-anti-roll-systems/"
+   ],
+   [
+    "Accurate Diagnoses: How to Check for Worn or Loose Chassis Parts - Mevotech",
+    "https://www.mevotech.com/article/accurate-diagnoses-how-to-check-for-worn-or-loose-chassis-parts/"
+   ],
+   [
+    "Diagnostic Tips for Hubs, Links and Bushings - Mevotech",
+    "https://www.mevotech.com/article/diagnostic-tips-for-hubs-links-and-bushings/"
+   ],
+   [
+    "Symptoms of Bad Sway Bar Links",
+    "https://www.moogparts.com/parts-matter/Symptoms-of-Bad-Sway-Bar-Links.html"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A technician is about to check the front stabilizer links for play. How should the car be positioned?",
+    "o": [
+     "Raised with the front wheels hanging free",
+     "On its wheels at ride height",
+     "Raised with only one wheel off the ground",
+     "On a lift with the stabilizer bar disconnected"
+    ],
+    "a": 1,
+    "why": "Mevotech says end links and stabilizer bushings are checked with weight on the wheels and the vehicle at ride height.",
+    "src": [
+     "Accurate Diagnoses: How to Check for Worn or Loose Chassis Parts - Mevotech",
+     "https://www.mevotech.com/article/accurate-diagnoses-how-to-check-for-worn-or-loose-chassis-parts/"
+    ]
+   },
+   {
+    "q": "New stabilizer bar bushings are being installed. Technician A says the bushing hardware should be torqued with the suspension at static ride height. Technician B says every stabilizer bushing must be packed with grease. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Mevotech says to always torque bushing hardware at static ride height and that most bushings install dry, with only some needing grease per the service manual.",
+    "src": [
+     "SLOW YOUR ROLL: ALL ABOUT ANTI-ROLL SYSTEMS! - Mevotech",
+     "https://www.mevotech.com/article/slow-your-roll-all-about-anti-roll-systems/"
+    ]
+   }
+  ]
+ },
+ "D25": {
+  "body": [
+   "A strut inspection starts with the customer's history and a road test, then a physical check of the unit.",
+   "On the physical check, Monroe looks for a bent, rusted, loose or scratched rod, fluid leaking down the side or from the bottom, damaging corrosion, damaged or missing non-replaceable bushings, and cupped or uneven tire wear.",
+   "Worn struts let the tire move too much and wear a cupped pattern; KYB lists nose dive, body roll, dripping fluid and broken brackets as reasons to replace, and says replacement usually restores ride and control after 50,000 miles.",
+   "Struts cannot be refilled or rebuilt; a strut with a replaceable cartridge is identified by a large hex nut at the top of the strut body.",
+   "A complete strut assembly comes with the strut already fitted with its coil spring and top mount, so no spring compressor is needed."
+  ],
+  "car": "Volvo's V60 specification lists McPherson struts with coil springs and hydraulic shock absorbers at the front.",
+  "src": [
+   [
+    "How to Conduct a Shock or Strut Inspection",
+    "https://www.monroe.com/technical-resources/tech-tips/how-to-conduct-a-shock-strut-inspection.html"
+   ],
+   [
+    "How do I know if I need new shocks? - KYB Americas LLC",
+    "https://www.kyb.com/resource/faqs/how-do-i-know-if-i-need-new-shocks/"
+   ],
+   [
+    "Can worn shocks or struts cause new tires to wear unevenly? - KYB Americas LLC",
+    "https://www.kyb.com/resource/faqs/can-worn-shocks-or-struts-cause-new-tires-to-wear-unevenly/"
+   ],
+   [
+    "How do I know if a strut can be rebuilt? - KYB Americas LLC",
+    "https://www.kyb.com/resource/faqs/how-do-i-know-if-a-strut-can-be-rebuilt/"
+   ],
+   [
+    "Quick-Strut Assemblies | Monroe Shocks & Struts",
+    "https://www.monroe.com/products/restore-your-ride/quick-strut-assembly.html"
+   ],
+   [
+    "KYB Strut-Plus complete strut assemblies - KYB Americas LLC",
+    "https://www.kyb.com/products/strut-plus/"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "New front tires show a cupped wear pattern after a few thousand miles. Which is the most likely cause?",
+    "o": [
+     "Worn struts",
+     "A weak battery",
+     "Low coolant",
+     "A sticking parking brake"
+    ],
+    "a": 0,
+    "why": "KYB says worn shocks and struts let the tires move excessively, which produces a cupping wear pattern.",
+    "src": [
+     "Can worn shocks or struts cause new tires to wear unevenly? - KYB Americas LLC",
+     "https://www.kyb.com/resource/faqs/can-worn-shocks-or-struts-cause-new-tires-to-wear-unevenly/"
+    ]
+   },
+   {
+    "q": "Technician A says a leaking sealed strut can be refilled with fluid. Technician B says a large hex nut at the top of the strut body identifies a strut with a replaceable cartridge. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "KYB says struts cannot be refilled or rebuilt, but some have a replaceable cartridge identified by a large hexagonal nut at the top of the body.",
+    "src": [
+     "How do I know if a strut can be rebuilt? - KYB Americas LLC",
+     "https://www.kyb.com/resource/faqs/how-do-i-know-if-a-strut-can-be-rebuilt/"
+    ]
+   }
+  ]
+ },
+ "D26": {
+  "body": [
+   "The strut mount supports the top of the strut and damps road vibration; where the mount is also the steering pivot it contains a bearing, which is a wear item that affects steering response and alignment.",
+   "Worn mounts or bearing plates cause noise, steering bind or pull, early tire wear, and upper strut movement that changes alignment angles.",
+   "With the car on the ground, turn the steering stop to stop and listen for noise or binding, and check the rubber for cracks or separation from the metal.",
+   "Note the piston rod position, raise the car, then grip the spring near the top mount and push and pull the strut: a slight downward shift is normal, but side-to-side movement or a rod that moves freely means the mount is worn.",
+   "Monroe and KYB both recommend replacing the strut mount (and bearing plate) whenever struts are replaced."
+  ],
+  "car": "Volvo's V60 specification lists McPherson struts at the front; Mevotech describes that design as pivoting on the upper strut mount, which is the case where KYB says the mount carries a bearing.",
+  "src": [
+   [
+    "Strut Mounts Vital to Vehicle Safety - Monroe Shock Absorbers",
+    "https://monroe.com.au/?p=1240"
+   ],
+   [
+    "Do KYB strut mounts come with the bearings? - KYB Americas LLC",
+    "https://www.kyb.com/resource/faqs/do-kyb-strut-mounts-come-with-the-bearings/"
+   ],
+   [
+    "Should I replace other parts while having my struts replaced? - KYB Americas LLC",
+    "https://www.kyb.com/resource/faqs/should-i-replace-other-parts-while-having-my-struts-replaced/"
+   ],
+   [
+    "Suspension 101: The Pros & Cons of Common Suspension Types - Mevotech",
+    "https://www.mevotech.com/article/suspension-101-the-pros-cons-of-common-suspension-types/"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A car makes a creaking noise and the steering binds when the wheel is turned from lock to lock while parked. Which is the most likely cause?",
+    "o": [
+     "A worn strut mount bearing",
+     "A worn rear wheel bearing",
+     "Low tire pressure",
+     "A worn stabilizer link"
+    ],
+    "a": 0,
+    "why": "Monroe says a defective strut mount bearing shows up as noise or binding when the steering is turned lock to lock.",
+    "src": [
+     "Strut Mounts Vital to Vehicle Safety - Monroe Shock Absorbers",
+     "https://monroe.com.au/?p=1240"
+    ]
+   },
+   {
+    "q": "After the car is raised, the top of a strut mount is seen to shift slightly downward. Technician A says this alone is normal. Technician B says side-to-side movement of the mount usually means wear. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Monroe's inspection steps say a slight downward shift after lifting is normal and side-to-side movement usually indicates a worn mount.",
+    "src": [
+     "Strut Mounts Vital to Vehicle Safety - Monroe Shock Absorbers",
+     "https://monroe.com.au/?p=1240"
+    ]
+   }
+  ]
+ },
+ "D27": {
+  "body": [
+   "A bearing hum, rumble or growl is present driving straight and gets louder with a slight steering input; Timken says the defective bearing is typically on the side opposite the noise. Clicking on sharp turns more often points to an outer CV joint or loose clamping.",
+   "Other hub bearing signs include play or vibration through the steering wheel, uneven tire wear, pulling, and an ABS warning light; extreme play can damage the ABS sensor.",
+   "The hand check is to grip the tire at 3 and 9, then 12 and 6 o'clock, rock it and feel for roughness; with the wheel, caliper and rotor off, a hub that feels rough, loose or noisy when turned by hand is replaced.",
+   "Timken's dial indicator check seats the bearing by pushing and pulling while rocking the hub at least five times each way; total movement over 0.004 in. means the hub bearing assembly is replaced.",
+   "Most modern hubs are sealed, pre-lubricated Gen 3 units with flanges for the knuckle and the wheel; they are never taken apart and rebuilt.",
+   "On replacement, the knuckle bore is cleaned, the hub goes in without hammering, and the knuckle bolts and axle nut are torqued to the vehicle maker's spec with a torque wrench, never an impact wrench; the ABS sensor wire is routed as before."
+  ],
+  "car": null,
+  "src": [
+   [
+    "Symptoms of a Worn Wheel Hub Bearing",
+    "https://www.timken.com/resources/md17-symptoms-of-a-worn-wheel-hub-bearing"
+   ],
+   [
+    "Checking A Hub Bearing Assembly",
+    "https://www.timken.com/resources/lv3-checking-a-hub-bearing-assembly/"
+   ],
+   [
+    "Removing and Installing a Hub Unit Bearing",
+    "https://www.timken.com/resources/lv1-removing-and-installing-a-hub-unit-bearing/"
+   ],
+   [
+    "Diagnostic Tips for Hubs, Links and Bushings - Mevotech",
+    "https://www.mevotech.com/article/diagnostic-tips-for-hubs-links-and-bushings/"
+   ],
+   [
+    "WHEEL BEARINGS AND HUBS 101: WHAT YOU NEED TO KNOW - Mevotech",
+    "https://www.mevotech.com/article/wheel-bearings-and-hubs-101-what-you-need-to-know/"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A front hub bearing is measured with a dial indicator after the bearing is seated. Which reading means the hub bearing assembly must be replaced?",
+    "o": [
+     "0.001 in.",
+     "0.002 in.",
+     "0.003 in.",
+     "0.006 in."
+    ],
+    "a": 3,
+    "why": "Timken says to replace the hub bearing assembly if total indicator movement exceeds 0.004 in.",
+    "src": [
+     "Checking A Hub Bearing Assembly",
+     "https://www.timken.com/resources/lv3-checking-a-hub-bearing-assembly/"
+    ]
+   },
+   {
+    "q": "A new hub bearing is being installed. All of these are correct practice EXCEPT:",
+    "o": [
+     "Cleaning burrs and debris from the knuckle bore",
+     "Torquing the axle nut with a torque wrench to the maker's spec",
+     "Tapping the hub onto the axle splines with a hammer",
+     "Routing the ABS sensor wire through the original clips"
+    ],
+    "a": 2,
+    "why": "Timken says never to force the hub onto the shaft or strike it with a hammer; the other steps are part of its installation procedure.",
+    "src": [
+     "Removing and Installing a Hub Unit Bearing",
+     "https://www.timken.com/resources/lv1-removing-and-installing-a-hub-unit-bearing/"
+    ]
+   }
+  ]
+ },
  "D42": {
   "body": [
    "A car that pulls or drifts to one side on a flat, straight road, a steering wheel that sits off center while driving straight, and uneven wear on the inner or outer tread edges are the common signs of misalignment.",
