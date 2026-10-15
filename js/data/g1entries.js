@@ -2653,6 +2653,633 @@ window.V60_G1_ENTRIES = {
    }
   ]
  },
+ "E8": {
+  "body": [
+   "This task covers removing a brake drum, cleaning off the brake dust safely, checking the drum for damage and measuring its inside diameter to decide whether it can be reused, machined or must be replaced.",
+   "OSHA's guidance says to assume every brake shoe, old or replacement, may contain asbestos, because worn non-asbestos shoes cannot be reliably told apart from asbestos ones; exposure must stay below 0.1 fiber per cubic centimeter averaged over 8 hours.",
+   "OSHA's brake appendix allows a sealed negative-pressure enclosure with a HEPA vacuum, or low-pressure wet cleaning that gently floods the assembly over a catch basin and lets the solution run between the drum and backing plate before the drum comes off; shops doing no more than 5 brake jobs a week may instead mist the parts with water and wipe them with a cloth. Dry brushing is prohibited in the wet methods.",
+   "Brembo's shoe instructions say to work on one wheel at a time, keeping the other side as an assembly reference, and not to press the brake pedal once the drum is off.",
+   "A 1944 SAE guide on drum reconditioning measures with an inside micrometer at the open and closed edges, at right angles to each other and at points in between, which reveals out-of-round, bell-mouth and bulge; it treated 0.010 in of out-of-round, or any bell-mouth, as needing reconditioning.",
+   "Dexter's instructions say the maximum machining diameter is usually stamped on the drum, and to inspect the drum and resurface or replace it as needed. Pro-Cut's lathe manual says a drum that still shows excessive runout once correctly mounted should not go back into service."
+  ],
+  "car": "Volvo's press specification lists brake disc diameters for the front (300 to 371 mm, by rim size) and the rear (302 mm), and the owner's manual refers to brake discs and pads, so this car has no drum brakes to service. Neither document uses the word drum, and the spec sheet is a European one dated Sept 2016.",
+  "src": [
+   [
+    "Asbestos-Automotive Brake and Clutch Repair Work (OSHA SHIB 07-26-06)",
+    "https://www.osha.gov/sites/default/files/publications/shib072606.pdf"
+   ],
+   [
+    "1910.1001 App F - Work practices and engineering controls for automotive brake and clutch inspection, disassembly, repair and assembly - Mandatory | Occupational Safety and Health Administration",
+    "https://www.osha.gov/laws-regs/regulations/standardnumber/1910/1910.1001AppF"
+   ],
+   [
+    "Instructions for replacing the brake shoes on cars and light commercial vehicles",
+    "https://www.bremboparts.com/america/en/support/assembly-instructions/CarAM_BrakeShoe"
+   ],
+   [
+    "Reconditioning Brake Drums: Limits and Tolerances (SAE Maintenance Methods Coordinating Committee for the Office of Defense Transportation, 1944)",
+    "https://govinfo.gov/content/pkg/GOVPUB-PR32_4900-609c61ff7d137460cc33ad7cbeb87637/html/GOVPUB-PR32_4900-609c61ff7d137460cc33ad7cbeb87637.htm"
+   ],
+   [
+    "Installation Instructions for the Hydraulic Drum Brake Replacement Shoe Lining Kit, 10\" x 2-1/4\" or 12\" x 2\" (Dexter Axle 059-260-00)",
+    "https://static.nhtsa.gov/odi/tsbs/2019/MC-10165671-0001.pdf"
+   ],
+   [
+    "Pro-Cut B17 Multi-Speed Bench Brake Lathe Technical Manual (50-4150)",
+    "https://www.procutusa.com/pdf/50-4150.pdf"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars press material, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ],
+   [
+    "Volvo V60 Owner's Manual, model year 2016, US web edition (TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A technician in a shop that does about 20 brake jobs a week is about to pull a rear brake drum. Which cleaning method meets OSHA's asbestos rule?",
+    "o": [
+     "Blowing the dust out with a compressed-air gun in open air",
+     "Dry brushing the backing plate before removing the shoes",
+     "Low-pressure wet cleaning that floods the assembly over a catch basin",
+     "Wiping the parts with a dry rag"
+    ],
+    "a": 2,
+    "why": "OSHA's appendix requires the negative-pressure HEPA enclosure, low-pressure wet cleaning or a proven equivalent; the simple mist-and-wipe method is limited to shops doing 5 or fewer brake jobs a week, and dry brushing is prohibited.",
+    "src": [
+     "1910.1001 App F - Work practices and engineering controls for automotive brake and clutch inspection, disassembly, repair and assembly - Mandatory | Occupational Safety and Health Administration",
+     "https://www.osha.gov/laws-regs/regulations/standardnumber/1910/1910.1001AppF"
+    ]
+   },
+   {
+    "q": "A technician measures a brake drum with an inside micrometer and gets different readings at two points 90 degrees apart at the same depth. This most likely means the drum is:",
+    "o": [
+     "Out of round",
+     "Exactly at its maximum diameter",
+     "Bell-mouthed only at the closed edge",
+     "Contaminated with brake fluid"
+    ],
+    "a": 0,
+    "why": "Readings taken at right angles to each other are how out-of-round is found; the SAE guide also measures at the open and closed edges to find bell-mouth.",
+    "src": [
+     "Reconditioning Brake Drums: Limits and Tolerances (SAE Maintenance Methods Coordinating Committee for the Office of Defense Transportation, 1944)",
+     "https://govinfo.gov/content/pkg/GOVPUB-PR32_4900-609c61ff7d137460cc33ad7cbeb87637/html/GOVPUB-PR32_4900-609c61ff7d137460cc33ad7cbeb87637.htm"
+    ]
+   }
+  ]
+ },
+ "E9": {
+  "body": [
+   "Machining (turning) a drum on a brake lathe cuts a thin layer off the friction surface to remove scoring, out-of-round and other surface defects.",
+   "Before cutting, check the drum's size and clean the mounting faces where the cones and clamps seat. Pro-Cut's lathe manual says the finished drum must never go past the vehicle maker's machine-to or maximum specification, because an over-machined drum is dangerous.",
+   "When a spec book lists one figure as both the maximum machining and the discard diameter, Phoenix Systems says the trade stops 0.015 in short of it (a 9.040 in listing becomes 9.025 in), so the drum is not over the limit soon after it goes back in service.",
+   "Pro-Cut's bench-lathe settings: cut no more than 0.015 in per side, always wrap the silencer band around the drum, and run small drums faster (180 RPM up to 12 in, 140 RPM for 12 to 14 in, 100 RPM for 14 to 19.5 in).",
+   "Feed rate sets the finish. Pro-Cut cites about 100 micro-inch Ra as the upper roughness limit for many vehicles, reached at its coarsest feed with its own inserts, and about 45 micro-inch at its finest.",
+   "Measure again after the cut and replace the drum if it is past the limit. Clean the friction surface before fitting, because machining leaves fine metal dust (Phoenix Systems)."
+  ],
+  "car": "Volvo's press specification lists brake disc diameters for the front (300 to 371 mm, by rim size) and the rear (302 mm), and the owner's manual refers to brake discs and pads, so this car has no drums to machine.",
+  "src": [
+   [
+    "Pro-Cut B17 Multi-Speed Bench Brake Lathe Technical Manual (50-4150)",
+    "https://www.procutusa.com/pdf/50-4150.pdf"
+   ],
+   [
+    "Rotor & Drum Specification Issues",
+    "https://phoenixsystems.co/blogs/brake-system-tips/rotor-drum-specification-issues"
+   ],
+   [
+    "Steps to a Quality Drum Brake Job",
+    "https://phoenixsystems.co/blogs/brake-system-tips/steps-to-a-quality-drum-brake-job"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars press material, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ],
+   [
+    "Volvo V60 Owner's Manual, model year 2016, US web edition (TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A scored drum measures slightly under the maximum diameter stamped on it. Technician A says it can be machined as long as the finished size stays within the maker's specification. Technician B says the cut can go past the stamped figure if that is what it takes to get a smooth surface. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Pro-Cut's manual says metal removal must never exceed the vehicle maker's machine-to or maximum specification, and that driving on an over-machined drum is dangerous; a drum that cannot clean up within the limit is replaced.",
+    "src": [
+     "Pro-Cut B17 Multi-Speed Bench Brake Lathe Technical Manual (50-4150)",
+     "https://www.procutusa.com/pdf/50-4150.pdf"
+    ]
+   },
+   {
+    "q": "When machining a passenger-car drum on a bench lathe, which of these is LEAST likely to be correct?",
+    "o": [
+     "Wrapping a silencer band around the drum",
+     "Cleaning the faces where the cones and clamps contact the drum",
+     "Taking a 0.050 in cut per side to finish in one pass",
+     "Using a slower spindle speed for a larger drum"
+    ],
+    "a": 2,
+    "why": "Pro-Cut gives 0.015 in per side as the maximum recommended cut for all drum sizes; the silencer band is required, mounting faces must be clean, and larger drums use slower speeds.",
+    "src": [
+     "Pro-Cut B17 Multi-Speed Bench Brake Lathe Technical Manual (50-4150)",
+     "https://www.procutusa.com/pdf/50-4150.pdf"
+    ]
+   }
+  ]
+ },
+ "E10": {
+  "body": [
+   "This task covers taking the shoes, return and hold-down springs, adjuster and other hardware off the backing plate, cleaning them and deciding what must be replaced.",
+   "Work on one side at a time and keep the other side assembled as a reference (Brembo). Phoenix Systems lays the parts out in the order they came off, and Dexter's instructions say to note where the adjuster and springs sit before removal.",
+   "Under OSHA's low-pressure wet method, the backing plate, shoes and shoe hardware are washed thoroughly before the old shoes come off; dry brushing is prohibited.",
+   "Brembo says to replace any damaged brake part found during the job and any part contaminated with grease, oil or mineral-based cleaner, and to replace shoes on both wheels of an axle.",
+   "Check the shoe lands, the raised pads on the backing plate the shoes slide on. Phoenix Systems says worn lands change where the shoe sits, and the backing plate must then be repaired or replaced.",
+   "Dexter's kits use new hold-down nuts and washers, and its shoes are not interchangeable: the primary shoe, with the shorter lining, faces forward and the secondary shoe, with the longer lining, faces rearward."
+  ],
+  "car": "Volvo's press specification lists brake disc diameters for the front (300 to 371 mm, by rim size) and the rear (302 mm), and the owner's manual refers to brake discs and pads, so this car has no brake shoes or drum hardware.",
+  "src": [
+   [
+    "Instructions for replacing the brake shoes on cars and light commercial vehicles",
+    "https://www.bremboparts.com/america/en/support/assembly-instructions/CarAM_BrakeShoe"
+   ],
+   [
+    "Steps to a Quality Drum Brake Job",
+    "https://phoenixsystems.co/blogs/brake-system-tips/steps-to-a-quality-drum-brake-job"
+   ],
+   [
+    "Installation Instructions for the Hydraulic Drum Brake Replacement Shoe Lining Kit, 10\" x 2-1/4\" or 12\" x 2\" (Dexter Axle 059-260-00)",
+    "https://static.nhtsa.gov/odi/tsbs/2019/MC-10165671-0001.pdf"
+   ],
+   [
+    "Installation Instructions: Shoe and Lining Kit for 12-1/4\" x 3-3/8\", 12-1/4\" x 4\" & 12-1/4\" x 5\" Hydraulic Brakes (Dexter Axle 059-101-00)",
+    "https://dextergroup.com/user_area/content_media/raw/shoe-and-lining-kit-12-25-x-3-375-12-25-x-4-amp-12-25-x-5-hydraulic-brakes-(059-101-00).pdf"
+   ],
+   [
+    "1910.1001 App F - Work practices and engineering controls for automotive brake and clutch inspection, disassembly, repair and assembly - Mandatory | Occupational Safety and Health Administration",
+    "https://www.osha.gov/laws-regs/regulations/standardnumber/1910/1910.1001AppF"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars press material, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ],
+   [
+    "Volvo V60 Owner's Manual, model year 2016, US web edition (TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "During a rear drum inspection, the shoe linings on the left side are soaked with oil from a leaking axle seal. Which action is most likely correct?",
+    "o": [
+     "Clean the linings with brake cleaner and reuse them",
+     "Replace the contaminated shoes, as a set across that axle",
+     "Sand the linings and reinstall them",
+     "Replace only the shoe with the most oil on it"
+    ],
+    "a": 1,
+    "why": "Brembo's instructions say any part contaminated with grease, oil or mineral-based cleaner must be replaced, and shoes are replaced across the whole axle.",
+    "src": [
+     "Instructions for replacing the brake shoes on cars and light commercial vehicles",
+     "https://www.bremboparts.com/america/en/support/assembly-instructions/CarAM_BrakeShoe"
+    ]
+   },
+   {
+    "q": "Before servicing drum brakes on both rear wheels, Technician A says to take both sides apart at once to save time. Technician B says to work on one side at a time and use the other side as a reference. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "Brembo's shoe instructions say to remove one wheel at a time and keep the other as a reference for reassembly.",
+    "src": [
+     "Instructions for replacing the brake shoes on cars and light commercial vehicles",
+     "https://www.bremboparts.com/america/en/support/assembly-instructions/CarAM_BrakeShoe"
+    ]
+   }
+  ]
+ },
+ "E11": {
+  "body": [
+   "Drum brakes need a thin film of high-temperature lubricant wherever metal slides on metal, so the shoes can move on the backing plate and the adjuster can turn.",
+   "Brembo says to use high-temperature-resistant grease only on the parts of the backing plate that touch the shoes, and never on the friction material or the inside of the drum.",
+   "Dexter's instructions list the shoe rest pads on the backing plate (six on its brakes), the adjuster threads, and the shoe web areas under the hold-down washers.",
+   "Phoenix Systems cleans the shoe lands first, then puts a light film of moly lubricant on every metal-to-metal contact point.",
+   "For the adjuster screw, Dexter says to clean the threads with a wire brush, apply a light coat of high-temperature anti-seize and screw it fully in before fitting.",
+   "Keep lubricant and dirty hands off the linings: Phoenix Systems washes hands or covers the linings with masking tape during fitting, and Brembo says any part contaminated with grease must be replaced."
+  ],
+  "car": "Volvo's press specification lists brake disc diameters for the front (300 to 371 mm, by rim size) and the rear (302 mm), and the owner's manual refers to brake discs and pads, so this car has no drum brake contact points to lubricate.",
+  "src": [
+   [
+    "Instructions for replacing the brake shoes on cars and light commercial vehicles",
+    "https://www.bremboparts.com/america/en/support/assembly-instructions/CarAM_BrakeShoe"
+   ],
+   [
+    "Installation Instructions: Shoe and Lining Kit for 12-1/4\" x 3-3/8\", 12-1/4\" x 4\" & 12-1/4\" x 5\" Hydraulic Brakes (Dexter Axle 059-101-00)",
+    "https://dextergroup.com/user_area/content_media/raw/shoe-and-lining-kit-12-25-x-3-375-12-25-x-4-amp-12-25-x-5-hydraulic-brakes-(059-101-00).pdf"
+   ],
+   [
+    "Installation Instructions for the Hydraulic Drum Brake Replacement Shoe Lining Kit, 10\" x 2-1/4\" or 12\" x 2\" (Dexter Axle 059-260-00)",
+    "https://static.nhtsa.gov/odi/tsbs/2019/MC-10165671-0001.pdf"
+   ],
+   [
+    "Steps to a Quality Drum Brake Job",
+    "https://phoenixsystems.co/blogs/brake-system-tips/steps-to-a-quality-drum-brake-job"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars press material, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ],
+   [
+    "Volvo V60 Owner's Manual, model year 2016, US web edition (TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "During a drum brake job, all of these points may receive a light coat of high-temperature brake lubricant EXCEPT:",
+    "o": [
+     "The shoe contact pads on the backing plate",
+     "The adjuster screw threads",
+     "The friction surface inside the drum",
+     "The shoe web areas under the hold-down washers"
+    ],
+    "a": 2,
+    "why": "Brembo says grease goes only on the backing plate points that touch the shoes and must never go on the friction material or the inside of the drum, because it compromises braking.",
+    "src": [
+     "Instructions for replacing the brake shoes on cars and light commercial vehicles",
+     "https://www.bremboparts.com/america/en/support/assembly-instructions/CarAM_BrakeShoe"
+    ]
+   },
+   {
+    "q": "Technician A says the adjuster threads should be cleaned and given a light coat of high-temperature anti-seize. Technician B says a little lubricant on the lining surface helps stop squeal. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Dexter's instructions call for wire-brushing the adjuster threads and applying a light coat of high-temperature anti-seize, and say to keep grease off the linings.",
+    "src": [
+     "Installation Instructions for the Hydraulic Drum Brake Replacement Shoe Lining Kit, 10\" x 2-1/4\" or 12\" x 2\" (Dexter Axle 059-260-00)",
+     "https://static.nhtsa.gov/odi/tsbs/2019/MC-10165671-0001.pdf"
+    ]
+   }
+  ]
+ },
+ "E12": {
+  "body": [
+   "The wheel cylinder sits at the top of the backing plate; pedal pressure pushes its pistons outward, which forces the shoes against the drum (Wagner).",
+   "To check for leaks, pull back each dust boot, or pry press-on boots down from the push rod with a dull pick. Phoenix Systems says a light sheen on the bore and piston is normal; fluid pooled at the bottom of the bore, or dripping out when the boot is pulled back, means the cylinder is replaced, and replacing both sides is the accepted practice.",
+   "Corrosion inside a wheel cylinder can let fluid leak, which lowers hydraulic pressure and gives a soft or low pedal (Wagner). Phoenix Systems adds that fluid under the boots by itself does not lower the pedal, because the cup seals leak only on release, so a low pedal needs its own diagnosis.",
+   "To check operation, push each piston in a short way and compare the effort; a piston that will not move or needs much more force needs investigating. Pushing too far can damage the seal (Phoenix Systems).",
+   "Hydraulic pressure must be zero before the drum comes off, and the pedal must not be pressed with the drum removed, or the pistons can be forced out (Dexter, Brembo). Brake fluid is corrosive, and a new cylinder means bleeding the brake circuit (Brembo)."
+  ],
+  "car": "Volvo's press specification lists brake disc diameters for the front (300 to 371 mm, by rim size) and the rear (302 mm), and the owner's manual refers to brake discs and pads, so this car has calipers rather than wheel cylinders.",
+  "src": [
+   [
+    "Causes of Spongy Brakes | Wagner Brake",
+    "http://www.wagnerbrake.com/technical/technical-tips/why-are-my-brakes-spongy.html"
+   ],
+   [
+    "Wheel Cylinder Inspection Tips",
+    "https://phoenixsystems.co/blogs/brake-system-tips/wheel-cylinder-inspection-tips"
+   ],
+   [
+    "Installation Instructions for the Hydraulic Drum Brake Replacement Shoe Lining Kit, 10\" x 2-1/4\" or 12\" x 2\" (Dexter Axle 059-260-00)",
+    "https://static.nhtsa.gov/odi/tsbs/2019/MC-10165671-0001.pdf"
+   ],
+   [
+    "Instructions for replacing the brake shoes on cars and light commercial vehicles",
+    "https://www.bremboparts.com/america/en/support/assembly-instructions/CarAM_BrakeShoe"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars press material, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ],
+   [
+    "Volvo V60 Owner's Manual, model year 2016, US web edition (TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A technician pulls back a wheel cylinder dust boot and finds a slight sheen of fluid on the piston, with no fluid collected in the bore. What is the most likely conclusion?",
+    "o": [
+     "This is normal and does not by itself call for replacement",
+     "The wheel cylinder must be replaced",
+     "The master cylinder has failed",
+     "The brake fluid is contaminated with oil"
+    ],
+    "a": 0,
+    "why": "Phoenix Systems says some wetness and a sheen on the bore and piston are normal; replacement is called for when fluid collects in the bottom of the bore or drips out with the boot pulled back.",
+    "src": [
+     "Wheel Cylinder Inspection Tips",
+     "https://phoenixsystems.co/blogs/brake-system-tips/wheel-cylinder-inspection-tips"
+    ]
+   },
+   {
+    "q": "A car with rear drums has fluid under both wheel cylinder boots and a low brake pedal. Technician A says new wheel cylinders will cure the low pedal. Technician B says the cylinders need replacing for the leak, but the low pedal needs its own diagnosis. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "Phoenix Systems explains that wheel cylinder cups leak only when the pedal is released and let no air in, so fluid under the boots does not cause a low pedal and replacing the cylinders will not fix one.",
+    "src": [
+     "Wheel Cylinder Inspection Tips",
+     "https://phoenixsystems.co/blogs/brake-system-tips/wheel-cylinder-inspection-tips"
+    ]
+   }
+  ]
+ },
+ "E13": {
+  "body": [
+   "Installation puts the shoes, springs, adjuster, parking brake linkage and hold-downs back on the backing plate in their original positions.",
+   "Brembo's order of work: fit the wheel cylinder, grease the backing plate contact points, hook the parking brake cable to the shoe lever, seat the shoe tips on the wheel cylinder and then the lower ends on the lower stop, refit the springs, and centre the shoes on the backing plate.",
+   "Brembo says not to interfere with the automatic adjuster so it keeps working; FMVSS 135 requires light-vehicle service brakes to make up for wear by automatic adjustment.",
+   "Dexter's instructions turn the adjuster screw in to shrink the shoe diameter so the drum will slide on. Phoenix Systems keeps the linings clean by washing hands first or covering them with masking tape.",
+   "Before refitting the drum, apply the parking brake lightly to check that the levers and mechanisms move, then return everything to rest (Brembo). Clean the drum's friction surface first: machined drums carry metal dust and new ones a rust-preventive coating (Phoenix Systems)."
+  ],
+  "car": "Volvo's press specification lists brake disc diameters for the front (300 to 371 mm, by rim size) and the rear (302 mm), and the owner's manual refers to brake discs and pads, so this car has no brake shoes to install.",
+  "src": [
+   [
+    "Instructions for replacing the brake shoes on cars and light commercial vehicles",
+    "https://www.bremboparts.com/america/en/support/assembly-instructions/CarAM_BrakeShoe"
+   ],
+   [
+    "Instructions for replacing brake shoe kits",
+    "https://www.bremboparts.com/europe/en/support/car/car-fitting/instructions-for-replacing-brake-shoe-kits-280499"
+   ],
+   [
+    "49 CFR 571.135 - Standard No. 135; Light vehicle brake systems",
+    "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-V/part-571/subpart-B/section-571.135"
+   ],
+   [
+    "Installation Instructions: Shoe and Lining Kit for 12-1/4\" x 3-3/8\", 12-1/4\" x 4\" & 12-1/4\" x 5\" Hydraulic Brakes (Dexter Axle 059-101-00)",
+    "https://dextergroup.com/user_area/content_media/raw/shoe-and-lining-kit-12-25-x-3-375-12-25-x-4-amp-12-25-x-5-hydraulic-brakes-(059-101-00).pdf"
+   ],
+   [
+    "Steps to a Quality Drum Brake Job",
+    "https://phoenixsystems.co/blogs/brake-system-tips/steps-to-a-quality-drum-brake-job"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars press material, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ],
+   [
+    "Volvo V60 Owner's Manual, model year 2016, US web edition (TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "While reassembling a drum brake, which step is LEAST likely to be correct?",
+    "o": [
+     "Centring the shoes on the backing plate",
+     "Hooking the parking brake cable to the shoe lever before seating the shoes",
+     "Disabling the automatic adjuster so it cannot over-adjust",
+     "Checking the parking brake levers move before refitting the drum"
+    ],
+    "a": 2,
+    "why": "Brembo says the automatic adjustment devices must not be tampered with so they keep working, and lists centring the shoes, hooking up the cable and a light parking brake check as normal steps.",
+    "src": [
+     "Instructions for replacing the brake shoes on cars and light commercial vehicles",
+     "https://www.bremboparts.com/america/en/support/assembly-instructions/CarAM_BrakeShoe"
+    ]
+   },
+   {
+    "q": "After new shoes are installed, the drum will not slide over them. What is the most likely fix?",
+    "o": [
+     "Turn the adjuster screw to shrink the shoe diameter",
+     "Machine the drum oversize",
+     "Leave out one return spring",
+     "Press the brake pedal to pull the shoes in"
+    ],
+    "a": 0,
+    "why": "Dexter's instructions turn the adjuster screw to shrink the shoe diameter so the drum fits over the shoes.",
+    "src": [
+     "Installation Instructions: Shoe and Lining Kit for 12-1/4\" x 3-3/8\", 12-1/4\" x 4\" & 12-1/4\" x 5\" Hydraulic Brakes (Dexter Axle 059-101-00)",
+     "https://dextergroup.com/user_area/content_media/raw/shoe-and-lining-kit-12-25-x-3-375-12-25-x-4-amp-12-25-x-5-hydraulic-brakes-(059-101-00).pdf"
+    ]
+   }
+  ]
+ },
+ "E14": {
+  "body": [
+   "Shoe adjustment sets the gap between the linings and the drum, and the parking brake is set to match once the shoes are adjusted.",
+   "FMVSS 135 requires light-vehicle service brakes to make up for wear automatically. Brembo says to set the automatic adjuster after refitting the drum by pressing the brake pedal several times, then adjust the hand brake.",
+   "Dexter's method for manual adjusters: turn the adjuster out until the linings drag hard as the drum turns, then back it off until the drum turns freely with slight lining drag, and give every brake the same clearance.",
+   "Wagner notes that on some designs applying the parking brake makes the shoes adjust themselves, and that a pedal which improves when pumped on a car with rear drums can mean the rear shoes are out of adjustment.",
+   "On duo-servo brakes with the adjuster at the bottom, Phoenix Systems confirms the parking brake is fully released by looking for a small gap, about 1/8 in, between the parking brake strut rod and the primary shoe."
+  ],
+  "car": "Volvo's press specification lists brake disc diameters for the front (300 to 371 mm, by rim size) and the rear (302 mm), and the owner's manual describes an electric parking brake, so there are no drum shoes or parking brake shoes to adjust on this car.",
+  "src": [
+   [
+    "49 CFR 571.135 - Standard No. 135; Light vehicle brake systems",
+    "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-V/part-571/subpart-B/section-571.135"
+   ],
+   [
+    "Instructions for replacing the brake shoes on cars and light commercial vehicles",
+    "https://www.bremboparts.com/america/en/support/assembly-instructions/CarAM_BrakeShoe"
+   ],
+   [
+    "Instructions for replacing brake shoe kits",
+    "https://www.bremboparts.com/europe/en/support/car/car-fitting/instructions-for-replacing-brake-shoe-kits-280499"
+   ],
+   [
+    "Installation Instructions: Shoe and Lining Kit for 12-1/4\" x 3-3/8\", 12-1/4\" x 4\" & 12-1/4\" x 5\" Hydraulic Brakes (Dexter Axle 059-101-00)",
+    "https://dextergroup.com/user_area/content_media/raw/shoe-and-lining-kit-12-25-x-3-375-12-25-x-4-amp-12-25-x-5-hydraulic-brakes-(059-101-00).pdf"
+   ],
+   [
+    "Installation Instructions for the Hydraulic Drum Brake Replacement Shoe Lining Kit, 10\" x 2-1/4\" or 12\" x 2\" (Dexter Axle 059-260-00)",
+    "https://static.nhtsa.gov/odi/tsbs/2019/MC-10165671-0001.pdf"
+   ],
+   [
+    "Causes of Spongy Brakes | Wagner Brake",
+    "http://www.wagnerbrake.com/technical/technical-tips/why-are-my-brakes-spongy.html"
+   ],
+   [
+    "Steps to a Quality Drum Brake Job",
+    "https://phoenixsystems.co/blogs/brake-system-tips/steps-to-a-quality-drum-brake-job"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars press material, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ],
+   [
+    "Volvo V60 Owner's Manual, model year 2016, US web edition (TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "After relining drum brakes that have manual adjusters, how should the shoes be set?",
+    "o": [
+     "Expanded until the drum locks, and left there",
+     "Expanded to a heavy drag, then backed off until the drum turns freely with slight drag",
+     "Fully retracted so the linings never touch the drum",
+     "Set tight on one side and loose on the other to suit road crown"
+    ],
+    "a": 1,
+    "why": "Dexter's instructions turn the adjuster out until the linings drag hard, then back it off so the drum turns freely with slight lining drag, with the same clearance at every brake.",
+    "src": [
+     "Installation Instructions: Shoe and Lining Kit for 12-1/4\" x 3-3/8\", 12-1/4\" x 4\" & 12-1/4\" x 5\" Hydraulic Brakes (Dexter Axle 059-101-00)",
+     "https://dextergroup.com/user_area/content_media/raw/shoe-and-lining-kit-12-25-x-3-375-12-25-x-4-amp-12-25-x-5-hydraulic-brakes-(059-101-00).pdf"
+    ]
+   },
+   {
+    "q": "A car with rear drum brakes has a brake pedal that rises when pumped. Technician A says the rear shoes may be out of adjustment. Technician B says the parking brake never plays a part in shoe adjustment. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Wagner says a pedal that improves with pumping on a rear-drum car can mean the rear shoes are out of adjustment, and that on some designs applying the parking brake adjusts the shoes automatically.",
+    "src": [
+     "Causes of Spongy Brakes | Wagner Brake",
+     "http://www.wagnerbrake.com/technical/technical-tips/why-are-my-brakes-spongy.html"
+    ]
+   }
+  ]
+ },
+ "E15": {
+  "body": [
+   "This task checks that the parking brake applies, holds and fully releases, and that its cable and levers move freely and are not worn or damaged.",
+   "Brembo says to inspect the parking brake cable while it is unhooked and replace it if it is worn or damaged, and after reassembly to apply the parking brake lightly to confirm all levers and mechanisms work before returning them to rest.",
+   "Brembo's kit instructions order the final work as refit the drum, press the brake pedal repeatedly to set the shoes, then adjust the hand brake.",
+   "The parking brake must be fully released before shoe work; on duo-servo brakes Phoenix Systems looks for about 1/8 in of clearance between the strut rod and the primary shoe.",
+   "The federal standard for new light vehicles (FMVSS 135, S7.12) requires the parking brake to hold the vehicle, loaded to its GVWR, on a 20% grade for 5 minutes facing both up and down, with no more than 400 N (89.9 lb) on a hand control or 500 N (112.4 lb) on a foot control."
+  ],
+  "car": "The owner's manual describes an electric parking brake applied by a control and an electric motor, with separate 30 A fuses for the left and right sides in the cargo-area fuse box; it cannot be applied or released if battery voltage is too low, and the manual gives no cable adjustment. For a \"Park brake not fully released\" or \"Parking brake Service required\" message, Volvo says to apply and release it several times and contact a Volvo workshop if the fault remains.",
+  "src": [
+   [
+    "Instructions for replacing the brake shoes on cars and light commercial vehicles",
+    "https://www.bremboparts.com/america/en/support/assembly-instructions/CarAM_BrakeShoe"
+   ],
+   [
+    "Instructions for replacing brake shoe kits",
+    "https://www.bremboparts.com/europe/en/support/car/car-fitting/instructions-for-replacing-brake-shoe-kits-280499"
+   ],
+   [
+    "Steps to a Quality Drum Brake Job",
+    "https://phoenixsystems.co/blogs/brake-system-tips/steps-to-a-quality-drum-brake-job"
+   ],
+   [
+    "49 CFR 571.135 - Standard No. 135; Light vehicle brake systems",
+    "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-V/part-571/subpart-B/section-571.135"
+   ],
+   [
+    "Volvo V60 Owner's Manual, model year 2016, US web edition (TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Under FMVSS 135, a new light vehicle loaded to its GVWR must be held by its parking brake for 5 minutes on what grade, facing both directions?",
+    "o": [
+     "10%",
+     "15%",
+     "20%",
+     "30%"
+    ],
+    "a": 2,
+    "why": "FMVSS 135 S7.12 tests the parking brake on a 20% grade, with the vehicle held stationary for 5 minutes facing uphill and downhill.",
+    "src": [
+     "49 CFR 571.135 - Standard No. 135; Light vehicle brake systems",
+     "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-V/part-571/subpart-B/section-571.135"
+    ]
+   },
+   {
+    "q": "During a drum brake job that includes the parking brake, which step is LEAST likely to be correct?",
+    "o": [
+     "Inspecting the cable while it is unhooked and replacing it if worn",
+     "Applying the parking brake lightly after assembly to check the levers move",
+     "Adjusting the parking brake before the drum is refitted and the shoes are set",
+     "Confirming the parking brake is fully released before working on the shoes"
+    ],
+    "a": 2,
+    "why": "Brembo's kit instructions refit the drum and press the pedal repeatedly to set the shoes before the hand brake is adjusted.",
+    "src": [
+     "Instructions for replacing brake shoe kits",
+     "https://www.bremboparts.com/europe/en/support/car/car-fitting/instructions-for-replacing-brake-shoe-kits-280499"
+    ]
+   }
+  ]
+ },
+ "E16": {
+  "body": [
+   "The last steps refit the drum and wheel, tighten the wheel fasteners to the maker's torque in a crosswise pattern, set and bleed the brakes, and check them before driving.",
+   "Brembo says to refit the drum, press the brake pedal several times to set the automatic adjuster, and bleed the brake circuit when the hydraulics were opened, such as for a new wheel cylinder.",
+   "Volvo's wheel procedure: clean the contact faces on the wheel and hub, fit the nuts hand-tight, snug them crosswise, then lower the car and tighten them crosswise to 103 lb-ft (140 Nm).",
+   "Dexter's instructions for its trailer drum brakes burnish new shoes with 20 to 30 stops from 40 mph down to 20 mph, letting the brakes cool between stops."
+  ],
+  "car": "Volvo's owner's manual gives 103 ft. lbs. (140 Nm) for the wheel nuts, tightened crosswise after the car is lowered to the ground. Volvo's press specification lists brake disc diameters front and rear, so there is no drum to refit on this car.",
+  "src": [
+   [
+    "Instructions for replacing the brake shoes on cars and light commercial vehicles",
+    "https://www.bremboparts.com/america/en/support/assembly-instructions/CarAM_BrakeShoe"
+   ],
+   [
+    "Volvo V60 Owner's Manual, model year 2016, US web edition (TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "Installation Instructions: Shoe and Lining Kit for 12-1/4\" x 3-3/8\", 12-1/4\" x 4\" & 12-1/4\" x 5\" Hydraulic Brakes (Dexter Axle 059-101-00)",
+    "https://dextergroup.com/user_area/content_media/raw/shoe-and-lining-kit-12-25-x-3-375-12-25-x-4-amp-12-25-x-5-hydraulic-brakes-(059-101-00).pdf"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars press material, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A technician refits a wheel on a 2016 Volvo V60. Which procedure matches Volvo's owner's manual?",
+    "o": [
+     "Tighten each nut fully to 103 lb-ft in a circle while the wheel is still in the air",
+     "Snug the nuts crosswise, lower the car, then tighten them crosswise to 103 lb-ft (140 Nm)",
+     "Run the nuts on with an impact wrench at its highest setting",
+     "Tighten to 140 lb-ft crosswise with the car on the ground"
+    ],
+    "a": 1,
+    "why": "The manual says to fit the nuts hand-tight, snug them crosswise, lower the car and then tighten them crosswise to 103 ft. lbs. (140 Nm).",
+    "src": [
+     "Volvo V60 Owner's Manual, model year 2016, US web edition (TP 20238)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   },
+   {
+    "q": "After fitting new shoes and a new wheel cylinder, Technician A says the brake circuit must be bled. Technician B says the brake pedal should be pressed several times after the drum is refitted to set the automatic adjuster. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Brembo's instructions say to refit the drum, set the automatic adjuster by operating the brake pedal several times, and then bleed the brake fluid circuit.",
+    "src": [
+     "Instructions for replacing the brake shoes on cars and light commercial vehicles",
+     "https://www.bremboparts.com/america/en/support/assembly-instructions/CarAM_BrakeShoe"
+    ]
+   }
+  ]
+ },
  "E17": {
   "body": [
    "Some rear calipers have the parking brake built in, so the piston cannot just be pushed straight back the way a plain hydraulic piston is.",
