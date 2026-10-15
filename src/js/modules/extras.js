@@ -14,7 +14,7 @@
     ["photo", "Photographer", "Save five photo inspections.", function (a) { return (a.state.photos || []).length >= 5; }],
     ["baymap", "Mapmaker", "Pin five parts on your own engine bay photo.", function (a) { var m = a.state.bayMap; return !!(m && m.pins && Object.keys(m.pins).length >= 5); }],
     ["cards", "Card sharp", "Master 25 flashcards.", function (a) { var d = mods(a, "cards").b || {}; return Object.keys(d).filter(function (k) { return d[k][0] >= 4; }).length >= 25; }],
-    ["cert", "Certified", "Pass the V60 Master exam.", function (a) { return !!mods(a, "exam").passed; }],
+    ["cert", "Certified", "Pass the mock G1 with every area at Owner.", function (a) { return !!(window.V60_TRACK && window.V60_TRACK.passedG1()); }],
     ["wrench", "Wrench time", "Complete three DIY jobs.", function (a) { return Object.keys(mods(a, "diy").done || {}).length >= 3; }],
     ["detective", "Detective", "Solve five mystery cars in the simulator.", function (a) { var s = a.acad().sim; return !!(s && s.correct >= 5); }],
     ["fuel", "Range finder", "Log five fill-ups.", function (a) { return (mods(a, "fuel").fills || []).length >= 5; }],

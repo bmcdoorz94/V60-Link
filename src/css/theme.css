@@ -106,3 +106,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .case.unknown .caseh .ct b { color: var(--muted); }
 .steps .sdot { border-radius: 0; border-width: 1.5px; font-weight: 700; }
 .steps li.done .sdot { background: transparent; color: var(--done); border-color: var(--done); }
+
+/* inner pages (anything but the home) get a one-row header: the brand strip and the pulse, no title, no instruments */
+body.inner .cockpit { grid-template-areas: "strip" "pu"; padding: 8px 0 0; gap: 4px; }
+body.inner .cockpit .ident, body.inner .cockpit .instruments { display: none; }
+body.inner .cockpit .brand { font-size: 10px; }
+body.inner .cockpit #saveStatus { display: none; }

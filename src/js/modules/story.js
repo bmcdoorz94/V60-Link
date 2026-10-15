@@ -53,12 +53,12 @@
   /* ---------- the case file ---------- */
   var ACTS = [["1", "Arrival"], ["2", "The Unknowns"], ["3", "The Voice"], ["4", "Ownership"]];
   var ACT_REWARD = {
-    "1": { tabs: ["bay", "health", "cards", "skills", "learn"], line: "Act 1 complete. The whole-car map, your Health score, How it works, daily flashcards and the skill tree are open." },
+    "1": { tabs: ["bay", "health", "cards", "learn"], line: "Act 1 complete. The whole-car map, your Health score, How it works, daily flashcards and the skill tree are open." },
     "2": { tabs: ["achieve", "unlocks"], line: "Act 2 complete. Side missions are open: seasonal events and achievements. Unlocks lists what this app cannot do and who can." },
     "3": { tabs: ["sim"], line: "Act 3 complete. Side mission: the Simulator and its mystery cars." },
-    "4": { tabs: ["exam"], line: "Act 4 complete. The V60 Master exam is open. Pass it to reach the finale." }
+    "4": { tabs: ["track"], line: "Act 4 complete. The mock G1 counts from here: pass it with every area at Owner to reach the finale." }
   };
-  var TABN = { skills: "Skill tree", academy: "Training", engine: "Engine bay", live: "Live link", bay: "Whole car", health: "Health", cards: "Flashcards", records: "Service log", glove: "Glovebox", fuel: "Fuel & costs", diy: "DIY jobs", trouble: "Troubleshoot", bulletins: "Bulletins", my: "My V60", kb: "Library", achieve: "Achievements", lab: "Data lab", sim: "Simulator", upgrades: "Upgrades", diag: "Diagnose", exam: "Exam", learn: "How it works", unlocks: "Unlocks" };
+  var TABN = { track: "Certification track", academy: "Training", engine: "Engine bay", live: "Live link", bay: "Whole car", health: "Health", cards: "Flashcards", records: "Service log", glove: "Glovebox", fuel: "Fuel & costs", diy: "DIY jobs", trouble: "Troubleshoot", bulletins: "Bulletins", my: "My V60", kb: "Library", achieve: "Achievements", lab: "Data lab", sim: "Simulator", upgrades: "Upgrades", diag: "Diagnose", learn: "How it works", unlocks: "Unlocks" };
   var CASES = [
     { id: "safe", act: "1", crit: true, t: "Safe to Touch", sub: "Learn the car's layout and the rules before touching anything.", scene: "bay", reveals: ["academy", "engine"],
       know: { arts: ["a-car", "a-lights"], tags: ["Identity", "Basics", "Safety", "Warning lights"] }, quiz: ["f-fan6", "f-hoodss", "f-coolloc"],
@@ -186,7 +186,7 @@
     if (i === 0) return true;
     var prev = inAct[i - 1]; return !!d.closed[prev.id] || status(api, prev).st !== "unknown";
   }
-  function finaleReady(api) { var d = D(api), e = api.mod("exam"); return !!(e && e.passed) && CRIT.every(function (id) { return d.closed[id]; }); }
+  function finaleReady(api) { var d = D(api); return !!(window.V60_TRACK && window.V60_TRACK.passedG1()) && CRIT.every(function (id) { return d.closed[id]; }); }
   var ALLTABS = null, gcache = null, gtime = 0;
   function revealedSet(api) { var now = Date.now(); if (gcache && now - gtime < 150) return gcache; gcache = computeSet(api); gtime = now; return gcache; }
   function bust() { gcache = null; }
@@ -418,6 +418,7 @@
       [G.visible("sim"), "Mystery cars", ((A.sim || {}).correct || 0) + " solved", "tab:sim"],
       [G.visible("diy"), "DIY jobs", diyDone(api) + " done", "tab:diy"],
       [G.visible("cards"), "Flashcards", Object.keys(cards).filter(function (k) { return cards[k][0] >= 4; }).length + " mastered", "tab:cards"],
+      [true, "Certification track", (window.V60_TRACK ? Math.round(window.V60_TRACK.ready() * 100) : 0) + " % G1 ready", "track:"],
       [G.visible("achieve"), "Seasonal checklist and achievements", "Real-world proof", "tab:achieve"],
       [G.visible("upgrades"), "Upgrades", Object.keys(up).filter(function (k) { return up[k] === "done"; }).length + " done", "tab:upgrades"],
       [G.visible("my"), "Photo mapping", (api.state.photos || []).length + " photos", "tab:my"],
@@ -452,7 +453,7 @@
   }
   function timelineHTML(api) {
     var esc = api.esc, st = api.state, d = D(api), ev = [];
-    if (window.V60_PERK && !window.V60_PERK("timeline")) return '<div class="card"><p class="ans-k">Locked</p><h3>Timeline</h3><p>Earn the Record keeper skill (log 3 services or receipts) to see your car\'s whole life on one scroll.</p><button type="button" class="quiet" data-jump="tab:skills">Skill tree</button></div>';
+    if (window.V60_PERK && !window.V60_PERK("timeline")) return '<div class="card"><p class="ans-k">Locked</p><h3>Timeline</h3><p>Log 3 services or receipts to see your car\'s whole life on one scroll.</p><button type="button" class="quiet" data-jump="tab:glove">Glovebox</button></div>';
     function add(date, kind, t, sub, go) { if (date) ev.push({ d: String(date).slice(0, 10), k: kind, t: t, s: sub || "", go: go || "" }); }
     (st.log || []).forEach(function (e) { var it = (api.ITEMS || []).filter(function (x) { return x.key === e.item; })[0]; add(e.date, "Service", it ? it.name : e.item, e.miles ? api.fmt(e.miles) + " mi" : "", "tab:records"); });
     (st.oil || []).forEach(function (e) { add(e.date, "Oil", "Oil level check" + (e.qts ? ", added " + e.qts + " qt" : ""), e.miles ? api.fmt(e.miles) + " mi" : "", "tab:records"); });
@@ -502,12 +503,12 @@
       var cs = avail.filter(function (c) { return c.act === act[0]; });
       return '<section class="act"><h3><span>Act ' + act[0] + "</span> " + esc(act[1]) + '</h3><ul class="cases">' + cs.map(function (c) { return caseHTML(api, c, status(api, c)); }).join("") + "</ul></section>";
     }).join("");
-    if (actClosed(api, "4") || fin) acts += '<section class="act"><h3><span>Finale</span> Master of the V60</h3><ul class="cases"><li class="case ' + (fin ? "closed" : "unknown") + '"><div class="caseh static"><span class="pill ' + (fin ? "ok" : "none") + '">' + (fin ? "Reached" : "Open") + '</span><span class="ct"><b>Close the critical cases and pass the exam</b><small>' + CRIT.filter(function (id) { return d.closed[id]; }).length + " of " + CRIT.length + " critical cases closed · exam " + ((api.mod("exam") || {}).passed ? "passed" : "not passed yet") + "</small></span></div>" + (fin ? '<div class="caseb"><button type="button" class="quiet" data-jump="story:fin">Watch the finale</button></div>' : "") + "</li></ul></section>";
+    if (actClosed(api, "4") || fin) acts += '<section class="act"><h3><span>Finale</span> Master of the V60</h3><ul class="cases"><li class="case ' + (fin ? "closed" : "unknown") + '"><div class="caseh static"><span class="pill ' + (fin ? "ok" : "none") + '">' + (fin ? "Reached" : "Open") + '</span><span class="ct"><b>Close the critical cases and pass the mock G1</b><small>' + CRIT.filter(function (id) { return d.closed[id]; }).length + " of " + CRIT.length + " critical cases closed · mock G1 " + (window.V60_TRACK && window.V60_TRACK.passedG1() ? "passed" : "not passed yet") + "</small></span></div>" + (fin ? '<div class="caseb"><button type="button" class="quiet" data-jump="story:fin">Watch the finale</button></div>' : "") + "</li></ul></section>";
     else acts += '<p class="status hidden-note">More of the story opens as you close cases.</p>';
     var alerts = window.V60_GATE.visible("health") ? api.computeHealth().actions.filter(function (a) { return a.sev >= 48; }) : [];
     var newC = fin ? '<section class="act"><h3><span>Ongoing</span> New cases</h3>' + (alerts.length ? '<ul class="tlist">' + alerts.slice(0, 6).map(function (a) { return '<li><span class="pill concern">Open</span><button type="button" class="tlink" data-jump="' + esc(a.jump) + '">' + esc(a.text) + "</button></li>"; }).join("") + "</ul>" : '<p class="status">Nothing new. Cases open here when a scan, the fuel log, a bulletin or a renewal flags something.</p>') + "</section>" : "";
     var side = sideList(api);
-    var sideH = side.length ? '<section class="card"><details><summary>Side missions (optional) · ' + side.length + '</summary><p class="status">Extra practice and XP. None of these block the story.</p><ul class="joblist">' + side.map(function (x) { return '<li><button type="button" class="mbtn" data-jump="' + x[3] + '"><span class="mt">' + esc(x[1]) + '</span><span class="status">' + esc(x[2]) + "</span></button></li>"; }).join("") + "</ul></details></section>" : "";
+    var sideH = side.length ? '<section class="card"><details><summary>Side missions (optional) · ' + side.length + '</summary><p class="status">Extra practice. None of these block the story.</p><ul class="joblist">' + side.map(function (x) { return '<li><button type="button" class="mbtn" data-jump="' + x[3] + '"><span class="mt">' + esc(x[1]) + '</span><span class="status">' + esc(x[2]) + "</span></button></li>"; }).join("") + "</ul></details></section>" : "";
     var seenable = ["pro"].concat(Object.keys(d.beats).sort()).concat(CASES.filter(function (c) { return d.closed[c.id]; }).map(function (c) { return "case-" + c.id; })).concat(fin ? ["fin"] : []);
     var scenesH = '<section class="card"><details><summary>Scenes · ' + seenable.length + '</summary><ul class="joblist">' + seenable.map(function (id) { var s = sceneById(api, id); return s ? '<li><button type="button" class="mbtn" data-jump="story:' + id + '"><span class="mt">' + esc(s.t) + '</span><span class="status">' + (d.seen[id] ? "Watched" : "New") + "</span></button></li>" : ""; }).join("") + '</ul><p class="status">Lars is a made-up guide. Every fact he states comes from the sources used elsewhere in the app.</p></details></section>';
     var opts = '<section class="card"><details id="stOpts"' + (ui.opts ? " open" : "") + '><summary>Options: sync, backup, display</summary><div id="syncBox" class="syncbox"></div><div class="row"><button type="button" class="quiet" data-jump="backup:go">Back up or restore my progress</button></div><div class="field"><span class="flab">Detail level</span><div class="seg">' + DEPTH.map(function (x) { var lock = x[0] === "mech" && window.V60_PERK && !window.V60_PERK("mech"); return '<button type="button" data-depth="' + x[0] + '" aria-pressed="' + (depthOf(api) === x[0]) + '"' + (lock ? ' disabled title="Earn the Scholar skill"' : "") + ">" + x[1] + (lock ? " · Scholar skill" : "") + "</button>"; }).join("") + '</div></div><label class="inl"><input type="checkbox" id="stPlain"' + (d.plain ? " checked" : "") + '> Plain readings in Live link (skip decoding)</label><label class="inl"><input type="checkbox" id="stAll"' + (d.all ? " checked" : "") + '> Show everything (skip the reveal)</label><p class="status">Progress is saved on this device in this browser. Sync keeps every device on the same progress; a backup file is the offline safety net.</p></details></section>';

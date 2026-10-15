@@ -28,9 +28,11 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
   const ori = await p.evaluate(() => { const y = s => { const t = [...document.querySelectorAll('#ebStage .edge')].filter(e => e.textContent.indexOf(s) === 0)[0]; return t ? +t.getAttribute('y') : null; }; const c = document.querySelector('[data-bi="catch"] rect'); return { wind: y('Windshield'), bump: y('Front bumper'), catchY: c ? +c.getAttribute('y') : null }; });
   ok(ori.wind < 60 && ori.bump > 380 && ori.catchY > 300, 'map seen from the bumper: windshield on top, hood catch at the bottom ' + JSON.stringify(ori));
 
-  /* fresh start: nothing locked is offered */
+  /* fresh start: nothing locked is offered (the index page is the back of the book) */
   await p.evaluate(() => __v60.go('car')); await p.waitForTimeout(150);
-  const offered = await p.evaluate(() => [...document.querySelectorAll('#mnHome .mn-also [data-jump]')].map(e => e.getAttribute('data-jump').slice(4)));
+  ok(await p.evaluate(() => !!document.querySelector('#mnHome [data-jump="tab:index"]') && !document.querySelector('#mnHome .mn-also')), 'the home carries one Index button instead of the page lists');
+  await p.evaluate(() => __v60.go('index')); await p.waitForTimeout(150);
+  const offered = await p.evaluate(() => [...document.querySelectorAll('#mnIndex .mn-also [data-jump]')].map(e => e.getAttribute('data-jump').slice(4)));
   const allOpen = await p.evaluate(o => o.every(t => V60_GATE.visible(t)), offered);
   ok(offered.length > 0 && allOpen, 'the index lists only opened pages at the start (' + offered.join(',') + ')');
   ok(!offered.includes('fuel') && !offered.includes('upgrades'), 'pages the story has not reached stay hidden');
@@ -47,7 +49,7 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
   }
   const navTabs = await p.evaluate(() => [...document.querySelectorAll('#rail [data-tab]')].map(e => e.getAttribute('data-tab')));
   navTabs.forEach(o => (into[o] = into[o] || new Set()).add('bar'));
-  const orphans = tabs.filter(t => !['view', 'item', 'chapter'].includes(t) && !into[t]);
+  const orphans = tabs.filter(t => !['view', 'item'].includes(t) && !into[t]);
   ok(orphans.length === 0, 'every page is linked from another page or the bar' + (orphans.length ? ' (missing: ' + orphans.join(',') + ')' : ''));
   const broken = Object.keys(into).filter(t => !tabs.includes(t));
   ok(broken.length === 0, 'no link points at a page that does not exist ' + JSON.stringify(broken));

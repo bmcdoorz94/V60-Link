@@ -17,11 +17,12 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
   await p.evaluate(() => V60_MANUAL.go('ch', '0')); await p.waitForTimeout(100);
   ok(await st('0') === 'resume', 'opening chapter 0 ends its glow and marks it as where you left off');
   ok(await p.evaluate(() => V60_GATE.visible('academy')), 'Training is reachable because chapter 0 needs it');
-  /* Go, then back through the crumb */
-  await p.click('#mnChapter [data-go="mission:m-sys"]'); await p.waitForTimeout(150);
-  ok(await p.evaluate(() => !document.querySelector('#p-academy').hidden && !document.getElementById('crumb').hidden), 'Go opens Training with a way back');
-  await p.click('#crumb [data-back]'); await p.waitForTimeout(100);
-  ok(await p.evaluate(() => !document.querySelector('#p-chapter').hidden), 'the crumb leads back to the chapter');
+  /* chapter 0 is a part page; its first step opened in place with the lesson inside it */
+  ok(await p.evaluate(() => !document.querySelector('#p-item').hidden && !!document.querySelector('#mnItem #ch-0 details.mn-stepx[open] .mn-train .mission')), 'the chapter is a section on the part page and the lesson renders inside the open step');
+  await p.evaluate(() => { const m = V60.CHAPTERS[0].missions.filter(x => x.id === 'm-sys')[0]; m.quiz.forEach((q, i) => { document.querySelector('#mnItem input[name="q' + i + '"][value="' + q.a + '"]').checked = true; }); });
+  await p.click('#mnItem #ch-0 details.mn-stepx[open] #quizGo'); await p.waitForTimeout(250);
+  ok(await p.evaluate(() => { const x = V60.acad().done['m-sys']; return !!(x && x.outcome === 'good') && !!document.querySelector('#mnItem #ch-0 details.mn-stepx.done'); }), 'finishing the lesson in place ticks the step');
+  ok(await p.evaluate(() => document.querySelector('#p-academy').hidden), 'Training stayed on the part page');
   /* finish the preface: the evidence is the four Training missions */
   await p.evaluate(() => { const A = V60.acad(); ['m-sys', 'm-safe', 'm-hood', 'm-five'].forEach(m => { A.done[m] = { date: V60.todayStr(), outcome: 'good' }; }); V60.save(); V60_MANUAL.bust(); __v60.go('car'); });
   await p.waitForTimeout(200);
@@ -34,8 +35,25 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
   /* read the oil article, find the cap on the map: 1.1.1 closes, 1.1.2 and 1.3.1 open */
   await p.evaluate(() => { V60_KNOW.discover('a', 'a-oil'); const d = V60.mod('manual'); d.went['1.1.1:1'] = 1; V60.save(); V60_MANUAL.bust(); });
   ok(await st('1.1.1') === 'closed' && await st('1.1.2') === 'new' && await st('1.3.1') === 'new', '1.1.1 closed, 1.1.2 and the battery opened ' + [await st('1.1.1'), await st('1.1.2'), await st('1.3.1')]);
-  await p.evaluate(() => V60_MANUAL.go('ch', '1.1.2')); await p.waitForTimeout(100);
+  /* a step that leads to a workbench page keeps a Go button and the crumb leads back to the part */
+  await p.evaluate(() => V60_MANUAL.go('ch', '1.1.2')); await p.waitForTimeout(150);
   ok(await p.evaluate(() => V60_MANUAL.resume() && V60_MANUAL.resume().id === '1.1.2'), 'the last chapter opened is where you pick up');
+  ok(await p.evaluate(() => !!document.querySelector('#mnItem #ch-1\\.1\\.2 details.mn-stepx[open] .mn-train')), 'arriving at 1.1.2 opens its first undone step (the oil check lesson)');
+  await p.click('#mnItem #ch-1\\.1\\.2 details.mn-stepx:nth-of-type(2) summary'); await p.waitForTimeout(150);
+  await p.click('#mnItem #ch-1\\.1\\.2 details.mn-stepx:nth-of-type(2) [data-go="tab:records"]'); await p.waitForTimeout(150);
+  ok(await p.evaluate(() => !document.querySelector('#p-records').hidden && !document.getElementById('crumb').hidden), 'Go opens the Service log with a way back');
+  await p.click('#crumb [data-back]'); await p.waitForTimeout(100);
+  ok(await p.evaluate(() => !document.querySelector('#p-item').hidden && /Oil/.test(document.querySelector('#mnItem .mn-h1').textContent)), 'the crumb leads back to the part');
+  /* the article is inside the Know step (1.1.1 is closed, its steps still open) */
+  await p.evaluate(() => V60_MANUAL.go('ch', '1.1.1')); await p.waitForTimeout(150);
+  await p.click('#mnItem #ch-1\\.1\\.1 details.mn-stepx:nth-of-type(1) summary'); await p.waitForTimeout(150);
+  ok(await p.evaluate(() => !!document.querySelector('#mnItem #ch-1\\.1\\.1 details.mn-stepx:nth-of-type(1)[open] .kbart h4')), 'opening an article step shows the article in place');
+  /* the troubleshooter walks in place and marks the step on an outcome (Show everything opens 1.1.4 for this) */
+  await p.evaluate(() => { const st = V60.mod('story'); st.all = true; V60.setMod('story', st); V60.save(); V60_MANUAL.bust(); V60_MANUAL.go('ch', '1.1.4'); }); await p.waitForTimeout(150);
+  ok(await p.evaluate(() => !!document.querySelector('#mnItem #ch-1\\.1\\.4 details.mn-stepx:nth-of-type(1)[open] .mn-tree [data-tree]')), 'the troubleshooter opens in place');
+  for (let i = 0; i < 4; i++) { const b = await p.$('#mnItem #ch-1\\.1\\.4 .mn-tree [data-tree$=":n"]'); if (!b) break; await b.click(); await p.waitForTimeout(120); }
+  ok(await p.evaluate(() => !!V60.mod('manual').went['1.1.4:0'] && !!document.querySelector('#mnItem #ch-1\\.1\\.4 .mn-note')), 'reaching an outcome marks the troubleshooter step done');
+  await p.evaluate(() => { const st = V60.mod('story'); st.all = false; V60.setMod('story', st); V60.save(); V60_MANUAL.bust(); V60_MANUAL.go('ch', '1.1.2'); }); await p.waitForTimeout(150);
   await p.evaluate(() => __v60.go('car')); await p.waitForTimeout(100);
   ok(await p.evaluate(() => document.querySelector('#mnHome .mn-hs[data-hs="bay"]').classList.contains('resume') || document.querySelector('#mnHome .mn-hs[data-hs="bay"]').classList.contains('new')), 'the hood carries a marker');
   /* reload: everything survives */
