@@ -60,6 +60,7 @@ window.V60_MANUAL_DATA = (function () {
         { tier: "S", t: "Service it", d: "A shop job. What a timing belt kit is, what it costs, and getting it on record.", steps: [{ record: "timingbelt", t: "Log a timing belt replacement", why: "From a receipt, a sticker you trust, or the job you have done. This closes The Belt.", go: "tab:records" }] }
       ] },
     { id: "filters", view: "bay", num: "1.5", n: "Air & cabin filters", d: "The engine air filter in the box under the hood; the cabin filter behind the glovebox.", bay: "airbox", part: "airfilter", record: "airfilter", tags: ["Maintenance"], at: [250, 130],
+      spec: [["Cowl, your photos", "Both drains in the cowl below the windshield were full of leaves, the passenger side most"]],
       chapters: [
         { tier: "K", t: "Know it", d: "Everything the turbo breathes passes the air filter first. The cabin filter is the one you smell.", steps: [{ bay: "airbox", t: "Find the air filter box on the map" }] },
         { tier: "C", t: "Check it", d: "Open the clips, hold the filter to the light, reseat it carefully.", steps: [{ mission: "m-airf" }, { mission: "m-cabin" }] },
@@ -92,7 +93,7 @@ window.V60_MANUAL_DATA = (function () {
 
     /* ---------- view 2: wheels & brakes ---------- */
     { id: "tires", view: "wheel", num: "2.1", n: "Tires", d: "Size, pressure, tread, age. The pressure light has been on since you bought the car.", part: "tread", record: "tires", tags: ["Tires"], photo: ["sidewall", "tread"], at: [60, 160],
-      spec: [["Size", "215/50R17 on 17 x 7.5 in wheels"], ["Pressure", "38 psi front and rear, cold"], ["Age rule", "Replace at 6 years from the DOT date"], ["Placard, your photo", "215/50R17 front and rear, 260 kPa / 38 psi cold, spare: none"], ["On the car, your photos", "Sentury UHP 215/50ZR17 95W, extra load, max 50 psi, made in Thailand; DOT week 43 of 2023 on the one photographed"]],
+      spec: [["Size", "215/50R17 on 17 x 7.5 in wheels"], ["Pressure", "38 psi front and rear, cold"], ["Age rule", "Replace at 6 years from the DOT date"], ["Placard, your photo", "215/50R17 front and rear, 260 kPa / 38 psi cold, spare: none"], ["On the car, your photos", "Sentury UHP 215/50ZR17 95W, extra load, max 50 psi, made in Thailand; DOT week 43 of 2023 on the one photographed"], ["Wear, read from your front-wheel photo", "The outer shoulder blocks look feathered or chunked. A reading from one photo, unconfirmed: have a shop look"]],
       chapters: [
         { tier: "K", t: "Know it", d: "What the numbers on a sidewall mean, how to read the DOT date, and what the placard on the door pillar is for.", steps: [{ mission: "m-tires" }] },
         { tier: "C", t: "Check it", d: "Pressure cold against the placard, tread at three points per tire, the DOT date on each sidewall. On your four tires.", time: "About 15 minutes, cold tires", steps: [{ mission: "m-psi" }, { mission: "m-tread" }, { photo: "sidewall", t: "Photograph one sidewall", why: "The app reads the DOT date on your phone and flags a tire past 6 years.", go: "tab:my" }] },
@@ -107,6 +108,7 @@ window.V60_MANUAL_DATA = (function () {
         { tier: "D", t: "Diagnose it", d: "If the light returns after a correct calibration, the fault is in the car, not the tires. Bulletin TJ29818 covers one cause.", steps: [{ tree: "tpms" }, { tsb: "TJ29818", t: "Read bulletin TJ29818 and mark it", go: "tsb:TJ29818" }] }
       ] },
     { id: "brakes", view: "wheel", num: "2.3", n: "Brake pads & rotors", d: "Visible through the spokes. Pad thickness and the rotor's lip tell most of the story.", part: "pads", record: "brakes", tags: ["Brakes", "Maintenance"], photo: ["brake"], at: [195, 118],
+      spec: [["Front brake, read from your photo", "Single-piston sliding caliper; the rotor shows a wear lip at its outer edge. A reading from one photo, unconfirmed: a shop measures pads and rotors"]],
       chapters: [
         { tier: "K", t: "Know it", d: "What pads, rotors and calipers do, and what the parts list says to look for.", steps: [{ part: "pads", t: "Read the brake pads entry in the parts list" }, { part: "rotors", t: "Read the brake discs entry" }] },
         { tier: "C", t: "Check it", d: "Photograph the pad edge through the spokes and log an inspection. A shop does the rest.", steps: [{ photo: "brake", t: "Photograph a brake pad through the wheel", go: "tab:my" }, { record: "brakes", t: "Log a brake inspection", go: "tab:records" }] },
