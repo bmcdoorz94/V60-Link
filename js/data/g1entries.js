@@ -653,6 +653,656 @@ window.V60_G1_ENTRIES = {
    }
   ]
  },
+ "A12": {
+  "body": [
+   "This task confirms that the radiator cooling fan runs when it should and that nothing blocks airflow through the radiator: the fan clutch on engine-driven fans, the fan shroud and the air dams.",
+   "MAHLE's workshop guide says electric fans are switched by pressure or temperature switches or by a control unit, either in steps or continuously with pulse-width control, and are mounted on a shroud as close to the radiator as possible so air passes through the core with little loss.",
+   "When an electric fan does not run, MAHLE lists checking the switch-on point, the fuse, the thermal switch and the fan control unit; a scan tool can read the fault memory, and an infrared thermometer can compare radiator inlet and outlet temperatures.",
+   "Hayden's thermal fan clutch guide gives fan speed as about 10 to 20 percent of pulley speed when the clutch is disengaged and about 60 to 90 percent when engaged, and says the blade tip should rock forward and back no more than 1/4 inch.",
+   "Hayden also lists blocked shrouds and air dams, debris on the radiator and condenser, and bent, cracked or chipped blades as airflow problems to rule out; a clutch that will not disengage causes excessive fan noise and, on some later vehicles, codes P2181 or P0128.",
+   "MAHLE's engine-off hand test for a viscous clutch: the fan should turn easily when the engine is cold and with difficulty when it is warm."
+  ],
+  "car": "The V60's cooling fan sits at the front of the engine compartment behind the radiator, has its own 60 A fuse (4- and 5-cylinder engines), and can start or keep running for up to 6 minutes after the engine is switched off.",
+  "src": [
+   [
+    "Vehicle cooling: A compact guide for the workshop (MAHLE)",
+    "https://www.mahle-aftermarket.com/media/homepage/facelift/media-center/klima/mah-kompaktwissen-ec-fahrzeugkuehlung-en-screen.pdf"
+   ],
+   [
+    "Thermal Fan Clutch Diagnosis",
+    "https://www.haydenauto.com/en/marketing/thermal-fan-clutch-diagnosis"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A 2016 V60 owner says the radiator fan kept running for several minutes after the engine was switched off on a hot day. What is most likely?",
+    "o": [
+     "The fan relay is stuck and must be replaced",
+     "This is normal: Volvo says the fan may run for up to 6 minutes after shutdown",
+     "The coolant temperature sensor has failed",
+     "The fan clutch is locked up"
+    ],
+    "a": 1,
+    "why": "Volvo's owner's manual warns that the cooling fan may start or continue to run for up to 6 minutes after the engine is switched off.",
+    "src": [
+     "Volvo 2016 V60 US Owner's Manual (TP20238)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   },
+   {
+    "q": "An electric cooling fan does not run and the engine runs hot at idle. Technician A says to check the fan fuse and the fan control unit. Technician B says a scan tool can read the fault memory for the fan circuit. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "MAHLE lists the switch-on point, fuse, thermal switch and fan control unit as electrical checks, and says a diagnostic tool can read the fault memory or check the control function.",
+    "src": [
+     "Vehicle cooling: A compact guide for the workshop (MAHLE)",
+     "https://www.mahle-aftermarket.com/media/homepage/facelift/media-center/klima/mah-kompaktwissen-ec-fahrzeugkuehlung-en-screen.pdf"
+    ]
+   }
+  ]
+ },
+ "A13": {
+  "body": [
+   "This task checks that the instrument panel warning lamps and indicators work, so a real fault is visible when it happens.",
+   "EPA's OBD fact sheet says the check engine light should come on briefly when the ignition is switched on and stay off while driving unless a problem is detected; a steady light means a detected problem, and a flashing light means a severe one, such as a misfire that can damage the catalytic converter.",
+   "Under 40 CFR 85.2222, an OBD emissions inspection fails a vehicle whose malfunction indicator does not light at all with the key on and engine off, even with no codes stored, and also fails one whose computer has commanded the lamp on while the lamp itself stays dark.",
+   "Volvo's red warning symbols include low oil pressure, generator not charging, brake system fault and the SRS airbags. For low oil pressure Volvo says to stop, switch off the engine and check the oil level; if the level is normal and the light stays on after a restart, the car should be towed.",
+   "Volvo signals overheating with text and a red warning triangle in the instrument display, ranging from High engine temp Reduce speed to High engine temp Stop engine, and says to let the engine cool before checking oil and coolant."
+  ],
+  "car": "On the 2016 V60 all indicator and warning symbols light in ignition mode II or at engine start; once the engine runs, all should go out except the parking brake symbol. If the check is done in mode II without starting, all go out after 5 seconds except the malfunction indicator and low oil pressure symbols.",
+  "src": [
+   [
+    "Do You Drive a 1996 or Newer Car or Light Truck? (EPA420-F-02-016)",
+    "https://nepis.epa.gov/Exe/ZyPURL.cgi?Dockey=P1002K2N.txt"
+   ],
+   [
+    "§ 85.2222 Onboard diagnostic test procedures (40 CFR 85.2222)",
+    "https://www.ecfr.gov/current/title-40/chapter-I/subchapter-C/part-85/subpart-W/section-85.2222"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "During a key-on, engine-off check at an OBD emissions inspection, the malfunction indicator lamp does not light at all. No trouble codes are stored. Under 40 CFR 85.2222 the vehicle:",
+    "o": [
+     "Passes, because no codes are stored",
+     "Fails the OBD inspection",
+     "Passes if all readiness monitors are complete",
+     "Is sent away to complete a drive cycle"
+    ],
+    "a": 1,
+    "why": "The rule says a vehicle whose MIL does not illuminate at all in the key-on/engine-off condition fails, even if no DTCs are present and the MIL has not been commanded on.",
+    "src": [
+     "§ 85.2222 Onboard diagnostic test procedures (40 CFR 85.2222)",
+     "https://www.ecfr.gov/current/title-40/chapter-I/subchapter-C/part-85/subpart-W/section-85.2222"
+    ]
+   },
+   {
+    "q": "On a 2016 V60, the ignition is placed in mode II and the engine is not started. After 5 seconds, which symbols are still lit?",
+    "o": [
+     "The malfunction indicator and low oil pressure symbols",
+     "Only the parking brake symbol",
+     "Every indicator and warning symbol",
+     "The seat belt reminder and SRS symbols"
+    ],
+    "a": 0,
+    "why": "Volvo says that if the function check is done in ignition mode II, all symbols go out after 5 seconds except the malfunction indicator light and the low oil pressure symbol.",
+    "src": [
+     "Volvo 2016 V60 US Owner's Manual (TP20238)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   }
+  ]
+ },
+ "A14": {
+  "body": [
+   "This task covers inspecting and cleaning the intake air path from the air filter to the throttle body, and relearning idle afterwards when the vehicle requires it.",
+   "Standard Motor Products describes electronic throttle control: pedal position sensors send the driver's request to the PCM, a motor opens and closes the throttle blade, and several throttle position sensors report the blade's position back. The PCM, not the pedal, sets the actual opening.",
+   "CRC's cleaning procedure starts with a cool engine, removes the intake duct from the throttle, and checks the blade edges, the seat line and the manifold side of the plate for deposits. It lists rough idle, hesitation, stalling and a check engine light as signs of a dirty throttle body.",
+   "CRC warns not to force the blade of an electronic throttle open, which can damage the throttle motor, not to use carburetor or brake cleaner, and not to spray through the air filter or across the mass air flow sensor. With the throttle body still on the engine, the cleaner goes on a rag, not into the bore.",
+   "After an electronic throttle part is replaced, Standard says to clear the PCM memory and relearn the throttle values to avoid idle problems; the procedure varies by vehicle, so service information decides it.",
+   "Walker lists the intake boot joints between the mass air flow sensor and the intake manifold as a common place for small leaks, which can badly skew sensor readings."
+  ],
+  "car": "Volvo's fuse table for 4-cylinder engines lists the mass air meter on a 10 A fuse shared with the thermostat and EVAP valve. The manual warns that engine damage will occur if water is drawn into the air cleaner.",
+  "src": [
+   [
+    "A Closer Look: Electronic Throttle Bodies",
+    "https://www.standardbrand.com/training-insights/training/a-closer-look-electronic-throttle-bodies/"
+   ],
+   [
+    "How to Clean a Throttle Body: Save Money & Boost Performance",
+    "https://www.crcindustries.com/blog/how-to-clean-a-throttle-body/"
+   ],
+   [
+    "How to Find an Exhaust System Leak",
+    "https://www.walkerexhaust.com/support/tech-tips/finding-exhaust-system-leaks.html"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A technician cleans an electronic throttle body that is still installed on the engine. Which step is LEAST likely to be recommended?",
+    "o": [
+     "Spraying cleaner onto a rag and wiping the bore",
+     "Prying the throttle blade open by hand to reach behind it",
+     "Using a lint-free cloth with light pressure",
+     "Keeping cleaner away from the mass air flow sensor"
+    ],
+    "a": 1,
+    "why": "CRC says not to force the butterfly of a drive-by-wire throttle open because it can damage the electronic throttle control motor; with the unit on the engine, cleaner goes on a rag.",
+    "src": [
+     "How to Clean a Throttle Body: Save Money & Boost Performance",
+     "https://www.crcindustries.com/blog/how-to-clean-a-throttle-body/"
+    ]
+   },
+   {
+    "q": "After an electronic throttle body is replaced, the engine idles erratically. Technician A says the PCM may need to relearn the throttle values. Technician B says the relearn procedure is the same on every vehicle. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Standard says the PCM memory should be cleared and throttle values relearned after replacing an ETC part, but the procedure ranges from a simple reflash to an extensive relearn and must come from the vehicle's service information.",
+    "src": [
+     "A Closer Look: Electronic Throttle Bodies",
+     "https://www.standardbrand.com/training-insights/training/a-closer-look-electronic-throttle-bodies/"
+    ]
+   }
+  ]
+ },
+ "A15": {
+  "body": [
+   "This task covers checking and replacing the engine air filter and inspecting its housing and intake ducts for dirt, damage and poor sealing.",
+   "FRAM's procedure: let the engine cool, find the air filter housing (usually a black plastic box joined to a large intake hose), release its hooks or screws without forcing them, note how the old filter sits, and vacuum dirt out of the housing before fitting the new one.",
+   "The new filter should sit snugly without being forced, with no edges bent or caught, and the cover must be fully secured. FRAM says a whistle or rattle after start-up can mean a poor seal.",
+   "FRAM advises against reinstalling a used filter, even one removed only for inspection, because dirt from the outer side can reach the engine side. It lists lower fuel economy, sluggish acceleration and a check engine light as signs of a clogged filter.",
+   "FRAM says manufacturers generally recommend changing standard filters every 12,000 to 15,000 miles, and more often in dusty conditions."
+  ],
+  "car": "The air cleaner is one of the main inspection points in Volvo's V60 engine compartment overview. Volvo lists a dirty air cleaner among the factors that lower fuel economy and warns that water drawn into the air cleaner will damage the engine. The air filter interval for this car is unconfirmed.",
+  "src": [
+   [
+    "How to Change Your Car's Engine Air Filter | FRAM",
+    "https://www.fram.com/vehicle-maintenance-center/post/how-to-change-engine-air-filter"
+   ],
+   [
+    "Dirty Air Filter Symptoms: 3 Signs Your Engine's Air Filter is Clogged",
+    "https://www.fram.com/vehicle-maintenance-center/post/dirty-air-filter-symptoms"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A customer asks for the engine air filter to be removed, looked at, and put back if it seems clean. According to FRAM, the best practice is to:",
+    "o": [
+     "Reinstall it if light shines through it",
+     "Tap it clean and reinstall it",
+     "Replace it once it has been removed",
+     "Reinstall it facing the opposite way"
+    ],
+    "a": 2,
+    "why": "FRAM says that if an air filter is removed, even for inspection, it should be replaced, because contaminants on the dirty side can be drawn into the engine.",
+    "src": [
+     "Dirty Air Filter Symptoms: 3 Signs Your Engine's Air Filter is Clogged",
+     "https://www.fram.com/vehicle-maintenance-center/post/dirty-air-filter-symptoms"
+    ]
+   },
+   {
+    "q": "Right after a new engine air filter is installed, a whistling sound comes from the air box with the engine running. What is most likely?",
+    "o": [
+     "The filter or cover is not sealing properly",
+     "The filter media is too fine",
+     "The throttle body needs a relearn",
+     "The mass air flow sensor has failed"
+    ],
+    "a": 0,
+    "why": "FRAM says to start the engine after the change and listen; whistling or rattling may indicate a poor seal.",
+    "src": [
+     "How to Change Your Car's Engine Air Filter | FRAM",
+     "https://www.fram.com/vehicle-maintenance-center/post/how-to-change-engine-air-filter"
+    ]
+   }
+  ]
+ },
+ "A16": {
+  "body": [
+   "This task covers inspecting the positive crankcase ventilation (PCV) system, its valve, hoses and any oil separator, and replacing worn parts.",
+   "EPA's 1977 PCV training manual explains that combustion gas leaking past the piston rings, called blowby, carries fuel vapor, acids and water vapor into the crankcase; the PCV system draws it into the intake to be burned and replaces it with fresh air. The valve's plunger, moved by manifold vacuum, limits flow at idle, allows the most flow at cruise and closes when the engine stops or backfires.",
+   "The same manual's inspection: confirm all parts are present and unmodified, check hoses for cracks, deterioration and loose connections, check for large crankcase oil leaks, and look for oil in the air cleaner, which points to a blocked valve pushing blowby out through the fresh-air inlet.",
+   "Two of its tests: at operating temperature, remove the valve and cover its end, and idle should drop 40 to 80 rpm (no drop suggests a blocked system); or hold thin paper over the oil filler opening at idle, and crankcase vacuum should pull it tight.",
+   "Standard Motor Products notes that a faulty PCV system can leave the crankcase under excessive pressure and cause oil leaks, that some PCV valves have heaters to stop them freezing, and that oil separators keep oil from being drawn into the cylinders. EPA warns that the wrong replacement hose may collapse."
+  ],
+  "car": null,
+  "src": [
+   [
+    "Motor Vehicle Emissions Control: Book One - Positive Crankcase Ventilation Systems (EPA-450/3-77-036)",
+    "https://nepis.epa.gov/Exe/ZyPURL.cgi?Dockey=91010D2I.TXT"
+   ],
+   [
+    "Emission Control Components: EVAP, EGR & Crankcase Ventilation Systems | Standard",
+    "https://www.standardbrand.com/whats-in-your-box/emission-controls/?tab=evap-components&subtab=canister-purge-solenoids"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "With the engine at operating temperature, a technician removes the PCV valve and covers its open end. Idle speed does not change. What is most likely?",
+    "o": [
+     "The PCV system is working normally",
+     "The PCV system is blocked",
+     "The engine has excessive blowby",
+     "The oil level is overfull"
+    ],
+    "a": 1,
+    "why": "EPA's PCV manual says idle should drop 40 to 80 rpm when the valve is blocked off; no drop indicates a blocked PCV system.",
+    "src": [
+     "Motor Vehicle Emissions Control: Book One - Positive Crankcase Ventilation Systems (EPA-450/3-77-036)",
+     "https://nepis.epa.gov/Exe/ZyPURL.cgi?Dockey=91010D2I.TXT"
+    ]
+   },
+   {
+    "q": "Oil is found in the air cleaner housing. Technician A says a blocked PCV valve can cause this. Technician B says cracked or loose PCV hoses can lean out the air-fuel mixture. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "EPA says a blocked PCV valve sends blowby out through the air inlet, leaving excess oil in the air cleaner, and that air leaks from cracked or loose hoses may lean out the air-fuel ratio.",
+    "src": [
+     "Motor Vehicle Emissions Control: Book One - Positive Crankcase Ventilation Systems (EPA-450/3-77-036)",
+     "https://nepis.epa.gov/Exe/ZyPURL.cgi?Dockey=91010D2I.TXT"
+    ]
+   }
+  ]
+ },
+ "A17": {
+  "body": [
+   "This task covers checking the exhaust system for leaks and for loose, broken or missing hangers, brackets and heat shields.",
+   "Walker's inspection checks welds for breaks, cracks and corrosion, pipe joints for misalignment and burned gaskets, clamp joints, and the flex pipe, which it calls a common failure point; a road test listens for unusual exhaust sounds and checks for exhaust odor in the cabin.",
+   "Walker says to look for leaks with the system cold and again at operating temperature, that a smoke machine is the usual way to find small leaks, and that pinholes in the welds around oxygen sensor ports and joints ahead of the converter or within 3 inches after it are typical leak points. Small leaks can badly skew oxygen sensor readings.",
+   "Hangers and isolators are checked for wear and for loose, damaged or missing parts. On a lift, moving the system side to side and up and down (carefully, since it gets hot) shows whether it is hung securely or touching the underbody.",
+   "Walker's installation guidance calls for 1/4 to 1/2 inch of clearance where metal parts could touch and 2 to 3 inches from parts not built for heat; cold isolators should be loaded evenly and angled slightly forward, and hang straight up and down at operating temperature.",
+   "Leak symptoms Walker lists include a loud rumble on acceleration, popping or hissing, lost power and lower fuel economy; it warns that many exhaust gases have no odor."
+  ],
+  "car": "Volvo warns that carbon monoxide, which has no color or smell, is present in all exhaust gas, and that any exhaust smell inside the V60 calls for ventilating the cabin and having the car checked right away. Volvo also says not to park over grass or leaves, which the hot exhaust system can ignite.",
+  "src": [
+   [
+    "How to Perform an Exhaust System Inspection",
+    "https://www.walkerexhaust.com/support/tech-tips/how-to-perform-exhaust-system-inspection.html"
+   ],
+   [
+    "How to Find an Exhaust System Leak",
+    "https://www.walkerexhaust.com/support/tech-tips/finding-exhaust-system-leaks.html"
+   ],
+   [
+    "Troubleshooting Excessive Exhaust System Noise Problems",
+    "https://www.walkerexhaust.com/support/tech-tips/troubleshooting-excessive-exhaust-system-noise-problems.html"
+   ],
+   [
+    "How to Install an Exhaust System Like a Pro",
+    "https://www.walkerexhaust.com/support/tech-tips/how-to-install-an-exhaust-system-like-a-pro.html"
+   ],
+   [
+    "Symptoms of an Exhaust Leak | Walker Exhaust Systems",
+    "https://www.walkerexhaust.com/support/exhaust-101/signs-of-an-exhaust-leak.html"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A replacement exhaust pipe passes close to an underbody part that is not designed for heat. According to Walker, how much clearance should be allowed?",
+    "o": [
+     "1/8 inch",
+     "1/4 to 1/2 inch",
+     "2 to 3 inches",
+     "At least 6 inches"
+    ],
+    "a": 2,
+    "why": "Walker calls for 2 to 3 inches of clearance from components not designed for heat; 1/4 to 1/2 inch applies where metal parts could touch.",
+    "src": [
+     "How to Install an Exhaust System Like a Pro",
+     "https://www.walkerexhaust.com/support/tech-tips/how-to-install-an-exhaust-system-like-a-pro.html"
+    ]
+   },
+   {
+    "q": "Technician A says an exhaust system should be checked for leaks cold and again at operating temperature. Technician B says that if no exhaust smell is noticed in the cabin, the exhaust has no leak. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Walker says to inspect cold and again after warm-up, and warns that many harmful exhaust gases are odorless, so the lack of a smell does not rule out a leak.",
+    "src": [
+     "How to Find an Exhaust System Leak",
+     "https://www.walkerexhaust.com/support/tech-tips/finding-exhaust-system-leaks.html"
+    ]
+   }
+  ]
+ },
+ "A18": {
+  "body": [
+   "This task covers connecting a scan tool to the OBD II connector, reading stored trouble codes and their supporting data, and writing them down before any repair or code clearing.",
+   "Snap-on's scan tool manual describes the generic OBD II functions: Mode $03 shows stored emission-related codes, Mode $07 shows codes detected during the last drive cycle, Mode $0A shows permanent codes, and Mode $02 freeze frame gives a snapshot of key values at the moment a code set.",
+   "Clearing codes (Mode $04) erases all emission-related diagnostic data in the selected module, including the codes, freeze frame data and test results. Permanent codes clear on their own only after the repair is made and the related monitor runs successfully.",
+   "In an OBD inspection under 40 CFR 85.2222, the tester reads readiness and lamp status; if the lamp is commanded on, every code causing it is recorded and the vehicle fails. Stored codes with the lamp off do not fail it, and 2001 and newer vehicles may have one unset readiness monitor.",
+   "EPA's OBD fact sheet says a technician reads the computer with a handheld scan tool plugged into a connector usually found under the dashboard."
+  ],
+  "car": "Volvo says the V60's OBD II system stores a message about any fault, and a fault stays recorded even if the check engine light goes out without service. After a check engine repair or a battery disconnection, Volvo says two half-hour trips of mixed stop-and-go and highway driving are typically needed for the system to show ready for inspection.",
+  "src": [
+   [
+    "OBD_Diagnose (Snap-on diagnostics manual)",
+    "https://snapon.com/diagnosticsmanuals/zeusplus%20na/content/zeus/OBD_Diagnose.htm"
+   ],
+   [
+    "§ 85.2222 Onboard diagnostic test procedures (40 CFR 85.2222)",
+    "https://www.ecfr.gov/current/title-40/chapter-I/subchapter-C/part-85/subpart-W/section-85.2222"
+   ],
+   [
+    "Do You Drive a 1996 or Newer Car or Light Truck? (EPA420-F-02-016)",
+    "https://nepis.epa.gov/Exe/ZyPURL.cgi?Dockey=P1002K2N.txt"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "At an OBD emissions inspection, a 2016 car has its malfunction indicator off and commanded off, all monitors ready, and one stored code. Under 40 CFR 85.2222 the vehicle:",
+    "o": [
+     "Passes the OBD inspection",
+     "Fails because a code is stored",
+     "Fails until the code is cleared and a drive cycle is completed",
+     "Is rejected and must return with the code repaired"
+    ],
+    "a": 0,
+    "why": "The rule says that if the MIL is not commanded to be illuminated, the vehicle passes the OBD inspection even if DTCs are present.",
+    "src": [
+     "§ 85.2222 Onboard diagnostic test procedures (40 CFR 85.2222)",
+     "https://www.ecfr.gov/current/title-40/chapter-I/subchapter-C/part-85/subpart-W/section-85.2222"
+    ]
+   },
+   {
+    "q": "Why should a technician record the freeze frame data before clearing codes?",
+    "o": [
+     "Clearing codes erases the freeze frame data along with the codes",
+     "Freeze frame data is needed to switch off the lamp",
+     "Codes cannot be cleared until the freeze frame is saved",
+     "Freeze frame data only appears after the codes are cleared"
+    ],
+    "a": 0,
+    "why": "Snap-on says Clear Codes (Mode $04) clears all emission-related diagnostic data, including DTCs, freeze frame data and test results.",
+    "src": [
+     "OBD_Diagnose (Snap-on diagnostics manual)",
+     "https://snapon.com/diagnosticsmanuals/zeusplus%20na/content/zeus/OBD_Diagnose.htm"
+    ]
+   }
+  ]
+ },
+ "A19": {
+  "body": [
+   "This task covers removing and installing spark plugs and inspecting secondary ignition parts such as coils, boots and connectors.",
+   "Champion says to work on a cold engine, blow dirt away from the plug wells with compressed air before removal, and pull on the boot or coil rather than the wire. An oily or white firing end can point to other engine problems.",
+   "Before installation, check the gap against the vehicle maker's specification. NGK and Denso both say to adjust only by bending the ground electrode and never to press on a fine-wire center electrode or the insulator; Denso also warns against round gap tools.",
+   "Start each plug by hand. For a 14 mm flat-seat plug in an aluminum head, NGK lists 18.0 to 21.6 lb-ft and Denso lists 15 to 22 lb-ft, with Denso reducing torque by about one third if the threads are lubricated. Overtightening can distort or break the shell; undertightening can let the plug overheat.",
+   "Delphi's coil checks: cracks in the housing, broken anti-rotation tabs, damaged wiring and connectors, oil around the coil (often from a leaking valve cover gasket), moisture, vibration damage and overheating. Primary resistance is typically 0.4 to 2 ohms and secondary 5,000 to 20,000 ohms, with the maker's figures taking priority.",
+   "Delphi notes that worn plugs with widened gaps force the coil to produce more voltage, which can overheat it, and recommends replacing all plugs when a coil is replaced and putting dielectric grease on the new coil's foot and connector socket."
+  ],
+  "car": "Volvo warns that the V60's ignition system operates at very high voltage: the ignition must be off when replacing plugs or coils, and no part of the ignition system should be touched with the engine running. The fuse table lists the 4-cylinder ignition coils on a 15 A fuse. The plug replacement interval for this car is unconfirmed.",
+  "src": [
+   [
+    "Spark Plug: Installation & Removal Guide Car | Champion Parts",
+    "https://www.championautoparts.com/en-eu/support/installation-guides/ignition/spark-plug-installation-and-removal.html"
+   ],
+   [
+    "How do I install spark plugs correctly? - NGK Spark Plugs",
+    "https://ngksparkplugs.com/en/resources/correctly-install-spark-plugs"
+   ],
+   [
+    "Do I need to set the \"gap\" when installing a new set of plugs? - NGK Spark Plugs",
+    "https://ngksparkplugs.com/en/resources/set-gap-when-installing-new-plugs"
+   ],
+   [
+    "Spark Plug Installation | DENSO Auto Parts",
+    "https://www.densoautoparts.com/spark-plug-installation/"
+   ],
+   [
+    "How to service ignition coils (Delphi)",
+    "https://www.delphiautoparts.com/resource-center/article/how-to-service-ignition-coils"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A technician needs to close the gap slightly on a new iridium spark plug. Which method is LEAST acceptable?",
+    "o": [
+     "Bending the ground electrode toward the center electrode",
+     "Checking the gap with a calibrated gap tool",
+     "Prying against the center electrode with a round wire gap tool",
+     "Comparing the gap with the vehicle maker's specification"
+    ],
+    "a": 2,
+    "why": "NGK and Denso say to move only the ground electrode and never apply force to the fine-wire center electrode or insulator; Denso says never to use a round gapping tool.",
+    "src": [
+     "Spark Plug Installation | DENSO Auto Parts",
+     "https://www.densoautoparts.com/spark-plug-installation/"
+    ]
+   },
+   {
+    "q": "A coil-on-plug ignition coil has failed. Technician A says worn spark plugs with widened gaps can overload a coil. Technician B says the spark plugs should be replaced along with the coil. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Delphi says worn plugs widen the gap so the coil must produce more voltage, which can overload and overheat it, and recommends replacing all spark plugs when replacing the coil.",
+    "src": [
+     "How to service ignition coils (Delphi)",
+     "https://www.delphiautoparts.com/resource-center/article/how-to-service-ignition-coils"
+    ]
+   }
+  ]
+ },
+ "A20": {
+  "body": [
+   "This task covers inspecting the fuel tank, filler neck, cap, lines and hoses for leaks and damage, and replacing an external (in-line) fuel filter on vehicles that have one.",
+   "EPA's OBD fact sheet names a loose or missing gas cap as a common cause of a lit check engine light; it also wastes fuel and adds to smog.",
+   "MANN-FILTER says in-line fuel filters fit directly into the fuel line and are replaced as a whole unit, and lists failure to start, weak acceleration, sputtering or stalling at low speed and poorer fuel economy as signs of a clogged filter; the interval comes from the vehicle's manual.",
+   "Delphi notes that replacing a fuel filter can spill fuel and recommends leaving the job to professionals.",
+   "Gates' Barricade fuel injection hose, a replacement fuel line hose, meets SAE J30R14 T2 and is rated at 225 psi maximum working pressure."
+  ],
+  "car": "The V60's fuel filler door is on the right rear fender. Volvo says to open the cap slowly because vapor expands in hot weather, close it by turning clockwise until it clicks, and use only Volvo original or approved caps; a loose cap or refueling with the engine running can light the check engine light. Tank capacity is 17.8 US gallons (67.5 L). The owner's manual lists no fuel filter service, and whether the car has an external filter is unconfirmed.",
+  "src": [
+   [
+    "Do You Drive a 1996 or Newer Car or Light Truck? (EPA420-F-02-016)",
+    "https://nepis.epa.gov/Exe/ZyPURL.cgi?Dockey=P1002K2N.txt"
+   ],
+   [
+    "Fuel filters for more engine power – MANN-FILTER",
+    "https://www.mann-filter.com/en/parts/fuel-filter.html"
+   ],
+   [
+    "How to replace your fuel filter (Delphi)",
+    "https://www.delphiautoparts.com/en-gb/mom/how-to/article/how-to-replace-your-fuel-filter"
+   ],
+   [
+    "Barricade™ Fuel Injection Hose | Gates Corporation",
+    "https://www.gates.com/us/en/fluid-power/engine-hose/fuel-line-hose.p.4219-000000-000003.html"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A V60 owner refueled with the engine running and did not turn the fuel cap until it clicked. Shortly after, the check engine light came on. What is the most likely cause?",
+    "o": [
+     "A failed fuel pump",
+     "The refueling and the loose cap",
+     "A clogged fuel filter",
+     "Low octane fuel"
+    ],
+    "a": 1,
+    "why": "Volvo says the check engine light may come on if the fuel filler cap is not closed tightly or the engine was running during refueling, and that the cap is closed by turning it clockwise until it clicks.",
+    "src": [
+     "Volvo 2016 V60 US Owner's Manual (TP20238)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   },
+   {
+    "q": "Which is LEAST likely to be a symptom of a clogged fuel filter?",
+    "o": [
+     "The engine will not start",
+     "Weak acceleration",
+     "Sputtering or stalling at low speed",
+     "Brake pedal pulsation"
+    ],
+    "a": 3,
+    "why": "MANN-FILTER lists failure to start, poor acceleration, sputtering or stalling at low speeds and worse fuel efficiency as clogged-filter symptoms; brake pulsation is unrelated to fuel delivery.",
+    "src": [
+     "Fuel filters for more engine power – MANN-FILTER",
+     "https://www.mann-filter.com/en/parts/fuel-filter.html"
+    ]
+   }
+  ]
+ },
+ "A21": {
+  "body": [
+   "This task covers inspecting the evaporative emission (EVAP) system: the charcoal canister, vapor lines and hoses, the purge and vent valves, and any leak detection pump or module.",
+   "Standard Motor Products explains the system: fuel vapor from the tank is stored in a charcoal canister, the vent valve lets fresh air in, and when conditions are right the engine computer opens the purge valve so the engine burns the vapor. The computer also checks the system for leaks and turns on the check engine light when it finds one.",
+   "Common faults it lists are a loose or damaged gas cap, cracked hoses, a faulty purge or vent valve, a damaged canister and a leaking fuel tank. A failing canister can shed charcoal through the system, so a failed purge valve calls for checking the canister too.",
+   "Diagnosis starts with a scan tool and a look at the cap, hoses and valves; Standard calls a smoke machine one of the most effective ways to find leaks. After a repair, an EVAP self-test should run without codes returning, though that is not always possible for small-leak codes.",
+   "Some systems use a leak detection pump that pressurizes the EVAP system to find leaks."
+  ],
+  "car": "Volvo's fuse table for 4-cylinder engines lists an EVAP valve (10 A fuse shared with the mass air meter and thermostat) and fuel leakage detection (7.5 A fuse shared with an A/C solenoid). Volvo warns that overfilling the tank can damage the emission control systems and says not to click the nozzle handle more than one extra time.",
+  "src": [
+   [
+    "What Is an EVAP System? How Evaporative Emission Systems Work, Common Problems & Diagnostics",
+    "https://www.standardbrand.com/training-insights/training/what-is-an-evap-system-how-evaporative-emission-systems-work-common-problems-and-diagnostics"
+   ],
+   [
+    "Emission Control Components: EVAP, EGR & Crankcase Ventilation Systems | Standard",
+    "https://www.standardbrand.com/whats-in-your-box/emission-controls/?tab=evap-components&subtab=canister-purge-solenoids"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A vehicle has an EVAP leak code. The fuel cap, visible hoses and valves look fine. Which next step is most effective for finding the leak?",
+    "o": [
+     "Replace the charcoal canister",
+     "Perform a smoke test of the EVAP system",
+     "Clear the code and wait for it to return",
+     "Replace the purge valve"
+    ],
+    "a": 1,
+    "why": "Standard Motor Products says to check the basics first and calls a smoke machine one of the most effective ways to find EVAP leaks.",
+    "src": [
+     "What Is an EVAP System? How Evaporative Emission Systems Work, Common Problems & Diagnostics",
+     "https://www.standardbrand.com/training-insights/training/what-is-an-evap-system-how-evaporative-emission-systems-work-common-problems-and-diagnostics"
+    ]
+   },
+   {
+    "q": "An EVAP purge valve has failed. Technician A says the canister should be inspected because a failing canister can send charcoal through the system. Technician B says the vent valve controls fresh air flowing in and out of the canister. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Standard says a failing canister can push charcoal downstream, so a failed purge valve may need the canister inspected, and that vent solenoids control the flow of outside air in and out of the canister.",
+    "src": [
+     "Emission Control Components: EVAP, EGR & Crankcase Ventilation Systems | Standard",
+     "https://www.standardbrand.com/whats-in-your-box/emission-controls/?tab=evap-components&subtab=canister-purge-solenoids"
+    ]
+   }
+  ]
+ },
+ "A22": {
+  "body": [
+   "This task applies to diesel vehicles with selective catalytic reduction (SCR): checking the diesel exhaust fluid (DEF) level and refilling it.",
+   "API defines DEF as a 32.5 percent solution of high-purity urea in purified water, with purity set by ISO 22241. Injected into the hot exhaust ahead of a catalyst, it converts nitrogen oxides into nitrogen and water vapor.",
+   "API runs a voluntary DEF certification program; certified products may carry the API Diesel Exhaust Fluid Certification Mark."
+  ],
+  "car": "This task does not apply to the 2016 V60 T5: Volvo's owner's manual says the car has a three-way catalytic converter and must use only unleaded gasoline, and the manual has no diesel or DEF section.",
+  "src": [
+   [
+    "Diesel Exhaust Fluid (DEF) | American Petroleum Institute | API",
+    "https://www.api.org/products-and-services/diesel-exhaust-fluid/"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Diesel exhaust fluid is:",
+    "o": [
+     "A 32.5 percent solution of urea in purified water",
+     "A glycol-based coolant additive",
+     "A fuel additive poured into the diesel tank",
+     "A methanol-based injector cleaner"
+    ],
+    "a": 0,
+    "why": "API defines DEF as a 32.5 percent solution of technically pure urea in purified water, meeting ISO 22241.",
+    "src": [
+     "Diesel Exhaust Fluid (DEF) | American Petroleum Institute | API",
+     "https://www.api.org/products-and-services/diesel-exhaust-fluid/"
+    ]
+   },
+   {
+    "q": "A customer asks for DEF to be topped up on a 2016 Volvo V60 T5. What is the correct response?",
+    "o": [
+     "Add DEF to the fuel tank",
+     "Add DEF to the coolant expansion tank",
+     "The car is gasoline-fueled with a three-way catalytic converter and uses no DEF",
+     "Add DEF to the windshield washer reservoir"
+    ],
+    "a": 2,
+    "why": "Volvo's manual says the V60 has a three-way catalytic converter and must use unleaded gasoline only; API says DEF is used with diesel engines.",
+    "src": [
+     "Volvo 2016 V60 US Owner's Manual (TP20238)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   }
+  ]
+ },
  "D1": {
   "body": [
    "The supplemental restraint system (SRS) covers more than the airbags: Volvo lists seat belt pretensioners, front airbags, side impact (SIPS) airbags, inflatable curtains and the front passenger occupant weight sensor, all watched by the SRS control module.",
