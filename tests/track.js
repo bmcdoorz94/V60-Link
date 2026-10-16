@@ -45,7 +45,7 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
   while (guard++ < 30) {
     const done = await p.evaluate(() => !document.querySelector('#tkBody .tk-opt'));
     if (done) break;
-    await p.evaluate(() => { const qText = document.querySelector('#tkBody .tk-q h3').textContent; const q = window.V60_QUIZ.filter(x => x.q === qText)[0] || window.V60_FACTS.filter(f => f.q === qText)[0]; const right = q.o ? q.o[q.a] : q.a; const btn = [...document.querySelectorAll('#tkBody .tk-opt')].filter(b => b.textContent.slice(1).trim() === right)[0]; btn.click(); });
+    await p.evaluate(() => { const qText = document.querySelector('#tkBody .tk-q h3').textContent; const q = window.V60_QUIZ.filter(x => x.q === qText)[0] || Object.values(window.V60_G1_ENTRIES || {}).reduce((a, e) => a.concat(e.qs || []), []).filter(x => x.q === qText)[0] || window.V60_FACTS.filter(f => f.q === qText)[0]; const right = q.o ? q.o[q.a] : q.a; const btn = [...document.querySelectorAll('#tkBody .tk-opt')].filter(b => b.textContent.slice(1).trim() === right)[0]; btn.click(); });
     await p.waitForTimeout(80);
     const nxt = await p.$('#tkBody [data-tk="next"]'); if (nxt) { await nxt.click(); await p.waitForTimeout(80); }
   }
@@ -57,7 +57,7 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
   const open = await p.$('#tkBody [data-quiz="1"]');
   if (open) {
     await open.click(); await p.waitForTimeout(150);
-    await p.evaluate(() => { const qText = document.querySelector('#tkBody .tk-q h3').textContent; const q = window.V60_QUIZ.filter(x => x.q === qText)[0] || window.V60_FACTS.filter(f => f.q === qText)[0]; const right = q.o ? q.o[q.a] : q.a; const wrong = [...document.querySelectorAll('#tkBody .tk-opt')].filter(b => b.textContent.slice(1).trim() !== right)[0]; wrong.click(); });
+    await p.evaluate(() => { const qText = document.querySelector('#tkBody .tk-q h3').textContent; const q = window.V60_QUIZ.filter(x => x.q === qText)[0] || Object.values(window.V60_G1_ENTRIES || {}).reduce((a, e) => a.concat(e.qs || []), []).filter(x => x.q === qText)[0] || window.V60_FACTS.filter(f => f.q === qText)[0]; const right = q.o ? q.o[q.a] : q.a; const wrong = [...document.querySelectorAll('#tkBody .tk-opt')].filter(b => b.textContent.slice(1).trim() !== right)[0]; wrong.click(); });
     await p.waitForTimeout(100);
     ok(await p.evaluate(() => !!document.querySelector('#tkBody .tk-why.bad a[href]') && !!document.querySelector('#tkBody .tk-opt.right')), 'a miss shows the right answer, the explanation and a source link');
     await p.click('#tkBody [data-tk="quit"]'); await p.waitForTimeout(100);
