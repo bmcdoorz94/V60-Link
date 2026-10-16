@@ -1,5 +1,18 @@
 # V60 Garage: how the game works
 
+## The path (2026-10-15): one line, one step at a time
+Kyle's brief: "one seed planted of info turns into a tree of knowledge but potentially more linear", without so many ways in that it overwhelms. His answers: strict (later steps stay locked), in the order a beginner learns a car, and the home cut down to the car, one next step and a progress bar.
+
+- **The path** (`src/js/data/path.js`) is 113 steps in 18 units: 1 Safety first; 2 What the car is telling you; 3 The car's history and recalls; 4 Under the hood: the fluids; 5 Tires, the tire light and steering; 6 Brakes; 7 The diagnostic port; 8 Battery, fuses, lights and wipers; 9 The engine; 10 Transmission and driveline; 11 Heating and A/C; 12 Inside and out; 13 First jobs; 14 Shop jobs on record; 15 Diagnose: lights and codes; 16 Diagnose: sounds, feel and fluids; 17 Upgrades; 18 The Technician quizzes and the mock G1.
+- **The order:** safety, then what this car is telling you and its history (bought as-is), then Know and Check one system at a time. Each system ends with its G1 study (ASE's tasks in ranges of 5 to 17) and its Owner quiz. Then Service (easiest jobs first), Diagnose, Upgrade, and the test. Every chapter and every G1 task is on the path exactly once; each quiz comes after the chapters and tasks it tests (`tests/path.js`).
+- **Strict.** Only the current step is open. A chapter, a study range, a quiz and the mock all wait for the step before. Evidence still counts whenever it comes in: a step already done when the path reaches it is passed straight over.
+- **Set aside.** A step that needs a shop, a purchase or a dealer (`park` in the data: the specialist inspection in 1.4.2, the oil change record, the timing belt, the transmission fluid, the S29842 dealer check) can be set aside from the Next card. The path moves on; the step stays listed under the card and closes by itself once its evidence arrives. For the track, a chapter set aside counts as hands-on done.
+- **Home:** the Next card first (step, unit, title, what it is, one button, a progress bar, anything set aside, a waiting scene), then the car figure (tapping a locked view says which step opens it), the Index button and the red "Something's wrong" list. Gone from the home: the view sheet, the chapter 0 sheet, the Now strip and the readiness strip.
+- **The whole path** (Index, or "The whole path" on the Next card): done units folded, the current unit open with its steps, later units by name only.
+- **The bar:** The car, Glovebox, Link. Glovebox and Link are workbenches and always open. Cases (with Options) moved into the Index.
+- **The story** no longer opens anything. Cases still close from evidence and scenes still play; the case board's next objective points at the path, and a case step past the current one shows "PATH STEP n" instead of Go. The guided walkthrough has no button for now (it followed the story's order); porting it onto path steps is on the roadmap.
+- The rest of this file predates the path. Where it says chapters open each other (`opens`) or a case opens a chapter early, the path replaced that.
+
 ## The manual (redesign, Oct 2026): the car is the menu
 Kyle's brief: an app a car person would want, not "an app Claude designed". Look at the car, tap a part, get that part's manual, and watch chapters unlock in order of difficulty. Mockup: the Design artifact "V60 Garage redesign mockup".
 

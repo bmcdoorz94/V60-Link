@@ -18,7 +18,7 @@
     items(a).forEach(function (it) {
       it.chapters.forEach(function (c) {
         if (rung === 1 && c.tier !== "K" && c.tier !== "C") return;
-        out.total++; if (M().closed(c.id)) out.done++; else out.missing.push({ it: it, c: c, open: M().open(c.id) });
+        out.total++; if (M().settled ? M().settled(c.id) : M().closed(c.id)) out.done++; else out.missing.push({ it: it, c: c, open: M().open(c.id) });
       });
     });
     return out;
@@ -56,7 +56,9 @@
     return parts.reduce(function (s, p) { return s + p[0] * p[1]; }, 0) / wsum;
   }
   function g1ready(api) { return AREAS.reduce(function (s, a) { return s + ready(api, a) * a.q / T.test.scored; }, 0); }
-  function quizOpen(api, a, rg) { if (rg === 2 && !ownerEarned(api, a)) return false; var h = hands(a, rg); return a.noCar && rg === 1 ? true : h.total > 0 && h.done === h.total; }
+  function pathOk(key) { return !window.V60_PATH || window.V60_PATH.reached(key); }
+  function quizOpen(api, a, rg) { if (!pathOk("quiz:" + a.id + ":" + rg)) return false; if (rg === 2 && !ownerEarned(api, a)) return false; var h = hands(a, rg); return a.noCar && rg === 1 ? true : h.total > 0 && h.done === h.total; }
+  function pathStep(key) { var P = window.V60_PATH, s = P && P.stages.filter(function (x) { return x.key === key; })[0]; return s ? s.n : null; }
   function allOwner(api) { return AREAS.every(function (a) { return ownerEarned(api, a); }); }
   function pct(x) { return Math.round(x * 100); }
 
@@ -132,7 +134,7 @@
     var mockOpen = true, counts = allOwner(api);
     h += '<article class="mn-sheet tk-mock"><div class="mn-kick"><span>MOCK G1</span><span class="mn-mono">' + T.test.scored + " Q · " + T.test.minutes + ' MIN</span></div><h3>' + (g1.passed ? "Passed on " + esc(g1.passed) : "The full test, timed") + '</h3><p>' + T.test.scored + " questions drawn in the test's proportions (" + AREAS.map(function (a) { return a.letter + " " + a.q; }).join(", ") + "), " + T.test.minutes + " minutes on the clock, answers shown at the end like a score report. " + esc(T.test.passNote) + "</p>" +
       '<p class="status">' + (counts ? "Every area is at Owner, so a pass counts." : "Counts toward the finale once every area is at Owner. Until then it is practice, and it still shows where you stand.") + (g1.tries ? " Tries: " + g1.tries + ", best " + g1.best + " %." : "") + "</p>" +
-      '<button type="button" class="mn-cta" data-mock="1">' + (g1.tries ? "Take the mock G1 again" : "Start the mock G1") + ' <span aria-hidden="true">→</span></button></article>';
+      (pathOk("mock") ? '<button type="button" class="mn-cta" data-mock="1">' + (g1.tries ? "Take the mock G1 again" : "Start the mock G1") + ' <span aria-hidden="true">→</span></button>' : '<p class="mn-locked">The last step of your path, step ' + pathStep("mock") + ". It opens when every step before it is done.</p>") + "</article>";
     var own = items(OWN);
     h += '<section class="mn-list"><div class="mn-kick"><span>OWNER\'S WORK · NOT ON THE G1</span></div><p class="status">' + esc(OWN.d) + "</p>" + own.map(function (it) { var n = it.chapters.filter(function (c) { return M().closed(c.id); }).length; return '<button type="button" class="mn-ix" data-jump="item:' + it.id + '"><span class="n">' + esc(it.num) + "</span><span>" + esc(it.n) + '</span><span class="st">' + n + " / " + it.chapters.length + "</span></button>"; }).join("") + "</section>";
     h += '<p class="status">Question counts per area are from ASE\'s G1 study guide. Quiz questions are this app\'s own, grounded in Volvo\'s manual and the other sources in the Library; none are ASE\'s. Sources: ' + srcHtml(api, "aseg1") + " · " + srcHtml(api, "aseg1p") + " · " + srcHtml(api, "asefees") + "</p>";
@@ -146,15 +148,15 @@
     /* rung 1 */
     var open1 = quizOpen(api, a, 1);
     h += '<article class="mn-sheet tk-rung' + (ownerEarned(api, a) ? " done" : "") + '"><div class="mn-kick"><span>RUNG 1 · OWNER</span><span class="mn-mono">' + (q1.passed ? "PASSED " + esc(q1.passed) : open1 ? "QUIZ OPEN" : "LOCKED") + '</span></div><h3>Know it and check it on your car, then the Owner quiz</h3>' +
-      (a.noCar ? '<p class="status">No hands-on step for this area. The quiz is open.</p>' : h1.missing.length ? '<p class="status">Still to close: ' + h1.missing.slice(0, 6).map(function (m) { return '<button type="button" class="mn-link" data-jump="ch:' + m.c.id + '">' + esc(m.c.id + " " + m.it.n + ", " + m.c.t) + "</button>"; }).join(" · ") + (h1.missing.length > 6 ? " · and " + (h1.missing.length - 6) + " more" : "") + "</p>" : '<p class="status">Every Know and Check chapter in this area is closed.</p>') +
+      (a.noCar ? '<p class="status">No hands-on step for this area' + (open1 ? ". The quiz is open." : ".") + "</p>" : h1.missing.length ? '<p class="status">Still to close: ' + h1.missing.slice(0, 6).map(function (m) { return '<button type="button" class="mn-link" data-jump="ch:' + m.c.id + '">' + esc(m.c.id + " " + m.it.n + ", " + m.c.t) + "</button>"; }).join(" · ") + (h1.missing.length > 6 ? " · and " + (h1.missing.length - 6) + " more" : "") + "</p>" : '<p class="status">Every Know and Check chapter in this area is closed.</p>') +
       '<p class="status">' + (b1.written.length + b1.recall.length) + " questions in the bank: " + b1.written.length + " scenario, " + b1.recall.length + " recall. Ten per round, pass at " + Math.round(T.test.pass * 100) + " %.</p>" +
-      (open1 ? '<button type="button" class="mn-cta" data-quiz="1">' + (q1.tries ? "Take the Owner quiz again" : "Take the Owner quiz") + ' <span aria-hidden="true">→</span></button>' : '<p class="mn-locked">The quiz opens when the hands-on chapters above are closed. Reading alone can\'t level you up.</p>') + "</article>";
+      (open1 ? '<button type="button" class="mn-cta" data-quiz="1">' + (q1.tries ? "Take the Owner quiz again" : "Take the Owner quiz") + ' <span aria-hidden="true">→</span></button>' : '<p class="mn-locked">' + (pathOk("quiz:" + a.id + ":1") ? "The quiz opens when the hands-on chapters above are closed. Reading alone can\'t level you up." : "The quiz is step " + pathStep("quiz:" + a.id + ":1") + " of your path. It opens when the steps before it are done.") + "</p>") + "</article>";
     /* rung 2 */
     var open2 = quizOpen(api, a, 2);
     h += '<article class="mn-sheet tk-rung' + (techEarned(api, a) ? " done" : "") + '"><div class="mn-kick"><span>RUNG 2 · TECHNICIAN</span><span class="mn-mono">' + (q2.passed ? "PASSED " + esc(q2.passed) : open2 ? "QUIZ OPEN" : "AFTER OWNER") + '</span></div><h3>Service and diagnose it, then the Technician quiz</h3>' +
       (ownerEarned(api, a) ? (h2.missing.length ? '<p class="status">Still to close: ' + h2.missing.slice(0, 6).map(function (m) { return '<button type="button" class="mn-link" data-jump="ch:' + m.c.id + '">' + esc(m.c.id + " " + m.it.n + ", " + m.c.t) + "</button>"; }).join(" · ") + "</p>" : '<p class="status">Every chapter in this area is closed.</p>') : '<p class="status">Earn the Owner rung first.</p>') +
       '<p class="status">' + b2.written.filter(function (q) { return (window.V60_QUIZ || []).some(function (z) { return z.id === q.id && z.rung === 2; }); }).length + " diagnosis questions in the bank so far; the round also draws from the Owner questions.</p>" +
-      (open2 ? '<button type="button" class="mn-cta" data-quiz="2">' + (q2.tries ? "Take the Technician quiz again" : "Take the Technician quiz") + ' <span aria-hidden="true">→</span></button>' : "") + "</article>";
+      (open2 ? '<button type="button" class="mn-cta" data-quiz="2">' + (q2.tries ? "Take the Technician quiz again" : "Take the Technician quiz") + ' <span aria-hidden="true">→</span></button>' : pathOk("quiz:" + a.id + ":2") ? "" : '<p class="mn-locked">Step ' + pathStep("quiz:" + a.id + ":2") + " of your path.</p>") + "</article>";
     /* the task list: the study guide proper */
     h += taskListHtml(api, a, st);
     /* parts */
@@ -171,6 +173,7 @@
   }
   function taskHtml(api, t, open) {
     var e = entry(t), d = D(api), read = !!d.read[t.id];
+    if (window.V60_PATH && !window.V60_PATH.taskReached(t.id) && !read) { var ps = window.V60_PATH.taskStage(t.id); return '<div class="tk-task locked"><span class="n">' + esc(t.id) + '</span><span class="b"><span class="t">' + esc(t.t) + '</span></span><span class="mn-mono">' + (ps ? "STEP " + ps.n : "LATER") + "</span></div>"; }
     var h = '<details class="tk-task' + (read ? " read" : "") + (e ? "" : " empty") + '" data-task-id="' + esc(t.id) + '"' + (open ? " open" : "") + '><summary><span class="n">' + esc(t.id) + '</span><span class="b"><span class="t">' + esc(t.t) + "</span>" + (t.car && !e ? '<span class="status">' + esc(t.car) + "</span>" : "") + '</span><span class="mn-tick" aria-label="' + (read ? "studied" : "not yet") + '">' + (read ? "✓" : "") + '</span></summary><div class="tk-taskb">';
     if (!e) h += '<p class="status">No sourced entry yet.</p>';
     else {
@@ -209,12 +212,25 @@
     var ks = Object.keys(g.byItem);
     if (ks.length) h += '<section class="mn-list"><div class="mn-kick"><span>WEAK SPOTS · GO FIX THEM ON THE CAR</span></div><div class="mn-chips">' + ks.map(function (k) { var it = M().data.items.filter(function (x) { return x.id === k; })[0]; return it ? '<button type="button" class="mn-chip" data-jump="item:' + it.id + '">' + esc(it.n) + " · " + g.byItem[k] + " missed</button>" : ""; }).join("") + "</div></section>";
     if (g.missed.length) h += '<section class="mn-list"><div class="mn-kick"><span>REVIEW · ' + g.missed.length + " MISSED</span></div>" + g.missed.map(function (x) { return '<div class="tk-rev"><p><b>' + esc(x.q.q) + '</b></p><p>' + "ABCD".charAt(x.right) + ". " + esc(x.opts[x.right]) + '</p><p class="status">' + esc(x.q.why) + " Source: " + srcHtml(api, x.q.src) + "</p></div>"; }).join("") + "</section>";
-    h += '<div class="row">' + (ui.mock ? '<button type="button" class="mn-cta" data-mock="1">Take it again</button>' : '<button type="button" class="mn-cta" data-quiz="' + ui.rung + '">Another round</button>') + '<button type="button" class="quiet" data-tk="' + (a ? "area" : "home") + '">Back</button></div>';
+    var onPath = window.V60_PATH && window.V60_PATH.current(), nextBtn = passed && onPath ? '<button type="button" class="mn-cta" data-jump="path:next">Next step <span aria-hidden="true">→</span></button>' : "";
+    h += '<div class="row">' + nextBtn + (ui.mock ? '<button type="button" class="' + (nextBtn ? "quiet" : "mn-cta") + '" data-mock="1">Take it again</button>' : '<button type="button" class="' + (nextBtn ? "quiet" : "mn-cta") + '" data-quiz="' + ui.rung + '">Another round</button>') + '<button type="button" class="quiet" data-tk="' + (a ? "area" : "home") + '">Back</button></div>';
+    return h;
+  }
+  /* a study step on the path: one range of G1 tasks, opened one by one */
+  function renderStudy(api) {
+    var ids = ui.study || [], ts = ids.map(function (id) { return (window.V60_G1_TASKS || []).filter(function (t) { return t.id === id; })[0]; }).filter(Boolean), d = D(api);
+    var P = window.V60_PATH, ps = P && ts.length ? P.taskStage(ts[0].id) : null, read = ts.filter(function (t) { return !!d.read[t.id]; }).length, a = ts.length ? area(ts[0].area) : null;
+    var h = '<div class="mn-top"><div class="mn-kick"><button type="button" class="mn-link" data-jump="tab:car">← The car</button><span>' + (ps ? "STEP " + ps.n + " · " : "") + "G1 STUDY</span></div><h2 class=\"mn-h1\">" + esc(ps && ps.t ? ps.t : a ? a.n : "Study") + "</h2>" +
+      "<p>" + (a ? "Area " + a.letter + ", " + esc(a.n) + ". " : "") + "ASE's tasks in ASE's order, in this app's words. Open each one to study it; an opened task counts as studied.</p>" + meterHtml(ts.length ? read / ts.length : 0) + '<p class="status mn-mono">' + read + " OF " + ts.length + " STUDIED</p></div>";
+    h += '<section class="mn-list tk-tasks">' + ts.map(function (t) { return taskHtml(api, t, ui.openTask === t.id); }).join("") + "</section>";
+    if (ts.length && read === ts.length) h += '<div class="row"><button type="button" class="mn-cta" data-jump="path:next">Next step <span aria-hidden="true">→</span></button></div>';
+    else if (a) h += '<p class="status">The rest of ' + esc(a.n) + ' is on the <button type="button" class="mn-link" data-area="' + a.id + '">area page</button>.</p>';
     return h;
   }
   function render(api) {
     var el = $("tkBody"); if (!el) return;
-    if (ui.mode === "quiz") el.innerHTML = renderQuiz(api);
+    if (ui.mode === "study") el.innerHTML = renderStudy(api);
+    else if (ui.mode === "quiz") el.innerHTML = renderQuiz(api);
     else if (ui.mode === "result") el.innerHTML = renderResult(api);
     else if (ui.mode === "area" && area(ui.area)) el.innerHTML = renderArea(api, area(ui.area));
     else { ui.mode = "home"; el.innerHTML = renderHome(api); }
@@ -254,7 +270,7 @@
       api.$("tkBody").addEventListener("toggle", function (e) {
         var dt = e.target; if (!dt.matches || !dt.matches("details.tk-task") || !dt.open) return;
         var tid = dt.getAttribute("data-task-id"), d = D(api); ui.openTask = tid;
-        if (!d.read[tid] && (window.V60_G1_ENTRIES || {})[tid]) { d.read[tid] = api.todayStr(); api.save(); dt.classList.add("read"); var tk = dt.querySelector(".mn-tick"); if (tk) tk.textContent = "✓"; hud(api); var m = dt.closest("#tkBody"); var kick = m && m.querySelector(".tk-tasks .mn-kick .mn-mono"); if (kick && ui.area) { var st = study(api, area(ui.area)); kick.textContent = st.read + " STUDIED · " + st.written + " WRITTEN"; } }
+        if (!d.read[tid] && (window.V60_G1_ENTRIES || {})[tid]) { d.read[tid] = api.todayStr(); api.save(); dt.classList.add("read"); var tk = dt.querySelector(".mn-tick"); if (tk) tk.textContent = "✓"; hud(api); var m = dt.closest("#tkBody"); var kick = m && m.querySelector(".tk-tasks .mn-kick .mn-mono"); if (kick && ui.area) { var st = study(api, area(ui.area)); kick.textContent = st.read + " STUDIED · " + st.written + " WRITTEN"; } if (ui.mode === "study" && (ui.study || []).every(function (id) { return !!d.read[id]; })) { var y = window.scrollY; render(api); window.scrollTo(0, y); } }
       }, true);
       api.$("tkBody").addEventListener("click", function (e) {
         var t = e.target, b;
@@ -270,6 +286,8 @@
     shown: function (api, tab) { if (tab !== "track") stopTimer(); else if (ui.mode === "quiz" && ui.mock && !ui.timer) { if (Date.now() >= ui.ends) finish(api); else tick(api); } hud(api); },
     jump: function (api, kind, id) {
       if (kind === "task") { var tk = (window.V60_G1_TASKS || []).filter(function (x) { return x.id === id; })[0]; if (!tk) return false; stopTimer(); ui.mode = "area"; ui.area = tk.area; ui.openTask = id; api.go("track"); var el = document.querySelector('#tkBody [data-task-id="' + id + '"]'); if (el && el.scrollIntoView) setTimeout(function () { el.scrollIntoView({ block: "start" }); }, 0); return true; }
+      if (kind === "study") { var m = /^([A-G])(\d+)-[A-G](\d+)$/.exec(id || ""); if (!m) return false; stopTimer(); ui.study = []; for (var i = +m[2]; i <= +m[3]; i++) ui.study.push(m[1] + i); ui.mode = "study"; ui.openTask = null; api.go("track"); window.scrollTo(0, 0); return true; }
+      if (kind === "quiz") { var q = String(id || "").split(":"), qa = area(q[0]), rg = +q[1] || 1; if (!qa) return false; stopTimer(); ui.area = qa.id; ui.mode = "area"; api.go("track"); if (quizOpen(api, qa, rg)) startQuiz(api, qa, rg); return true; }
       if (kind !== "track") return false; stopTimer(); if (id === "g1") { api.go("track"); startMock(api); return true; } ui.mode = id && area(id) ? "area" : "home"; ui.area = id && area(id) ? id : ui.area; api.go("track"); return true; },
     xp: function () { return 0; }
   });

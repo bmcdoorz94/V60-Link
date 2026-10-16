@@ -14,13 +14,27 @@
     it.chapters.forEach(function (c, i) { c.id = it.num + "." + (i + 1); c.item = it; c.idx = i; CH[c.id] = c; CHLIST.push(c); });
   });
   VIEWS.forEach(function (v) { v.items = ITEMS.filter(function (it) { return it.view === v.id; }); });
+  /* the path (data/path.js): one strict line through every chapter, the G1 study and the quizzes */
+  var UNITS = window.V60_PATH_DATA || [], STAGES = [], STAGE_OF_CH = {}, STAGE_OF_TASK = {}, STAGE_BY_KEY = {};
+  function range(r) { var m = /^([A-G])(\d+)-[A-G](\d+)$/.exec(r), out = []; if (!m) return out; for (var i = +m[2]; i <= +m[3]; i++) out.push(m[1] + i); return out; }
+  UNITS.forEach(function (u, ui) {
+    u.num = ui + 1;
+    u.stages.forEach(function (s) {
+      var st = { unit: u, n: STAGES.length + 1, park: s.park || null };
+      if (s.ch) { st.kind = "ch"; st.ch = s.ch; st.key = "ch:" + s.ch; STAGE_OF_CH[s.ch] = st; }
+      else if (s.g1) { st.kind = "g1"; st.tasks = range(s.g1); st.range = s.g1; st.t = s.t; st.key = "g1:" + s.g1; st.tasks.forEach(function (t) { STAGE_OF_TASK[t] = st; }); }
+      else if (s.quiz) { st.kind = "quiz"; st.area = s.quiz; st.rung = s.rung || 1; st.key = "quiz:" + s.quiz + ":" + st.rung; }
+      else { st.kind = "mock"; st.key = "mock"; }
+      STAGES.push(st); STAGE_BY_KEY[st.key] = st;
+    });
+  });
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function $(id) { return document.getElementById(id); }
 
   /* ---------- saved data ---------- */
   function D(api) {
     var d = api.mod("manual"); if (!d) { d = {}; api.setMod("manual", d); }
-    ["opened", "closed", "manual", "went", "views", "sel"].forEach(function (k) { if (!d[k] || typeof d[k] !== "object" || Array.isArray(d[k])) d[k] = {}; });
+    ["opened", "closed", "manual", "went", "views", "sel", "parked"].forEach(function (k) { if (!d[k] || typeof d[k] !== "object" || Array.isArray(d[k])) d[k] = {}; });
     if (typeof d.last !== "string") d.last = null;
     return d;
   }
@@ -75,17 +89,40 @@
     if (cache) return cache;
     var closed = {}, open = {}, d = D(api), all = allOn(api);
     CHLIST.forEach(function (c) { closed[c.id] = c.steps.every(function (s, i) { return s.optional || info(api, c, i).done; }); });
-    var caseOpen = {};
-    if (window.V60_STORY) window.V60_STORY.cases.forEach(function (c) { if ((CASE_OPENS[c.id] || []).length && window.V60_STORY.available(c)) CASE_OPENS[c.id].forEach(function (id) { caseOpen[id] = c.t; }); });
-    var byOpens = {};
-    CHLIST.forEach(function (c) { if (closed[c.id]) (c.opens || []).forEach(function (id) { byOpens[id] = c.id; }); });
-    CHLIST.forEach(function (c) {
-      var prev = c.item && c.idx > 0 ? c.item.chapters[c.idx - 1] : null;
-      open[c.id] = all || c.id === "0" || closed[c.id] || !!byOpens[c.id] || !!caseOpen[c.id] || !!(prev && closed[prev.id]);
+    /* the path decides what is open: every step up to the first one not done (or set aside) */
+    var tr = api.mod("track") || {}, read = tr.read || {}, quiz = tr.quiz || {}, g1 = tr.g1 || {}, done = {}, cur = null, reached = {}, nDone = 0;
+    STAGES.forEach(function (s) {
+      done[s.key] = s.kind === "ch" ? !!closed[s.ch] : s.kind === "g1" ? s.tasks.every(function (t) { return !!read[t]; }) : s.kind === "quiz" ? !!(quiz[s.area + ":" + s.rung] || {}).passed : !!g1.passed;
+      if (done[s.key]) nDone++;
+      if (!cur && !done[s.key] && !d.parked[s.key]) cur = s;
     });
-    cache = { closed: closed, open: open, caseOpen: caseOpen, byOpens: byOpens, d: d };
+    STAGES.forEach(function (s) { if (all || !cur || s.n <= cur.n) reached[s.key] = true; });
+    CHLIST.forEach(function (c) { var s = STAGE_OF_CH[c.id]; open[c.id] = closed[c.id] || !!(s && reached[s.key]) || (!s && all); });
+    var parked = STAGES.filter(function (s) { return d.parked[s.key] && !done[s.key]; });
+    cache = { closed: closed, open: open, d: d, done: done, cur: cur, reached: reached, nDone: nDone, parked: parked };
     return cache;
   }
+  /* the path, as the rest of the app sees it */
+  function stageTitle(s) {
+    if (s.kind === "ch") { var c = CH[s.ch]; return c.item ? c.item.num + " " + c.item.n + " · " + c.t : PREFACE.n; }
+    if (s.kind === "g1") return "Study: " + s.t;
+    var a = s.kind === "quiz" && window.V60_TRACK_DATA ? window.V60_TRACK_DATA.areas.filter(function (x) { return x.id === s.area; })[0] : null;
+    if (s.kind === "quiz") return "Quiz: " + (a ? a.n : s.area) + ", " + (s.rung === 2 ? "Technician" : "Owner");
+    return "The mock G1";
+  }
+  function stageDesc(s) {
+    if (s.kind === "ch") return CH[s.ch].d;
+    if (s.kind === "g1") return s.tasks.length + " of ASE's G1 tasks, each with what it is, how it is done and how it applies to your car. Open each one to study it.";
+    if (s.kind === "quiz") return "Ten questions in ASE's styles. 70 % passes. A miss shows the answer, why, and the source.";
+    return "55 questions drawn the way the test weights its areas, 90 minutes on the clock, and a score report by area.";
+  }
+  function stageGo(s) { return s.kind === "ch" ? "ch:" + s.ch : s.kind === "g1" ? "study:" + s.range : s.kind === "quiz" ? "quiz:" + s.area + ":" + s.rung : "track:g1"; }
+  function stageStarted(api, s) {
+    if (s.kind === "ch") { var c = CH[s.ch]; return c.steps.some(function (q, i) { return info(api, c, i).done; }); }
+    if (s.kind === "g1") { var r = (api.mod("track") || {}).read || {}; return s.tasks.some(function (t) { return !!r[t]; }); }
+    return false;
+  }
+  function stageState(api, s) { var x = compute(api); return x.done[s.key] ? "done" : x.d.parked[s.key] ? "parked" : x.cur === s ? "current" : x.reached[s.key] ? "open" : "locked"; }
   function chStatus(api, c) {
     var x = compute(api), d = x.d;
     if (x.closed[c.id]) return "closed";
@@ -95,12 +132,9 @@
     return "open";
   }
   function why(api, c) {
-    var x = compute(api), prev = c.item && c.idx > 0 ? c.item.chapters[c.idx - 1] : null, from = [];
-    if (prev) from.push(prev.id + " " + prev.t);
-    CHLIST.forEach(function (o) { if ((o.opens || []).indexOf(c.id) >= 0 && o.id !== (prev && prev.id)) from.push(o.id + " " + o.t + (o.item ? " (" + o.item.n.toLowerCase() + ")" : "")); });
-    var cases = Object.keys(CASE_OPENS).filter(function (k) { return CASE_OPENS[k].indexOf(c.id) >= 0; }).map(function (k) { var cc = (window.V60_STORY ? window.V60_STORY.cases : []).filter(function (q) { return q.id === k; })[0]; return cc ? "the case " + cc.t : null; }).filter(Boolean);
-    var parts = []; if (from.length) parts.push("Opens after " + from.join(", or after ")); if (cases.length) parts.push((from.length ? "or with " : "Opens with ") + cases.join(" or "));
-    return parts.length ? parts.join(", ") + "." : "Opens later in the story.";
+    var s = STAGE_OF_CH[c.id], x = compute(api);
+    if (!s) return "Not on the path.";
+    return "Step " + s.n + " of your path, in " + s.unit.t + ". It opens when the step before it is done" + (x.cur ? "; you are on step " + x.cur.n + "." : ".");
   }
   /* the status of an item or a view is the strongest of its chapters: resume > new > open > closed > locked */
   function roll(list) {
@@ -128,17 +162,15 @@
   function sweep(api) {
     bust(); var x = compute(api), d = x.d, changed = false, closedNow = [], first = !Object.keys(d.closed).length && !Object.keys(d.opened).length;
     CHLIST.forEach(function (c) { if (x.closed[c.id] && !d.closed[c.id]) { d.closed[c.id] = api.todayStr(); closedNow.push(c); changed = true; } });
-    if (closedNow.length && !first) {
-      var opened = []; closedNow.forEach(function (c) { (c.opens || []).forEach(function (id) { if (CH[id] && !x.closed[id]) opened.push(CH[id]); }); var nx = c.item ? c.item.chapters[c.idx + 1] : null; if (nx && !x.closed[nx.id]) opened.push(nx); });
-      toast = { t: closedNow.map(label).join(", ") + " closed", d: opened.length ? "Unlocked: " + opened.map(longLabel).join(" · ") : "" };
-    }
+    if (closedNow.length && !first) toast = { t: closedNow.map(label).join(", ") + " closed", d: x.cur ? "Next on your path: step " + x.cur.n + ", " + stageTitle(x.cur) : "The path is complete.", go: x.cur ? 1 : 0 };
     if (changed) api.save();
     unlockTerms(api);
     return changed;
   }
 
   /* ---------- gate: which old pages exist yet ---------- */
-  var ROOTS = { car: 1, view: 1, item: 1, index: 1, story: 1, today: 1, academy: 1 };
+  /* Glovebox and Link are workbenches, not lessons, so they are always open; the path decides the lessons */
+  var ROOTS = { car: 1, view: 1, item: 1, index: 1, story: 1, today: 1, academy: 1, glove: 1, live: 1, path: 1 };
   var GO_TAB = { mission: "academy", kb: "kb", diy: "diy", tree: "trouble", tsb: "bulletins", bay: "engine", part: "bay", tab: null };
   function neededTabs(api) {
     var x = compute(api), set = {};
@@ -220,66 +252,81 @@
   function sosHtml() { return '<details class="mn-sos"><summary><span class="mn-sosi" aria-hidden="true"></span>Something\'s wrong with the car</summary><p class="status">Red warning lights come first: Volvo\'s manual says stop for those.</p><ul>' + SOS.map(function (x) { return '<li><button type="button" class="mn-row" data-jump="' + x[1] + '">' + esc(x[0]) + "</button></li>"; }).join("") + "</ul></details>"; }
   function segs(api, it) { return '<div class="mn-segs" aria-hidden="true">' + it.chapters.map(function (c) { return '<i class="' + chStatus(api, c) + '"></i>'; }).join("") + "</div>"; }
   function pill(st) { var M = { locked: ["locked", ""], "new": ["new", "New"], resume: ["resume", "Pick up here"], closed: ["closed", "Closed"], open: ["open", ""] }; return M[st][1] ? '<span class="mn-pill ' + M[st][0] + '">' + M[st][1] + "</span>" : ""; }
-  function toastHtml() { if (!toast) return ""; var t = toast; toast = null; return '<div class="mn-toast" role="status"><b>' + esc(t.t) + "</b>" + (t.d ? "<span>" + esc(t.d) + "</span>" : "") + "</div>"; }
+  function toastHtml() { if (!toast) return ""; var t = toast; toast = null; return '<div class="mn-toast" role="status"><b>' + esc(t.t) + "</b>" + (t.d ? "<span>" + esc(t.d) + "</span>" : "") + (t.go ? '<button type="button" class="mn-cta" data-jump="path:next">Next step <span aria-hidden="true">→</span></button>' : "") + "</div>"; }
 
-  /* ---------- home: the car ---------- */
+  /* ---------- home: the car, the one next step, and how far along the path you are ---------- */
+  function nextCard(api) {
+    var x = compute(api), cur = x.cur, total = STAGES.length, pc = Math.round(x.nDone / total * 100), sd = storyD(api);
+    var h = '<article class="mn-sheet mn-next"><div class="mn-kick"><span>' + (cur ? "NEXT · STEP " + cur.n + " OF " + total : "THE PATH IS COMPLETE") + '</span><button type="button" class="mn-link" data-jump="tab:path">The whole path</button></div>' +
+      '<div class="mn-pbar" role="progressbar" aria-label="Path progress" aria-valuemin="0" aria-valuemax="' + total + '" aria-valuenow="' + x.nDone + '"><i style="width:' + pc + '%"></i></div>' +
+      '<p class="status mn-mono">' + x.nDone + " OF " + total + " STEPS DONE · " + pc + " %</p>";
+    if (cur) {
+      var c = cur.kind === "ch" ? CH[cur.ch] : null, started = stageStarted(api, cur);
+      var lab = cur.kind === "ch" ? (started ? "Continue" : "Start") : cur.kind === "g1" ? (started ? "Keep studying" : "Start studying") : cur.kind === "quiz" ? "Take the quiz" : "Take the mock G1";
+      h += '<p class="mn-unit">UNIT ' + cur.unit.num + " OF " + UNITS.length + " · " + esc(cur.unit.t.toUpperCase()) + "</p><h3>" + esc(stageTitle(cur)) + "</h3><p>" + esc(stageDesc(cur)) + (c && c.time ? ' <span class="mn-mono">' + esc(c.time) + "</span>" : "") + "</p>" +
+        '<button type="button" class="mn-cta" data-jump="path:next">' + lab + ' <span aria-hidden="true">→</span></button>';
+      if (cur.park) h += '<details class="mn-park"><summary>Can\'t do this one yet?</summary><p>' + esc(cur.park) + " Set it aside and the path moves on. It stays on your list below and closes by itself once the work is on record.</p>" + '<button type="button" class="quiet" data-park="' + esc(cur.key) + '">Set it aside</button></details>';
+    } else h += "<h3>Every step is done.</h3><p>The parts, the G1 study and the quizzes are all behind you. The Index has every page for looking things up.</p>";
+    if (x.parked.length) h += '<p class="status mn-parked">Set aside: ' + x.parked.map(function (s) { return '<button type="button" class="mn-link" data-jump="' + esc(stageGo(s)) + '">' + esc("Step " + s.n + ", " + stageTitle(s)) + "</button>"; }).join(" · ") + "</p>";
+    var pend = sd.pending || [];
+    if (!(sd.seen || {}).pro) h += '<button type="button" class="mn-row" data-jump="story:pro"><span class="mn-pill new">Scene</span><span>The story behind the path: <b>The As-Is File</b>. A used Volvo, sold as-is, with no records.</span></button>';
+    else if (pend.length) h += '<button type="button" class="mn-row" data-jump="story:' + esc(pend[0]) + '"><span class="mn-pill new">Scene</span><span>' + pend.length + (pend.length === 1 ? " scene is" : " scenes are") + " waiting. Watch</span></button>";
+    return h + "</article>";
+  }
   function renderHome(api) {
     sweep(api);
-    var x = compute(api), d = D(api), st = api.state;
     var vi = VIEWS.map(function (v) { return { id: v.id, num: String(v.num), label: v.n, status: viewStatus(api, v), v: v }; });
-    var sel = ui.selView || (resumeChapter(api) && resumeChapter(api).item ? resumeChapter(api).item.view : null) || vi.filter(function (q) { return q.status !== "locked"; })[0] && vi.filter(function (q) { return q.status !== "locked"; })[0].id || "bay";
-    ui.selView = sel;
-    var pre = chStatus(api, PREFACE), nOpen = ITEMS.filter(function (it) { return itemOpen(api, it); }).length, nNew = newList(api).length, rc = resumeChapter(api);
     var at = function (it) { return { bay: [70, 74], wheel: [84, 156], cabin: [181, 76], under: [180, 174], body: [334, 116] }[it.id]; };
-    var h = '<div class="mn-kick"><span>The car</span><span>' + nOpen + " of " + ITEMS.length + " parts open" + (nNew ? ' · <b class="mn-amber">' + nNew + " new</b>" : "") + "</span></div>" + toastHtml();
-    if (pre !== "closed") {
-      var pc = PREFACE.steps.filter(function (s, i) { return info(api, PREFACE, i).done; }).length;
-      h += '<article class="mn-sheet mn-pre"><div class="mn-kick"><span>CHAPTER 0 · START HERE</span><span class="mn-mono">' + pc + " / " + PREFACE.steps.length + '</span></div><h3>' + esc(PREFACE.n) + "</h3><p>" + esc(PREFACE.d) + '</p><p class="status">Every view opens after this one. ' + esc(PREFACE.time) + '.</p><button type="button" data-ch="0" class="mn-cta">' + (pc ? "Continue chapter 0" : "Open chapter 0") + ' <span aria-hidden="true">→</span></button></article>';
-    }
-    h += '<div class="mn-figwrap"><div class="mn-kick"><span>FIG. 1 · SIDE VIEW · TAP TO LOOK INSIDE</span><button type="button" class="mn-link" data-ch="legend">Key</button></div>' + figure(api, { id: "home", n: "The car", fig: "side" }, vi, sel, at) + "</div>";
-    var sv = vi.filter(function (q) { return q.id === sel; })[0];
-    if (sv) {
-      var v = sv.v, open = sv.status !== "locked", items = v.items, nc = items.filter(function (it) { return itemStatus(api, it) === "closed"; }).length;
-      var nx = null; items.forEach(function (it) { if (!nx) { var c = nextChapter(api, it); if (c && (chStatus(api, c) === "new" || chStatus(api, c) === "resume")) nx = c; } }); if (!nx) items.forEach(function (it) { if (!nx) nx = nextChapter(api, it); });
-      var cases = (window.V60_STORY ? window.V60_STORY.cases : []).filter(function (c) { return (CASE_OPENS[c.id] || []).some(function (id) { return CH[id] && CH[id].item && CH[id].item.view === v.id; }) && window.V60_STORY.available(c) && !(storyD(api).closed || {})[c.id]; });
-      h += '<article class="mn-sheet"><div class="mn-kick"><span>VIEW ' + v.num + "</span><span class=\"mn-mono\">" + (open ? nc + " of " + items.length + " parts closed" : items.length + " parts") + "</span></div><h3>" + esc(v.n) + "</h3>" +
-        '<div class="mn-segs" aria-hidden="true">' + items.map(function (it) { return '<i class="' + itemStatus(api, it) + '"></i>'; }).join("") + "</div>" +
-        "<p>" + esc(open && nx ? ({ "new": "New: ", resume: "Pick up at ", open: "Next: ", closed: "", locked: "" })[chStatus(api, nx)] + nx.item.num + " " + nx.item.n + ", " + nx.t + ". " + nx.d : v.d) + "</p>" +
-        (cases.length ? '<p class="status">Pointed at by the case <b>' + cases.map(function (c) { return esc(c.t); }).join(", ") + "</b></p>" : "") +
-        (open ? '<div class="row">' + (nx ? '<button type="button" class="mn-cta" data-ch="' + nx.id + '">' + esc(nx.item.num + " " + nx.item.n) + ' <span aria-hidden="true">→</span></button>' : "") + '<button type="button" class="' + (nx ? "quiet" : "mn-cta") + '" data-view="' + v.id + '">' + esc(v.enter) + "</button></div>" : '<p class="mn-locked">Locked. ' + esc(firstWhy(api, v)) + "</p>") + "</article>";
-    }
-    /* now */
-    var now = [];
-    if (rc) now.push('<button type="button" class="mn-row" data-ch="' + rc.id + '"><span class="mn-dot" aria-hidden="true"></span><span>' + esc(d.last === rc.id ? "Pick up where you left off: " : "Start here: ") + "<b>" + esc(longLabel(rc)) + "</b></span></button>");
-    var hh = api.computeHealth ? api.computeHealth() : null, urgent = hh && window.V60_GATE.visible("health") ? hh.actions.filter(function (a) { return a.sev >= 70; }).slice(0, 2) : [];
-    urgent.forEach(function (a) { now.push('<button type="button" class="mn-row" data-jump="' + esc(a.jump) + '"><span class="mn-pill bad">Act</span><span>' + esc(a.text) + "</span></button>"); });
-    var sd = storyD(api), pend = (sd.pending || []);
-    if (!(sd.seen || {}).pro) now.unshift('<button type="button" class="mn-row" data-jump="story:pro"><span class="mn-pill new">Scene</span><span>Watch the prologue: <b>The As-Is File</b>. A used Volvo, sold as-is, with no records.</span></button>');
-    else if (pend.length) now.push('<button type="button" class="mn-row" data-jump="story:' + esc(pend[0]) + '"><span class="mn-pill new">Scene</span><span>' + pend.length + (pend.length === 1 ? " scene is" : " scenes are") + " waiting. Watch</span></button>");
-    var notes = 0; (window.V60_MODULES || []).forEach(function (m) { if (m.id === "today" || m.id === "story" || m.id === "manual" || !m.today) return; if (m.tabs && m.tabs.length && !m.tabs.some(function (t) { return window.V60_GATE.visible(t.id); })) return; try { notes += (m.today(api) || []).length; } catch (e) {} });
-    if (notes) now.push('<button type="button" class="mn-row" data-jump="tab:today"><span class="mn-pill">Notes</span><span>' + notes + (notes === 1 ? " note" : " notes") + " for today, from Lars and the garage</span></button>");
-    if (now.length) h += '<section class="mn-list"><div class="mn-kick"><span>NOW</span></div>' + now.join("") + "</section>";
-    /* the certification track, one tap away */
-    if (window.V60_TRACK) h += window.V60_TRACK.strip();
-    /* everything else lives on one Index page */
+    var h = toastHtml() + nextCard(api);
+    h += '<div class="mn-figwrap"><div class="mn-kick"><span>THE CAR · ' + ITEMS.filter(function (it) { return itemOpen(api, it); }).length + ' OF ' + ITEMS.length + ' PARTS OPEN</span><button type="button" class="mn-link" data-ch="legend">Key</button></div>' + figure(api, { id: "home", n: "The car", fig: "side" }, vi, null, at) + (ui.homeNote ? '<p class="status mn-homenote">' + esc(ui.homeNote) + "</p>" : "") + "</div>";
+    ui.homeNote = null;
     h += '<div class="row mn-homefoot"><button type="button" class="quiet" data-jump="tab:index">Index: every page</button></div>';
     h += sosHtml();
     $("mnHome").innerHTML = h;
   }
+  /* ---------- the whole path: done units folded, the current unit open, later units by name only ---------- */
+  function renderPath(api) {
+    sweep(api);
+    var x = compute(api), cur = x.cur;
+    var h = '<div class="mn-top"><div class="mn-kick"><button type="button" class="mn-link" data-jump="tab:car">← The car</button><span>THE PATH</span></div><h2 class="mn-h1">One step at a time</h2>' +
+      "<p>Safety first, then what the car is telling you and its history, then looking and checking one system at a time, each ending with its G1 study and quiz. Then servicing, diagnosing, upgrades, and the test. Each step opens when the one before it is done.</p>" +
+      '<div class="mn-pbar"><i style="width:' + Math.round(x.nDone / STAGES.length * 100) + '%"></i></div><p class="status mn-mono">' + x.nDone + " OF " + STAGES.length + " STEPS DONE</p></div>";
+    UNITS.forEach(function (u) {
+      var ss = STAGES.filter(function (s) { return s.unit === u; }), nd = ss.filter(function (s) { return x.done[s.key]; }).length, here = cur && cur.unit === u, any = ss.some(function (s) { return x.reached[s.key]; });
+      var st = nd === ss.length ? "closed" : here ? "resume" : any ? "open" : "locked";
+      h += '<details class="mn-unitx ' + st + '"' + (here ? " open" : "") + '><summary><span class="n">' + u.num + '</span><span class="b"><span class="t">' + esc(u.t) + '</span><span class="kind">' + (st === "locked" ? "LOCKED · " + ss.length + " STEPS" : nd + " OF " + ss.length + " DONE") + '</span></span><span class="mn-tick" aria-hidden="true">' + (st === "closed" ? "✓" : here ? "●" : "") + "</span></summary>";
+      if (st === "locked") h += '<p class="status">' + esc(u.d) + "</p>";
+      else h += '<p class="status">' + esc(u.d) + '</p><div class="mn-list">' + ss.map(function (s) {
+        var sst = stageState(api, s), lk = sst === "locked";
+        return '<button type="button" class="mn-ix ' + (sst === "done" ? "closed" : sst === "current" ? "resume" : sst === "parked" ? "open" : "locked") + '"' + (lk ? ' aria-disabled="true"' : ' data-jump="' + esc(stageGo(s)) + '"') + '><span class="n">' + s.n + "</span><span>" + esc(stageTitle(s)) + '</span><span class="st">' + (sst === "done" ? "DONE" : sst === "current" ? "● NOW" : sst === "parked" ? "SET ASIDE" : "") + "</span></button>";
+      }).join("") + "</div>";
+      h += "</details>";
+    });
+    $("mnPath").innerHTML = h;
+  }
+  /* open the step the path is on: a chapter on its part page, a study list, a quiz */
+  function goNext(api) {
+    var x = compute(api), s = x.cur; if (!s) { api.go("path"); return; }
+    if (s.kind === "ch") open(api, "ch", s.ch); else api.jump(stageGo(s));
+  }
   /* ---------- the index: every other page, grouped by what you want to do ---------- */
   function renderIndex(api) {
     sweep(api);
-    var h = '<div class="mn-top"><div class="mn-kick"><button type="button" class="mn-link" data-jump="tab:car">← The car</button><span>INDEX</span></div><h2 class="mn-h1">Every page</h2><p>The car is the menu; this is the back of the book. Only pages the story has opened are listed.</p></div>';
+    var x = compute(api);
+    var h = '<div class="mn-top"><div class="mn-kick"><button type="button" class="mn-link" data-jump="tab:car">← The car</button><span>INDEX</span></div><h2 class="mn-h1">Every page</h2><p>The back of the book, for looking things up. Only pages your path has reached are listed.</p></div>';
+    h += '<section class="mn-list"><div class="mn-kick"><span>YOUR PATH</span></div><button type="button" class="mn-ix resume" data-jump="tab:path"><span class="n">' + (x.cur ? x.cur.n : "✓") + '</span><span>The whole path, step by step</span><span class="st">' + x.nDone + " / " + STAGES.length + "</span></button></section>";
     h += '<section class="mn-list"><div class="mn-kick"><span>THE CAR</span></div><button type="button" class="mn-ix ' + chStatus(api, PREFACE) + '" data-ch="0"><span class="n">0</span><span>' + esc(PREFACE.n) + '</span><span class="st">' + (chStatus(api, PREFACE) === "closed" ? "CLOSED" : PREFACE.steps.filter(function (s, i) { return info(api, PREFACE, i).done; }).length + " / " + PREFACE.steps.length) + "</span></button>" +
       VIEWS.map(function (v) { var st = viewStatus(api, v), n = v.items.filter(function (it) { return itemClosedN(api, it) === it.chapters.length; }).length; return '<button type="button" class="mn-ix ' + st + '" data-view="' + v.id + '"' + (st === "locked" ? ' aria-disabled="true"' : "") + '><span class="n">' + v.num + "</span><span>" + esc(v.n) + " · " + v.items.length + ' parts</span><span class="st">' + (st === "locked" ? "after " + esc(firstGate(api, v)) : n + " / " + v.items.length) + "</span></button>"; }).join("") + "</section>";
     h += backMatter(api) + sosHtml();
     $("mnIndex").innerHTML = h;
   }
-  function firstGate(api, v) { var id = v.items.length ? v.items[0].chapters[0].id : ""; var froms = []; CHLIST.forEach(function (o) { if ((o.opens || []).indexOf(id) >= 0) froms.push(o.id); }); return froms.length ? froms[0] : "the story"; }
-  function firstWhy(api, v) { var c = v.items.length ? v.items[0].chapters[0] : null; return c ? why(api, c) : ""; }
-  var BACK = [["kb", "Library"], ["cards", "Flashcards"], ["track", "Certification track"], ["academy", "Training library"], ["health", "Health score"], ["records", "Service log"], ["fuel", "Fuel & costs"], ["lab", "Data lab"], ["sim", "Simulator"], ["diy", "All DIY jobs"], ["trouble", "Troubleshoot"], ["bulletins", "Bulletins"], ["upgrades", "Upgrades"], ["my", "My V60 & photos"], ["bay", "Whole-car parts list"], ["engine", "Engine bay map"], ["achieve", "Achievements"], ["today", "Today's notes"], ["index", "Index"]];
+  /* the first chapter of a view the path reaches */
+  function firstCh(v) { var best = null; v.items.forEach(function (it) { it.chapters.forEach(function (c) { var s = STAGE_OF_CH[c.id]; if (s && (!best || s.n < STAGE_OF_CH[best.id].n)) best = c; }); }); return best; }
+  function firstGate(api, v) { var c = firstCh(v); return c ? "step " + STAGE_OF_CH[c.id].n : "later"; }
+  function firstWhy(api, v) { var c = firstCh(v); return c ? why(api, c) : ""; }
+  var BACK = [["kb", "Library"], ["cards", "Flashcards"], ["track", "Certification track"], ["academy", "Training library"], ["health", "Health score"], ["records", "Service log"], ["fuel", "Fuel & costs"], ["lab", "Data lab"], ["sim", "Simulator"], ["diy", "All DIY jobs"], ["trouble", "Troubleshoot"], ["bulletins", "Bulletins"], ["upgrades", "Upgrades"], ["my", "My V60 & photos"], ["bay", "Whole-car parts list"], ["engine", "Engine bay map"], ["achieve", "Achievements"], ["today", "Today's notes"], ["index", "Index"], ["path", "The path"], ["story", "Cases & options"]];
   /* every other page, grouped by what you want to do; only pages the story has opened are listed */
-  var INDEX = [["Your car", ["engine", "bay", "health", "my", "upgrades", "bulletins"]], ["Fix & maintain", ["records", "diy", "trouble", "fuel", "unlocks"]], ["Learn", ["track", "academy", "learn", "kb", "cards"]], ["Data", ["lab", "diag", "sim"]], ["Progress", ["achieve", "today"]]];
+  var INDEX = [["Your car", ["engine", "bay", "health", "my", "upgrades", "bulletins"]], ["Fix & maintain", ["records", "diy", "trouble", "fuel", "unlocks"]], ["Learn", ["track", "academy", "learn", "kb", "cards"]], ["Data", ["lab", "diag", "sim"]], ["Progress", ["story", "achieve", "today"]]];
   /* "see also" on each view and on the other three roots */
   var ALSO = { bay: ["bay", "diy", "records"], wheel: ["diy", "records", "bulletins"], cabin: ["live", "diag", "trouble"], under: ["trouble", "diy"], body: ["upgrades", "diy", "bulletins"],
     glove: ["records", "fuel", "docs", "bulletins"], live: ["lab", "diag", "sim", "health"], story: ["track", "academy", "kb", "cards", "achieve"] };
@@ -325,7 +372,7 @@
     }
     h += '<section class="mn-list"><div class="mn-kick"><span>ITEMS IN THIS VIEW</span></div>' + items.map(function (q) {
       var it = q.it, stat, nx = nextChapter(api, it);
-      if (q.status === "locked") stat = "after " + (function () { var w = []; CHLIST.forEach(function (o) { if ((o.opens || []).indexOf(it.chapters[0].id) >= 0) w.push(o.id); }); return w[0] || "the story"; })();
+      if (q.status === "locked") stat = (function () { var b = null; it.chapters.forEach(function (c) { var s = STAGE_OF_CH[c.id]; if (s && (!b || s.n < b.n)) b = s; }); return b ? "step " + b.n : "later"; })();
       else if (q.status === "new") stat = "NEW · " + (nx ? nx.id : ""); else if (q.status === "resume") stat = "● " + (nx ? nx.id : ""); else if (q.status === "closed") stat = "CLOSED"; else stat = itemClosedN(api, it) + " / " + it.chapters.length;
       return '<button type="button" class="mn-ix ' + q.status + '" data-item="' + it.id + '"' + (q.status === "locked" ? ' aria-disabled="true"' : "") + '><span class="n">' + esc(it.num) + "</span><span>" + esc(it.n) + '</span><span class="st">' + esc(stat) + "</span></button>";
     }).join("") + "</section>" + alsoHtml(ALSO[v.id]);
@@ -364,16 +411,16 @@
   }
   function chapterHtml(api, c, d, x) {
     var st = chStatus(api, c), done = c.steps.filter(function (s, i) { return info(api, c, i).done; }).length, it = c.item;
-    var right = st === "closed" ? '<span class="mn-stamp">CLOSED ' + esc((d.closed[c.id] || "").slice(5).replace("-", "·")) + "</span>" : st === "locked" ? '<span class="mn-mono">AFTER ' + esc(lockedAfter(api, c)) + "</span>" : st === "new" ? '<span class="mn-mono mn-amber">NEW</span>' : st === "resume" ? '<span class="mn-mono mn-amber">● ' + done + " / " + c.steps.length + "</span>" : '<span class="mn-mono">' + done + " / " + c.steps.length + "</span>";
+    var right = st === "closed" ? '<span class="mn-stamp">CLOSED ' + esc((d.closed[c.id] || "").slice(5).replace("-", "·")) + "</span>" : st === "locked" ? '<span class="mn-mono">' + esc(lockedAfter(api, c).toUpperCase()) + "</span>" : st === "new" ? '<span class="mn-mono mn-amber">NEW</span>' : st === "resume" ? '<span class="mn-mono mn-amber">● ' + done + " / " + c.steps.length + "</span>" : '<span class="mn-mono">' + done + " / " + c.steps.length + "</span>";
     var h = '<section class="mn-chs ' + st + '" id="ch-' + esc(c.id) + '"><div class="mn-chh2"><span class="mn-num' + (st === "new" || st === "resume" ? " amber" : "") + '">' + esc(c.id) + '</span><div class="b"><h3>' + esc(c.t) + (it ? ' <span class="mn-tier">' + esc(TIER[c.tier].split(" ")[0]) + "</span>" : "") + "</h3><p>" + esc(c.d) + (c.time ? ' <span class="mn-mono">' + esc(c.time) + "</span>" : "") + "</p></div>" + right + "</div>";
     if (st === "locked") return h + '<p class="mn-locked">' + esc(why(api, c)) + "</p></section>";
     h += '<div class="mn-steps">' + c.steps.map(function (s, i) {
       var o = info(api, c, i), k = stepKey(c, i), open = ui.openStep === k;
       return '<details class="mn-stepx' + (o.done ? " done" : "") + '" data-k="' + esc(k) + '"' + (open ? " open" : "") + '><summary><span class="n">' + (i + 1) + '</span><span class="b"><span class="t">' + esc(o.t) + '</span><span class="kind">' + esc(o.kind.toUpperCase()) + (o.optional ? " · OPTIONAL" : "") + "</span></span><span class=\"mn-tick\" aria-label=\"" + (o.done ? "done" : "not yet") + '">' + (o.done ? "✓" : "") + "</span></summary><div class=\"mn-stepb\">" + (open ? stepBody(api, c, i, o, k) : "") + "</div></details>";
     }).join("") + "</div>";
-    var cs = caseStepsFor(api, c), opens = (c.opens || []).map(function (id) { return CH[id]; }).filter(Boolean), nx = it ? it.chapters[c.idx + 1] : null, lines = [];
+    var cs = caseStepsFor(api, c), ps = STAGE_OF_CH[c.id], lines = [];
+    if (ps) lines.push("<b>Path:</b> step " + ps.n + " of " + STAGES.length + ", " + esc(ps.unit.t));
     cs.forEach(function (q) { lines.push("<b>Case:</b> step " + (q.k + 1) + " of " + q.c.steps.length + " in <b>" + esc(q.c.t) + "</b>"); });
-    var un = (nx ? [nx] : []).concat(opens); if (un.length) lines.push("<b>Unlocks:</b> " + un.map(function (q) { return esc(longLabel(q)); }).join(" · "));
     if (lines.length) h += '<p class="status mn-chnote">' + lines.join("<br>") + "</p>";
     return h + "</section>";
   }
@@ -442,7 +489,7 @@
     });
   }
   function lastDot(api, it) { if ((it.photo || []).indexOf("sidewall") < 0) return null; var ps = (api.state.photos || []).filter(function (p) { return p.ai && p.ai.dot; }); return ps.length ? ps[ps.length - 1].ai.dot : null; }
-  function lockedAfter(api, c) { var prev = c.item && c.idx > 0 ? c.item.chapters[c.idx - 1] : null; if (prev) return prev.id; var w = []; CHLIST.forEach(function (o) { if ((o.opens || []).indexOf(c.id) >= 0) w.push(o.id); }); return w[0] || "the story"; }
+  function lockedAfter(api, c) { var s = STAGE_OF_CH[c.id]; return s ? "step " + s.n : "later"; }
   function caseStepsFor(api, c) {
     var out = []; if (!window.V60_STORY) return out;
     var gos = c.steps.map(function (s, i) { return info(api, c, i).go; });
@@ -452,8 +499,8 @@
 
   /* ---------- crumb: "← Back to …" on every page that is not one of the four roots or the manual itself ----------
      trail holds where you came from, newest last. A root clears it; the manual's own pages keep their own back links. */
-  var NAMES = { car: "The car", story: "Cases", glove: "Glovebox", live: "Link", docs: "Documents", diag: "Diagnose", learn: "How it works", unlocks: "Unlocks: beyond the app", today: "Today" };
-  var TAB_ROOT = { car: 1, story: 1, glove: 1, live: 1 }, trail = [], here = null, goingBack = false;
+  var NAMES = { car: "The car", story: "Cases & options", path: "The path", glove: "Glovebox", live: "Link", docs: "Documents", diag: "Diagnose", learn: "How it works", unlocks: "Unlocks: beyond the app", today: "Today" };
+  var TAB_ROOT = { car: 1, glove: 1, live: 1 }, trail = [], here = null, goingBack = false;
   function where(tab) {
     if (tab === "view") { var v = VIEWS.filter(function (q) { return q.id === ui.view; })[0]; return v && { tab: "view", id: v.id, label: v.n }; }
     if (tab === "item") { if (ui.item === "0") return { tab: "item", id: "0", label: "0 " + PREFACE.n }; var it = ITEMS.filter(function (q) { return q.id === ui.item; })[0]; return it && { tab: "item", id: it.id, label: it.num + " " + it.n }; }
@@ -507,7 +554,7 @@
     d.views[v.id] = { photo: photoId, pins: pins }; ui.arrange = true; ui.fm = null; api.save();
   }
   function wire(api) {
-    ["mnHome", "mnView", "mnItem", "mnIndex"].forEach(function (id) {
+    ["mnHome", "mnView", "mnItem", "mnIndex", "mnPath"].forEach(function (id) {
       var root = $(id);
       root.addEventListener("toggle", function (e) {
         var dt = e.target; if (!dt.matches || !dt.matches("details.mn-stepx")) return;
@@ -521,7 +568,7 @@
         if ((b = t.closest("[data-hs]"))) {
           if (ui.arrange) return;
           var fig = b.closest(".mn-fig").getAttribute("data-fig"), hs = b.getAttribute("data-hs");
-          if (fig === "home") { ui.selView = hs; renderHome(api); } else { ui.item = hs; var vv = VIEWS.filter(function (q) { return q.id === fig; })[0]; if (vv) D(api).sel[vv.id] = hs; renderView(api); }
+          if (fig === "home") { var hv = VIEWS.filter(function (q) { return q.id === hs; })[0]; if (hv && viewStatus(api, hv) === "locked") { ui.homeNote = hv.n + " is not open yet. " + firstWhy(api, hv); renderHome(api); } else if (hv) open(api, "view", hs); } else { ui.item = hs; var vv = VIEWS.filter(function (q) { return q.id === fig; })[0]; if (vv) D(api).sel[vv.id] = hs; renderView(api); }
           return;
         }
         if ((b = t.closest("[data-view]"))) { if (b.getAttribute("aria-disabled") === "true") { ui.selView = b.getAttribute("data-view"); if (id === "mnHome") { renderHome(api); var s = root.querySelector(".mn-sheet"); if (s) s.scrollIntoView({ block: "nearest" }); } return; } open(api, "view", b.getAttribute("data-view")); return; }
@@ -537,6 +584,7 @@
           TREE_UI[k2] = path; var nn = tr.n[path[path.length - 1]]; if (nn && !nn.q) { D(api).went[k2] = 1; api.save(); bust(); }
           renderItem(api); return;
         }
+        if ((b = t.closest("[data-park]"))) { var pk = b.getAttribute("data-park"), pd = D(api); if (STAGE_BY_KEY[pk] && STAGE_BY_KEY[pk].park) { pd.parked[pk] = api.todayStr(); api.save(); bust(); renderHome(api); } return; }
         if ((b = t.closest("[data-fm]"))) { var m = b.getAttribute("data-fm"), v = VIEWS.filter(function (q) { return q.id === ui.view; })[0]; if (!v) return; if (m === "draw") { var dd = D(api); delete dd.views[v.id]; ui.arrange = false; ui.fm = null; api.save(); } else ui.fm = "photo"; renderView(api); return; }
         if ((b = t.closest("[data-arrange]"))) { ui.arrange = !ui.arrange; renderView(api); return; }
         if ((b = t.closest("[data-usephoto]"))) { var v2 = VIEWS.filter(function (q) { return q.id === ui.view; })[0]; if (v2) usePhoto(api, v2, b.getAttribute("data-usephoto")); renderView(api); return; }
@@ -549,7 +597,28 @@
   window.V60_MANUAL = {
     data: DATA, chapters: CH, status: function (id) { return API ? chStatus(API, CH[id]) : null; }, open: function (id) { return API ? !!compute(API).open[id] : false; },
     closed: function (id) { return API ? !!compute(API).closed[id] : false; }, resume: function () { return API ? resumeChapter(API) : null; }, newCount: function () { return API ? newList(API).length : 0; },
-    needed: function () { return API ? neededTabs(API) : {}; }, bust: bust, sweep: function () { if (API) return sweep(API); }, go: function (kind, id) { if (API) open(API, kind, id); }
+    needed: function () { return API ? neededTabs(API) : {}; }, bust: bust, sweep: function () { if (API) return sweep(API); }, go: function (kind, id) { if (API) open(API, kind, id); },
+    /* closed, or set aside on the path: what the certification track counts as hands-on work done */
+    settled: function (id) { if (!API) return false; var x = compute(API), s = STAGE_OF_CH[id]; return !!x.closed[id] || !!(s && x.d.parked[s.key]); }
+  };
+  /* the path, for the track, the story and the tests */
+  window.V60_PATH = {
+    units: UNITS, stages: STAGES,
+    current: function () { return API ? compute(API).cur : null; },
+    done: function () { return API ? compute(API).nDone : 0; },
+    state: function (key) { return API && STAGE_BY_KEY[key] ? stageState(API, STAGE_BY_KEY[key]) : null; },
+    reached: function (key) { return !API || !!compute(API).reached[key]; },
+    taskStage: function (id) { return STAGE_OF_TASK[id] || null; },
+    taskReached: function (id) { var s = STAGE_OF_TASK[id]; return !API || !s || !!compute(API).reached[s.key]; },
+    chStage: function (id) { return STAGE_OF_CH[id] || null; },
+    title: stageTitle,
+    /* a Go link from elsewhere (a case step) is reached when some open chapter uses it, or no chapter does */
+    goStage: function (go) {
+      if (!API || !go) return null; var x = compute(API), first = null, ok = false;
+      CHLIST.forEach(function (c) { c.steps.forEach(function (s, i) { if (info(API, c, i).go !== go) return; var st = STAGE_OF_CH[c.id]; if (!st) return; if (x.open[c.id]) ok = true; if (!first || st.n < first.n) first = st; }); });
+      return ok || !first ? null : first;
+    },
+    next: function () { if (API) goNext(API); }
   };
 
   (window.V60_MODULES = window.V60_MODULES || []).push({
@@ -558,14 +627,15 @@
       { id: "car", section: "car", label: "The car", order: 1, html: '<div id="mnHome" class="mn"></div>' },
       { id: "view", section: "car", label: "View", order: 2, hidden: true, html: '<div id="mnView" class="mn"></div>' },
       { id: "item", section: "car", label: "Part", order: 3, hidden: true, html: '<div id="mnItem" class="mn"></div>' },
-      { id: "index", section: "car", label: "Index", order: 4, hidden: true, html: '<div id="mnIndex" class="mn"></div>' }
+      { id: "index", section: "car", label: "Index", order: 4, hidden: true, html: '<div id="mnIndex" class="mn"></div>' },
+      { id: "path", section: "car", label: "The path", order: 5, hidden: true, html: '<div id="mnPath" class="mn"></div>' }
     ],
     init: function (api) { API = api; installGate(); wire(api); },
-    render: function (api, tab) { bust(); if (tab === "car") renderHome(api); else if (tab === "view") renderView(api); else if (tab === "item") renderItem(api); else if (tab === "index") renderIndex(api); },
+    render: function (api, tab) { bust(); if (tab === "car") renderHome(api); else if (tab === "view") renderView(api); else if (tab === "item") renderItem(api); else if (tab === "index") renderIndex(api); else if (tab === "path") renderPath(api); },
     refresh: function (api) { bust(); },
     shown: function (api, tab) { crumb(api, tab); rootAlso(tab); if (tab !== "item" && api.trainReset) api.trainReset(); },
     clean: function (v) { return v && typeof v === "object" ? v : {}; },
     xp: function (api) { var d = api.mod("manual"); if (!d || !d.closed) return 0; return Object.keys(d.closed).length * 15 + (d.closed["0"] ? 15 : 0); },
-    jump: function (api, kind, id) { if (kind === "view" || kind === "item" || kind === "ch") { open(api, kind, id); return true; } return false; }
+    jump: function (api, kind, id) { if (kind === "view" || kind === "item" || kind === "ch") { open(api, kind, id); return true; } if (kind === "path") { if (id === "next") goNext(api); else api.go("path"); return true; } return false; }
   });
 })();

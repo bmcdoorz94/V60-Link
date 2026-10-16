@@ -236,7 +236,7 @@
       /* show the intro line whenever a tab opens */
       var g = window.V60_GATE;
       if (g && g.shown) { var orig = g.shown; g.shown = function (tab) { orig(tab); try { intro(tab); } catch (e) {} }; }
-      var hb = document.getElementById("guideBtn"); if (hb) hb.hidden = false;
+      /* the header button stays hidden since the path (2026-10-15): the Next card on the home is the one way forward */
     },
     refresh: function (api) {
       if (!api.ready || !api.ready()) return; /* saved data not loaded yet */

@@ -1,4 +1,4 @@
-/* Guided mode: walkthrough, at-the-car question, safety check, I'm stuck ladder, levels rising and the
+/* Guided mode (since the path, 2026-10-15, opened from code only: the path's Next card is the way forward): walkthrough, at-the-car question, safety check, I'm stuck ladder, levels rising and the
    "Keep guiding me" undo, unprompted proof, tab intros and the welcome-back recap. */
 const { chromium } = require(process.env.PLAYWRIGHT_PATH || 'playwright');
 const path = require('path'), fs = require('fs'); const ROOT = path.resolve(__dirname, '..'); const SH = path.join(ROOT, 'tests', 'shots') + '/'; fs.mkdirSync(SH, { recursive: true });
@@ -12,9 +12,9 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
     await p.goto('file://' + ROOT + '/index.html'); await p.waitForTimeout(500);
     const h2 = () => p.textContent('#gwH');
     await p.evaluate(() => __v60.go('story'));
-    ok(/Start/.test(await p.textContent('#stV-cases .nextc [data-guide]')), 'next objective offers Start while guided');
-    ok(await p.isVisible('#guideBtn'), 'Guide me button in the header');
-    await p.click('#stV-cases .nextc [data-guide]');
+    ok(/your path/.test(await p.textContent('#stV-cases .nextc')) && !(await p.$('#stV-cases .nextc [data-guide]')), 'the case board points at the path instead of its own next objective');
+    ok(await p.isHidden('#guideBtn'), 'no Guide me button in the header');
+    await p.evaluate(() => V60_GUIDE.start(null));
     ok(/at the car/.test(await h2()), 'asks whether you are at the car');
     await p.click('[data-gw="car-no"]');
     ok(/four jobs/.test(await h2()), 'first step: ' + await h2());
@@ -30,7 +30,7 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
     ok(/safety rules/.test(await h2()) && await p.locator('.gwprev').count() === 1, 'next step, with the finished one acknowledged');
     await p.evaluate(() => { const A = V60.acad(); A.done['m-safe'] = { date: '2026-10-11', outcome: 'good' }; V60.save(); V60.renderAll(); });
     await p.click('[data-gw="close"]');
-    await p.click('#guideBtn');
+    await p.evaluate(() => V60_GUIDE.start(null));
     ok(/box can and can't hear/.test(await h2()), 'not at the car: skips car steps (' + await h2() + ')');
     ok(await p.evaluate(() => V60.mod('guide').sc.hood) === 1, 'a step finished without "stuck" counts; the stuck one does not');
     await p.click('[data-gw="close"]');
@@ -50,9 +50,6 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
     ok(await p.evaluate(() => V60.mod('guide').lvl.hood) === 1, 'hood guidance stepped back to assisted');
     await p.evaluate(() => { __v60.go('today'); });
     ok(/Less hand-holding for under-the-hood/.test(await p.textContent('#tdCards')), 'Today announces it');
-    await p.evaluate(() => __v60.go('story'));
-    const gtexts = await p.$$eval('#stV-cases .stnext [data-guide]', bs => bs.map(x => x.textContent));
-    ok(gtexts.indexOf('Walk me through it') >= 0 && gtexts.indexOf('Start') < 0, 'assisted: Walk me through it instead of Start (' + gtexts + ')');
     await p.evaluate(() => __v60.go('today')); await p.click('[data-gkeep="hood"]');
     ok(await p.evaluate(() => V60_GUIDE.level('safe')) === 0, 'Keep guiding me puts it back');
     // unprompted proof

@@ -45,6 +45,7 @@ The car is the menu (manual shell), Live link works on the real car in Bluefy, G
   - Contents of TJ30087
 
 ## Decisions
+- 2026-10-15 (Kyle: "one seed planted of info turns into a tree of knowledge but potentially more linear"): strict (later steps locked), in the order a beginner learns a car starting with this one, and the home cut to the car, one next step and a progress bar. Built as the path.
 - 2026-10-15 (menus within menus; Kyle's answers): three levels only, the car → a view → a part, with every chapter's content inline on the part page; progression rebuilt around ASE's G1 "and more in depth": seven areas as levels with Owner and Technician rungs, readiness meters, quizzes that open hands-on first, a mock G1; XP, ranks, the skill tree and the V60 Master exam retired; screenshots from a working draft on the `g1-track` branch before merging.
 - 2026-10-12 (redesign, Kyle's answers): the car is the menu, organised by area; progression-based unlocks stay and work both ways (chapter chain and story cases); each area opens a view "as if looking inside" (hood open, inside the cabin); glow on first open only, with a quieter "pick up here" marker; light and dark; Live link and the Data lab keep an instrument look; "make it my vehicle as much as possible" is done with the owner's own photos as the figures (no drawing of Volvo's actual design), points placed automatically from the drawing and adjustable by hand; density between dense and roomy; item count per view as mocked (about 4 to 9). Mockup approved before the build.
 - 2026-10-11: Guided mode (Kyle's answers): full-screen walkthrough (Claude's pick), levels change without asking but are announced with an undo, guidance fades per area (Claude's pick), no read-aloud needed in the walkthrough.
@@ -72,6 +73,13 @@ The car is the menu (manual shell), Live link works on the real car in Bluefy, G
 - [ ] Retire the Today tab once its remaining cards (welcome back, protect your progress, the garage map) have a home elsewhere. The home's Now strip already counts the notes and links there.
 - [ ] Wheel and underside figures: better drawings, or photos.
 - [ ] Desktop: consider the figure and the sheet side by side above 1000 px.
+
+## The path (2026-10-15)
+- [x] One strict path through every chapter, the G1 study and the quizzes (data/path.js, 113 steps, 18 units); home cut to the Next card, the figure, the Index and the red list; bar to The car, Glovebox, Link; Cases into the Index; set aside for shop, purchase and dealer steps. tests/path.js.
+- [ ] Port the guided walkthrough (at the car?, safety check, I'm stuck ladder) onto path steps; it has no button since the path because it followed the story's order.
+- [ ] Today's notes (Lars's announcements, welcome back, protect your progress) no longer show on the home; decide whether one line belongs on the Next card.
+- [ ] Health "Act" items (urgent service) left the home with the Now strip; the header pulse still shows them. Check with Kyle that this is enough.
+- [ ] Run `npm test` on the PC (WebKit).
 
 ## Next (G1 study guide)
 - [x] Merged to main 2026-10-15. Still to do: run `npm test` on the PC for the WebKit side.

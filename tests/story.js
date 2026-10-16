@@ -9,15 +9,16 @@ const ctx=await b.newContext({viewport:vp,colorScheme:sch});await ctx.addInitScr
 const p=await ctx.newPage();const errs=[];p.on('pageerror',e=>errs.push('PE '+e.message));p.on('console',m=>{if(m.type()==='error')errs.push(m.text())});
 await p.goto('file://'+ROOT+'/index.html');await p.waitForTimeout(500);
 const rail=()=>p.evaluate(()=>[...document.querySelectorAll('#rail button span')].map(x=>x.textContent));
-ok(JSON.stringify(await rail())==='["The car","Cases","Glovebox","Link"]' && await p.evaluate(()=>document.querySelectorAll('#rail button.locked').length)===2,'start shows the four roots, Glovebox and Link locked: '+await rail());
-ok(/Watch the prologue/.test(await p.textContent('#mnHome')),'prologue row on the home');
+ok(JSON.stringify(await rail())==='["The car","Glovebox","Link"]' && await p.evaluate(()=>document.querySelectorAll('#rail button.locked').length)===0,'the bar shows three roots, none locked; Cases is in the Index: '+await rail());
+ok(/The story behind the path/.test(await p.textContent('#mnHome .mn-next')),'prologue row inside the Next card');
+ok(await p.evaluate(()=>V60_GATE.visible('story')) && /Cases/.test(await p.evaluate(()=>{__v60.go('index'); return document.getElementById('mnIndex').textContent;})),'Cases is listed in the Index'); await p.evaluate(()=>__v60.go('car'));
 ok(await p.isVisible('#mnHome .mn-sos'),'Something\'s wrong button on the home');
 ok(!(await p.isVisible('.cockpit .gauge')),'health gauge hidden at start');
 await p.screenshot({path:SH+'s-today-'+nm+'.png',fullPage:true});
 await p.click('[data-jump="story:pro"]'); await p.waitForTimeout(150); await p.click('.cin-skip');
 await p.evaluate(()=>__v60.go('story'));
 ok(await p.evaluate(()=>document.getElementById('subnav').hidden),'Learn shows only the Story (Training opens from cases)');
-await p.click('#stV-cases .nextc [data-from]'); ok(/Back to the case: Safe to Touch/.test(await p.textContent('#p-academy')),'lesson opened from a case links back to it');
+if(!(await p.$('.case.open'))) await p.click('[data-case="safe"]'); await p.click('.case.open [data-from]'); ok(/Back to the case: Safe to Touch/.test(await p.textContent('#p-academy')),'lesson opened from a case links back to it');
 await p.click('#p-academy [data-jump="case:safe"]'); ok(await p.evaluate(()=>!document.getElementById('p-story').hidden),'back to the case returns to Story');
 await p.screenshot({path:SH+'s-start-'+nm+'.png',fullPage:true});
 // close Safe to Touch

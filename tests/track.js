@@ -19,7 +19,7 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
   ok(/G1 readiness/.test(await p.textContent('#tkBody')), 'the track page renders');
   ok(await p.evaluate(() => document.querySelectorAll('#tkBody [data-area]').length === 7), 'seven areas listed');
   await p.click('#tkBody [data-area="eng"]'); await p.waitForTimeout(150);
-  ok(await p.evaluate(() => !document.querySelector('#tkBody [data-quiz="1"]') && /opens when the hands-on chapters/.test(document.querySelector('#tkBody').textContent)), 'the Engine quiz is locked until the hands-on chapters are closed');
+  ok(await p.evaluate(() => !document.querySelector('#tkBody [data-quiz="1"]') && /step \d+ of your path/.test(document.querySelector('#tkBody').textContent)), 'the Engine quiz is locked until the path reaches it');
   /* close every Know and Check chapter of the engine area by faking their evidence, then the quiz opens */
   await p.evaluate(() => { const st = V60.mod('story'); st.all = true; V60.setMod('story', st); const d = V60.mod('manual'); const a = window.V60_TRACK_DATA.areas.filter(x => x.id === 'eng')[0];
     const A = V60.acad(), dy = V60.mod('diy') || { done: {} }, today = V60.todayStr();
@@ -74,7 +74,7 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
   ok(await p.evaluate(() => (V60.mod('track').g1.tries || 0) === 1), 'the mock attempt is saved');
   /* the home strip */
   await p.evaluate(() => __v60.go('car')); await p.waitForTimeout(150);
-  ok(await p.evaluate(() => !!document.querySelector('#mnHome .tk-strip') && document.querySelectorAll('#mnHome .tk-segs i').length === 7), 'the home carries the readiness strip with seven segments');
+  ok(await p.evaluate(() => !document.querySelector('#mnHome .tk-strip') && !!document.querySelector('#mnHome .mn-next .mn-pbar')), 'the home carries one Next card with the path progress, not the readiness strip');
   ok(errs.length === 0, 'no errors ' + JSON.stringify(errs));
   await b.close();
 })();

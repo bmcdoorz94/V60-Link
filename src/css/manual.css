@@ -257,3 +257,33 @@
 .tk-taskb .tk-car b { font-weight: 600; }
 .tk-task:not([open]) .tk-taskb { display: none; }
 @media (max-width: 600px) { .tk-taskb { padding-left: 0; } }
+
+/* ---------- the path (2026-10-15): one Next card on the home, the whole path on its own page ---------- */
+.mn-next { border-color: var(--new); }
+.mn-next h3 { font-size: 26px; }
+.mn-pbar { height: 8px; background: var(--line); overflow: hidden; }
+.mn-pbar i { display: block; height: 100%; background: var(--ink); }
+.mn-unit { font-family: var(--font-data); font-size: 11px; letter-spacing: .1em; color: var(--new-ink); margin-top: 4px; }
+.mn-park { font-size: 13.5px; color: var(--muted); }
+.mn-park > summary { cursor: pointer; min-height: 32px; display: flex; align-items: center; }
+.mn-park[open] { display: flex; flex-direction: column; gap: 8px; }
+.mn-park[open] > button { align-self: flex-start; }
+.mn-parked { line-height: 1.6; }
+.mn-homenote { margin-top: 6px; }
+.mn-toast .mn-cta { margin-top: 6px; background: var(--bg); color: var(--ink); border-color: var(--bg); }
+.mn-unitx { border-bottom: 1px solid var(--line); }
+.mn-unitx > summary { list-style: none; cursor: pointer; display: flex; gap: 12px; align-items: flex-start; padding: 11px 0; min-height: 44px; }
+.mn-unitx > summary::-webkit-details-marker { display: none; }
+.mn-unitx > summary .n { font-family: var(--font-data); font-size: 13px; font-weight: 500; color: var(--muted); width: 1.8em; flex: none; padding-top: 2px; }
+.mn-unitx > summary .b { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.mn-unitx > summary .t { font-weight: 600; font-size: 15px; line-height: 1.3; }
+.mn-unitx > summary .kind { font-family: var(--font-data); font-size: 11px; letter-spacing: .06em; color: var(--muted); }
+.mn-unitx.locked > summary .t { color: var(--none); }
+.mn-unitx.resume > summary .n, .mn-unitx.resume > summary .mn-tick { color: var(--new-ink); }
+.mn-unitx.closed .mn-tick { border-color: var(--done); }
+.mn-unitx > .status, .mn-unitx > .mn-list { padding-left: 2.6em; }
+.mn-unitx > .mn-list { padding-bottom: 10px; }
+.tk-task.locked { display: flex; gap: 10px; align-items: baseline; padding: 10px 0; color: var(--none); }
+.tk-task.locked .n { font-family: var(--font-data); font-size: 12.5px; width: 2.6em; flex: none; }
+.tk-task.locked .b { flex: 1; min-width: 0; font-size: 14.5px; line-height: 1.35; }
+.tk-task.locked .mn-mono { font-size: 11px; flex: none; }
