@@ -1,0 +1,575 @@
+# Non-work ideas: the chat where V60 Garage was built (Oct 10 to 14, 2026)
+
+Chat on claude.ai: https://claude.ai/chat/ab69dd68-dbe4-4029-bb60-2f3028d531db (private to Kyle). 200 turns. It opened on unrelated work ideas and turned to the car at turn 4; only the car and the app are covered here. Summarised in two halves on 2026-10-15. The VIN, plate, chassis number, contact details, job details and sync tokens are left out on purpose.
+
+Turn numbers are the chat's own (t12 and T112 both mean turn 12 or 112). Open questions are as of the end of each half: many were answered later in the chat or in Claude Code sessions, and docs/ROADMAP.md holds the current list. Where this record and the app disagree, the app's sourced version is the later one (for example the maintenance intervals corrected at t34 against Volvo's own schedule).
+
+## Turns 0 to 99 (Oct 10 to 11)
+The chat started on work-related automation ideas (turns 0-1) and a survey of hobby builds (turns 2-3), then turned to the car at turn 4. Dates in this range run from 2026-10-10 to 2026-10-11.
+
+### 1. What Kyle said
+
+- t2: Asked for ideas that were "Non work related".
+- t4: "do whatever you want, be ambitious."
+- t6: Asked for the page to be "way more intricate and advanced", like Car Mechanic Simulator, able to "look at all aspects of my vehicle" and to "connect to my vehicle to optimize everything". Asked for it to be "as ambitious and intricate as possible".
+- t9: "How can this be optimized more".
+- t11: Wants it gamified so it is easier to understand, so he can learn more about the car and take care of it. "Anything I don't know about I'd want to consider." Asked for clarifying questions, and asked that the clarifying-questions instruction be saved to memory for every task.
+- t12 (answers to the question tool, as the assistant relayed them): knowledge about 1/10, has never opened the hood, open to buying an OBD adapter, schedule varies.
+- t13: "Create something that would allow everything that cannot be done, to can be done."
+- t14: His answers to the device, code-clearing and tuning questions are not shown in the transcript. Later turns treat him as iPhone-only (Bluefy for Bluetooth), with code clearing allowed with safeguards.
+- t16: (1) Yes, create the public GitHub repo. (2) Buy "whatever more effective". He asked whether, if V60 Link doesn't work with the adapter he buys, he can still use the other option with the same device. (3) Mileage "around 95K give or take 5k".
+- t18: Said the repo was created. "if the OBDLink CX best option, verify that." Asked whether the used dealer would have done a used-vehicle inspection.
+- t20: Bought from an independent dealer, "pretty sure was sold as is". Mileage at purchase was "closer to 90k probably a tad less".
+- t22: Bought "about 14ish months ago". The oil was changed recently. He believes the TPMS sensor is broken because the tires have air but the light is always on.
+- t24: Asked how the OBDLink connects to the vehicle and everything it can do ("I see it's bluetooth").
+- t26: "Answer both if you didn't due to me cutting you off."
+- t28: "How can this be optimized or made more...idk interactive...open to all suggestions."
+- t29: His answers to "build first" and "device" are not shown. The assistant started with the fault simulator.
+- t30: Wants everything "as realistic as possible. A 1:1 of my vehicle itself for 100% accuracy in what I do."
+- t31 (answers as relayed): decode the VIN (the VIN stays out of the page); a drawn diagram now with his own photos layered in later; plan a place in the app for exact Volvo data.
+- t32: "Make the UI/UX insane in the best way. Not your default Claude looking style... Don't theme it based on me. Theme it on whatever is optimal."
+- t35: "List every other optimization you could implement for me. I want to be a master of my vehicle." He would come back to the earlier questions. "Don't ask clarifying ones this time"; queue them in the reply instead. "If anyone asked me about my car I'd want to be able to answer anything about it."
+- t37: "Add all these." He also asked for:
+  - a simple cinematic or story mode for the whole thing
+  - a knowledge base that answers questions "if it doesn't require token usage"
+  - a standalone app for mobile and desktop that is easy to update and extend
+  - UI/UX updated with every new feature so it is "not crowded or ugly" and easy to navigate
+- t39: "if someone were obsessed with their vehicle to the max, this is what I'd want them to use", tuned to him "and the future of me... being obsessed with my vehicle".
+- t41: "Continue".
+- t44: Asked whether the story mode is as cohesive as it can be, where things connect, and what counts as a "side mission". Open to suggestions.
+- t46: Asked whether this would be better done in Claude Code, or with an .md file to keep track.
+- t48: Wants a Claude/Gemini handoff so work continues when the usage limit hits. He pasted a prompt: on "Initiate Handoff Protocol", stop and produce a single complete .md with four sections (Current Active Objective, Immediate Next Steps, Pending Logic & Blockers, Complete Codebase). Every file in full, no truncation and no placeholders.
+- t50: "It's the app" (he uses the Gemini app, not AI Studio) "and implement the changes from earlier" (the story rebuild).
+- t52: Confused by the order of progression. Side content should not be "known to exist until a certain point", GTA-style, where context is explored before other things unlock. The start "feels a bit confusing and overwhelming". Asked whether it could be more informative ("cranked up more"). Open to ideas.
+- t54:
+  - (1) Yes: main story first, everything else hidden until unlocked.
+  - (2) "Completely hidden".
+  - (3) Yes: keep the always-on "Something's wrong" button and the "Show everything" switch.
+  - (4) All six informative ideas.
+  - "I have the adapter already." He wants it treated like a mystery device whose output is deciphered, like a cipher. No extra work unless it relates directly to the vehicle: "I don't want to have to rework letters. I just wouldn't understand the codes."
+  - Asked for everything (progression, options, extras, milestones, achievements, quests) explained as if he were telling someone else.
+- t56: Asked for a demo like a presentation or trailer (possibly both), how progress saves, whether staying online in a browser is the only way on mobile and whether to worry about it, and new UI/UX ideas.
+- t58:
+  - Asked whether Claude can put an app on his iPhone Home Screen.
+  - Wants all information synced for seamless continuation between devices.
+  - "So far this is all just for me but I'd show to others potentially."
+  - The trailer gives away too much. It should create a ":O what is that going to be" reaction.
+  - A tech tree had been mentioned but he saw no evidence of it.
+  - "You can do all the ideas."
+  - He has no Mac or developer account, and asked why he would need a VM.
+- t60: The Academy and Story both seem to move the story along, and he is confused how to use each. "Either combine them in some way or make it understood." The trailer is "a little off and not very impressive".
+- t63: "I can't find this" (the sync setup).
+- t65: Asked where to find the token: in the GitHub app or on GitHub's mobile website.
+- t67: "???" (he was on the token page).
+- t69: "Yes" (sync turned on). Asked whether he needs to use only Bluefy since it supports Bluetooth.
+- t71: "I don't want to switch between browsers. I'd want sync to work on bluefy and just use that for the rest."
+- t73: "sync looks like it works".
+- t75: "Try again now :)" (the iPhone reminder).
+- t77: Asked whether Claude can tell when the usage limit is nearly up and create the Gemini handoff automatically.
+- t79: Pasted Gemini's reply: Gemini can take the full ~900 KB file and no smaller version is needed.
+- t81: Asked to initiate the handoff. Wants uploads "scanned and deciphered within automatically" and "Blocking out personal information as well". Asked for a check of which listed features are already built, with anything missing noted in the handoff file.
+- t83: Uploaded Gemini's returned package (message had no text).
+- t86: (1) Leave the shop's details visible on receipts. (2) Keep confirm-before-save. (3) "Not sure/don't care" whether the VIN and plate he types in Glovebox sync to the private repo. (4) "Don't care either way" about an optional AI read with his own API key.
+- t88: Asked what a more guided experience from the start would look like, one that lets go as he gets the hang of it.
+- t90: (1) Full-screen walkthrough or highlights: "Dealers choice". (2) Let go automatically: "Just do". (3) Per area or one level: "Dealers choice". (4) "I don't need the read aloud".
+- t93: "Make the trailer insane, go nuts and make it incredibly, undeniably awesome."
+- t95: "The obd link isn't working."
+- t97: "It's not connecting with my vehicle to the app."
+- t99: It doesn't connect with the app it came with (the OBDLink app) or with the car. "It doesn't see it as a device for bt."
+
+### 2. Facts about the car established
+
+- t12, t54: Kyle owns an OBD adapter. At t54 he says he already has it; the OBDLink CX is the model discussed from t17 on.
+- t15: No dipstick; oil level is read electronically in the instrument cluster (ignition in mode II, thumb wheel on the left stalk to "Oil level"). Dipsticks are only on the five- and six-cylinder V60s. Source: Volvo, checking oil, 2016 V60, https://www.volvocars.com/us/support/car/v60/2016/article/527f24d2b96b2c38c0a801e8000aafe8
+- t15: Hood release: a handle under the left side of the dash, turned about 20-25 degrees clockwise, then the catch near the front-right edge of the hood is pushed left. Source: Volvo, opening the hood, 2016 V60, https://www.volvocars.com/us/support/car/v60/2016/article/f2de677bb96926f2c0a801e801c6ec9e
+- t15: Recommended tire pressures are on the driver's door pillar. The OBD-II port is under the dash on the driver's side, tagged "verify" (no source).
+- t16: Odometer about 95,000 miles (Kyle's estimate, give or take 5k), October 2026.
+- t20: Bought from an independent lot, probably "as is", at a little under 90,000 miles.
+- t22: Bought about 14 months before 2026-10-10, recorded in CLAUDE.md (t47) as about August 2025. Oil changed recently. Tire pressure light always on with tires inflated.
+- t22/t47: No service history is known; the timing belt history is unknown.
+- t31 (NHTSA vPIC decode, https://vpic.nhtsa.dot.gov/):
+  - 2016 V60 wagon, Premier trim (SV33)
+  - B4204T11 2.0 L four-cylinder turbo (Drive-E), 240 hp
+  - ULEV, engine stop/start, front-wheel drive, 8-speed automatic
+  - indirect tire pressure monitoring (no wheel sensors)
+  - built at Volvo's Torslanda plant, Sweden
+  - front, seat-cushion and curtain airbags (rows 1 and 2)
+- t31: Recalls listed for the 2016 V60 model year (NHTSA recalls API, https://www.nhtsa.gov/recalls). Whether each applies to his VIN was left for him to check.
+  - 20V378000 (Volvo R10029): front seat belt anchor cable
+  - 19V849000 (R89978): door latches
+  - 16V798000 (R89708): front passenger buckle stud, cars built Feb 16, 2015 to Aug 22, 2016
+  - 15V555000 (R39574): starter motor fuse on stop/start, cars built Apr 8 to Aug 19, 2015
+- t33: From the VIN decode, the tire monitor is indirect, so the always-on light is "almost certainly" a calibration issue, not a broken sensor.
+- t34: Engine bay layout. Source: Volvo 2016 V60 US Owner's Manual, https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf
+  - Brake fluid reservoir and washer filler on the driver side.
+  - Battery in the engine bay under two covers, with the fuse box beside it.
+  - Jump-start ground point at the passenger-side engine mount.
+  - Radiator at the front; hood catch near the front-right edge.
+  - No power steering fluid (electric steering).
+  - The coolant tank and air box positions could not be confirmed.
+- t34: Spec sheet. Sources: the Volvo 2016 V60 US Owner's Manual (above) and the Volvo 2016 Maintenance Schedule, https://www.volvocars.com/images/cs/v3/assets/bltccbab8edae0354cd/bltd8992f59bb25d587/684189d0f08427b79f2c3893/2016-Volvo-Maintenance-Schedule-v1.pdf?branch=prod_alias
+  - Engine: B4204T11, 1,969 cc, bore and stroke 82 x 93.2 mm, compression 10.8:1, 240 hp at 5,600 rpm, 258 lb-ft at 1,500-4,500 rpm, timing belt.
+  - Oil: full synthetic ACEA A5/B5 SAE 5W-30. Volvo's 0W-20 (VCC RBS0-2AE) is also approved. 6.2 US qt (5.9 L) with the filter.
+  - Coolant: Volvo coolant, 50/50 with water, 8.7 US qt.
+  - Transmission: Volvo AW1 fluid, about 7 US qt. Volvo says no change is needed in normal use.
+  - Brake fluid: DOT 4, 0.63 US qt.
+  - Washer fluid: 6.8 US qt (4.7 without headlight washers).
+  - A/C: R134a, 1.7 lb, PAG oil.
+  - Tires: 215/50R17 on 17 x 7.5 in wheels, 38 psi front and rear cold. Tire size source: https://tiresize.com/tires/Volvo/V60/2016/T5-FWD/
+  - Wheel bolts: 103 lb-ft (140 Nm), tightened crosswise.
+  - Battery: 12 V AGM, 800 CCA, required on start/stop cars.
+  - Bulbs: H11 55 W low beam, H9 65 W high beam, PY24W front and PY21W rear turn signals.
+  - Fuel: 17.8 US gal tank. 87 octane is fine; premium is recommended for best performance and 91+ for heat or towing; up to E10.
+  - EPA: 25 city / 37 highway / 29 combined mpg (fueleconomy.gov, https://www.fueleconomy.gov/feg/noframes/36292.shtml).
+  - Curb weight about 3,530-3,620 lb (sources differ); towing 3,300 lb braked, 1,650 lb unbraked; roof load 165 lb.
+- t38/t47: Transmission is the Aisin TG-81SC 8-speed. Volvo bulletin codes for the car: engine code 40, vehicle type 155 (from Volvo bulletin TJ36858, https://static.nhtsa.gov/odi/tsbs/2024/MC-11006558-0001.pdf).
+- t42: The car's chassis number falls inside the range covered by Volvo's oil-consumption program P10186. Coverage ran 8 years from first delivery, so it has almost certainly expired; a Volvo dealer can confirm. Source: https://static.nhtsa.gov/odi/tsbs/2023/MC-10242508-9999.pdf
+- t42: Bulletin TJ34588 is for the five-cylinder engine and does not apply. The shift-quality bulletins are for the old 6-speed, not this 8-speed.
+- Build month and year from the door-pillar label: still unknown at turn 99.
+
+### 3. Findings and advice given
+
+- t3: Found nothing worthwhile for the Volvo in public builds; suggested a maintenance log as a first build (no source given).
+- t5 (first-pass intervals, later corrected at t34):
+  - Oil 0W-20, Castrol Edge Professional V or VCC RBS0-2AE, about 5.6-5.9 L (Volvo: engine oil grade and volume, https://volvocars.com/uk/support/car/v60/15w17/article/3b599b62f78d1b3ac0a801e80197d148).
+  - Oil service every 10,000 mi or 12 months (Firestone, https://vehicle.firestonecompleteautocare.com/volvo/v60/2016/maintenance/).
+  - Brake fluid every 24 months (Haynes, https://uk.haynes.com/pages/maintenance-plans-car-volvo-s60-v60-2011-2018).
+  - Air filter and spark plugs 37,000 mi, coolant 62,000 mi / 60 months, all marked "verify" (Haynes, https://uk.haynes.com/pages/maintenance-plans-car-volvo-s60-v60).
+  - Transmission fluid: no fixed Volvo interval for normal driving (FCP Euro, https://www.fcpeuro.com/blog/how-to-service-volvo-p2-p3-spa-xc90-s60-v70-automatic-transmission; Volvo later-generation page, https://www.volvocars.com/au/support/car/v60/article/b51abbf67feb476ec0a8015139ecc710/).
+- t5: 2015-2016 Drive-E engines have a documented oil-consumption problem. Volvo's extended warranty P10186 covered a piston and ring repair for 8 years or 100,000 miles, likely lapsed on a 2016 (https://static.nhtsa.gov/odi/tsbs/2023/MC-10242508-9999.pdf). Related bulletin on the low oil level message: https://static.nhtsa.gov/odi/tsbs/2016/SB-10075244-5448.pdf. Advice: keep an oil consumption log as a paper trail.
+- t5: PCV clogging and thermostat failure are owner anecdotes, not failure rates (Edmunds, https://www.edmunds.com/volvo/v60/2015/consumer-reviews/; CarComplaints, https://www.carcomplaints.com/Volvo/S60/2015/engine/engine.shtml).
+- t7: A web page or artifact cannot connect to the car directly; the route is CSV logs from a scanner app (no source given).
+- t10: Running voltage near 12.6-13 V can be normal with smart charging, "likely including this one (verify)" (no source given). Long-term fuel trim lean points to P0171 causes and rich to P0172 causes (no source given).
+- t15 (Unlocks research):
+  - iPhones need a Bluetooth LE adapter. OBDLink CX $79.95 (https://www.obdlink.com/products/obdlink-cx/). Veepeak OBDCheck BLE+ $41.99 (https://veepeak.com/products/obdcheck-ble-plus). Vgate iCar Pro about $25-33. OBDLink MX+ $139.95, no BLE, cannot talk to a web page (https://scantool.net/obdlink-mxp/).
+  - Car Scanner Pro is $7.99 (https://apps.apple.com/us/app/car-scanner-elm-obd2/id1259933623).
+  - The OBDLink CX accepts new pairings only in the first 5 minutes after power-up (https://support.obdlink.com/support/solutions/articles/43000746707-obdlink-cx-adapter-notes).
+- t15: Emissions:
+  - Texas dropped safety inspections for personal cars on Jan 1, 2025; Travis County still requires an emissions test (https://www.dps.texas.gov/news/icymi-vehicle-safety-inspection-changes-take-effect-january-2025).
+  - 2001-and-newer cars may have at most one readiness monitor not ready, and a check-engine light with a stored code fails (40 CFR 85.2222, https://www.customsmobile.com/regulations/title40_chapterI-i24_part85_subpartW_section85.2222).
+  - Clearing codes resets the monitors. Only a generic drive cycle was found (AA1Car, https://www.aa1car.com/library/us50326.htm); no Volvo-specific cycle was confirmed.
+- t15: Volvo VIDA diagnostics costs $48.15 for 3 days, plus a DiCE interface (about $500) and a Windows 11 Pro PC; the software tier is $73.14 for 3 days (https://www.volvotechinfo.com/vida). For a one-off non-engine fault, an independent specialist's scan is cheaper. At t31 the service-info tier was quoted at about $21 for 3 days (no source given in that turn).
+- t15: Polestar Performance Optimization exists for this exact car (242 to 250 hp, 258 to 295 lb-ft, 0-60 mph 6.4 to 6.3 s, article 31459463). US price and 2026 availability are unconfirmed (https://engineered-api.polestar.com/optimisations/v60-t5-drive-e-fwd-automatic-2016/productSheet?market=us). No emissions-legal aftermarket tune was found; recalibration counts as tampering (EPA, https://www.epa.gov/node/226161; Tex. Transp. Code 547.605).
+- t17: Timing belt: interference engine, so a snapped belt usually ruins the engine. Sources cite about 10 years and 150k, 144k or 90k miles, all from forums or a newer engine (Volvo forums, https://www.volvoforums.org.uk/forum/technical-topics/s60-v60-18-xc60-17-s90-v90-16-xc90-15-general/293287-timing-belt-change-v90?p=3741861; AutoPadre, https://www.autopadre.com/belt-or-chain/volvo-v60). The app showed 90k / 10 years until t34.
+- t17: At ~95k with no records, plugs, coolant, brake fluid and air filter are past due if never done (later intervals corrected at t34).
+- t17/t19: The OBDLink CX was recommended and "confirmed". It is the only adapter considered whose BLE data channel is published; the same CX also works with Car Scanner and OBDLink's app. It draws under 1 mA asleep, has a 180-day money-back guarantee and a 3-year warranty, and was out of stock at OBDLink when checked. Sources: OBDLink CX page; OBDAdvisor, https://obdadvisor.com/best-obdlink-scan-tool-review/; Scan Tool Compass, https://scantoolcompass.com/best-bluetooth-obd2-adapters/. Runner-up: vLinker MC+ about $60 (Fast Car, https://www.fastcar.co.uk/review/vlinker-mc-obd2-scanner-review/). Veepeak was dropped to fallback after ABRP flagged problems (https://abrp.featurebase.app/help/articles/7457755-choosing-an-obd-device).
+- t19: Dealer inspection:
+  - The FTC Used Car Rule requires the Buyers Guide (As Is or warranty) but no inspection (https://ftc.gov/business-guidance/resources/dealers-guide-used-car-rule).
+  - Dealers usually do a reconditioning check, and independent lots vary (no source given).
+  - Certified by Volvo means 170+ points, a 12-month warranty and under 80,000 miles (https://volvocars.com/us/l/certified-by-volvo/).
+  - Advice: ask the dealer for the reconditioning repair order and history report, and have a Volvo dealer pull service history by VIN.
+- t21: As-is means no warranty. Advice: hunt for timing belt evidence (shop sticker, paperwork, Volvo dealer history), then book a baseline inspection at an independent Volvo specialist with a full-module scan (no source given for local prices).
+- t25/t27: Tire light:
+  - Steady with "Tire pressure low" means calibrate.
+  - Flashing for about a minute then steady with "Tire press. syst Service required" means a system fault.
+  - Calibration: set cold tires to the door-pillar pressure, then MY CAR > Settings > Car settings > Tire monitoring > Calibrate tire pressure, then drive at least 10 minutes above 20 mph.
+  - Sources: Volvo US Tire Monitor, https://www.volvocars.com/us/support/car/v60/14w46/article/c43f9d2decd9952dc0a801513772c990/; calibrating, https://www.volvocars.com/us/support/car/v60/14w46/article/2f888f1af162f784c0a8015145e77ecc/; recalibration, https://www.volvocars.com/us/support/car/v60/14w46/article/5a300e78aa14d4f0c0a801e801efec26/.
+  - Valve-stem tell (metal with a nut means sensors) (no source given).
+- t25/t27: The CX plugs into the port and is powered by the car. It can read and clear stored, pending and permanent codes, show freeze frame, readiness, live data, CSV logs, Mode 06, and the VIN and ECU software ID. It cannot read airbag, ABS, TPMS, climate or body modules, or change software (OBDLink CX pages).
+- t33: Recalls can be checked at nhtsa.gov/recalls or by calling Volvo; two of the four involve seat belts.
+- t34: Corrections from Volvo's own documents (2016 owner's manual and maintenance schedule):
+  - Oil: 5W-30 A5/B5 base spec, 0W-20 also approved (not 0W-20 only); 6.2 qt with filter.
+  - Spark plugs: every 60k miles, not 37k.
+  - Engine air filter: every 40k miles.
+  - Brake fluid: every 3 years or 40k miles.
+  - Cabin filter: every 20k miles or yearly.
+  - Tires 38 psi; wheel bolts 103 lb-ft; 87 octane fine.
+  - Timing belt hardware: 150k miles or 10 years; the car is at 10 years now, so it became the top Fix first item. Volvo's schedule lists the belt tensioner and idler at 150k/10 years; independent sources replace the belt with them as a kit.
+- t34: Listed Volvo TSB TJ29818 (tire monitor false warnings), https://static.nhtsa.gov/odi/tsbs/2016/MC-10120958-9999.pdf (also https://static.nhtsa.gov/odi/tsbs/2019/MC-10165233-9999.pdf at t42).
+- t34: 12-month budget with no service history: about $2,400-$3,600 at a shop, roughly $200-$300 a month (RepairPal timing belt, https://repairpal.com/estimator/volvo/v60/2016/timing-belt-replacement-cost; YourMechanic plugs, https://www.yourmechanic.com/estimates/volvo/v60/spark-plugs-replacement; FCP Euro kits, https://www.fcpeuro.com/Volvo-parts/V60/Timing-Belt-Kits/).
+- t36: The 2016 system lacks CarPlay, so a retrofit was listed as an upgrade option (no source given).
+- t42: Other bulletins and sources added to the app:
+  - TJ31216: https://static.nhtsa.gov/odi/tsbs/2019/MC-10169029-9999.pdf
+  - Buchanan v. Volvo (oil consumption case): https://bergermontague.com/cases/buchanan-et-al-v-volvo-car-usa-llc-et-al
+  - TG-81SC: https://www.transmissiondigest.com/?p=27645
+  - NHTSA ruling on HID kits: https://www.nhtsa.gov/interpretations/shih3
+  - Texas windshield mounting law: https://www.recordinglaw.com/us-laws/windshield-mounting-restrictions/texas-windshield-mounting-laws/
+  - Volvo 2016 V60 What's New: https://mb.cision.com/Main/23622/4196507/3563273.pdf
+  - Edmunds trims: https://www.edmunds.com/volvo/v60/2016/trims
+  - Still unconfirmed: Polestar availability and price, 4G modem update, live tire prices, an LED-specific NHTSA ruling. 0-60 timing is accurate to about ±0.2 s.
+- t47: Advice: build in Claude Code pointed at the repo, one feature per session, start with "Read CLAUDE.md and docs/ROADMAP.md", end with "Update the roadmap" (no source given).
+- t57: Saving and offline use:
+  - The Home Screen app stores data on the device and works offline after the first load. Bluefy keeps a separate copy, and the Claude version is a third copy in account cloud storage.
+  - Apple's WebKit team said Home Screen web apps keep their own usage counter and their data is not expected to be deleted (https://webkit.org/blog/10218/full-third-party-cookie-blocking-and-more/). The 2023 policy says unused sites can be cleared and Home Screen apps are more likely to get persistent storage (https://webkit.org/?p=14403).
+  - Real risks: deleting the app, clearing data, losing the phone.
+  - A native app would need a Mac, Xcode and a paid Apple developer account (no source given).
+- t59: A VM is not worth it. macOS on non-Apple hardware breaks Apple's license, and a free self-installed app expires after 7 days (no source given). The app cannot be installed remotely; Kyle adds it with Safari > Share > Add to Home Screen.
+- t66: The GitHub iPhone app has no token settings, "as far as I know". Tokens are made on the website, are fine-grained, cover the one repo with Contents read/write, and are shown once (GitHub Docs, https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
+- t70/t72: Bluefy is needed only for Bluetooth, but Bluefy-only use works. Apple's storage statement covers Home Screen apps, not Bluefy, and Bluefy's data retention could not be confirmed, so sync is the safety net.
+- t78: Claude cannot see its usage limit, and a session stops without warning. Hence an always-ready handoff file on a branch.
+- t80: Corrected Gemini: the handoff holds all source files (including the generated live.js) but not the build output, and none of Kyle's saved progress. It is roughly 250,000-300,000 tokens.
+- t84: Gemini's scanner draft would not have worked as sent:
+  - its link to the OCR library was broken
+  - no upload in the app went through it
+  - it missed multi-word phone numbers and addresses
+  - it would have saved highlight boxes into the photo
+  - there was no way to hide text it missed
+- t98: Connection checklist:
+  - Open the app in Bluefy.
+  - Give Bluefy Bluetooth permission.
+  - Close the OBDLink app and other OBD apps (the adapter talks to one app at a time).
+  - Unplug and replug the CX with the ignition on, then connect within 5 minutes and accept pairing (PIN 123456 if asked).
+  - Source: OBDLink CX adapter notes, https://support.obdlink.com/support/solutions/articles/43000746707-obdlink-cx-adapter-notes
+
+### 4. Open questions (not answered by turn 99)
+
+- t42, repeated at t47, t49, t51, t55, t80, t82: Build month and year on the driver's door-pillar label.
+- t34, repeated at t36 and t42: A photo of the engine bay from the front bumper (to place the coolant tank and air box).
+- t17, t34, t36, t42: Any service records or receipts, including the recent oil change receipt (date and mileage).
+- t21: Any oil top-ups between changes, noises, or warning lights besides the tire light.
+- t25/t27: Does the tire light flash then stay on, or stay steady, and what message shows? Were tires replaced or only aired up?
+- t36/t42: Did the car come with a service contract or extended warranty paperwork?
+- t36/t42: Will he log every fill-up or only some?
+- t36/t42: Which upgrades interest him (performance/Polestar, CarPlay, tires, dash cam, comfort, or reliability only)?
+- t45: The four story questions (narrator, close-with-reason, cutscene timing, Academy placement). Never answered directly; the defaults were used at t51.
+- t47: Which tool he will use for build sessions; whether to drop the Claude artifact copy and keep only GitHub Pages.
+- t49: Upload Gemini's files to GitHub himself, or bring the .md back to Claude first? Not answered; the default of bringing it back was used.
+- t51: Is the case board too wordy or crowded? Is the side-missions list worth keeping? Is the narrator name "Lars" OK?
+- t55: Reveal pace (Act 2 cases together or one after another)? A "previously on" recap after a week away? Should Volvo-specific codes get their own Codebook entries?
+- t57: Should the trailer replace the prologue on first launch, or play before it?
+- t59: Is 9 AM on the 1st of the month right for the monthly reminder, or would a weekend morning be better?
+- t61: What felt off about the earlier trailer (pace, look, words, not his car), and did he watch with sound? Keep the Training library link in the Story? Add a first-launch note?
+- t80: Which next item comes first, and when will he be at the car for the first real test?
+- t87: Start on the feature-audit gaps now, or wait until he tries a real receipt in Bluefy?
+- t91: Do the guided-mode thresholds (4 and 10 points) let go too early or too late?
+- t94: How does the new trailer sound on his phone, does it stutter, and do the drop lines (including "OIL LEVEL · DROPPING?") feel right?
+- t98: Where exactly does the connection fail (Connect greyed out, adapter missing from the list, error after picking it, or "Talking to the car..." failing)? Is the adapter listed under iPhone Settings > Bluetooth > My Devices? He also had not given the go-ahead to push the clearer Live link error messages (uncommitted at t98). His t99 reply says the OBDLink app also can't find the adapter over Bluetooth.
+
+### 5. Built or changed
+
+- t5: V60 Garage v1 artifact: due list, service log, oil watch (qt per 1,000 mi), engine explainer, known trouble, glossary, sources; private saved data.
+- t7: Rebuilt as a six-tab explorer: Bay (13 systems, ~65 parts), Diagnose, Data lab (scanner CSV import and analysis), Health score and plan, Records, Learn.
+- t10/t12: Tab switching fixed; phone diagram fixed; Torque, Car Scanner and OBD Fusion log formats handled; direction-specific fuel trim text; drift tracking against a baseline of saved runs, feeding Health.
+- t14: Academy (6 chapters, ~30 missions, quizzes, field checks, ranks, badges, Career shop jobs). V60 Link companion page (Web Bluetooth: codes, freeze frame, readiness, live data, guarded clearing), with reports importing into Diagnose.
+- t15: "Dipstick" wording replaced everywhere with the cluster oil-level check; new oil-check mission; Unlocks tab; V60 Link uses full Bluetooth UUIDs and gives an emissions readiness verdict.
+- t17: Timing belt service item; Health flags services past their interval that have no record.
+- t19/t21: V60 Link pushed to GitHub (repo renamed V60-Link); GitHub Pages live at bmcdoorz94.github.io/V60-Link. Missions "Timing belt detective" and "Book a baseline inspection".
+- t23/t25: Diagnose symptom "Tire pressure light stays on" and a calibration step.
+- t29-t34:
+  - fault simulator (8 faults, 4 routes, Mystery car)
+  - My V60 tab (build sheet, recall status, verified-spec table, photo inspections reviewed by Claude)
+  - full visual redesign (bottom bar or side rail, cockpit header with health gauge, night mode)
+  - calendar-file reminders
+  - engine bay explorer (overlays, find-it game, pin on own photo)
+  - 12-month budget, spec sheet and Volvo schedule, with interval corrections
+- t38-t42: Rebuilt as a modular installable app (PWA) from one source, building to both GitHub Pages and the Claude artifact. Added:
+  - Today home and Ask bar
+  - offline Library (86 facts, 24 articles), spaced-repetition Cards, V60 Master exam with printable fact card
+  - Story v1, Fuel and costs, Glovebox (receipts, papers, tools)
+  - DIY jobs, Troubleshoot decision trees, Bulletins (20 TSBs, applicability by build date)
+  - Upgrades with a "should I" verdict
+  - Live link merged in (gauges, 0-60, drive-cycle coach, trips, scan history)
+  - achievements, seasonal events, Career jobs
+- t47: CLAUDE.md, docs/ROADMAP.md, in-repo Playwright tests and the Live link generator.
+- t49: Claude/Gemini handoff: docs/HANDOFF_STATE.md, tools/handoff.py, tools/apply_handoff.py, and a GitHub Action that rebuilds the site on source pushes.
+- t51: Story rebuilt as "The As-Is File" case board: 8 cases in 4 acts, Lars the fictional narrator, known-risk closing, scenes waiting on Today, side missions labeled.
+- t55: Progression gating: areas stay completely hidden until the story reveals them; "Something's wrong with the car" button; The Signal case with Codebook decoding of adapter readings; The File dossier; briefings and debriefs with quizzes; knowledge unlocks; Short/Detailed/Mechanic detail levels; Show everything option; docs/GAME_DESIGN.md.
+- t57: Trailer and 12-slide deck artifacts; backup reachable from the start; persistent-storage request.
+- t59:
+  - cross-device sync to the private repo v60-garage-data
+  - skill tree (four branches plus a capstone)
+  - garage map on Today, header status pills, Drive mode, Timeline, proof photos
+  - teaser on first launch, backup nudge, Listen buttons, swipeable Today
+  - working backup download outside Claude
+  - monthly iPhone reminder for oil and tire checks
+- t61: Academy merged into the Story as Training, opened from case steps; trailer rebuilt as a 46-second canvas piece with synthesized sound.
+- t64: Header "Sync" chip; sync moved to the top of Options.
+- t74/t76: Sync setup and the Bluefy-only decision recorded in the docs; iPhone reminder to renew the sync token before it expires.
+- t78: GitHub Action keeps HANDOFF.md current on the `handoff` branch after every push.
+- t82: Handoff with the upload-scanning spec and a feature audit (built, partly built, not built).
+- t84-t87: On-device photo scanner (Tesseract.js) for receipts, proof photos and the Photos tab. It blacks out personal details before saving or syncing, leaves the shop's details visible, decodes receipts, door labels and papers into unconfirmed values, and requires confirmation before saving; tests/scan.js added.
+- t91: Guided mode: full-screen walkthrough, daily "at the car?" check, safety checklist before hood work, "I'm stuck" ladder, guidance fading per area at 4 and 10 points, Guide me header button, welcome-back recap after 45+ days.
+- t94: Trailer rebuilt in 3D (50 seconds, hologram V60, live-generated sound).
+- t96/t98: Clearer Live link error messages for pairing, permission and dropped links, written and tested but not pushed by turn 99.
+
+## Turns 100 to 199 (Oct 11 to 14)
+Covers 2026-10-11 evening to 2026-10-14 evening (America/Chicago). Only V60, app and car content is included. Turn numbers are the conversation's own.
+
+### 1. What Kyle said
+
+- T101: Sent a screen recording of the official OBDLink app failing to connect to the OBDLink CX. No text.
+- T103: Reported the OBDLink app now connects: "It works I got it and it's all connected."
+- T105: In V60 Garage's Live link the adapter "connect[s] then disconnect[s] instantly."
+- T107: Asked for a Gemini handoff ("initiate gemini transfer").
+- T109: Asked what questions he had skipped or not yet answered.
+- T112: Answered the open list:
+  - The OBDLink app was not open when Live link dropped.
+  - The suggested steps fixed the first connection, but the drop is still a problem. The adapter is new.
+  - The 3D trailer is good and runs smoothly; the vehicle "isn't perfectly modeled."
+  - He doesn't recall much about guided mode.
+  - He wants it clear that the story progresses knowledge of the vehicle, and was unsure whether the Academy (Training) is where he gains the information behind a story objective.
+  - Start on the missing pieces.
+  - He forgot to send the build month.
+  - Engine bay photo "soon/tomorrow".
+  - No receipts or paperwork found; he may call the lot for a UVI.
+  - "No warranty of any kind."
+  - He doesn't know how often to log fuel or what that means.
+  - He needs wipers and wants to fix peeling window tint. He is open to more cosmetic and performance upgrades, with cost/benefit "for everything".
+  - He was unsure whether the V60 icon on his home screen is Safari or Bluefy, and believes it is Safari.
+  - He also pasted a partial Gemini handoff claiming auto-start trips, a door-pillar scan step and a cabin filter card were done.
+- T114: Entered mileage does not stay ("sometimes it's there but as of right now it's not"). "You can research all potential upgrades."
+- T116: "DIY would be nice."
+- T118: Wants a tint removal guide. He has nothing close to moderate equipment, so brake pads are "not doable." Yes to car-care DIY cards.
+- T120: Doesn't think there is paint damage, but there are small dents; paintless dent repair "would be nice" but he has no tools. Yes to sourced DIY for interior and trim care.
+- T122: "DIY for everything you can think of." Believes the seats are leather.
+- T124: "The mileage is staying synced" (with a screenshot whose grey 95000 turned out to be the placeholder).
+- T126: Can't see the new features that were added.
+- T128: The mileage he enters keeps disappearing after some time or a refresh. He turned on Show everything, and it also went away.
+- T130: Asked what photos he should take to help test the app.
+- T132: Clarified: photos of the vehicle specifically.
+- T134: Has taken photos of the engine bay, tires, seats and door panel. Wants to upload them to the app but needs to know they will stay, be accurate and not disappear.
+- T136: "Can you make it so it can scan the photos."
+- T138: Asked whether uploading a set of photos would make the app work out what each shows and sort them.
+- T140: Chose options 1, 2 and 3 (batch upload with tagging, sending photos in chat, on-phone recognition). "Make sure duplicates don't get added to it if it's the same photo on the app." Attached vehicle photos.
+- T143: "Fix any known issues."
+- T145: Wants the UI/UX "vastly different": it still has the "Claude designed an app" vibe. It should be "incredibly unique", something a person who loves cars would want, "not literally car themed" but sensible to use and navigate. Asked to be asked clarifying questions. (His picks on the four-question picker in T146 are not visible in the transcript.)
+- T147: Answers on the redesign mockup:
+  - Each section should open another view "as if you would actually be looking inside it": opening the hood shows the engine bay; interior shows inside the vehicle.
+  - Unlocks: "both?" (chapters chaining and story cases).
+  - Glow on first open, with the relevant subsections glowing. Not too much glowing, but he wants to know where to pick up where he left off.
+  - Light and dark: "Both options."
+  - Live link and Data lab: keep "Instruments."
+  - "Make it my vehicle as much as possible."
+- T149: Will take the photos. Try to place points automatically but let him adjust. Items per view are fine. Wheel view "fine as described." "Do the build :)"
+- T151: "Continue."
+- T153: "Integrate the manuals information into it. If I wanted to use the manual alone I wouldn't really be doing this."
+- T155: Asked whether to upload photos in chat or to the app.
+- T157: Sent 18 vehicle photos. No text.
+- T159: Sent a screenshot of Live link failing ("Could not connect."). No text.
+- T161: Pasted the adapter log (picked OBDLink CX, GATT connected, notifications on DF94, ATZ, then init commands, 0100, then "connect failed" and a reported drop). Asked: "Am I unable to have my phone connected to Bluetooth at the same time?"
+- T163: The adapter picker list is empty while he is listening to music.
+- T165: "Help me identify these and everything else I've given" (new photos of the brake fluid reservoir, fuse box lid and oil filler cap; he had also placed pins on the old engine-bay map).
+- T168: Uploaded the 2016 V60 T5 owner's manual PDF and asked to verify the app's information about his car against it.
+- T170: Wants the log for the data link work but doesn't see it in Bluefy.
+- T172: He found the log when it failed, but not the one from the morning, when Live link worked for his drive.
+- T174: "I tried to save it every option within the app."
+- T176: Shared a file from Live link that arrived containing only its file name.
+- T178: Shared the 15-minute live recording (CSV).
+- T180: Shared the health report (JSON, 2026-10-14 15:26).
+- T182: "Where can I get a vehicle inspection report for free?"
+- T184: Sent his car's Texas inspection history from MyTxCar.org (five records). No text.
+- T186: Asked whether he can upload his own documents and have the app scan, categorize, organize and pull the relevant information without AI.
+- T188: "I like the bluefy version" (wants on-device reading in Bluefy, not the Claude artifact).
+- T190: Asked to verify that every button that completes an action works in Bluefy, such as save as PDF. "As of right now it looks like only sharing to other sources works."
+- T192: The cluster's "Oil level" entry is greyed out and can't be selected (cluster photo).
+- T194: "The GitHub handoffs are failing plz fix."
+- T196: Thinks moving the work into Claude Code may be better; he'd need a folder on the desktop, an MD file, and isn't sure what else.
+- T198: He uses Windows, and the app through Bluefy. Asked what prompts to give Claude Code.
+
+### 2. Facts about the car established
+
+- T102: The OBDLink CX has three LEDs (PWR, OBD, BLE). The PWR light was on in Kyle's recording, which rules out the car's OBD port. Source: [OBDLink CX adapter notes](https://support.obdlink.com/support/solutions/articles/43000746707-obdlink-cx-adapter-notes) (5-minute pairing window after power-up, PIN 123456).
+- T112: The OBDLink CX is new. No warranty or service contract of any kind. No receipts or paperwork from the previous owner.
+- T141, T158: Door-pillar label date 08/15 (build month August 2015). Market code 31, type PC, colour code 717-46. The paint is black in his photos; the colour name is unconfirmed. GVWR 4,740 lb; GAWR 2,580 lb front, 2,300 lb rear. Source: Kyle's photos.
+- T141, T158: Tire placard: 215/50R17 front and rear, 38 psi (260 kPa) cold, spare: none, so the car has the sealing kit. Load: 5 seats, occupants and cargo never more than 950 lb (430 kg). Source: Kyle's photos.
+- T141, T158: Tires on the car: Sentury UHP 215/50ZR17 95W, extra load, max 50 psi, made in Thailand. The photographed tire has DOT code 4323 (week 43 of 2023, about 3 years old). Source: Kyle's photos.
+- T158: Front brake: single-piston sliding caliper. The rotor shows a wear lip at its edge. Curb rash on that wheel. The tire shoulder looks feathered or chunked on the outer blocks. Source: Kyle's photos (assistant's reading, unconfirmed).
+- T141, T158: Hood labels: oil is Castrol EDGE Professional, ACEA A5/B5, SAE 5W-30. A/C is R-134a, 800 g, Volvo PAG oil, with leak-tracer dye in the system. Emissions label: 2016 model year, EPA T2B5 LDV, California ULEV 125, CA II OBD, gasoline, engine family GVVXV02.0U3T, EVAP family GVVXR0130EV3. Coolant cap 145 kPa. Engine cover reads B4204T11. Source: Kyle's photos.
+- T141, T158: Seats are leather (confirmed from photos), light coloured, with creasing on the driver's seat bolster.
+- T158: Both cowl drains were full of leaves, the passenger side especially. Source: Kyle's photos.
+- T166: Brake fluid reservoir: under the round cover on the driver's side of the cowl, yellow cap reading "USE ONLY DOT 4 FLUID FROM A SEALED CONTAINER"; level read against MIN/MAX on the side of the tank. Fuse box: black box beside the air intake duct on the driver's side, lid marked with a fuse and a book-with-"i" symbol; the box behind it, with a battery symbol, is the battery cover. Oil filler cap: on the cam cover between the ignition coils. Engine bay layout seen from the bumper: coolant tank front-left (passenger side), airbox, battery and fuse boxes on the right (driver's side). Source: Kyle's photos.
+- T169: The uploaded PDF is Volvo's 2016 US owner's manual, TP 20238 (web edition). Matches confirmed against it:
+  - B4204T11, 240 hp at 5,600 rpm, 258 lb-ft from 1,500 to 4,500 rpm, 82 × 93.2 mm, 10.8:1.
+  - Oil 6.2 US qt with filter, no dipstick.
+  - Coolant 8.7 US qt, 50/50, normally never changed.
+  - AW1 transmission fluid about 7 US qt, no change in normal use.
+  - DOT 4 brake fluid under the round cowl cover.
+  - Washer 6.8 / 4.7 qt.
+  - 800 CCA AGM battery under front and rear covers; the manual's fuse table lists an auxiliary battery.
+  - Jump-start ground on the right engine mount's outer screw.
+  - 17.8 gal tank; 87 octane is fine, premium recommended, 91+ for heat, towing or altitude; up to E10.
+  - 215/50R17 at 38 psi; wheel bolts 103 lb-ft; tires replaced at 6 years; no required rotation, with the most tread on the rear.
+  - Bulbs H11, H9, PY24W, PY21W.
+  - Length 182.5 in, wheelbase 109.3 in.
+  - Fuel door right rear; wading depth 10 in; cooling fan can run up to 6 minutes after shutdown.
+  - Hood handle turned 20–25° clockwise, catch at the front right.
+  - Sealing kit limits 50 mph / 120 miles; City Safety up to 30 mph; a loose fuel cap can light the check-engine light.
+  - Door-label weights match the manual's four-cylinder FWD row.
+  - Brake fluid boiling point above 536 °F; 0.63 US qt in the system.
+- T169: Facts in the same manual that conflict or differ:
+  - Roof load is 165 lb (75 kg) in the weights table and 220 lb (100 kg) on the loading pages.
+  - A/C charge is 1.7 lb (770 g) in the manual and 800 g on the hood sticker.
+  - Curb weight is 3,620–3,960 lb across engines, with the 2.0 FWD the lightest; 3,530 lb came from other sources.
+  - Towing: 3,300 lb braked (2 in ball), 2,000 lb (1 7/8 in ball), 1,650 lb unbraked, 165 lb tongue.
+  - Oil: 5W-30 A5/B5 for normal use; 0W-30 A5/B5, or 0W-20 (VCC RBS0-2AE, four-cylinders only), for extreme driving.
+  - Oil level is valid after about 20 miles of driving or 5 minutes parked level with the engine off.
+  - The four-cylinder engine bay drawing shows no power steering reservoir.
+  - Not covered by the manual: service intervals, timing belt, Premier trim contents, EPA mpg, recalls and bulletins.
+- T169: Brake fluid interval: every 3 years or 40,000 miles. Source: [Volvo 2016 Maintenance Schedule](https://www.volvocars.com/images/cs/v3/assets/bltccbab8edae0354cd/bltd8992f59bb25d587/684189d0f08427b79f2c3893/2016-Volvo-Maintenance-Schedule-v1.pdf?branch=prod_alias). The owner's manual defers to the service booklet.
+- T154: From Volvo's 2016 V60 US manual pages:
+  - Parking brake: automatic release only with the engine running and the seat belt on. A signal sounds above 6 mph in emergency use. With a flat battery it can neither be applied nor released.
+  - Ignition modes 0, I and II (mode II is a hold of about 2 seconds, foot off the brake). Mode II lights every warning lamp for 5 seconds.
+  - After 3 failed start attempts, wait 3 minutes.
+  - Eco mode and the steering force setting are optional equipment, unconfirmed on his car.
+  - The rear brake linings being workshop-only comes from the 2014 edition and is unconfirmed for 2016.
+  - Sources:
+    - [Parking brake, applying](https://www.volvocars.com/us/support/car/v60/2016/article/525c22a9aa523b52c0a801e801af343c/9794cac1aa5384aac0a801e80177d4f0/5c977471aa29746ac0a801e800d69d71/)
+    - [Parking brake, releasing](https://www.volvocars.com/us/support/car/v60/2016/article/525c22a9aa523b52c0a801e801af343c/9794cac1aa5384aac0a801e80177d4f0/91e63d36aa2a2e83c0a801e801b0814a/)
+    - [Parking brake, general information](https://www.volvocars.com/us/support/car/v60/2016/article/525c22a9aa523b52c0a801e801af343c/9794cac1aa5384aac0a801e80177d4f0/96121674aa28bbaac0a801e80171c108/)
+    - [Parking brake, symbols and messages](https://www.volvocars.com/us/support/car/v60/2016/article/9444ed03aa3a7737c0a801e80007847b/d8dce5fcaa3dd44cc0a801e8011d1811/9d768d92aa2b6166c0a801e801e69c68/)
+    - [Parking brake, 2014 edition (Australia)](https://www.volvocars.com/au/support/car/v60/14w20/article/063c7e8bf78eea4dc0a801e800a131f7/)
+    - [Ignition modes](https://www.volvocars.com/us/support/car/v60/2016/article/186ded96aa4bf31bc0a801e800d34677/bf2f0722aa4c67ddc0a801e8007f2f65/e7cfded6a9c62f45c0a801e801b7b5d7/)
+    - [Starting the engine](https://www.volvocars.com/my/support/car/v60/2016/article/e7a608c8f78bd0d8c0a801e801afb359/)
+    - [Steering wheel](https://www.volvocars.com/us/support/car/v60/2016/article/9444ed03aa3a7737c0a801e80007847b/2288ce91aa3d64bac0a801e8010dbad1/f2df6defa9d068d3c0a801e801d2d363/)
+    - [Adjustable steering force](https://www.volvocars.com/us/support/car/v60/2016/article/3ba5e843aab4cfe4c0a801e8008db80c/d30f2960aa9c816bc0a801e8002ddeed/)
+    - [Economical driving](https://www.volvocars.com/us/support/car/v60/2016/article/525c22a9aa523b52c0a801e801af343c/b64e4916aa582f9dc0a801e8006a27e9/2f5554f7ba55389ac0a801e8012fd8fe/)
+    - [ECO mode, 2017 S60, Slovenia](https://www.volvocars.com/si/support/car/s60/16w46/article/d359017c311d0f84c0a801e80066ed79/)
+- T113, T123: Bulbs: front turn PY24W 24 W (owner-replaceable); rear turn PY21W; backup H21W; rear fog H21W; plate light C5W 5 W. Volvo's documents disagree on whether the brake light is LED or a P21W bulb. Sources: [Volvo V60 bulb table](https://www.volvocars.com/us/support/car/v60/14w46/article/defc916db9801b4ac0a801e8001fdf3a/), [Volvo 2015 V60 taillight housing](https://volvocars.com/my/support/car/v60/2015/article/b71053e7aa65e1e6c0a801e800f4fff8_d5e48a6aaa68b0f4c0a801e8018b9ab2_0a670aa5b979b866c0a801e80162696c), [Volvo 2015 V60 license plate bulb](https://www.volvocars.com/us/support/car/v60/14w46/article/b71053e7aa65e1e6c0a801e800f4fff8/d5e48a6aaa68b0f4c0a801e8018b9ab2/6de2dc1eb97a61d5c0a801e8009b5b80).
+- T113: Wiper sizes 26 in driver, 20 in passenger, 12 in rear, from one retail table, unconfirmed. Source: [autofiles.com wiper sizes](https://autofiles.com/wipers/volvo/v60/).
+- T115: Front brake pads come in versions for 300, 316 or 336 mm rotors; which one his car takes is unconfirmed. Source: [FCP Euro V60 brake pads](https://www.fcpeuro.com/Volvo-parts/V60/Disc-Brake-Pad/).
+- T117: Rear brake linings must be replaced at a workshop because of the electric parking brake. Source: [Volvo parking brake fault page](https://www.volvocars.com/ph/support/car/v60/article/81f3f70089a874dcc0a801515773b27d/).
+- T162: Bluetooth services of the OBDLink CX:
+  - Serial channel: service FFF0, notify on FFF1, write on FFF2.
+  - It also exposes a firmware-update service, FEF5, which accepts notify and write but never answers. Bluefy reports the UUIDs in upper case.
+  - Source: [OBDLink CX adapter notes](https://support.obdlink.com/support/solutions/articles/43000746707-obdlink-cx-adapter-notes).
+- T172: Live link connected and held on the real car in Bluefy on the morning of 2026-10-14, after the FFF0 fix.
+- T181: Health report, 2026-10-14 15:26:
+  - Check-engine light on, with P0171 "system too lean, bank 1", stored and pending. The light came on 4 km before the report.
+  - All 8 readiness monitors ready. Codes last cleared about 6,700 miles earlier (6,686 per T193).
+  - Freeze frame: idle at 916 rpm, warm, short-term fuel trim +48%, long-term +15%.
+- T181: 15-minute recording, 2026-10-14:
+  - Idle fuel trims ran +25% to +35%. At 55 mph under boost (MAP 151 kPa, MAF 58 g/s) the trims were near zero.
+  - Long-term trim started at −11% and relearned up to +24%.
+  - Coolant warmed to 85 °C and held. Charging voltage 13.4–13.7 V. Barometric pressure 98 kPa. Intake air 41–53 °C on a 36–39 °C day.
+- T185, T187: Texas inspection history, looked up 2026-10-14. Source: [TCEQ MyTxCar.org](https://www.mytxcar.org/).
+  - 2015-12-03, Roger Beasley Volvo, Austin: new-car safety inspection at 5 miles, passed. The car was sold new in Austin.
+  - 2018-09-10, Sames Quick Service: emissions and safety at 37,000 miles, passed. All monitors complete, no codes, fuel cap passed.
+  - 2019-09-18, Volvo Cars West Houston: emissions and safety at 45,122 miles, listed with no plate (likely dealer stock), passed, no codes.
+  - 2025-06-20, Lams Austin Autos: emissions only at 84,574 miles, no plate (the lot's pre-sale test), passed, no codes. This entry lists the engine as a 2.5 L five-cylinder, which is a station typo.
+  - 2026-05-16, Jiffy Lube, Austin: emissions only at 89,617 miles, passed with the light off. P0455 (large evaporative leak) was on file.
+  - There is no Texas inspection between 2019 and 2025; about 39,000 miles were added in that gap.
+  - The next emissions test is due with the May 2027 registration renewal.
+- T193: Cluster photo, 2026-10-14:
+  - Odometer 91,357 miles. Trip T2 reads 6,803 miles, so the car was bought at about 84,550 miles.
+  - The cluster is the digital instrument cluster, which is a Premier item (no source given).
+  - The "Oil level" menu is greyed out while the engine runs.
+
+### 3. Findings and advice given
+
+- T100, T102: OBDLink pairing advice:
+  - Scan for the CX from inside an app, not iPhone Settings.
+  - Forget any old pairing in Settings.
+  - Close other car apps; the adapter talks to one app at a time.
+  - Check the app's Bluetooth permission and toggle iPhone Bluetooth.
+  - Re-plug the adapter and connect within 5 minutes. PIN 123456.
+  - Sources: [OBDLink CX adapter notes](https://support.obdlink.com/support/solutions/articles/43000746707-obdlink-cx-adapter-notes), [Troubleshoot issues after using other OBD apps](https://support.obdlink.com/support/solutions/articles/43000733076-troubleshoot-obdlink-issues-after-using-other-obd-apps), [Troubleshoot OBDLink app error messages](https://support.obdlink.com/support/solutions/articles/43000758433-troubleshoot-obdlink-app-error-messages).
+- T106: Likely cause of the instant drop: the OBDLink app still holding the adapter (no source given). Kyle later said that app was closed (T112). The real cause was found in T162.
+- T113: The Home Screen icon opens in Safari, and Bluetooth only works in Bluefy. The two keep separate saved data (no source given).
+- T113: Cabin air filter: every 20,000 miles and at least once a year, per Volvo's service schedule (no URL given). The procedure comes from [Hella V60/S60 2012–2018 cabin filter procedure](https://hella.com/techworld/us/bi/volvo-v60-s60-replacing-the-cabin-filter) and is unconfirmed for his exact car.
+- T113: Front turn signal bulb steps come from Volvo's 2018 S60 page and are unconfirmed for his 2016 V60. Source: [Volvo front turn signal page](https://www.volvocars.com/us/support/car/s60-inscription/article/7bd17738b9746a7dc0a801e801c4f03b/).
+- T113: Texas tint limits from a law-firm summary, not the statute. Front side windows must let at least 25% of light through, and the windshield may be tinted only above the AS-1 line or the top 5 in. Whether a wagon counts as a car or a multipurpose vehicle for the rear windows is unconfirmed. Source: [Simmons and Fletcher Texas tint summary](https://www.simmonsandfletcher.com/blog/texas-window-tint-laws/).
+- T113: No sourced procedure was found for tire rotation or the engine air filter on this engine. iFixit's V60 air filter guide is for the five-cylinder.
+- T115: Odometer loss, first cause: the value was saved only when the field lost focus.
+- T115: A Thule roof rack set for the V60 is listed at $809.80, with fit for his model years unconfirmed. Source: [Rack Warehouse Thule V60](https://www.rackwarehouse.com/products/thule-evo-edge-rack/vehicle/volvo/v60/).
+- T115: No reliable prices were found for paint protection film or ceramic coating, headlight restoration, floor liners, lowering springs, or Polestar for a 2016 car.
+- T117: Headlight lens restoration process: clean, sand with progressively finer abrasives, polish, then UV sealant. Follow the kit's own sheet. Source: [3M headlight restoration kit](https://zpadr.3m.com/3m-headlight-restoration-kit).
+- T119: Tint removal on the side windows only:
+  - Soak the film in detergent and water under plastic sheeting for 2–4 hours.
+  - Use no heat, which can break glass, and no solvents on the glass.
+  - Use only plastic or stainless steel tools.
+  - Leave the rear window, which has defroster lines, to a shop.
+  - Source: [3M removal bulletin](https://multimedia.3m.com/mws/media/2429150O/3m-instruction-bulletin-removal-ra.pdf). It covers 3M graphic films, not auto tint.
+- T119: Ceramic coating: strip wash, clay and correct the paint first. Keep the car dry for 24 hours and don't wash it for 48. Use touchless washes only afterwards. Source: [Chemical Guys ceramic coating how-to](https://www.chemicalguys.com/blogs/exterior-how-tos/how-to-apply-ceramic-coating) (a blog; the product label wins).
+- T121: Paintless dent repair suits shallow dents with intact paint. It costs $50–295 per small dent. Edges, body lines, creases and aluminum panels are harder. Get two quotes from the same photos. Sources: [AutoBodyLab PDR cost, May 2026](https://autobodylab.com/blog/paintless-dent-repair-cost/), [Dent Evo PDR cost, April 2026](https://dentevo.com/how-much-does-pdr-cost/).
+- T121: Interior care follows Volvo's interior page for the 2014 S60:
+  - Use only Volvo-recommended cleaners and no strong solvents.
+  - For leather, use a foamy damp sponge, then protective cream one to four times a year.
+  - Source: [Volvo 2014 S60 interior cleaning](https://volvocars.com/my/support/car/s60/14w20/article/48c344a1f78e05bac0a801e800db839a).
+- T121: Polish and wax:
+  - Wax when the shine fades.
+  - Work in the shade with panels no hotter than 45 °C.
+  - Polish first, then wax.
+  - Don't polish matte paint or glossy trim.
+  - Source: [Volvo V60 polishing and waxing (UK)](https://volvocars.com/uk/support/car/v60/article/2c92788fce09c40ac0a8b04a32d665fa-54e7d249d3a88082c0a8cc371ba1661c-8664b2fa77a7e089c0a8296870d1a409).
+- T123: The remote key battery page found covers the 2020 V60 key (CR2032); his 2016 key may differ. Source: [Volvo 2020 V60 key battery](https://volvocars.com/en-ca/support/car/v60/2020/article/0d1de0f98ec52053c0a801510c6f5e5c).
+- T125: The grey "95000" in the odometer field was the field's placeholder, not a saved value (no source needed).
+- T127: New pages were hidden by the staged reveal until the Story reached them; Story → Options → Show everything shows them.
+- T129: Data-loss root cause: every app start, the Story code saved an empty copy before the saved data loaded. That overwrote the saved data and synced the blank copy to the private sync repo. Earlier versions may be recoverable from that repo's history.
+- T133: Volvo's manual says to replace tires at 6 years (no URL given here; confirmed against the manual PDF in T169).
+- T139: Bluefy has no AI available to the page. Recognizing what a picture shows needs an image model, which only the Claude artifact has.
+- T144: Retry with ATWS (warm start) instead of ATZ, per the ELM327 data sheet (no URL given).
+- T150: The oil level is read in the driver display, not with a dipstick, per Volvo's manual for this engine (no URL given in the reply; confirmed against the PDF in T169).
+- T156: Upload photos to the app, not to chat. The app's scanner blacks out the VIN, which is visible on the door label and hood sticker.
+- T158: Clear the leaves from the cowl drains (about five minutes); blocked drains let water into the cabin filter area. Have a shop look at the rotor lip and the tire shoulder wear. (No source given.)
+- T162: Real cause of the Live link failure:
+  - The code matched "fff0" case-sensitively. Bluefy returns upper-case UUIDs, so the match failed.
+  - The code then picked the FEF5 firmware-update service, so ATZ went unanswered.
+  - The "drop" was the app's own disconnect. The two blank "connect failed" lines were the picker being dismissed.
+  - His phone can stay connected to other Bluetooth devices. Don't pair the CX in iOS Settings and don't run the OBDLink app at the same time.
+  - Source: [OBDLink CX adapter notes](https://support.obdlink.com/support/solutions/articles/43000746707-obdlink-cx-adapter-notes).
+- T164: An empty picker is not caused by music. The CX stops advertising while the phone holds a link, and Bluefy's "allow future background connections" keeps one. Quit Bluefy and unplug the adapter for 10 seconds. (No source given.)
+- T177: Bluefy's share sheet passes only the title and drops attached files (observed from Kyle's upload).
+- T181: P0171 diagnosis, all with no source given:
+  - The pattern (lean at idle, normal under load, long-term trim relearning upward) points to new unmetered air after the airflow sensor: a vacuum leak, a crankcase/PCV leak or an intake opening.
+  - Check first that the oil filler cap is fully seated. A loose cap opens the crankcase to the intake.
+  - Then check the air box lid clips and the intake hose clamp.
+  - If either was loose: reseat, drive 10–15 minutes, record again. Idle trims should fall under +10% within a few drives, and the light goes out after three clean warm-up cycles.
+  - If nothing was loose, check the PCV hoses and oil trap next.
+  - A lit check-engine light with a stored code fails the Travis County emissions test.
+- T181, T187, T193: The assistant's view of when the codes were cleared changed three times:
+  - T181: the lot prepping the car.
+  - T187: a shop or battery disconnect after purchase.
+  - T193: the lot at the sale. With the cluster reading of 91,357, the clear falls at about 84,650 miles.
+- T183: Free inspection records: TCEQ's MyTxCar.org shows Texas inspection history by VIN or plate. A paper copy of the last inspection report is available from any inspection station within 13 months. Source: [TCEQ vehicle inspection waivers page](https://www.tceq.texas.gov/airquality/mobilesource/vim/waivers.html).
+- T183: Other free checks: NHTSA recalls by VIN, NICB VINCheck, and the dealer listing's Carfax link if it is still online. NMVTIS reports are paid, via vehiclehistory.gov (no sources given beyond TCEQ).
+- T187: P0455 was on file in May 2026, so the fuel cap has history. P0171 must be fixed before the May 2027 emissions test.
+- T193: Reading the oil level:
+  - Park level, engine off, wait 5 minutes.
+  - Hold START/STOP about 2 seconds without the brake (mode II), then use the thumb wheel to reach Oil level.
+  - "No values available" means a condition was not met.
+  - "Oil service required" can mean the level is too high; have it checked.
+  - Source: the owner's manual PDF (TP 20238).
+- T197: Moving to Claude Code means cloning the GitHub repo. `CLAUDE.md` is already the project instruction file, so no new MD file is needed. Usage limits are the same either way.
+
+### 4. Open questions
+
+- T102: What do the adapter's three lights (PWR, OBD, BLE) show with the engine running?
+- T110: Do the guided-mode thresholds (4 points for assisted, 10 for on your own) feel right? Kyle answered only that he doesn't recall guided mode (T112).
+- T113: Should logging every fill-up be the fuel log default?
+- T115: Should the odometer field show a small "saved" message?
+- T119: Does Kyle want to do the ceramic coating at all? Not directly answered.
+- T123: Should the search continue for a 2016-specific key battery page? Is the brake light an LED strip or a bulb (a photo of the lit taillight would settle it)?
+- T125: Which app was the mileage screenshot from (Bluefy or the Home Screen icon)? Is the Sync chip on in Bluefy?
+- T127: Should Show everything be on by default?
+- T129, T141, T144: Was anything else lost in the wipe (oil checks, lessons)? Should an earlier `garage.json` be restored from the private sync repo's history?
+- T131: Does Kyle have an oil change sticker or any recent receipt to test the receipt flow?
+- T133: Should there be a guided photo checklist in the app? Should there be a button that saves each shot to the matching part?
+- T135: Should each photo show a "Saved (and backed up)" line?
+- T137: Should the tire-age result show on the Tires part? Should the oil level screen photo get the same on-device reading?
+- T141: Does Kyle want image-based photo recognition built anyway?
+- T173, T175, T181: Did Live link stay connected the whole drive? Did "Save to my Garage" under Scan for codes work?
+- T181: Was the oil filler cap loose?
+- T187: What documents does Kyle actually have in hand?
+- T191: Asked Kyle to try the new Documents intake with an oil change receipt photo and a MyTxCar screenshot. No result reported.
+- T197: Does Kyle want the tests runnable locally on Windows?
+- Kyle's own request in T190 (check that every action button, such as save as PDF, works in Bluefy) got no explicit verification report within this range.
+
+### 5. Built or changed
+
+- Live link: after a drop during connect, retries once without reopening the picker, logs each step and gives plain-words advice; `tests/ble.js` covers a mocked adapter (T106).
+- Bulletins: "Scan the label with the camera" button reads the build month from the door label (T113).
+- Story and Training intros reworded: the Story is the goal, Training is the textbook (T113).
+- New DIY cards (T113–T123): cabin air filter, front turn signal bulb, headlight lens restoration, side-window tint removal, ceramic coating, interior cleaning, polish and wax, rear bulbs, license plate bulb.
+- Upgrades entries (T113–T121): wipers, window tint, brakes (marked a shop job), roof rack, ceramic coating, paintless dent repair.
+- Odometer saves while typing and when the page is hidden; placeholder changed to "Enter miles" (T115, T125).
+- Data-loss fix: nothing is saved until the saved data has loaded; `tests/odo.js` reloads four times (T129).
+- Photos: persistence test (T135); on-device reading of tire sidewalls (DOT date, size, age), and of text on dash, fluid and bay photos (T137).
+- Batch photo upload with type tagging, "Let the reader decide", a duplicate guard (file hash plus look-alike print), and new types "Door, hood or A/C label" and "Seats and interior" (T141).
+- Today screen no longer repeats the odometer; door-label photos show the build month read (T144).
+- Redesign mockup published as a Design artifact, five boards and then seven (T146, T148).
+- Redesign built: the home is a side-view figure with numbered points; each opens a view (hood, wheel, cabin, underside, walk-around) whose items have Know/Check/Service/Diagnose/Upgrade chapters. Amber glow means new, the amber dot means where you left off. The owner's photo can replace a figure, with draggable points. Bottom bar: The car, Cases, Glovebox, Link (T150).
+- Cases page restyled to match, with "→ §" links to items; the home lists today's notes; item glossaries limited to eight terms and unlocked as chapters close (T152, T154).
+- Owner's manual content added to Parking brake, Controls and start/stop, and Suspension and steering: three articles, 14 facts and Check-it chapters (T154).
+- "Your car" spec rows from Kyle's photos; engine-bay schematic redrawn for a from-the-bumper view; pin mirroring bug fixed; leather marked confirmed (T158, T166).
+- Live link: "Copy the adapter log" button under a failed connection (T160).
+- Live link: picks the CX serial service FFF0 case-insensitively, never the firmware-update service, and logs every service (T162).
+- Live link: reconnects to the remembered adapter without the picker; empty-picker tip added (T164).
+- Facts corrected against owner's manual TP 20238: roof load, oil spec, oil level timing, A/C charge, towing, curb weight, brake fluid interval, tire-monitor calibration steps, power steering (T169).
+- Adapter log kept across reloads, under the Connect buttons (T171); Share, Download, a working iOS copy fallback, and a selectable box (T175).
+- Every Live link share passes the content as text as well as the file (T177).
+- Glovebox: Texas inspection history article, four facts and Papers rows (T185).
+- Glovebox Documents intake: photos and PDFs read on the phone, redacted, classified, fields extracted, reviewed, then filed, with search and duplicate refusal (T191).
+- Mileage corrected everywhere: 91,357 in Oct 2026, bought at about 84,550; digital cluster noted (T193).
+- Handoff workflow sends binary test fixtures as base64; build workflow retries its push after a race (T195).
+- `docs/LOCAL_SETUP.md`: Windows setup for Claude Code and an opening prompt (T197, T199).
+- Project docs updated: Gemini handoff state (T108); Live link confirmed working on the car (T173).
