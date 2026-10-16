@@ -4,6 +4,655 @@
    A task with no entry yet shows "No sourced entry yet" in the app. Never write an entry from memory: fetch the source first.
    Merge researched entries with tools/gen/g1merge.py; it validates ids, sources and questions. */
 window.V60_G1_ENTRIES = {
+ "A1": {
+  "body": [
+   "The job starts by confirming the owner's complaint, reproducing it on a road test, and then checking the carmaker's service information and bulletins before choosing a repair.",
+   "Carmakers must send NHTSA a copy of every notice or bulletin about a defect that goes to more than one dealer or owner in the US, safety-related or not, and Volvo's bulletins can be read on static.nhtsa.gov.",
+   "A Volvo bulletin lists the customer symptom codes and trouble codes it applies to, the vehicle types, engine codes and production weeks it covers, and then the service action and part numbers.",
+   "The OBD II system stores a fault when an emission-related part or system works outside its expected range, and it can light the Check Engine light; a fault may be permanent or temporary.",
+   "After a repair that needed the battery disconnected, the OBD II monitors can show 'not ready'; Volvo says two half-hour trips of mixed stop-and-go and highway driving usually bring them back.",
+   "Volvo's pre-trip checks double as a basic road-test routine: the engine should run smoothly, fuel use should be normal, and there should be no fuel, oil or fluid leaks."
+  ],
+  "car": "Volvo bulletins identify this car as vehicle type 155 with engine code 40 (B4204T11); TJ 36858, for example, lists type 155 with engine 40 for model years 2015 to 2018. Volvo's owner's manual says full technician service information is sold online at www.volvotechinfo.com.",
+  "src": [
+   [
+    "49 CFR 579.5 Notices, bulletins, customer satisfaction campaigns, consumer advisories, and other communications",
+    "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-V/part-579/subpart-A/section-579.5"
+   ],
+   [
+    "Volvo Technical Journal TJ 36858: High Temperature Message in DIM after Coolant Pump Replacement",
+    "https://static.nhtsa.gov/odi/tsbs/2024/MC-11006558-0001.pdf"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A 2016 V60 shows a high engine temperature message soon after its coolant pump was replaced. ECM-U040100 and ECM-P021700 are stored. What is the technician's best next step?",
+    "o": [
+     "Replace the thermostat",
+     "Check for a Volvo bulletin that matches these codes and this vehicle type",
+     "Replace the expansion tank cap",
+     "Flush and refill the cooling system"
+    ],
+    "a": 1,
+    "why": "Volvo TJ 36858 covers exactly this symptom and these two codes on type 155 with engine 40, and calls for an updated pump with new internal programming, so the bulletin decides the repair.",
+    "src": [
+     "Volvo Technical Journal TJ 36858: High Temperature Message in DIM after Coolant Pump Replacement",
+     "https://static.nhtsa.gov/odi/tsbs/2024/MC-11006558-0001.pdf"
+    ]
+   },
+   {
+    "q": "Technician A says carmakers must send NHTSA copies of bulletins they send to dealers about defects. Technician B says this applies only to defects that are safety-related. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "49 CFR 579.5(a) covers communications about any defect sent to more than one dealer or owner, whether or not the defect is safety-related.",
+    "src": [
+     "49 CFR 579.5 Notices, bulletins, customer satisfaction campaigns, consumer advisories, and other communications",
+     "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-V/part-579/subpart-A/section-579.5"
+    ]
+   }
+  ]
+ },
+ "A2": {
+  "body": [
+   "Finding a leak means locating where fuel, oil, coolant or another fluid escapes, then deciding whether a hose, clamp, gasket, seal or the part itself needs repair.",
+   "With fluorescent dye, the dye is added to the system and allowed to circulate with the fluid, then the area is inspected with a UV lamp, ideally in the dark; Spectroline puts the time at 5 to 45 minutes depending on system size.",
+   "Coolant leaks are traced with dyes made for water-based fluids, and engine oil and fuel leaks with oil-based dyes; Tracer sells separate coolant dyes for factory-filled extended-life coolants.",
+   "A cooling-system pressure test shows external leaks as visible seepage; a pressure drop with no visible leak can mean coolant is getting into a combustion chamber through a failed head gasket or cracked block, so the oil and transmission fluid are checked for coolant.",
+   "Hose leaks usually show at clamps and connectors, caused by too little clamp torque or a worn hose or connector; adjustable clamps are retightened after a short run-in, or replaced with constant-tension clamps.",
+   "After an oil change, the drain plug and filter are watched for leaks with the engine idling for 2 minutes, because drain plug threads and gaskets wear over time."
+  ],
+  "car": "Volvo's owner's manual lists a check for fuel, oil and fluid leakage before any long trip and warns against spilling oil onto hot exhaust parts. Its fuse list includes a fuel leakage detection circuit on 4-cylinder engines.",
+  "src": [
+   [
+    "How Fluorescent Leak Detection Works - Spectroline.com",
+    "https://spectroline.com/how-fluorescent-leak-detection-works/"
+   ],
+   [
+    "Leak Detection Applications - Tracerproducts.com",
+    "https://tracerproducts.com/leak-detection-applications/"
+   ],
+   [
+    "Mityvac MV4534 Cooling System Pressure Tester: User and maintenance instructions",
+    "https://www.matcotools.com/productassets/web-documents/MV4534_InstructionManual_01.pdf"
+   ],
+   [
+    "Gates: Hose Failure Symptoms",
+    "https://www.gatestechzone.com/en/problem-diagnosis/cooling-system/hose-failure-symptoms"
+   ],
+   [
+    "How to change oil in a car - step by step | Mobil",
+    "https://www.mobil.com/en/lubricants/for-personal-vehicles/auto-care/vehicle-maintenance/how-to-change-oil-in-car"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A cooled engine's cooling system is pumped to its test pressure. The gauge slowly drops, but no coolant appears at any hose, the radiator or the pump. What is the most likely cause?",
+    "o": [
+     "A loose clamp on a heater hose",
+     "Coolant entering a combustion chamber through a head gasket or a cracked block",
+     "A radiator cap that holds too much pressure",
+     "A slow drip from the water pump weep hole"
+    ],
+    "a": 1,
+    "why": "Mityvac's instructions say a pressure drop with no visible seepage can point to a blown head gasket or cracked block letting coolant into the combustion chamber.",
+    "src": [
+     "Mityvac MV4534 Cooling System Pressure Tester: User and maintenance instructions",
+     "https://www.matcotools.com/productassets/web-documents/MV4534_InstructionManual_01.pdf"
+    ]
+   },
+   {
+    "q": "Technician A says an oil-based fluorescent dye can be used to find a fuel leak. Technician B says coolant leaks are traced with dyes made for water-based fluids. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Tracer lists its oil-based All-In-One dye for fuel leaks and its water-based Dye-Lite dyes for coolant leaks.",
+    "src": [
+     "Leak Detection Applications - Tracerproducts.com",
+     "https://tracerproducts.com/leak-detection-applications/"
+    ]
+   }
+  ]
+ },
+ "A3": {
+  "body": [
+   "On the accessory belt drive, a chirp that rises in pitch with engine speed most often means misaligned pulleys, and a high-pitched squeal when pulling away usually means the belt is too loose.",
+   "Gates has the drive loaded while listening: A/C and blower on full, lights and defroster on, and the steering turned three-quarters to one side.",
+   "A squeaking or rattling tensioner has worn internal parts; a steady grinding that rises with rpm points to a pulley bearing, found by removing the belt and spinning each pulley by hand for roughness, stiffness or rattle.",
+   "A worn water pump bearing makes a rumbling or screeching noise, and with the engine off its shaft should have no side-to-side play.",
+   "Knocking is abnormal combustion with a very steep pressure rise that can crack piston ring lands; in a gasoline engine MAHLE lists wrong ignition timing, a lean mixture, low-octane fuel, hot intake air and too high compression as causes.",
+   "MAHLE's advice for unusually loud running noises is to switch off the ignition and find the source before more damage is done."
+  ],
+  "car": "Volvo recommends premium fuel for best performance but says 87 octane or higher will not affect engine reliability, and suggests 91 or higher in hot weather, when towing, or at high altitude for long periods.",
+  "src": [
+   [
+    "Gates: Diagnosing a noisy accessory belt drive",
+    "https://gatestechzone.com/en/focus/diagnosing-a-noisy-accessory-belt-drive"
+   ],
+   [
+    "Gates: Water Pump Failure Signs",
+    "https://www.gatestechzone.com/en/problem-diagnosis/cooling-system/water-pump-failure-signs"
+   ],
+   [
+    "MAHLE: Engine Components and Filters: Damage Profiles, Probable Causes and Prevention",
+    "https://www.mahle-aftermarket.com/media/local-media-north-america/pdfs-&-thumbnails/mahle-engine-component-&-filters-failure-guide.pdf"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Technician A says a chirp that rises in pitch with engine speed usually points to pulley misalignment. Technician B says a high-pitched squeal when pulling away from a stop usually points to low belt tension. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Gates names misaligned pulleys as the leading cause of a chirp that rises with engine speed, and insufficient tension as the cause of a squeal when pulling away.",
+    "src": [
+     "Gates: Diagnosing a noisy accessory belt drive",
+     "https://gatestechzone.com/en/focus/diagnosing-a-noisy-accessory-belt-drive"
+    ]
+   },
+   {
+    "q": "A gasoline engine knocks under load. Which of these is LEAST likely to be the cause?",
+    "o": [
+     "Incorrect ignition timing",
+     "A lean air-fuel mixture",
+     "Fuel with too low an octane rating",
+     "An overly rich air-fuel mixture"
+    ],
+    "a": 3,
+    "why": "MAHLE lists incorrect ignition timing, a lean mixture, inadequate octane, hot intake air and too high compression as causes of knocking; a rich mixture is not on the list.",
+    "src": [
+     "MAHLE: Engine Components and Filters: Damage Profiles, Probable Causes and Prevention",
+     "https://www.mahle-aftermarket.com/media/local-media-north-america/pdfs-&-thumbnails/mahle-engine-component-&-filters-failure-guide.pdf"
+    ]
+   }
+  ]
+ },
+ "A4": {
+  "body": [
+   "This task covers removing and refitting engine pans and covers, such as the oil pan and the valve cover, with new gaskets; Fel-Pro calls valve cover gaskets the most common leak repair part.",
+   "Many current engines use a heavier cast oil pan that adds strength to the vehicle frame, and these pans need molded-rubber or rigid-carrier gaskets.",
+   "Corners are a common leak path; one-piece gaskets with silicone rubber on a rigid carrier are designed to close them, and built-in torque limiters stop the gasket being over-compressed and the sealing surfaces deforming.",
+   "A molded-rubber valve cover gasket often sits in a groove in the cover and is designed for an exact amount of squeeze; over-tightening can split a gasket.",
+   "Reaching the pan can mean removing an underbody plate first, and the drain plug threads and plug gasket should be checked each time, since both wear."
+  ],
+  "car": null,
+  "src": [
+   [
+    "One Piece Oil Pan Gaskets | Fel-Pro Gaskets",
+    "https://www.felpro.com/parts/leak-repair/oil-pan-gasket-sets.html"
+   ],
+   [
+    "Valve Cover Gaskets | Fel-Pro Gaskets",
+    "https://www.felpro.com/parts/leak-repair/valve-cover-gasket-sets.html"
+   ],
+   [
+    "How to change oil in a car - step by step | Mobil",
+    "https://www.mobil.com/en/lubricants/for-personal-vehicles/auto-care/vehicle-maintenance/how-to-change-oil-in-car"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A replacement valve cover gasket has built-in torque limiters. What are they mainly for?",
+    "o": [
+     "Setting valve clearance",
+     "Preventing over-tightening and splitting of the gasket",
+     "Locating the cover on its dowels",
+     "Venting crankcase pressure"
+    ],
+    "a": 1,
+    "why": "Fel-Pro states the torque limiters prevent over-tightening and gasket splitting.",
+    "src": [
+     "Valve Cover Gaskets | Fel-Pro Gaskets",
+     "https://www.felpro.com/parts/leak-repair/valve-cover-gasket-sets.html"
+    ]
+   },
+   {
+    "q": "Technician A says some current engines use a cast oil pan that adds strength to the vehicle frame. Technician B says the drain plug threads and gasket should be inspected whenever the oil is drained. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Fel-Pro describes cast oil pans that add strength to the frame, and Mobil says drain plug threads and gaskets wear and should be inspected at each oil change.",
+    "src": [
+     "One Piece Oil Pan Gaskets | Fel-Pro Gaskets",
+     "https://www.felpro.com/parts/leak-repair/oil-pan-gasket-sets.html"
+    ]
+   }
+  ]
+ },
+ "A5": {
+  "body": [
+   "With the car level and secured, the drain plug is removed to drain the oil, then refitted with its gasket where one is used and tightened to the maker's torque.",
+   "The old filter is removed, checking that its O-ring came off with it; the new filter's O-ring gets a thin film of oil, a spin-on filter is tightened by hand, and a cartridge filter gets a new O-ring in its housing groove.",
+   "The specified amount of oil goes in, the engine idles for 2 minutes while the drain plug and filter are checked for leaks, and the level is checked again after shutdown.",
+   "The mileage and date are recorded and the next change is set from the maker's interval; Mobil does not recommend more than 5,000 miles between changes with conventional oil.",
+   "Used oil and drained filters go to a collection point for recycling; the EPA says the used oil from one oil change can contaminate one million gallons of fresh water."
+  ],
+  "car": "Volvo requires full synthetic oil meeting ACEA A5/B5 with no additives, about 6.2 US qt (5.9 L) including the filter for the 4-cylinder, and reads its level electronically (no dipstick) after about 20 miles of driving or 5 minutes parked level with the engine off. The 'Time for regular maintenance' message is timed by miles, months since the last service and engine running time; the manual does not say how to reset it.",
+  "src": [
+   [
+    "How to change oil in a car - step by step | Mobil",
+    "https://www.mobil.com/en/lubricants/for-personal-vehicles/auto-care/vehicle-maintenance/how-to-change-oil-in-car"
+   ],
+   [
+    "Managing, Reusing, and Recycling Used Oil | US EPA",
+    "https://www.epa.gov/hw/managing-reusing-and-recycling-used-oil"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Right after an oil change, a 2016 V60 with the 2.0 L four-cylinder is parked on a slope and the oil level display shows 'No values available'. What is the most likely reason?",
+    "o": [
+     "The oil level sensor has failed",
+     "The oil is overfilled",
+     "The conditions for an electronic reading have not been met",
+     "The wrong viscosity oil was used"
+    ],
+    "a": 2,
+    "why": "Volvo says the reading needs about 20 miles of driving or 5 minutes parked level with the engine off, and that 'No values available' in that case is not a sensor fault.",
+    "src": [
+     "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   },
+   {
+    "q": "Technician A says a new spin-on filter's O-ring should get a thin film of oil and the filter should be tightened by hand. Technician B says the old filter's O-ring must be confirmed removed, because it can stick to the engine. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Mobil's procedure calls for oiling the new O-ring and hand-tightening the filter, and warns that the old O-ring can stay stuck to the engine.",
+    "src": [
+     "How to change oil in a car - step by step | Mobil",
+     "https://www.mobil.com/en/lubricants/for-personal-vehicles/auto-care/vehicle-maintenance/how-to-change-oil-in-car"
+    ]
+   }
+  ]
+ },
+ "A6": {
+  "body": [
+   "With the system cool, the cap is removed, the coolant level and hoses are checked, and a tester adapter is fitted to the radiator filler neck or to a pressurized expansion tank.",
+   "The pump is worked to the test range for the cap's rating, for example 14 to 18 psi for a 15 or 16 psi cap, or 12 to 16 psi for a 13 or 14 psi cap, and the gauge is watched for a drop.",
+   "An overflow bottle with a snap-on or vented cap is not part of the sealed system, so testing through it only vents the pressure; plastic tanks can crack if the adapter plug is overtightened.",
+   "While the system holds pressure, the whole system, including every hose and connection, is checked for seepage, and the pressure is released with the tester's relief valve before disconnecting.",
+   "Coolant dye made for water-based fluids can be circulated and then traced with a UV lamp to find small or hidden leaks.",
+   "Gates notes that a faulty pressure cap can let air into the system and speed up corrosion, so the cap is inspected and replaced if faulty."
+  ],
+  "car": "Volvo's manual says never to open the expansion tank cap with the engine warm and, if a warm top-up cannot be avoided, to unscrew it slowly so the overpressure escapes. The V60 has a radiator and a coolant expansion tank, and the manual does not give the cap's pressure rating.",
+  "src": [
+   [
+    "Mityvac MV4534 Cooling System Pressure Tester: User and maintenance instructions",
+    "https://www.matcotools.com/productassets/web-documents/MV4534_InstructionManual_01.pdf"
+   ],
+   [
+    "Leak Detection Applications - Tracerproducts.com",
+    "https://tracerproducts.com/leak-detection-applications/"
+   ],
+   [
+    "How Fluorescent Leak Detection Works - Spectroline.com",
+    "https://spectroline.com/how-fluorescent-leak-detection-works/"
+   ],
+   [
+    "Gates: Water Pump Failure Signs",
+    "https://www.gatestechzone.com/en/problem-diagnosis/cooling-system/water-pump-failure-signs"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A cooling system has a cap rated at 16 psi. According to Mityvac's test table, what range should the system be pumped to?",
+    "o": [
+     "9 to 11 psi",
+     "12 to 16 psi",
+     "14 to 18 psi",
+     "18 to 22 psi"
+    ],
+    "a": 2,
+    "why": "Mityvac's table gives a 14 to 18 psi test range for a 15 or 16 psi cap.",
+    "src": [
+     "Mityvac MV4534 Cooling System Pressure Tester: User and maintenance instructions",
+     "https://www.matcotools.com/productassets/web-documents/MV4534_InstructionManual_01.pdf"
+    ]
+   },
+   {
+    "q": "A technician fits the pressure tester to a coolant overflow bottle that has a vented snap-on cap. What is the most likely result?",
+    "o": [
+     "An accurate test of the sealed system",
+     "The test pressure vents to the atmosphere and the system is not tested",
+     "The radiator cap is tested instead",
+     "The heater core is isolated from the test"
+    ],
+    "a": 1,
+    "why": "Mityvac explains that such bottles are not part of the sealed system, so the test pressure simply vents to the atmosphere.",
+    "src": [
+     "Mityvac MV4534 Cooling System Pressure Tester: User and maintenance instructions",
+     "https://www.matcotools.com/productassets/web-documents/MV4534_InstructionManual_01.pdf"
+    ]
+   }
+  ]
+ },
+ "A7": {
+  "body": [
+   "Gates recommends replacing accessory belts at least every 4 years or 62,000 miles (100,000 km) and inspecting them at every service, with the vehicle maker's procedure taking priority.",
+   "Before removal the routing is recorded; the automatic tensioner is released and held, and the tensioner, idlers, torsional vibration damper and overrunning alternator pulley are checked for wear along with pulley alignment.",
+   "The new belt must sit square in every pulley groove (feel behind any pulley that cannot be seen); the automatic tensioner is released slowly to set tension, and the engine is run a few minutes with no readjustment afterwards.",
+   "Too much tension causes heat, cracking and broken cords; too little causes slipping, noise and shiny flanks on both sides of the ribs. For manually tensioned Micro-V drives Gates gives 100 N (10 kg) per rib for a new belt and 60 N (6 kg) per rib for a used one.",
+   "Misalignment above 1 degree causes pilling, damaged outer ribs that can get into the timing belt drive, and shine on one side of the ribs; it must be corrected before a new belt goes on.",
+   "Belt dressing, soap, silicone spray and similar products only hide noise and can permanently damage the belt."
+  ],
+  "car": "Volvo's owner's manual lists checking the condition of the drive belts among the checks before a long trip.",
+  "src": [
+   [
+    "Gates: How to replace a Micro-V belt in 7 easy steps",
+    "https://www.gatestechzone.com/en/installation/belts-and-kits/micro-v-belts"
+   ],
+   [
+    "Gates Technical Bulletin 032: Automotive Replacement, V- and Micro-V belts",
+    "https://www.gatestechzone.com/-/media/files/public-downloads/tech-tips/tb-product-specific/technicalbulletin032/gates_tb032_en.ashx"
+   ],
+   [
+    "Gates: Identifying and Addressing Causes of Belt Noise",
+    "https://gates.com/us/en/industries/automotive/vehicle-aftermarket/power-up/identifying-and-addressing-causes-of-belt-noise.html"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A Micro-V belt shows small rubber balls in its grooves and a shiny surface on one side of the ribs. What is the most likely cause?",
+    "o": [
+     "Too much belt tension",
+     "Pulley misalignment",
+     "Oil contamination",
+     "A belt that is too long"
+    ],
+    "a": 1,
+    "why": "Gates TB032 links pilling and one-sided shine on the ribs to misalignment above 1 degree.",
+    "src": [
+     "Gates Technical Bulletin 032: Automotive Replacement, V- and Micro-V belts",
+     "https://www.gatestechzone.com/-/media/files/public-downloads/tech-tips/tb-product-specific/technicalbulletin032/gates_tb032_en.ashx"
+    ]
+   },
+   {
+    "q": "Technician A says belt dressing is an acceptable fix for a squealing belt. Technician B says a squeal at start-up usually points to too little tension. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "Gates ties start-up squeal to insufficient tension and warns that belt dressing only masks the noise and can damage the belt.",
+    "src": [
+     "Gates: Identifying and Addressing Causes of Belt Noise",
+     "https://gates.com/us/en/industries/automotive/vehicle-aftermarket/power-up/identifying-and-addressing-causes-of-belt-noise.html"
+    ]
+   }
+  ]
+ },
+ "A8": {
+  "body": [
+   "A coolant hose has three layers: an inner tube, a reinforcement and an outer cover.",
+   "Electrochemical degradation is the most common failure: dissimilar metals produce an electrical charge in the coolant that cracks the tube from inside. It is found by squeezing near the ends; soft, mushy spots within about 2 inches of the connectors or internal channels mean replacement with an ECD-resistant hose.",
+   "Heat damage shows as slight swelling or a hard, glossy, cracked cover; ozone causes fine parallel cracks, usually at bends; oil contamination makes a hose soft, spongy and swollen.",
+   "Hoses are checked for kinks and for contact with hot or moving parts and sharp edges; an abraded hose is replaced and rerouted or sleeved, but not with a slit piece of old hose.",
+   "Leaks at clamps come from low clamp torque or worn parts; adjustable clamps are retightened after a short run-in, or constant-tension clamps are used."
+  ],
+  "car": null,
+  "src": [
+   [
+    "Gates: Hose Failure Symptoms",
+    "https://www.gatestechzone.com/en/problem-diagnosis/cooling-system/hose-failure-symptoms"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A lower radiator hose feels firm in the middle but soft and mushy within about 2 inches of each end. What is the most likely cause?",
+    "o": [
+     "Ozone attack",
+     "Electrochemical degradation",
+     "Heat damage from the exhaust",
+     "A loose clamp"
+    ],
+    "a": 1,
+    "why": "Gates describes soft, mushy hose ends within about 2 inches of the connectors as the sign of electrochemical degradation.",
+    "src": [
+     "Gates: Hose Failure Symptoms",
+     "https://www.gatestechzone.com/en/problem-diagnosis/cooling-system/hose-failure-symptoms"
+    ]
+   },
+   {
+    "q": "Technician A says fine parallel cracks at a hose bend are typical of ozone damage. Technician B says a slit piece of old hose makes a good protective sleeve against abrasion. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Gates attributes fine parallel cracks at bends to ozone and advises against using a slit piece of old hose as a sleeve.",
+    "src": [
+     "Gates: Hose Failure Symptoms",
+     "https://www.gatestechzone.com/en/problem-diagnosis/cooling-system/hose-failure-symptoms"
+    ]
+   }
+  ]
+ },
+ "A9": {
+  "body": [
+   "A thermostat's wax element changes volume with temperature: when the engine is cold, coolant bypasses the radiator through a smaller bypass loop, and at operating temperature the thermostat opens the path to the radiator.",
+   "If the temperature climbs sharply, all the coolant goes through the radiator and the bypass closes; map-controlled thermostats add a heater controlled by the engine computer so they respond faster.",
+   "MAHLE lists a jammed working piston, corrosion, a faulty housing or gasket, debris in the system and failed electric actuation as causes of thermostat faults, which can lead to overheating, poor cabin heat, higher fuel use and coolant loss.",
+   "An infrared thermometer helps: an upper radiator hose that gets hot before warm-up is complete points to a thermostat stuck open, and one that stays cold points to a thermostat that does not open.",
+   "A badly installed thermostat can leak at the mounting surface; torque specs are followed, seals and gaskets are checked for damage and seating, and sealant is used only where the maker calls for it."
+  ],
+  "car": "Volvo's fuse list for 4-cylinder engines puts the thermostat on a 10 A fuse with the mass air meter and EVAP valve, so this engine's thermostat has an electrical part. That fits MAHLE's description of a map-controlled thermostat, but no fetched Volvo document confirms the type.",
+  "src": [
+   [
+    "MAHLE: Thermal management control units brochure 2024 (EN)",
+    "https://mpulse.mahle.com/assets/Artikelbilder/Thermostate/EN_48_1803_Thermostat_Broschuere_EN_2024_WEB_Doppelseiten.pdf"
+   ],
+   [
+    "Gates: Hose Failure Symptoms",
+    "https://www.gatestechzone.com/en/problem-diagnosis/cooling-system/hose-failure-symptoms"
+   ],
+   [
+    "Gates: Water Pump Failure Signs",
+    "https://www.gatestechzone.com/en/problem-diagnosis/cooling-system/water-pump-failure-signs"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Ten minutes after a cold start, an infrared thermometer shows the upper radiator hose already as hot as the engine outlet. What is the most likely cause?",
+    "o": [
+     "A thermostat stuck open",
+     "A thermostat stuck closed",
+     "A collapsed lower hose",
+     "A failed temperature sensor"
+    ],
+    "a": 0,
+    "why": "Gates says an upper hose that is hot before warm-up suggests a thermostat stuck open or not closing properly.",
+    "src": [
+     "Gates: Hose Failure Symptoms",
+     "https://www.gatestechzone.com/en/problem-diagnosis/cooling-system/hose-failure-symptoms"
+    ]
+   },
+   {
+    "q": "During warm-up with a conventional wax thermostat closed, where does most of the coolant flow?",
+    "o": [
+     "Through the radiator",
+     "Through the bypass loop",
+     "Only through the heater core",
+     "It does not circulate"
+    ],
+    "a": 1,
+    "why": "MAHLE explains that while the engine is cold, coolant flows through the smaller bypass loop instead of the radiator.",
+    "src": [
+     "MAHLE: Thermal management control units brochure 2024 (EN)",
+     "https://mpulse.mahle.com/assets/Artikelbilder/Thermostate/EN_48_1803_Thermostat_Broschuere_EN_2024_WEB_Doppelseiten.pdf"
+    ]
+   }
+  ]
+ },
+ "A10": {
+  "body": [
+   "A refractometer reads the coolant's freeze point: it is zeroed with distilled water, one or two drops of coolant go on the prism, and the reading is where the shadow line crosses the scale. The Robinair 75240 reads from -60 °F to 32 °F and is re-zeroed every 30 minutes.",
+   "Draining starts only with a fully cool engine; the front is raised on stands, the undertray removed if needed, and the coolant drained from the radiator drain valve. Rust or debris in it calls for further inspection.",
+   "For a flush, PEAK has the system filled with water, run for 10 to 15 minutes with the heater on high, and drained, repeated two or three times until the water runs clear.",
+   "The system is refilled with correctly diluted coolant (most cars take 50/50, and concentrate should be mixed before pouring), then run 10 to 15 minutes with the heater on high to push out air pockets that could cause overheating.",
+   "PEAK says tap water will do for flushing; Volvo says chlorinated tap water must not go into the cooling system, and for this car Volvo's rule wins. Used coolant goes to a service center or hazardous-waste site."
+  ],
+  "car": "Volvo specifies Volvo Genuine Coolant mixed 50/50 with water, 8.7 US qt (8.3 L) for the B4204T11, says coolant types must not be mixed and the system must not be topped up with water alone, and says a drained system should be flushed with clean water or premixed antifreeze before refilling. The manual adds that the coolant normally does not need changing.",
+  "src": [
+   [
+    "Robinair 75240 Hand Refractometer Operating Instruction Sheet",
+    "https://otctools.com/sites/default/files/75240.pdf"
+   ],
+   [
+    "How to Fill Coolant - Flush and Fill Antifreeze or Coolant - Old World Industries (PEAK)",
+    "https://owi.com/retail/brands/peak-auto/peak-news/how-to-coolant-flush-fill"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Before measuring coolant with a hand refractometer, what should the technician use to set the zero point?",
+    "o": [
+     "A drop of new 50/50 coolant",
+     "A drop of pure distilled water",
+     "A drop of battery electrolyte",
+     "Nothing; it is factory-set"
+    ],
+    "a": 1,
+    "why": "Robinair's instructions set the null point with one or two drops of pure distilled water on the prism.",
+    "src": [
+     "Robinair 75240 Hand Refractometer Operating Instruction Sheet",
+     "https://otctools.com/sites/default/files/75240.pdf"
+    ]
+   },
+   {
+    "q": "A 2016 V60's coolant is slightly low. Technician A says topping up with plain water is acceptable. Technician B says a different type of coolant must not be mixed in. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "Volvo's manual says not to top up with water alone and that different types of antifreeze/coolant must not be mixed.",
+    "src": [
+     "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   }
+  ]
+ },
+ "A11": {
+  "body": [
+   "The water pump circulates coolant, and a failing one can overheat the engine; Gates recommends replacing the pump together with the belt, tensioner and other drive parts, because each affects the others' life.",
+   "With the engine off, the pump shaft should show no side-to-side play by hand; play or a rumbling or screeching noise means a worn bearing, caused by misalignment, an over-tensioned belt or coolant washing out lubricant through a failed seal.",
+   "The weep hole sits between the pump's bearings and seals; a little seepage is normal for about 10 minutes on a new pump while the seal seats, but a continuing drip or a large stain means failure, and AISIN warns against sealing the weep hole with epoxy.",
+   "Corroded impeller fins, sludge deposits and cavitation pitting come from contaminated, incompatible or mixed coolant; the fix is a new pump, a system flush and the correct coolant, plus a check of the pressure cap.",
+   "A pump must never run dry, even briefly, because it destroys the mechanical seal; the system is flushed at replacement and belt tension and pulley alignment are checked."
+  ],
+  "car": "Volvo's fuse list shows a 50 A fuse for the coolant pump on 4-cylinder engines, and TJ 36858 (covering type 155 with engine 40) describes a replacement pump, PN 32441265, with modified internal programming; this points to an electrically driven pump rather than a belt-driven one, but that is not confirmed in a Volvo repair document fetched here.",
+  "src": [
+   [
+    "Gates: Water Pump Failure Signs",
+    "https://www.gatestechzone.com/en/problem-diagnosis/cooling-system/water-pump-failure-signs"
+   ],
+   [
+    "AISIN University: Understanding Water Pump Weep Holes",
+    "https://aisinaftermarket.com/video-details/315/4/9"
+   ],
+   [
+    "Volvo Technical Journal TJ 36858: High Temperature Message in DIM after Coolant Pump Replacement",
+    "https://static.nhtsa.gov/odi/tsbs/2024/MC-11006558-0001.pdf"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A newly installed water pump shows slight seepage at the weep hole during the first few minutes of running. What is the most likely explanation?",
+    "o": [
+     "The pump is defective and must be replaced",
+     "The seal is seating during normal break-in",
+     "The cooling system is overpressurized",
+     "The wrong coolant was used"
+    ],
+    "a": 1,
+    "why": "Gates says a little weep-hole seepage is normal for about ten minutes while a new pump's mechanical seal seats.",
+    "src": [
+     "Gates: Water Pump Failure Signs",
+     "https://www.gatestechzone.com/en/problem-diagnosis/cooling-system/water-pump-failure-signs"
+    ]
+   },
+   {
+    "q": "Technician A says a small amount of side-to-side play in the water pump shaft is normal. Technician B says a rumbling noise from the pump points to a worn bearing. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "Gates says there should be no shaft play under hand pressure, and that rumbling or screeching indicates a worn bearing.",
+    "src": [
+     "Gates: Water Pump Failure Signs",
+     "https://www.gatestechzone.com/en/problem-diagnosis/cooling-system/water-pump-failure-signs"
+    ]
+   }
+  ]
+ },
  "D1": {
   "body": [
    "The supplemental restraint system (SRS) covers more than the airbags: Volvo lists seat belt pretensioners, front airbags, side impact (SIPS) airbags, inflatable curtains and the front passenger occupant weight sensor, all watched by the SRS control module.",
