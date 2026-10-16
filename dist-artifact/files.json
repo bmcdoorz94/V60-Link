@@ -6,6 +6,7 @@
  "js/data/g1entries.js": "dist-artifact/js/data/g1entries.js",
  "js/data/g1tasks.js": "dist-artifact/js/data/g1tasks.js",
  "js/data/manual.js": "dist-artifact/js/data/manual.js",
+ "js/data/path.js": "dist-artifact/js/data/path.js",
  "js/data/quiz.js": "dist-artifact/js/data/quiz.js",
  "js/data/toolprices.js": "dist-artifact/js/data/toolprices.js",
  "js/data/track.js": "dist-artifact/js/data/track.js",

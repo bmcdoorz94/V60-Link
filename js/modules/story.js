@@ -382,7 +382,7 @@
     return '<ol class="steps">' + c.steps.map(function (st, i) {
       var ok = s.done[i], pr = st.prog && !ok ? st.prog(api) : "";
       var info = (deep !== "short" && st.why ? "<small>" + esc(st.why) + "</small>" : "") + (deep === "mech" && st.mech ? '<small class="mech">' + esc(st.mech) + "</small>" : "") + (pr ? '<small class="prog">' + esc(pr) + "</small>" : "");
-      var acts = (st.manual ? '<button type="button" class="quiet" data-man="' + st.manual + '" aria-pressed="' + ok + '">' + (ok ? "Undo" : "Mark done") + "</button>" : "") + (st.go && !ok ? '<button type="button" class="quiet" data-from="' + c.id + '" data-jump="' + esc(st.go) + '">' + (st.go.indexOf("mission:") === 0 ? "Lesson" : "Go") + "</button>" : "") + (st.where ? '<button type="button" class="quiet" data-jump="bay:' + st.where + '" title="Show me where">Where</button>' : "") + '<button type="button" class="quiet" data-proof="' + c.id + "|" + i + '" title="Attach a proof photo">Photo</button>';
+      var acts = (st.manual ? '<button type="button" class="quiet" data-man="' + st.manual + '" aria-pressed="' + ok + '">' + (ok ? "Undo" : "Mark done") + "</button>" : "") + (st.go && !ok ? (pathLock(st.go) ? '<span class="mn-mono">PATH STEP ' + pathLock(st.go).n + "</span>" : '<button type="button" class="quiet" data-from="' + c.id + '" data-jump="' + esc(st.go) + '">' + (st.go.indexOf("mission:") === 0 ? "Lesson" : "Go") + "</button>") : "") + (st.where ? '<button type="button" class="quiet" data-jump="bay:' + st.where + '" title="Show me where">Where</button>' : "") + '<button type="button" class="quiet" data-proof="' + c.id + "|" + i + '" title="Attach a proof photo">Photo</button>';
       var shots = proofs(api, c.id, i);
       info += shots.length ? '<span class="proofs">' + shots.map(function (p) { var u = api.photoUrl(p); return u ? '<img src="' + esc(u) + '" alt="Proof photo, ' + esc(p.date) + '" loading="lazy">' : ""; }).join("") + "</span>" : "";
       return '<li class="' + (ok ? "done" : "") + '"><span class="sdot" aria-hidden="true">' + (ok ? "✓" : "") + '</span><span class="stx">' + esc(st.t) + (st.optional ? ' <span class="pill none">bonus</span>' : "") + info + '</span><span class="sact">' + acts + "</span></li>";
@@ -497,7 +497,7 @@
     if (ui.view === "file") { $("stV-file").innerHTML = fileHTML(api); return; }
     if (ui.view === "codebook") { $("stV-codebook").innerHTML = codebookHTML(api); return; }
     var nextHTML = (pend.length ? '<div class="nextc scene"><p class="ans-k">New scene</p><h3>' + esc(sceneById(api, pend[0]).t) + '</h3><button type="button" data-jump="story:' + pend[0] + '">Watch</button></div>' : "") +
-      (nx ? '<div class="nextc"><p class="ans-k">Next objective · ' + esc(nx.c.t) + "</p><h3>" + esc(nx.s.t) + "</h3>" + (d.depth !== "short" && nx.s.why ? '<p class="nwhy">' + esc(nx.s.why) + "</p>" : "") + '<div class="row">' + (gl(nx.c) === 0 ? '<button type="button" data-guide="' + nx.c.id + '">Start</button>' : "") + (nx.s.manual ? '<button type="button"' + (gl(nx.c) === 0 ? ' class="quiet"' : "") + ' data-man="' + nx.s.manual + '">Mark done</button>' : "") + (nx.s.go ? '<button type="button" class="' + (nx.s.manual || gl(nx.c) === 0 ? "quiet" : "") + '" data-from="' + nx.c.id + '" data-jump="' + esc(nx.s.go) + '">' + (nx.s.manual ? "Open" : (nx.s.go.indexOf("mission:") === 0 ? "Start the lesson" : "Go")) + "</button>" : "") + '<button type="button" class="quiet" data-case="' + nx.c.id + '">See the case</button>' + (gl(nx.c) === 1 ? '<button type="button" class="quiet" data-guide="' + nx.c.id + '">Walk me through it</button>' : "") + "</div></div>" : (fin ? "" : (actClosed(api, "4") ? '<div class="nextc"><p class="ans-k">Next objective · Finale</p><h3>Pass the V60 Master exam</h3><button type="button" data-jump="tab:exam">Take the exam</button></div>' : "")));
+      (pathNext() || (nx ? '<div class="nextc"><p class="ans-k">Next objective · ' + esc(nx.c.t) + "</p><h3>" + esc(nx.s.t) + "</h3>" + (d.depth !== "short" && nx.s.why ? '<p class="nwhy">' + esc(nx.s.why) + "</p>" : "") + '<div class="row">' + (gl(nx.c) === 0 ? '<button type="button" data-guide="' + nx.c.id + '">Start</button>' : "") + (nx.s.manual ? '<button type="button"' + (gl(nx.c) === 0 ? ' class="quiet"' : "") + ' data-man="' + nx.s.manual + '">Mark done</button>' : "") + (nx.s.go ? '<button type="button" class="' + (nx.s.manual || gl(nx.c) === 0 ? "quiet" : "") + '" data-from="' + nx.c.id + '" data-jump="' + esc(nx.s.go) + '">' + (nx.s.manual ? "Open" : (nx.s.go.indexOf("mission:") === 0 ? "Start the lesson" : "Go")) + "</button>" : "") + '<button type="button" class="quiet" data-case="' + nx.c.id + '">See the case</button>' + (gl(nx.c) === 1 ? '<button type="button" class="quiet" data-guide="' + nx.c.id + '">Walk me through it</button>' : "") + "</div></div>" : (fin ? "" : (actClosed(api, "4") ? '<div class="nextc"><p class="ans-k">Next objective · Finale</p><h3>Pass the V60 Master exam</h3><button type="button" data-jump="tab:exam">Take the exam</button></div>' : ""))));
     if (ui.open == null && nx) ui.open = nx.c.id;
     var acts = ACTS.filter(function (a) { return avail.some(function (c) { return c.act === a[0]; }); }).map(function (act) {
       var cs = avail.filter(function (c) { return c.act === act[0]; });
@@ -515,6 +515,14 @@
     $("stV-cases").innerHTML = '<div class="stnext">' + nextHTML + "</div>" + acts + newC + sideH + scenesH + opts;
     if (window.V60_SYNC) window.V60_SYNC.renderBox();
   }
+
+  /* since 2026-10-15 the path (manual.js) is the one way forward: the case board points at it, and a case step that
+     leads past the path's current step shows its step number instead of a Go button */
+  function pathNext() {
+    var P = window.V60_PATH, cur = P && P.current(); if (!cur) return "";
+    return '<div class="nextc"><p class="ans-k">Next step · your path, step ' + cur.n + " of " + P.stages.length + "</p><h3>" + API.esc(P.title(cur)) + '</h3><div class="row"><button type="button" data-jump="path:next">Go</button><button type="button" class="quiet" data-jump="tab:path">The whole path</button></div></div>';
+  }
+  function pathLock(go) { var P = window.V60_PATH; return P && P.goStage ? P.goStage(go) : null; }
 
   (window.V60_MODULES = window.V60_MODULES || []).push({
     id: "story",
@@ -608,6 +616,7 @@
       if (pend.length) return [{ order: 4, html: '<article class="tcard story"><p class="ans-k">New scene</p><h3>' + esc(sceneById(api, pend[0]).t) + '</h3><button type="button" data-jump="story:' + pend[0] + '">Watch</button></article>' }];
       var nx = nextStep(api);
       if (!nx) return [];
+      if (window.V60_PATH && window.V60_PATH.current()) return [];
       return [{ order: 4, html: '<article class="tcard story"><p class="ans-k">Next in your story · ' + esc(nx.c.t) + "</p><h3>" + esc(nx.s.t) + '</h3><div class="row">' + (gl(nx.c) === 0 ? '<button type="button" data-guide="' + nx.c.id + '">Start</button>' : "") + (nx.s.go ? '<button type="button"' + (gl(nx.c) === 0 ? ' class="quiet"' : "") + ' data-from="' + nx.c.id + '" data-jump="' + esc(nx.s.go) + '">' + (nx.s.go.indexOf("mission:") === 0 ? "Start the lesson" : "Go") + "</button>" : "") + '<button type="button" class="quiet" data-jump="case:' + nx.c.id + '">Open the case</button></div></article>' }];
     }
   });

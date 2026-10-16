@@ -2116,11 +2116,11 @@
     glove: '<path d="M3 8h18v11H3z"/><path d="M3 8l2-3h14l2 3"/><path d="M10 12h4"/>',
     live: '<path d="M4 12h4l2-5 4 10 2-5h4"/>'
   };
-  /* The bar: four roots. Every other page is reached from the manual (a chapter's Go button), a case, or the back matter,
+  /* The bar: three roots (Cases moved into the Index with the path, 2026-10-15). Every other page is reached from the
+     path, a chapter's Go button, or the Index,
      and lives under "car" as hidden-unless-active so the bar still shows where you are. tab entries: [id, label, order, hidden-unless-active] */
   var SECTIONS = [
     { id: "car", n: "The car", tabs: [["engine", "Engine bay", 10, true], ["bay", "Whole car", 20, true], ["my", "My V60", 30, true], ["health", "Health", 40, true], ["records", "Service log", 50, true], ["diag", "Diagnose", 60, true], ["lab", "Data lab", 70, true], ["sim", "Simulator", 80, true], ["academy", "Training", 90, true], ["learn", "Reference", 95, true], ["unlocks", "Unlocks", 96, true]] },
-    { id: "story", n: "Cases", tabs: [] },
     { id: "glove", n: "Glovebox", tabs: [] },
     { id: "live", n: "Link", tabs: [] }
   ];
@@ -2147,7 +2147,7 @@
   function renderNav(name) {
     if (window.V60_GATE && window.V60_GATE.sync) window.V60_GATE.sync();
     var sec = sectionOf(name); lastTab[sec.id] = name;
-    /* the bar always shows all four roots; a root the story has not reached yet is drawn locked */
+    /* the bar always shows its roots; a root the gate has not opened is drawn locked */
     $("rail").innerHTML = SECTIONS.map(function (x) {
       var on = x.id === sec.id, ok = gateOk(x.id), nw = ok && (gateNew(x.id) || (x.id === "car" && window.V60_MANUAL && window.V60_MANUAL.newCount() > 0));
       return '<button type="button" ' + (ok ? 'data-tab="' + x.id + '"' : 'data-locked="' + esc(ROOT_LOCK[x.id] || "Not open yet.") + '" class="locked" aria-disabled="true"') + (on ? ' aria-current="page"' : "") + '><svg viewBox="0 0 24 24" aria-hidden="true">' + ICON[x.id] + "</svg><span>" + esc(x.n) + "</span>" + (nw ? '<i class="newdot" aria-label="new"></i>' : "") + "</button>";
