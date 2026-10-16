@@ -5644,5 +5644,698 @@ window.V60_G1_ENTRIES = {
     ]
    }
   ]
+ },
+ "F1": {
+  "body": [
+   "The task is to make the airbag (SRS) system safe before work near its parts, then restore power and confirm the warning lamp runs its self-check.",
+   "FMVSS 208 (S4.5.2) requires any occupant protection system that deploys in a crash to have a readiness indicator that monitors its own readiness and is clearly visible from the driver's seat.",
+   "Volvo's SRS covers the seat belt pretensioners, front airbags, side (SIPS) airbags, the front passenger occupant weight sensor and the inflatable curtains, all monitored by the SRS control module.",
+   "In ignition mode I or II the SRS light comes on and should go out after about 6 seconds if the module finds no fault; a light that stays on after the engine starts, or comes on while driving, means a fault has been detected. If the SRS symbol itself fails, the general warning symbol and a text message appear instead.",
+   "Volvo's owner's manual gives no disarm procedure for owners and says all SRS work belongs to a trained Volvo technician. Its only instruction for cutting SRS power is for a flood-damaged car: ignition off for at least 10 minutes, then disconnect the battery, before towing."
+  ],
+  "car": "On the 2016 V60 the SRS page says the light goes out about 6 seconds after ignition mode I or II, while the warning-symbol page treats a light still on about 10 seconds after starting as a fault; the two Volvo pages differ. Volvo says never to repair SRS parts yourself.",
+  "src": [
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Supplemental Restraint System (SRS); Information displays – warning symbols (pp. 31–32, 75)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "49 CFR 571.208 -- Standard No. 208; Occupant crash protection (eCFR)",
+    "https://www.ecfr.gov/api/renderer/v1/content/enhanced/current/title-49?part=571&section=571.208"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "After a battery reconnection on a 2016 V60, the ignition is set to mode II. The SRS warning light comes on, then goes out after about 6 seconds. This most likely means:",
+    "o": [
+     "The SRS control module found no fault during its self-check",
+     "The passenger airbag has been switched off",
+     "The occupant weight sensor needs calibration",
+     "The SRS warning bulb has burned out"
+    ],
+    "a": 0,
+    "why": "Volvo says the SRS light comes on in ignition mode I or II and normally goes out after about 6 seconds if no faults are detected.",
+    "src": [
+     "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Supplemental Restraint System (SRS); Information displays – warning symbols (pp. 31–32, 75)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   },
+   {
+    "q": "Technician A says FMVSS 208 requires an airbag readiness indicator that monitors its own readiness. Technician B says the indicator must be clearly visible from the driver's seating position. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "S4.5.2 of FMVSS 208 requires the readiness indicator to monitor its own readiness and to be clearly visible from the driver's designated seating position.",
+    "src": [
+     "49 CFR 571.208 -- Standard No. 208; Occupant crash protection (eCFR)",
+     "https://www.ecfr.gov/api/renderer/v1/content/enhanced/current/title-49?part=571&section=571.208"
+    ]
+   }
+  ]
+ },
+ "F2": {
+  "body": [
+   "Voltage drop is the voltage lost across a wire, connection, switch or ground while current flows. By Ohm's law (V = I × R), 10 A through 0.5 Ω loses 5 V.",
+   "Drop only shows with the circuit working, because a multimeter's own battery cannot push normal circuit current; the meter is connected across the section under test on DC volts or the mV range.",
+   "Starter example (Fluke): disable ignition or fuel so the engine cannot start, put the red probe on the battery positive post and the black on the starter battery stud, crank 4 to 5 seconds and capture the reading with AutoHOLD or MIN/MAX; then measure from the battery negative post to the starter housing for the ground side.",
+   "Fluke's guide for that test is about 0.3 V on the positive side and about 0.2 V or less on the ground side (0.2 to 0.5 V total); higher readings point to corrosion, loose terminals or damaged cables.",
+   "Where the maker gives no values, Fluke's general maximums are 0.00 V across a connection, 0.20 V across a wire or cable, 0.30 V across a switch and 0.10 V at a ground; low-current computer circuits should stay under 0.10 V and need a 10-megohm meter.",
+   "Fluke suggests testing engine and body grounds first. Delco Remy notes that 1 V of drop costs roughly 30 cranking rpm."
+  ],
+  "car": "Volvo describes the V60 as a 12-volt single-pole system in which the chassis and engine block carry current back to the battery and the battery negative is connected to the chassis, so body and engine grounds are part of every circuit tested.",
+  "src": [
+   [
+    "How to Check Starter Circuit Voltage Drop with a Multimeter | Fluke",
+    "https://www.fluke.com/en-us/learn/blog/digital-multimeters/how-to-check-starter-circuit-voltage-drop-with-a-multimeter"
+   ],
+   [
+    "Diagnosing Voltage Drops: Electrical Automotive Troubleshooting | Fluke",
+    "https://www.fluke.com/en-au/learn/blog/automotive/electrical-automotive-troubleshooting"
+   ],
+   [
+    "Tech Tip: Checking Voltage Drops | Delco Remy",
+    "https://www.delcoremy.com/the-latest/2013/june/tech-tip-checking-voltage-drops"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Battery – handling, maintenance, changing; Battery specifications (pp. 352–355, 389)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "During cranking, a meter connected from the battery positive post to the starter battery stud reads 0.9 V. Which is the most likely cause?",
+    "o": [
+     "Normal drop for a starter positive cable",
+     "Corrosion, a loose terminal or a damaged cable in the positive path",
+     "A fault on the ground side only",
+     "An overcharged battery"
+    ],
+    "a": 1,
+    "why": "Fluke gives about 0.3 V as the guide for the positive side; anything higher suggests corrosion, loose terminals or damaged cables.",
+    "src": [
+     "How to Check Starter Circuit Voltage Drop with a Multimeter | Fluke",
+     "https://www.fluke.com/en-us/learn/blog/digital-multimeters/how-to-check-starter-circuit-voltage-drop-with-a-multimeter"
+    ]
+   },
+   {
+    "q": "Technician A says voltage drop can be measured accurately with the circuit switched off. Technician B says that, without a maker's value, a ground should show no more than about 0.10 V drop. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "Fluke says voltage drop can only be measured with current flowing, and lists 0.10 V at a ground as a maximum when manuals give no value.",
+    "src": [
+     "Diagnosing Voltage Drops: Electrical Automotive Troubleshooting | Fluke",
+     "https://www.fluke.com/en-au/learn/blog/automotive/electrical-automotive-troubleshooting"
+    ]
+   }
+  ]
+ },
+ "F3": {
+  "body": [
+   "Current is measured either by opening the circuit and placing the meter in series, or with a clamp-on (inductive) ammeter around the wire. Delco Remy prefers the clamp because it does not disturb the circuit and cannot be damaged by misconnection.",
+   "An in-line meter with an internal shunt is generally for 10 A or less and must not be overloaded. Fluke's drain test starts on the 10 A jack and moves to the mA jack once current falls below 400 mA.",
+   "With a clamp meter on DC, select A dc, zero the display with the jaws closed and empty, then close the jaws around the conductor and center it on the alignment marks; Delco Remy adds that the jaw arrow points in the direction of current flow.",
+   "Parasitic draw is read with everything off, doors closed and modules asleep (Fluke allows 10–45 minutes; Snap-on says most vehicles shut down within 10 minutes), the meter in series between the battery post and the removed cable, and no cranking while in current mode.",
+   "Guide values differ: Snap-on uses under 50 mA, Fluke treats over 100 mA as suspect, and Denso says draws above 0.35 A should be investigated. The vehicle maker's specification overrides all three.",
+   "To find the circuit, pull fuses one at a time or read the voltage drop across each fuse until the current falls. Snap-on notes a scan tool left on the DLC (pin 16 is always live) or a keyless key nearby can keep modules awake."
+  ],
+  "car": null,
+  "src": [
+   [
+    "Delco Remy Diagnostic Procedures Manual for Starters and Alternators",
+    "https://www.delcoremy.com/getmedia/30ff0e99-7084-451b-8f2a-6745dd18a3b5/DelcoRemy_DiagnosticManual_Updated_Digital.pdf.aspx"
+   ],
+   [
+    "How to Measure Current with a Clamp Meter | Fluke",
+    "https://www.fluke.com/en-us/learn/blog/clamps/how-to-measure-current"
+   ],
+   [
+    "How to Find Parasitic Battery Drain with a Multimeter | Fluke",
+    "https://www.fluke.com/en-us/learn/blog/digital-multimeters/how-to-find-parasitic-battery-drain-with-a-multimeter"
+   ],
+   [
+    "Parasitic Draw Diagnosis | Snap-on",
+    "https://www.snapon.com/EN/US/Diagnostics/News-Center/Technical-Focus-Archive/Parasitic-Draw-Diagnosis"
+   ],
+   [
+    "Battery Visual Inspection & Performance Testing for Starters & Alternators | DENSO",
+    "https://www.densoautoparts.com/battery-visual-inspection-performance-testing-for-starters-alternators/"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "After the modules have slept for 45 minutes, a meter in series with the battery reads 300 mA. Which is the most likely next step?",
+    "o": [
+     "Replace the battery",
+     "Crank the engine with the meter still in series to confirm the draw",
+     "Pull fuses one at a time, or read fuse voltage drops, until the current falls",
+     "Move the red lead to the 10 A jack for a finer reading"
+    ],
+    "a": 2,
+    "why": "Fluke treats over 100 mA as suspect and isolates the circuit by removing fuses one by one or reading the voltage drop across each fuse.",
+    "src": [
+     "How to Find Parasitic Battery Drain with a Multimeter | Fluke",
+     "https://www.fluke.com/en-us/learn/blog/digital-multimeters/how-to-find-parasitic-battery-drain-with-a-multimeter"
+    ]
+   },
+   {
+    "q": "Technician A says a clamp meter should be zeroed for DC with the jaws closed and no conductor inside. Technician B says the conductor should be centered using the alignment marks on the jaw. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Fluke's steps zero the meter with closed, empty jaws before DC readings and then center the conductor on the jaw's alignment marks.",
+    "src": [
+     "How to Measure Current with a Clamp Meter | Fluke",
+     "https://www.fluke.com/en-us/learn/blog/clamps/how-to-measure-current"
+    ]
+   }
+  ]
+ },
+ "F4": {
+  "body": [
+   "Continuity and resistance are checked with power removed: disconnect the battery negative or isolate the circuit, since an ohmmeter on a live circuit can be damaged. A fuse taken out of the vehicle can be tested without disconnecting anything.",
+   "Set the meter to Ω and the continuity beeper, red lead in V/Ω and black in COM, then touch the probes to each end of the path.",
+   "A steady beep with about 0.0–0.2 Ω means good continuity. No beep with OL or a high reading means an open circuit, a break, corrosion or a bad connection. The beeper typically sounds below about 25–50 Ω.",
+   "Ground continuity is checked from bare engine block or chassis metal to the component ground; no continuity points to a broken ground strap or corroded terminal. Wiggling the harness helps catch intermittent faults, and testing a known-good part first proves the meter.",
+   "Diodes and transistors are checked on the meter's diode scale, not the ohms scale (Delco Remy).",
+   "A meter's small internal battery cannot load a circuit, so a voltage drop test with the circuit operating finds restrictions more accurately than a resistance check (Fluke)."
+  ],
+  "car": "Volvo's manual checks a V60 fuse by pulling it and looking at the wire from the side, and says to replace it with one of the same color and amperage; a removed fuse can also be read on the Ω range without disconnecting the battery.",
+  "src": [
+   [
+    "How to Perform Automotive Continuity Checks with a Multimeter | Fluke",
+    "https://www.fluke.com/en-us/learn/blog/digital-multimeters/how-to-perform-automotive-continuity-checks-with-a-multimeter"
+   ],
+   [
+    "Delco Remy Diagnostic Procedures Manual for Starters and Alternators",
+    "https://www.delcoremy.com/getmedia/30ff0e99-7084-451b-8f2a-6745dd18a3b5/DelcoRemy_DiagnosticManual_Updated_Digital.pdf.aspx"
+   ],
+   [
+    "Diagnosing Voltage Drops: Electrical Automotive Troubleshooting | Fluke",
+    "https://www.fluke.com/en-au/learn/blog/automotive/electrical-automotive-troubleshooting"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Fuses – introduction (p. 355)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A fuse removed from the vehicle reads OL on the ohms range with no beep. The fuse is most likely:",
+    "o": [
+     "Good, with near-zero resistance",
+     "Open (blown)",
+     "Shorted to ground",
+     "Unreadable unless the battery is connected"
+    ],
+    "a": 1,
+    "why": "Fluke says no beep with OL or a high reading indicates an open circuit or a break.",
+    "src": [
+     "How to Perform Automotive Continuity Checks with a Multimeter | Fluke",
+     "https://www.fluke.com/en-us/learn/blog/digital-multimeters/how-to-perform-automotive-continuity-checks-with-a-multimeter"
+    ]
+   },
+   {
+    "q": "All of these are correct ohmmeter practices EXCEPT:",
+    "o": [
+     "Disconnect the battery ground cable before using the ohmmeter",
+     "Measure resistance with the circuit powered so current flows",
+     "Use the diode scale to check diodes",
+     "Read an infinite reading as an open circuit"
+    ],
+    "a": 1,
+    "why": "Delco Remy warns never to connect an ohmmeter to a circuit under voltage and to disconnect the battery ground cable first.",
+    "src": [
+     "Delco Remy Diagnostic Procedures Manual for Starters and Alternators",
+     "https://www.delcoremy.com/getmedia/30ff0e99-7084-451b-8f2a-6745dd18a3b5/DelcoRemy_DiagnosticManual_Updated_Digital.pdf.aspx"
+    ]
+   }
+  ]
+ },
+ "F5": {
+  "body": [
+   "Testing starts with a visual check (correct size, type and CCA; no loose posts, cracks, bulges or leaks; clean, tight connections) and a state-of-charge reading. Odyssey wants an AGM battery at 12.6 V or more before a load or conductance test.",
+   "Load test (½ CCA): enter the battery's CCA, apply half that current for 15 seconds and read terminal voltage. At 70°F or warmer it must stay at or above 9.6 V; the limit drops in the cold, for example 9.1 V at 30°F and 8.5 V at 0°F (Odyssey's table).",
+   "Denso removes surface charge first (a 150 A load for 10–15 seconds after charging), replaces a battery that will not reach 12.6 V open-circuit, and runs the load test twice about 30 seconds apart.",
+   "Conductance (electronic) testing sends a small AC signal through the battery and correlates the response with cranking amps. Midtronics says it takes under two minutes, does not stress the battery and works on AGM and EFB when the matching battery-type profile is selected.",
+   "Tester decisions set the service: Good, Good–Recharge, Charge & Retest (replace if it repeats after a full charge), Replace Battery (retest out of the vehicle first, since a poor cable connection can cause it) or Bad Cell–Replace.",
+   "Conductance alone checks cranking health; Midtronics adds longer profiling and charge-acceptance tests for reserve capacity, which matter on start/stop vehicles."
+  ],
+  "car": "Volvo specifies a 12 V AGM battery with 800 A CCA for start/stop engines, so a ½ CCA load test on a matching battery applies 400 A, and an electronic tester should be set to AGM.",
+  "src": [
+   [
+    "ODYSSEY Installation, Operation and Maintenance Manual (EnerSys)",
+    "https://www.enersys.com/4a5285/globalassets/documents/product-documentation/odyssey/_multi/amer/odyssey-installation-operation-and-maintenance-manual.pdf"
+   ],
+   [
+    "Battery Visual Inspection & Performance Testing for Starters & Alternators | DENSO",
+    "https://www.densoautoparts.com/battery-visual-inspection-performance-testing-for-starters-alternators/"
+   ],
+   [
+    "Which Battery Test Technology is Right for You? | Midtronics",
+    "https://www.midtronics.com/blog/which-battery-test-technology-is-right-for-you/"
+   ],
+   [
+    "Midtronics MDX-650P Battery Conductance & System Analyzer Instruction Manual",
+    "https://www.midtronics.com/wp-content/uploads/2019/06/MDX-650-EN-Instruction-Manual.pdf"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Battery – handling, maintenance, changing; Battery specifications (pp. 352–355, 389)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "An 800 CCA AGM battery at 75% charge or more is load-tested at 70°F with 400 A for 15 seconds. Voltage ends at 9.2 V. Which is most likely?",
+    "o": [
+     "The battery passed",
+     "The battery failed",
+     "The test should have used 800 A",
+     "The result is normal for AGM batteries"
+    ],
+    "a": 1,
+    "why": "Odyssey's ½ CCA test requires the voltage to stay above 9.6 V at 70°F or warmer; lower indicates a failed battery.",
+    "src": [
+     "ODYSSEY Installation, Operation and Maintenance Manual (EnerSys)",
+     "https://www.enersys.com/4a5285/globalassets/documents/product-documentation/odyssey/_multi/amer/odyssey-installation-operation-and-maintenance-manual.pdf"
+    ]
+   },
+   {
+    "q": "An in-vehicle conductance test shows REPLACE BATTERY. Technician A says to disconnect the cables and retest out of the vehicle first, because a poor cable connection can cause this result. Technician B says the result means the battery must be replaced with no further testing. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Midtronics says REPLACE BATTERY can also mean a poor cable connection and recommends an out-of-vehicle retest before replacing the battery.",
+    "src": [
+     "Midtronics MDX-650P Battery Conductance & System Analyzer Instruction Manual",
+     "https://www.midtronics.com/wp-content/uploads/2019/06/MDX-650-EN-Instruction-Manual.pdf"
+    ]
+   }
+  ]
+ },
+ "F6": {
+  "body": [
+   "Control modules hold data such as adaptive fuel values, diagnostic results, idle settings and audio presets. Interstate notes that losing it can bring rough idle, harsh shifting, warning lights from reinitialized checks and other faults after a battery change.",
+   "A memory saver keeps the modules powered while the battery is out, commonly through the OBD II port; Snap-on notes DLC pin 16 is a constant battery feed.",
+   "Connect the memory saver before disconnecting the negative cable, wrap the loose clamp so it cannot touch metal, and leave the vehicle's systems off while the battery is out so the backup is not drained.",
+   "The memory saver must be disconnected during an actual parasitic-draw measurement (Fluke).",
+   "Volvo: switch off, remove the remote key and wait at least 5 minutes before disconnecting the battery so the control modules can store their information.",
+   "After a disconnect, Volvo's power-window auto function needs a reset: raise the switch front to close the window and hold one second, release briefly, then raise it again for one second."
+  ],
+  "car": "The V60 manual gives the 5-minute wait before battery disconnection and the power-window auto function reset; it does not mention a memory saver.",
+  "src": [
+   [
+    "Red or Black First? How to Disconnect a Car Battery Safely | Interstate Batteries",
+    "https://www.interstatebatteries.com/en-CA/blog/how-to-disconnect-car-battery-terminals-safely"
+   ],
+   [
+    "Here's How to Charge an AGM Battery and Why It's Different | Interstate Batteries",
+    "https://www.interstatebatteries.com/blog/how-to-charge-an-agm-battery"
+   ],
+   [
+    "Parasitic Draw Diagnosis | Snap-on",
+    "https://www.snapon.com/EN/US/Diagnostics/News-Center/Technical-Focus-Archive/Parasitic-Draw-Diagnosis"
+   ],
+   [
+    "How to Find Parasitic Battery Drain with a Multimeter | Fluke",
+    "https://www.fluke.com/en-us/learn/blog/digital-multimeters/how-to-find-parasitic-battery-drain-with-a-multimeter"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Battery – changing (p. 354); Power windows (pp. 101–102)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "After a battery replacement on a 2016 V60, the driver's window no longer opens or closes fully with one press. The most likely fix is:",
+    "o": [
+     "Replace the window motor",
+     "Reset the auto up/down function with the window switch",
+     "Recalibrate the tire monitor",
+     "Replace the door module fuse"
+    ],
+    "a": 1,
+    "why": "Volvo says that after the battery has been disconnected the auto function must be reset by holding the switch up for one second, releasing, and holding again for one second.",
+    "src": [
+     "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Power windows (pp. 101–102)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   },
+   {
+    "q": "Which device do repair shops commonly plug into the OBD II port to keep module memory alive while a battery is replaced?",
+    "o": [
+     "A scan tool",
+     "A memory saver (backup power supply)",
+     "A fuse loop tool",
+     "A conductance tester"
+    ],
+    "a": 1,
+    "why": "Interstate says many shops plug a backup battery into the OBD II port during battery replacement to keep the computers powered.",
+    "src": [
+     "Red or Black First? How to Disconnect a Car Battery Safely | Interstate Batteries",
+     "https://www.interstatebatteries.com/en-CA/blog/how-to-disconnect-car-battery-terminals-safely"
+    ]
+   }
+  ]
+ },
+ "F7": {
+  "body": [
+   "Inspection checks the size, type and CCA rating; loose posts; a cracked, bulging or leaking case; dirt and moisture on top; corroded terminals; frayed or stiff cables; and a hold-down that secures the battery without being overtightened (Denso, Odyssey).",
+   "Only batteries with access caps are filled: use distilled or deionized water and never fill above the level mark. A sealed AGM (VRLA) battery never needs water, and opening it damages the battery and voids the warranty (Odyssey).",
+   "Corrosion comes off with a wire brush on metal and a wet rag elsewhere, wearing rubber gloves; Odyssey warns against solvents and other chemicals on AGM cases, and Optima suggests one tablespoon of baking soda in a cup of hot water for flooded-battery terminals.",
+   "Replacement: ignition off, disconnect the negative cable first and the positive second, inspect the cables, seat and clamp the new battery in the tray, connect positive first and negative last, and torque the terminals to spec.",
+   "The new battery must match the original's cold-start capacity; Odyssey installs an AGM battery only at 12.65 V or more and charges it first if lower."
+  ],
+  "car": "Volvo requires an AGM battery with 800 A CCA on start/stop engines. Its steps add removing the front and rear covers, the vent hose and the clamp screw, and waiting 5 minutes after switching off before disconnecting; the manual's maintenance page also describes opening cell caps to add distilled water, which battery makers say a sealed AGM never needs.",
+  "src": [
+   [
+    "Battery Visual Inspection & Performance Testing for Starters & Alternators | DENSO",
+    "https://www.densoautoparts.com/battery-visual-inspection-performance-testing-for-starters-alternators/"
+   ],
+   [
+    "ODYSSEY Installation, Operation and Maintenance Manual (EnerSys)",
+    "https://www.enersys.com/4a5285/globalassets/documents/product-documentation/odyssey/_multi/amer/odyssey-installation-operation-and-maintenance-manual.pdf"
+   ],
+   [
+    "How Do I Know When My Car Battery Needs Replacing? - optimabatteries",
+    "https://www.optimabatteries.com/experience/blog/how-do-i-know-when-my-car-battery-needs-replacing"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Battery – handling, maintenance, changing; Battery specifications (pp. 352–355, 389)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Technician A says the negative cable is disconnected first when removing a battery. Technician B says the positive cable is connected first when installing one. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Volvo's removal steps detach the black negative cable before the red positive, and its installation steps connect the red positive before the black negative.",
+    "src": [
+     "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Battery – handling, maintenance, changing; Battery specifications (pp. 352–355, 389)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   },
+   {
+    "q": "Which service is LEAST likely to be needed on a sealed AGM battery?",
+    "o": [
+     "Cleaning terminal corrosion with a wire brush",
+     "Checking the hold-down for looseness",
+     "Adding distilled water to the cells",
+     "Inspecting the case for swelling"
+    ],
+    "a": 2,
+    "why": "Odyssey says its sealed AGM batteries never need water added and that opening the cover damages the battery.",
+    "src": [
+     "ODYSSEY Installation, Operation and Maintenance Manual (EnerSys)",
+     "https://www.enersys.com/4a5285/globalassets/documents/product-documentation/odyssey/_multi/amer/odyssey-installation-operation-and-maintenance-manual.pdf"
+    ]
+   }
+  ]
+ },
+ "F8": {
+  "body": [
+   "Slow, low-amp charging limits heat. Interstate notes flooded batteries are stressed above about 10 A, while AGM batteries can take 30–50 A; charge time is roughly amp-hours divided by charger amps (70 Ah at 5 A is about 14 hours, at 20 A about 3.5 hours).",
+   "AGM batteries need the charger's AGM (Absorbed) setting: above about 15 V an AGM can overheat and vent through its safety valve, and Odyssey says over 15.0 V causes irreversible damage. Optima advises against gel settings on its AGM batteries.",
+   "Manual chargers keep pushing current until disconnected and must be watched with the ammeter, a voltmeter or a hydrometer; automatic chargers switch to a maintain (float) mode when the battery is full (Schumacher).",
+   "Optima recommends charging its batteries at no more than 10 A and floating at 13.2–13.8 V with at most 1 A; Odyssey's float voltage is 13.6 V at 77°F.",
+   "Charge in a ventilated area with eye protection and no jewelry; never charge a frozen battery (Clore), and Odyssey says not to charge above 104°F (40°C).",
+   "Volvo's rules for the V60 override generic advice: never use a quick charger, only a traditional charger; never connect a charger to the battery negative terminal, only the chassis ground point; and disconnect the battery from the car when charging directly at its posts."
+  ],
+  "car": "The V60 manual forbids quick chargers and the battery negative post for charger connections. Start/stop cars use an AGM battery, so the charger should be on its AGM setting; AGM makers' high-current figures do not override Volvo's quick-charger ban.",
+  "src": [
+   [
+    "Here's How to Charge an AGM Battery and Why It's Different | Interstate Batteries",
+    "https://www.interstatebatteries.com/blog/how-to-charge-an-agm-battery"
+   ],
+   [
+    "ODYSSEY Installation, Operation and Maintenance Manual (EnerSys)",
+    "https://www.enersys.com/4a5285/globalassets/documents/product-documentation/odyssey/_multi/amer/odyssey-installation-operation-and-maintenance-manual.pdf"
+   ],
+   [
+    "Nevermind your vector, Victor. What's your voltage? - optimabatteries",
+    "https://www.optimabatteries.com/experience/blog/nevermind-your-vector-victor.-what's-your-voltage"
+   ],
+   [
+    "An Introduction to Battery Chargers | Schumacher Electric",
+    "https://www.schumacherelectric.com/blog/intro-guide-to-battery-chargers/"
+   ],
+   [
+    "Jump Starting 101 - Clore Automotive",
+    "https://cloreautomotive.com/jump-starting-101/"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Battery – handling, maintenance (pp. 352–353); Battery specifications (p. 389)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Technician A says the AGM battery in a 2016 V60 may be fast-charged because AGM batteries accept high current. Technician B says Volvo allows only traditional battery chargers on this car. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "Volvo's manual says never to use a quick charger on the battery and to use only traditional chargers.",
+    "src": [
+     "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Battery – handling (p. 352)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   },
+   {
+    "q": "A standard charger holds an AGM battery at 16 V. The most likely result is:",
+    "o": [
+     "A faster, complete charge with no harm",
+     "Irreversible battery damage",
+     "Removal of sulfation with no side effects",
+     "An accurate state-of-charge reading"
+    ],
+    "a": 1,
+    "why": "Odyssey says charging voltages higher than 15.0 V cause irreversible damage to its AGM batteries.",
+    "src": [
+     "ODYSSEY Installation, Operation and Maintenance Manual (EnerSys)",
+     "https://www.enersys.com/4a5285/globalassets/documents/product-documentation/odyssey/_multi/amer/odyssey-installation-operation-and-maintenance-manual.pdf"
+    ]
+   }
+  ]
+ },
+ "F9": {
+  "body": [
+   "Cables are checked for frayed strands, damaged insulation, corrosion and acid damage. A good cable bends freely; popping or crackling when it is flexed means internal corrosion and the cable should be replaced (Denso).",
+   "Every connection in the path counts: battery clamps, frame and body grounds, and the connections at the starter, solenoid and alternator.",
+   "Hold-downs must keep the battery secure without being overtightened; loose hold-downs, loose connections and case swelling are part of routine inspection (Odyssey).",
+   "Flooded-battery corrosion is cleaned with a wire brush and baking soda solution (one tablespoon per cup of hot water, Optima). Odyssey says sealed AGM batteries should show little corrosion and are cleaned with a wire brush on metal and a wet rag elsewhere, without chemicals.",
+   "A visual check cannot show resistance inside a cable or connector; Delco Remy calls voltage-drop testing the only sure check of the current path, and Fluke notes burnt or blistered body-ground insulation means starter current has overheated it.",
+   "Cables are sized for the current they carry, and Odyssey suggests a heavier gauge for runs longer than six feet; terminals are torqued to the battery or vehicle maker's figure."
+  ],
+  "car": "On the V60 one screw holds the battery clamp, a ventilation hose runs from the battery to a body vent and must be refitted correctly, and the manual says to check that the cables are correctly connected and tightened. The rally bar (22 ft-lb) is fitted only on R-Design models.",
+  "src": [
+   [
+    "Battery Visual Inspection & Performance Testing for Starters & Alternators | DENSO",
+    "https://www.densoautoparts.com/battery-visual-inspection-performance-testing-for-starters-alternators/"
+   ],
+   [
+    "ODYSSEY Installation, Operation and Maintenance Manual (EnerSys)",
+    "https://www.enersys.com/4a5285/globalassets/documents/product-documentation/odyssey/_multi/amer/odyssey-installation-operation-and-maintenance-manual.pdf"
+   ],
+   [
+    "How Do I Know When My Car Battery Needs Replacing? - optimabatteries",
+    "https://www.optimabatteries.com/experience/blog/how-do-i-know-when-my-car-battery-needs-replacing"
+   ],
+   [
+    "Tech Tip: Checking Voltage Drops | Delco Remy",
+    "https://www.delcoremy.com/the-latest/2013/june/tech-tip-checking-voltage-drops"
+   ],
+   [
+    "Diagnosing Voltage Drops: Electrical Automotive Troubleshooting | Fluke",
+    "https://www.fluke.com/en-au/learn/blog/automotive/electrical-automotive-troubleshooting"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Battery – handling, maintenance, changing; Battery specifications (pp. 352–355, 389)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A battery cable makes a crackling sound when it is bent. The most likely cause is:",
+    "o": [
+     "Normal stiffness of heavy-gauge cable",
+     "Internal corrosion, so the cable should be replaced",
+     "A loose battery hold-down",
+     "An overcharged battery"
+    ],
+    "a": 1,
+    "why": "Denso says popping or crackling sounds while bending a battery cable indicate corrosion and the cable should be replaced.",
+    "src": [
+     "Battery Visual Inspection & Performance Testing for Starters & Alternators | DENSO",
+     "https://www.densoautoparts.com/battery-visual-inspection-performance-testing-for-starters-alternators/"
+    ]
+   },
+   {
+    "q": "Technician A says a cable that looks clean can still have excessive resistance inside it. Technician B says a voltage drop test is the way to confirm the current path. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Delco Remy says a visual inspection does not show what is happening inside cables or connections and that voltage drop testing is the only sure method.",
+    "src": [
+     "Tech Tip: Checking Voltage Drops | Delco Remy",
+     "https://www.delcoremy.com/the-latest/2013/june/tech-tip-checking-voltage-drops"
+    ]
+   }
+  ]
+ },
+ "F10": {
+  "body": [
+   "Before jumping, confirm both systems are 12 V, wear eye protection, make sure two vehicles are not touching, and keep sparks and flames away, because batteries give off flammable, explosive hydrogen.",
+   "With the ignition off, the positive (red) lead goes to the dead battery's positive terminal or the maker's remote starting point, and the negative (black) lead goes last to a heavy, non-moving engine or frame ground, never to fuel parts, moving parts or sheet-metal body panels.",
+   "Clore calls the negative battery post an unsafe final connection because a spark there can ignite battery gases. Interstate's jump-pack guide still shows the negative post; Volvo forbids it on this car.",
+   "With two vehicles, start the booster's engine first, then the disabled one. With a jump pack, Clore limits cranking to 6 seconds, then a 3-minute cool-down to protect the starter.",
+   "After the engine starts, remove the negative (ground) clamp first, then the positive, keeping the clamps away from each other and from metal.",
+   "A jump start does not fix the cause; the battery and charging system should be tested afterward (Interstate)."
+  ],
+  "car": "Volvo's V60 steps: ignition to mode 0, red cable to the booster's positive and then to the V60's positive post under its folding cover, black from the booster's negative to the ground point at the top of the right engine mount (outer screw), never the battery negative. A dead battery also prevents the electric parking brake from being applied or released.",
+  "src": [
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Jump starting (p. 259); Battery – handling (p. 352)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "Jump Starting 101 - Clore Automotive",
+    "https://cloreautomotive.com/jump-starting-101/"
+   ],
+   [
+    "How to Use a Portable Jump Starter or Jump Box | Interstate Batteries",
+    "https://www.interstatebatteries.com/blog/how-to-use-a-jump-starter"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Transmission – shiftlock override (footnote, p. 264)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Where does Volvo say the black jumper cable connects on a 2016 V60?",
+    "o": [
+     "The battery's negative terminal",
+     "The ground point at the top of the right engine mount, outer screw",
+     "Any painted body panel",
+     "The fuel rail"
+    ],
+    "a": 1,
+    "why": "Volvo's jump-starting steps connect the black cable to the ground point at the right engine mount (top, outer screw) and say the battery's negative terminal must never be used.",
+    "src": [
+     "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Jump starting (p. 259); Battery – handling (p. 352)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   },
+   {
+    "q": "Technician A says to remove the negative clamp from the vehicle ground first once the engine starts. Technician B says that if the engine does not start within 6 seconds on a jump pack, cranking should continue until it does. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Clore disconnects the negative clamp from the vehicle ground first and says to let the jump starter cool for 3 minutes if the vehicle has not started within 6 seconds.",
+    "src": [
+     "Jump Starting 101 - Clore Automotive",
+     "https://cloreautomotive.com/jump-starting-101/"
+    ]
+   }
+  ]
+ },
+ "F11": {
+  "body": [
+   "The starter current-draw test measures the amps the starter pulls while cranking, normally with an inductive clamp around the battery cable. Delco Remy zeroes the clamp first, keeps the jaws fully closed, and points the jaw arrow in the direction of current flow.",
+   "The battery must be good and fully charged first, because starting-system results depend on it (Midtronics). Disable ignition or fuel so the engine cranks without starting, and crank only a few seconds (Fluke uses 4 to 5).",
+   "Midtronics gives 150 to 400 A as a typical cranking draw, depending on the vehicle, engine size and temperature; the vehicle maker's specification is the figure to compare against.",
+   "High draw with slow cranking points to a failing starter (worn brushes, damaged bearings or a failing armature) or to cold, thick oil, which Midtronics says can make the starter work two to three times harder.",
+   "Resistance in the circuit lowers both voltage and current (Fluke), so slow cranking with low draw calls for voltage drop tests on the positive and ground cables.",
+   "A weak battery and a failing starter show nearly the same symptoms (slow cranking, clicking, intermittent no-start), so both are tested before either is replaced."
+  ],
+  "car": null,
+  "src": [
+   [
+    "Delco Remy Diagnostic Procedures Manual for Starters and Alternators",
+    "https://www.delcoremy.com/getmedia/30ff0e99-7084-451b-8f2a-6745dd18a3b5/DelcoRemy_DiagnosticManual_Updated_Digital.pdf.aspx"
+   ],
+   [
+    "Battery Health and Starter Motor Failure | Midtronics",
+    "https://www.midtronics.com/blog/battery-health-starter-motor-correlation/"
+   ],
+   [
+    "Midtronics MDX-650P Battery Conductance & System Analyzer Instruction Manual",
+    "https://www.midtronics.com/wp-content/uploads/2019/06/MDX-650-EN-Instruction-Manual.pdf"
+   ],
+   [
+    "How to Check Starter Circuit Voltage Drop with a Multimeter | Fluke",
+    "https://www.fluke.com/en-us/learn/blog/digital-multimeters/how-to-check-starter-circuit-voltage-drop-with-a-multimeter"
+   ],
+   [
+    "Diagnosing Voltage Drops: Electrical Automotive Troubleshooting | Fluke",
+    "https://www.fluke.com/en-au/learn/blog/automotive/electrical-automotive-troubleshooting"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A car cranks slowly. The battery tests good and fully charged, and both cable voltage drops are within limits, but starter current draw is well above specification. Which is most likely?",
+    "o": [
+     "A corroded positive battery cable",
+     "A discharged battery",
+     "A failing starter with worn brushes or bearings",
+     "A loose engine ground strap"
+    ],
+    "a": 2,
+    "why": "Midtronics says a failing starter with worn brushes, damaged bearings or a failing armature draws excessive current; the battery and cable tests rule out the other choices.",
+    "src": [
+     "Battery Health and Starter Motor Failure | Midtronics",
+     "https://www.midtronics.com/blog/battery-health-starter-motor-correlation/"
+    ]
+   },
+   {
+    "q": "Technician A says a clamp-on ammeter should be zeroed before the starter draw test. Technician B says the jaws can be left slightly open around a large battery cable. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Delco Remy says to zero the clamp-on meter before use and make sure the jaws are completely closed during use.",
+    "src": [
+     "Delco Remy Diagnostic Procedures Manual for Starters and Alternators",
+     "https://www.delcoremy.com/getmedia/30ff0e99-7084-451b-8f2a-6745dd18a3b5/DelcoRemy_DiagnosticManual_Updated_Digital.pdf.aspx"
+    ]
+   }
+  ]
  }
 };
