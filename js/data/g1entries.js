@@ -2030,6 +2030,930 @@ window.V60_G1_ENTRIES = {
    }
   ]
  },
+ "C6": {
+  "body": [
+   "A drivetrain road test recreates the complaint while noting road speed, engine rpm, gear, whether the car is pulling or coasting, and the load it carries (Spicer).",
+   "Clicking or knocking while cornering points to a worn CV joint; vibration that grows with road speed can come from excess joint play or a bent shaft (GKN).",
+   "A bearing hum or growl is present in a straight line and gets louder with a slight steering input; Timken notes the faulty bearing is typically on the side opposite the rumble.",
+   "A clunk when changing direction or going from acceleration to coast suggests play in the CV or U-joints or excess differential backlash, not usually a bearing (Timken).",
+   "To isolate a wheel-end cause, swap in a known-good wheel assembly (Spicer); to pin down a noisy bearing, SKF runs the wheels on a hoist at moderate speed and listens at each one with a stethoscope, staying clear of moving parts."
+  ],
+  "car": "Volvo's spec sheet lists the T5 (B4204T11) as transverse, front-wheel drive, so the driven wheels are the fronts and there is no front-to-rear driveshaft or rear differential to check on the road test.",
+  "src": [
+   [
+    "Spicer Vibration Diagnostics (Dana RRMT-0001)",
+    "https://media.spicerparts.com/cfs/files/media/aqpsgAR84mMM4S8Tw/CVSP-J1140-Vibration"
+   ],
+   [
+    "GKN Automotive Tech Tips: Driveshaft inspection (Autobiz Tech Tips, 2012)",
+    "https://www.techtips.ie/GKN-Automotive/driveshaft-inspection.pdf"
+   ],
+   [
+    "Timken Light Vehicle TechTips LV5: Symptoms of a Worn Wheel Hub Bearing",
+    "https://www.timken.com/wp-content/uploads/2017/08/LV5-Symptoms-of-a-Worn-Wheel-Hub-Bearing.pdf"
+   ],
+   [
+    "SKF Tech tip TT 08-011: Hub unit wheel bearing noise",
+    "https://cdn.skfmediahub.skf.com/api/public/0901d1968019eb1e/pdf_preview_medium/0901d1968019eb1e_pdf_preview_medium.pdf"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars press PDF, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A car makes a rhythmic clicking only while accelerating through tight turns. Which part is the most likely cause?",
+    "o": [
+     "Worn outer CV joint",
+     "Worn rear wheel bearing",
+     "Low differential fluid",
+     "Out-of-balance tire"
+    ],
+    "a": 0,
+    "why": "GKN traces clicking or knocking in corners to the balls of a CV joint moving over pits worn into the joint; Timken also links snapping or clicking in sharp turns to a worn outer CV joint.",
+    "src": [
+     "GKN Automotive Tech Tips: Driveshaft inspection (Autobiz Tech Tips, 2012)",
+     "https://www.techtips.ie/GKN-Automotive/driveshaft-inspection.pdf"
+    ]
+   },
+   {
+    "q": "Technician A says a wheel-bearing hum usually gets louder when the steering wheel is turned slightly. Technician B says a clunk when switching from acceleration to coasting usually means a wheel bearing. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Timken describes bearing noise as present in a straight line and louder with slight steering, while a clunk on load reversal points to CV or U-joint play or differential backlash, not generally to bearings.",
+    "src": [
+     "Timken Light Vehicle TechTips LV5: Symptoms of a Worn Wheel Hub Bearing",
+     "https://www.timken.com/wp-content/uploads/2017/08/LV5-Symptoms-of-a-Worn-Wheel-Hub-Bearing.pdf"
+    ]
+   }
+  ]
+ },
+ "C7": {
+  "body": [
+   "Phasing is how the yokes at the two ends of a driveshaft line up: 'in phase' means the yoke ears are in line, while some shafts are built offset by a set angle to cancel torsional vibration (Spicer).",
+   "Before removal, mark the bearing positions against the yokes and the two halves of the slip spline so the shaft goes back in its original position; Spicer warns against changing a shaft's phasing without the vehicle maker's approval.",
+   "Reassembling a shaft out of phase can cause vibration and failure of driveline parts; Spicer's fix for re-indexing is to separate at the end yoke, turn it 180 degrees and reassemble.",
+   "U-joint inspection looks for damaged or loose bearing straps and retainers, missing snap rings, loose flange bolts, turning bearing cups and missing grease fittings; Spicer's heavy-duty SPL guide replaces a joint with more than 0.006 in. of movement relative to the end yoke.",
+   "Greasable joints are purged until fresh grease shows at all four bearing seals, and a joint that will not purge at every position is replaced (Spicer SPL).",
+   "For CV joints, torn, slipped or porous boots are the most frequent cause of failure; grease outside the boot signals a problem, and joints are checked for radial play through all steering angles (GKN)."
+  ],
+  "car": "Volvo's spec sheet lists the T5 (B4204T11) as transverse, front-wheel drive, so it has no front-to-rear driveshaft or U-joints to phase; the boot and joint checks are the part of this task that matter for its driven front wheels.",
+  "src": [
+   [
+    "Spicer Driveline Phasing, service/technical letter JOI-TEC-082 (Dana, Sept 2017)",
+    "https://static.nhtsa.gov/odi/tsbs/2017/MC-10119574-9999.pdf"
+   ],
+   [
+    "Spicer Vibration Diagnostics (Dana RRMT-0001)",
+    "https://media.spicerparts.com/cfs/files/media/aqpsgAR84mMM4S8Tw/CVSP-J1140-Vibration"
+   ],
+   [
+    "Spicer Life Series (SPL) U-Joint Service - Quick Reference",
+    "https://www.dana.com/globalassets/resource-library/commercial-vehicle/customer-support/spl-u-joint-service-guide.pdf"
+   ],
+   [
+    "GKN Automotive Tech Tips: Driveshaft inspection (Autobiz Tech Tips, 2012)",
+    "https://www.techtips.ie/GKN-Automotive/driveshaft-inspection.pdf"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars press PDF, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A driveshaft was removed for a transmission repair, and the vehicle now vibrates. The technician did not mark the shaft before removal. What is the most likely cause?",
+    "o": [
+     "The shaft was reinstalled out of phase",
+     "The U-joints were purged with fresh grease",
+     "The flange bolts were tightened",
+     "The slip spline was cleaned"
+    ],
+    "a": 0,
+    "why": "Spicer has technicians mark yokes and slip-spline parts before removal because a shaft reassembled out of phase can cause vibration and driveline failure.",
+    "src": [
+     "Spicer Life Series (SPL) U-Joint Service - Quick Reference",
+     "https://www.dana.com/globalassets/resource-library/commercial-vehicle/customer-support/spl-u-joint-service-guide.pdf"
+    ]
+   },
+   {
+    "q": "A CV joint has failed early. Which condition most likely started the damage?",
+    "o": [
+     "A torn or slipped boot",
+     "An axle nut torqued to specification",
+     "A dry, clean boot exterior",
+     "Joints that turn smoothly without binding"
+    ],
+    "a": 0,
+    "why": "GKN names torn, slipped and porous boots as the most frequent cause of CV joint failures.",
+    "src": [
+     "GKN Automotive Tech Tips: Driveshaft inspection (Autobiz Tech Tips, 2012)",
+     "https://www.techtips.ie/GKN-Automotive/driveshaft-inspection.pdf"
+    ]
+   }
+  ]
+ },
+ "C8": {
+  "body": [
+   "Multi-piece driveshafts are carried in the middle by a center support bearing held in a rubber isolator (Spicer).",
+   "In a vibration check, Spicer inspects the center bearing, its fasteners and supports, and the slip spline for wear, bottoming or poor engagement.",
+   "High torsional vibration from poor phasing loads the center bearing and can damage its rubber isolator; correct phasing of a multi-piece shaft reduces side load on the bearing."
+  ],
+  "car": "Volvo's spec sheet lists the T5 (B4204T11) as transverse, front-wheel drive, so it has no driveshaft or center support bearing.",
+  "src": [
+   [
+    "Spicer Vibration Diagnostics (Dana RRMT-0001)",
+    "https://media.spicerparts.com/cfs/files/media/aqpsgAR84mMM4S8Tw/CVSP-J1140-Vibration"
+   ],
+   [
+    "Spicer Driveline Phasing, service/technical letter JOI-TEC-082 (Dana, Sept 2017)",
+    "https://static.nhtsa.gov/odi/tsbs/2017/MC-10119574-9999.pdf"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars press PDF, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "The rubber isolator of a driveshaft center support bearing has failed early. Which is the most likely contributing cause?",
+    "o": [
+     "High torsional vibration from incorrect phasing",
+     "Fresh grease in the U-joints",
+     "New flange bolts",
+     "Full slip-spline engagement"
+    ],
+    "a": 0,
+    "why": "Spicer states that high torsional vibration levels raise center bearing loads, which can damage the rubber isolator and shorten its life.",
+    "src": [
+     "Spicer Driveline Phasing, service/technical letter JOI-TEC-082 (Dana, Sept 2017)",
+     "https://static.nhtsa.gov/odi/tsbs/2017/MC-10119574-9999.pdf"
+    ]
+   }
+  ]
+ },
+ "C9": {
+  "body": [
+   "Serviceable tapered wheel bearings are removed and cleaned, along with the hub and spindle, in kerosene or mineral spirits; the spindle is checked for wear and dressed of nicks and burrs (Timken).",
+   "New cups are driven in with a cup driver or mild steel bar until they seat against the hub shoulders, never with a bearing cone; cones are packed with a mechanical grease packer, and the seal is replaced with its lips facing the way the vehicle maker specifies.",
+   "Timken's adjustment: tighten the nut to 50 ft-lb while turning the rotor, back off one full turn, retighten to 10 ft-lb while turning, back off 1/4 turn and lock it with a new cotter pin.",
+   "End play measured with a dial indicator should be 0.001 to 0.005 in.; a bearing is never spun with compressed air, because parts can fly out.",
+   "Sealed hub units are not adjusted: SKF checks hub end play first and replaces the hub assembly if it is out of specification."
+  ],
+  "car": null,
+  "src": [
+   [
+    "Timken TechTips MDV16: Wheel Bearing Replacement",
+    "https://www.timken.com/wp-content/uploads/2017/08/MDV16-Wheel-Bearing-Replacement.pdf"
+   ],
+   [
+    "SKF Tech tip TT 08-011: Hub unit wheel bearing noise",
+    "https://cdn.skfmediahub.skf.com/api/public/0901d1968019eb1e/pdf_preview_medium/0901d1968019eb1e_pdf_preview_medium.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Technician A says a tapered wheel bearing's final end play should be 0.001 to 0.005 in. Technician B says a cleaned bearing can be dried by spinning it with compressed air. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Timken specifies 0.001 to 0.005 in. of end play and warns never to spin a bearing with compressed air because components can be thrown out.",
+    "src": [
+     "Timken TechTips MDV16: Wheel Bearing Replacement",
+     "https://www.timken.com/wp-content/uploads/2017/08/MDV16-Wheel-Bearing-Replacement.pdf"
+    ]
+   },
+   {
+    "q": "When servicing tapered-roller wheel bearings, all of these are correct EXCEPT:",
+    "o": [
+     "Driving the new cup in with the bearing cone",
+     "Packing the cone with a mechanical grease packer",
+     "Installing a new grease seal",
+     "Locking the adjusting nut with a new cotter pin"
+    ],
+    "a": 0,
+    "why": "Timken says to use a cup driver or mild steel bar and never to drive a cup with a bearing cone.",
+    "src": [
+     "Timken TechTips MDV16: Wheel Bearing Replacement",
+     "https://www.timken.com/wp-content/uploads/2017/08/MDV16-Wheel-Bearing-Replacement.pdf"
+    ]
+   }
+  ]
+ },
+ "C10": {
+  "body": [
+   "Axle leak points include the pinion seal, axle tube seal, wheel bearing seal, cover gasket, drain plug, and even a cracked ABS sensor or its O-ring (Nissan).",
+   "A leaking axle wheel bearing seal shows up behind the brake rotor at the outer face of the hub; the actual source is found and fixed before an axle assembly is condemned.",
+   "An overfilled axle pushes fluid out of its vent, so the level is checked before a vent leak is chased (GM).",
+   "Where the source is unclear, GM cleans the area with mineral spirits, dries it and makes short drives to bring the leak back."
+  ],
+  "car": "Volvo's spec sheet lists the T5 (B4204T11) as transverse, front-wheel drive, so there is no rear axle housing or rear differential to leak.",
+  "src": [
+   [
+    "Nissan NTB24-007: Diagnosing Rear Final Drive Assembly Leaks",
+    "https://static.nhtsa.gov/odi/tsbs/2024/MC-10249928-0001.pdf"
+   ],
+   [
+    "GM PIP5075A: Rear Axle Leak From The Vent",
+    "https://static.nhtsa.gov/odi/tsbs/2013/SB-10063361-2273.pdf"
+   ],
+   [
+    "GM 22-NA-225: Information on Red Fluid Leak from Center of Vehicle Located by the Rear of the Transmission or Transfer Case Area",
+    "https://static.nhtsa.gov/odi/tsbs/2023/MC-10245200-0001.pdf"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars press PDF, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Gear oil is found around a rear axle vent and on the rear bumper. What should be checked first?",
+    "o": [
+     "The axle fluid level for overfill",
+     "Pinion bearing preload",
+     "Wheel bearing end play",
+     "Axle shaft runout"
+    ],
+    "a": 0,
+    "why": "GM notes that an overfilled differential seeps fluid out of the vent and has the level verified before further diagnosis.",
+    "src": [
+     "GM PIP5075A: Rear Axle Leak From The Vent",
+     "https://static.nhtsa.gov/odi/tsbs/2013/SB-10063361-2273.pdf"
+    ]
+   },
+   {
+    "q": "Gear oil is found on the outer face of a rear hub, behind the brake rotor. Which seal is most likely leaking?",
+    "o": [
+     "Axle wheel bearing seal",
+     "Pinion seal",
+     "Cover gasket",
+     "Transmission output seal"
+    ],
+    "a": 0,
+    "why": "Nissan shows a damaged rear axle wheel bearing seal leaking behind the brake rotor at the outer surface of the hub.",
+    "src": [
+     "Nissan NTB24-007: Diagnosing Rear Final Drive Assembly Leaks",
+     "https://static.nhtsa.gov/odi/tsbs/2024/MC-10249928-0001.pdf"
+    ]
+   }
+  ]
+ },
+ "C11": {
+  "body": [
+   "Gear oil is chosen by the viscosity and GL rating in the owner's or service manual, and a limited-slip differential needs oil with the friction modifier its design calls for; the wrong oil can make it malfunction or fail (Mobil).",
+   "A basic change: support the car securely, remove the drain plug and let the oil drain fully, refit the drain plug, remove the fill plug and pump oil in slowly until it starts to run out of the fill hole (Mobil).",
+   "Correct level is at the bottom of the fill hole; oil that can only be seen or touched is not enough (Sterling). GM counts anything from the opening down to 1/4 in. below it as full.",
+   "GM lets the axle drain to level for 90 to 120 seconds before fitting the fill plug, because an overfilled axle seeps oil out of its vent."
+  ],
+  "car": "Volvo's spec sheet lists the T5 (B4204T11) as transverse, front-wheel drive, so it has no rear axle to service. Volvo's manual warns that water deeper than about 10 in. (25 cm) can get into the differential and transmission and reduce the oil's ability to lubricate.",
+  "src": [
+   [
+    "Six steps to changing rear differential fluid | Mobil",
+    "https://mobil.com/en/lubricants/for-personal-vehicles/auto-care/vehicle-maintenance/six-steps-to-changing-rear-differential-fuid"
+   ],
+   [
+    "Sterling Service Bulletin 35-10: Lubricating the Wheel Bearings, Rear Drive Axles",
+    "https://static.nhtsa.gov/odi/tsbs/2012/SB-10039615-8827.pdf"
+   ],
+   [
+    "GM PIP5075A: Rear Axle Leak From The Vent",
+    "https://static.nhtsa.gov/odi/tsbs/2013/SB-10063361-2273.pdf"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars press PDF, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ],
+   [
+    "Volvo V60 Owner's Manual MY16 (TP 20238, USA & Canada)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Technician A says axle oil level is correct if the oil can be touched with a finger through the fill hole. Technician B says an overfilled axle can leak from its vent. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "Sterling's bulletin says oil that can be seen or touched is not sufficient and must be level with the bottom of the fill hole; GM notes overfill seeps out of the vent.",
+    "src": [
+     "Sterling Service Bulletin 35-10: Lubricating the Wheel Bearings, Rear Drive Axles",
+     "https://static.nhtsa.gov/odi/tsbs/2012/SB-10039615-8827.pdf"
+    ]
+   },
+   {
+    "q": "A technician is refilling a limited-slip differential. Which matters most when choosing the oil?",
+    "o": [
+     "Oil with the friction modifier the differential requires",
+     "Any gear oil of the right viscosity",
+     "Engine oil of the same viscosity",
+     "Whatever oil was drained, judged by color"
+    ],
+    "a": 0,
+    "why": "Mobil states that limited-slip differentials need gear oil with the right friction modifiers for their design, and the wrong oil can cause malfunction or failure.",
+    "src": [
+     "Six steps to changing rear differential fluid | Mobil",
+     "https://mobil.com/en/lubricants/for-personal-vehicles/auto-care/vehicle-maintenance/six-steps-to-changing-rear-differential-fuid"
+    ]
+   }
+  ]
+ },
+ "C12": {
+  "body": [
+   "A broken or damaged stud no longer clamps the wheel, so the studs beside it carry extra load; Hendrickson, a heavy-duty wheel-end maker, replaces the damaged stud and the stud on each side of it.",
+   "Old studs come out with a stud remover; hammering them out can damage the hub or the bearing raceway.",
+   "The new stud goes in with its knurl lined up with the grooves left by the old one and is drawn in with a nut and hardened washers; that nut is discarded afterwards.",
+   "Threads stay dry during this job, because lubricant changes friction and can lead to overtightening and unpredictable clamp load (Hendrickson)."
+  ],
+  "car": "Volvo's manual tightens the wheels crosswise to 103 lb-ft (140 Nm) and calls the fasteners both wheel nuts and bolts, so whether this car uses studs is unconfirmed. Volvo's spec sheet lists the T5 (B4204T11) as transverse, front-wheel drive, so it has no rear drive axle.",
+  "src": [
+   [
+    "Hendrickson T82006: Recommended Stud Replacement Procedures",
+    "https://static.nhtsa.gov/odi/tsbs/2017/MC-10120758-9999.pdf"
+   ],
+   [
+    "Volvo V60 Owner's Manual MY16 (TP 20238, USA & Canada)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars press PDF, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "One wheel stud on a hub is found broken. Which repair does the wheel-end maker recommend?",
+    "o": [
+     "Replace the broken stud and the stud on each side of it",
+     "Replace only the broken stud",
+     "Run the wheel with one stud missing until the next service",
+     "Hammer the broken stud out and reuse the nut"
+    ],
+    "a": 0,
+    "why": "Hendrickson recommends replacing the damaged stud and each adjacent stud, because the neighbors take extra load and may lose clamping ability.",
+    "src": [
+     "Hendrickson T82006: Recommended Stud Replacement Procedures",
+     "https://static.nhtsa.gov/odi/tsbs/2017/MC-10120758-9999.pdf"
+    ]
+   },
+   {
+    "q": "Technician A says new wheel studs should be oiled before being drawn into the hub. Technician B says hammering out old studs can damage the bearing raceway. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "Hendrickson warns against lubricating the threads and against pounding studs out, which can cause impact damage to the bearing raceway.",
+    "src": [
+     "Hendrickson T82006: Recommended Stud Replacement Procedures",
+     "https://static.nhtsa.gov/odi/tsbs/2017/MC-10120758-9999.pdf"
+    ]
+   }
+  ]
+ },
+ "C13": {
+  "body": [
+   "The axle housing is checked for leaks at its seals, cover gasket and plugs (Nissan), and the vent on top of the housing is checked because an overfilled axle pushes oil out through it (GM).",
+   "On one GM model, a vent leak was fixed by fitting a hose that raises the vent, tied to the crossmember so it cannot rattle against anything.",
+   "When an axle is lowered for this work, its mounting fasteners are removed and refitted using the service information's procedure (GM)."
+  ],
+  "car": "Volvo's spec sheet lists the T5 (B4204T11) as transverse, front-wheel drive with independent rear suspension, so there is no rear axle housing, vent or axle mounts to inspect.",
+  "src": [
+   [
+    "Nissan NTB24-007: Diagnosing Rear Final Drive Assembly Leaks",
+    "https://static.nhtsa.gov/odi/tsbs/2024/MC-10249928-0001.pdf"
+   ],
+   [
+    "GM PIP5075A: Rear Axle Leak From The Vent",
+    "https://static.nhtsa.gov/odi/tsbs/2013/SB-10063361-2273.pdf"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars press PDF, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Oil is seeping from the vent on top of a rear axle. Technician A says to check whether the axle is overfilled. Technician B says vent seepage proves the pinion seal has failed. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "GM states that an overfilled differential will seep fluid out of the rear axle vent and has the level checked first; the vent is a separate leak point from the pinion seal.",
+    "src": [
+     "GM PIP5075A: Rear Axle Leak From The Vent",
+     "https://static.nhtsa.gov/odi/tsbs/2013/SB-10063361-2273.pdf"
+    ]
+   }
+  ]
+ },
+ "C14": {
+  "body": [
+   "This task covers a 4WD transfer case's shift parts (manual linkage and levers, or electric shift), its bushings, mounts and brackets.",
+   "For an electric-shift case with an intermittent fault, GM's checks include a visual inspection around the case for damaged parts, cut wires and loose terminal tension at its connector.",
+   "When FCA removed a transmission crossmember to reach transfer case bolts, the old mount-to-crossmember nuts and isolator bolts were replaced, not reused.",
+   "No sourced procedure for linkage or lever adjustment found yet."
+  ],
+  "car": "Volvo's spec sheet lists the T5 (B4204T11) as transverse, front-wheel drive, so it has no transfer case.",
+  "src": [
+   [
+    "GM 23-NA-185: Information on Helping Reduce Customer Concern Not Duplicated (CCND) on Transfer Cases",
+    "https://static.nhtsa.gov/odi/tsbs/2025/MC-11017255-0001.pdf"
+   ],
+   [
+    "FCA 21-021-19 REV. A: Transfer Case Oil Leak",
+    "https://static.nhtsa.gov/odi/tsbs/2019/MC-10162558-9999.pdf"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars press PDF, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "An electric-shift transfer case sets an intermittent Service 4WD message that cannot be duplicated, and no current codes are stored. After reviewing code history, what does GM list next?",
+    "o": [
+     "A visual inspection around the transfer case for damage, cut wires and connector terminal tension",
+     "Replacing the transfer case",
+     "Overfilling the transfer case",
+     "Clearing codes and returning the vehicle"
+    ],
+    "a": 0,
+    "why": "GM's flow chart moves from history codes to a thorough visual inspection, including damaged parts near the case, cut wires and terminal tension at its connector.",
+    "src": [
+     "GM 23-NA-185: Information on Helping Reduce Customer Concern Not Duplicated (CCND) on Transfer Cases",
+     "https://static.nhtsa.gov/odi/tsbs/2025/MC-11017255-0001.pdf"
+    ]
+   }
+  ]
+ },
+ "C15": {
+  "body": [
+   "This task checks transfer case fluid level and condition and drains and refills it with the specified fluid.",
+   "On some GM AWD models, gear oil was pushed out of the transfer case (PTU) vent because the fluid's additives broke down, and the fix was new fluid; GM also notes some transfer case complaints, including noise, can be cured with a drain and fill.",
+   "A red fluid leak near the back of the transmission or transfer case may come from the output seal or the driveshaft slip-yoke plug; GM cleans the area and inspects each spot to tell them apart.",
+   "No sourced fill-level procedure found yet."
+  ],
+  "car": "Volvo's spec sheet lists the T5 (B4204T11) as transverse, front-wheel drive, so it has no transfer case.",
+  "src": [
+   [
+    "GM PI0312A: Fluid Leak from Transfer Case (PTU) Vent",
+    "https://static.nhtsa.gov/odi/tsbs/2012/SB-10043933-1856.pdf"
+   ],
+   [
+    "GM 23-NA-185: Information on Helping Reduce Customer Concern Not Duplicated (CCND) on Transfer Cases",
+    "https://static.nhtsa.gov/odi/tsbs/2025/MC-11017255-0001.pdf"
+   ],
+   [
+    "GM 22-NA-225: Information on Red Fluid Leak from Center of Vehicle Located by the Rear of the Transmission or Transfer Case Area",
+    "https://static.nhtsa.gov/odi/tsbs/2023/MC-10245200-0001.pdf"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars press PDF, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Gear oil is leaking from the transfer case (PTU) vent of an AWD vehicle. What repair did GM specify for this condition?",
+    "o": [
+     "Replace the transfer case fluid",
+     "Replace the transfer case",
+     "Plug the vent",
+     "Replace the front axle actuator"
+    ],
+    "a": 0,
+    "why": "GM traced the vent leak to breakdown of fluid additives and specified a transfer case fluid replacement.",
+    "src": [
+     "GM PI0312A: Fluid Leak from Transfer Case (PTU) Vent",
+     "https://static.nhtsa.gov/odi/tsbs/2012/SB-10043933-1856.pdf"
+    ]
+   }
+  ]
+ },
+ "C16": {
+  "body": [
+   "This task applies the driveshaft checks to the front driveshaft of a 4WD vehicle: joints, slip yoke, phasing and lubrication.",
+   "Bearing positions are marked against the yokes, and the slip-spline halves against each other, before removal so the shaft goes back in phase (Spicer).",
+   "Greasable joints are purged until fresh grease shows at all four seals; Spicer's heavy-duty guide replaces a joint with more than 0.006 in. of movement at the end yoke.",
+   "On some GM trucks a convoluted boot protects the slip-yoke splines; a leaking plug in the slip yoke is fixed by replacing the slip yoke, while a leaking output seal is replaced on its own."
+  ],
+  "car": "Volvo's spec sheet lists the T5 (B4204T11) as transverse, front-wheel drive, so it has no front driveshaft.",
+  "src": [
+   [
+    "Spicer Life Series (SPL) U-Joint Service - Quick Reference",
+    "https://www.dana.com/globalassets/resource-library/commercial-vehicle/customer-support/spl-u-joint-service-guide.pdf"
+   ],
+   [
+    "Spicer Driveline Phasing, service/technical letter JOI-TEC-082 (Dana, Sept 2017)",
+    "https://static.nhtsa.gov/odi/tsbs/2017/MC-10119574-9999.pdf"
+   ],
+   [
+    "GM 22-NA-225: Information on Red Fluid Leak from Center of Vehicle Located by the Rear of the Transmission or Transfer Case Area",
+    "https://static.nhtsa.gov/odi/tsbs/2023/MC-10245200-0001.pdf"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars press PDF, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Red fluid is dripping near the rear of a truck's transfer case. The output seal and boot area are dry, but the slip-yoke plug area is wet. What repair does GM specify?",
+    "o": [
+     "Replace the propeller shaft front slip yoke",
+     "Replace the output seal only",
+     "Replace the transfer case",
+     "Top off the fluid and recheck later"
+    ],
+    "a": 0,
+    "why": "GM's bulletin says that if the welch plug is the leak source, the propeller shaft front slip yoke is replaced.",
+    "src": [
+     "GM 22-NA-225: Information on Red Fluid Leak from Center of Vehicle Located by the Rear of the Transmission or Transfer Case Area",
+     "https://static.nhtsa.gov/odi/tsbs/2023/MC-10245200-0001.pdf"
+    ]
+   },
+   {
+    "q": "A driveshaft U-joint shows movement relative to its end yoke. In Spicer's heavy-duty SPL guide, above what amount is the joint replaced?",
+    "o": [
+     "0.006 in.",
+     "0.060 in.",
+     "0.0006 in.",
+     "0.016 in."
+    ],
+    "a": 0,
+    "why": "Spicer's SPL quick reference sets the limit at less than 0.006 in. of movement relative to the end yoke and replaces the joint beyond that.",
+    "src": [
+     "Spicer Life Series (SPL) U-Joint Service - Quick Reference",
+     "https://www.dana.com/globalassets/resource-library/commercial-vehicle/customer-support/spl-u-joint-service-guide.pdf"
+    ]
+   }
+  ]
+ },
+ "C17": {
+  "body": [
+   "With the shaft installed, GKN checks for a tight fit at each end, a bent or damaged shaft, boot and clamp condition, and radial play in the joints and slip spline, turning the steering through all angles.",
+   "Grease outside the boot is a clear sign of trouble, and torn, slipped or porous boots are the leading cause of joint failure.",
+   "For a full check the shaft is removed, cleaned and held in soft vise jaws: both joints should turn smoothly with no binding and no excess radial movement.",
+   "On refitting, the inner plunging joint is never left hanging from the transmission, a new axle nut is torqued to the vehicle maker's figure, and the wheel carrier gets new bolts (GKN).",
+   "On GM trucks with a front axle actuator, moisture corrosion at the actuator connector has stopped the front axle from engaging."
+  ],
+  "car": "Volvo's spec sheet lists the T5 (B4204T11) as transverse, front-wheel drive, so the front wheels are its driven wheels and the half-shaft and CV-joint checks in this task apply to it.",
+  "src": [
+   [
+    "GKN Automotive Tech Tips: Driveshaft inspection (Autobiz Tech Tips, 2012)",
+    "https://www.techtips.ie/GKN-Automotive/driveshaft-inspection.pdf"
+   ],
+   [
+    "GM PIP5087: Service 4 Wheel Drive Message Front Axle Will Not Engage When 4WD Is Selected",
+    "https://static.nhtsa.gov/odi/tsbs/2013/MC-10112740-9999.pdf"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars press PDF, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "While reinstalling a front half-shaft, which practice is correct?",
+    "o": [
+     "Use a new axle nut and torque it to the vehicle maker's figure",
+     "Reuse the old axle nut if its threads look clean",
+     "Let the shaft hang from the inner joint while working",
+     "Clamp the shaft in steel vise jaws"
+    ],
+    "a": 0,
+    "why": "GKN says to use only a new driveshaft nut torqued to the car maker's specification and never to reuse the old one.",
+    "src": [
+     "GKN Automotive Tech Tips: Driveshaft inspection (Autobiz Tech Tips, 2012)",
+     "https://www.techtips.ie/GKN-Automotive/driveshaft-inspection.pdf"
+    ]
+   },
+   {
+    "q": "Technician A says grease on the outside of a CV boot is a sign of a problem. Technician B says CV joints should be checked through all steering angles. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "GKN's inspection list treats grease contamination as a clear sign of a problem and checks joints in all possible steering angles.",
+    "src": [
+     "GKN Automotive Tech Tips: Driveshaft inspection (Autobiz Tech Tips, 2012)",
+     "https://www.techtips.ie/GKN-Automotive/driveshaft-inspection.pdf"
+    ]
+   }
+  ]
+ },
+ "C18": {
+  "body": [
+   "Grinding when turning or when load shifts suggests roller or raceway damage; a hum that grows with a slight steering input points to a bearing (Timken).",
+   "Snapping or clicking in sharp turns can mean excess bearing end play from poor clamping, or a worn outer CV joint.",
+   "Severe bearing looseness can cause runout that makes the brakes pulsate or pull and wears pads and rotors unevenly, though Timken notes a caliper fault is the more common cause.",
+   "SKF checks hub end play first and replaces an out-of-spec hub assembly; if the ABS light is on, the wheel speed sensor and its wiring are tested to the vehicle maker's procedure.",
+   "The spindle, axle joints, wheel flange and frame are also checked for damage, and an alignment check can reveal a bent part (SKF)."
+  ],
+  "car": null,
+  "src": [
+   [
+    "Timken Light Vehicle TechTips LV5: Symptoms of a Worn Wheel Hub Bearing",
+    "https://www.timken.com/wp-content/uploads/2017/08/LV5-Symptoms-of-a-Worn-Wheel-Hub-Bearing.pdf"
+   ],
+   [
+    "SKF Tech tip TT 08-011: Hub unit wheel bearing noise",
+    "https://cdn.skfmediahub.skf.com/api/public/0901d1968019eb1e/pdf_preview_medium/0901d1968019eb1e_pdf_preview_medium.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A front hub unit bearing has end play beyond specification. What is the correct repair?",
+    "o": [
+     "Replace the hub assembly",
+     "Tighten the hub nut to remove the play",
+     "Repack the hub with grease",
+     "Shim the hub flange"
+    ],
+    "a": 0,
+    "why": "SKF's first step is to check end play and replace the hub assembly if it is out of specification.",
+    "src": [
+     "SKF Tech tip TT 08-011: Hub unit wheel bearing noise",
+     "https://cdn.skfmediahub.skf.com/api/public/0901d1968019eb1e/pdf_preview_medium/0901d1968019eb1e_pdf_preview_medium.pdf"
+    ]
+   },
+   {
+    "q": "A noise is heard as a hum on a straight road and gets louder when the steering wheel is turned slightly. What is the most likely cause?",
+    "o": [
+     "A worn wheel bearing",
+     "Excess differential backlash",
+     "A worn brake pad",
+     "A loose heat shield"
+    ],
+    "a": 0,
+    "why": "Timken describes bearing-related hum or rumble as present in a straight line and intensifying with slight steering.",
+    "src": [
+     "Timken Light Vehicle TechTips LV5: Symptoms of a Worn Wheel Hub Bearing",
+     "https://www.timken.com/wp-content/uploads/2017/08/LV5-Symptoms-of-a-Worn-Wheel-Hub-Bearing.pdf"
+    ]
+   }
+  ]
+ },
+ "C19": {
+  "body": [
+   "This task is a leak and condition check of the transfer case, the front differential, and their seals and vents on 4WD and AWD vehicles.",
+   "For a red fluid leak at the back of the transmission or transfer case, GM separates an output-seal leak from a slip-yoke plug leak, cleaning with mineral spirits and making short drives to bring the leak back.",
+   "Vents can leak too: on some GM AWD models gear oil came out of the transfer case (PTU) vent because the fluid's additives broke down, and new fluid fixed it.",
+   "An overfilled differential also pushes oil out of its vent, so the level is checked before the vent is blamed (GM)."
+  ],
+  "car": "Volvo's spec sheet lists the T5 (B4204T11) as transverse, front-wheel drive, so it has no transfer case. Volvo's manual warns that wading deeper than about 10 in. (25 cm) can let water into the differential and transmission.",
+  "src": [
+   [
+    "GM 22-NA-225: Information on Red Fluid Leak from Center of Vehicle Located by the Rear of the Transmission or Transfer Case Area",
+    "https://static.nhtsa.gov/odi/tsbs/2023/MC-10245200-0001.pdf"
+   ],
+   [
+    "GM PI0312A: Fluid Leak from Transfer Case (PTU) Vent",
+    "https://static.nhtsa.gov/odi/tsbs/2012/SB-10043933-1856.pdf"
+   ],
+   [
+    "GM PIP5075A: Rear Axle Leak From The Vent",
+    "https://static.nhtsa.gov/odi/tsbs/2013/SB-10063361-2273.pdf"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars press PDF, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ],
+   [
+    "Volvo V60 Owner's Manual MY16 (TP 20238, USA & Canada)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Gear oil is found at an AWD vehicle's transfer case (PTU) vent. Technician A says breakdown of the fluid's additives can push fluid out of the vent. Technician B says GM's fix for this is a fluid replacement. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "GM attributes the vent leak to fluid additives breaking down and specifies transfer case fluid replacement.",
+    "src": [
+     "GM PI0312A: Fluid Leak from Transfer Case (PTU) Vent",
+     "https://static.nhtsa.gov/odi/tsbs/2012/SB-10043933-1856.pdf"
+    ]
+   },
+   {
+    "q": "Both the output seal area and the slip-yoke plug area behind a transfer case are wet with fluid. What does GM do next?",
+    "o": [
+     "Dry the area, make short drives to bring the leak back, then reinspect",
+     "Replace both parts",
+     "Replace the transfer case",
+     "Add a stop-leak additive"
+    ],
+    "a": 0,
+    "why": "GM's procedure says that when both areas are wet the source is unclear, so the area is dried and short drives are made before inspecting again.",
+    "src": [
+     "GM 22-NA-225: Information on Red Fluid Leak from Center of Vehicle Located by the Rear of the Transmission or Transfer Case Area",
+     "https://static.nhtsa.gov/odi/tsbs/2023/MC-10245200-0001.pdf"
+    ]
+   }
+  ]
+ },
+ "C20": {
+  "body": [
+   "Correct tire size comes from the owner's manual or the Tire and Loading Information label on the driver's door edge or post, and replacements should match the original size (NHTSA).",
+   "Tires are replaced at 2/32 in. of tread, when the tread is level with the wear bars; in the penny test, a fully visible Lincoln head means the tread is too low (NHTSA, USTMA).",
+   "Irregular wear comes from under-inflation, misalignment (for example after a pothole) and skipped rotation; balance is checked along with alignment (USTMA).",
+   "Volvo adds that under- or over-inflation causes uneven treadwear, and that all four tires should share the same size designation and radial type, ideally from the same maker.",
+   "NHTSA's general rotation interval is 5,000 to 8,000 miles where the maker recommends rotation; some vehicles should not be rotated, so the owner's manual decides."
+  ],
+  "car": "Volvo's pressure table lists 215/50 R17 Extra Load at 38 psi (260 kPa) front and rear, with the placard on the B-pillar behind the driver's door. Volvo requires no rotation, but if done it is front to rear only, first at about 3,000 miles and then every 6,000, and only with fairly even wear and more than 1/16 in. (1.6 mm) of tread; Volvo's guidance governs this car over NHTSA's general interval.",
+  "src": [
+   [
+    "Tire Safety Ratings and Awareness | TireWise | NHTSA",
+    "https://www.nhtsa.gov/vehicle-safety/tires"
+   ],
+   [
+    "Tire Care Essentials | USTMA",
+    "https://www.ustires.org/tire-care-safety/tire-care-essentials"
+   ],
+   [
+    "Volvo V60 Owner's Manual MY16 (TP 20238, USA & Canada)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "All of the following can cause irregular tread wear EXCEPT:",
+    "o": [
+     "Under-inflation",
+     "Misaligned wheels after a pothole",
+     "Skipping the recommended rotation",
+     "Inflating to the placard's cold pressure"
+    ],
+    "a": 3,
+    "why": "USTMA links irregular wear to under-inflation, misalignment and missed rotation; Volvo recommends the placard's cold pressure for best wear.",
+    "src": [
+     "Tire Care Essentials | USTMA",
+     "https://www.ustires.org/tire-care-safety/tire-care-essentials"
+    ]
+   },
+   {
+    "q": "A tire's tread is level with its wear bars. Technician A says the tire should be replaced. Technician B says it still has 4/32 in. of tread left. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "NHTSA says tires should be replaced at 2/32 in., which is when the tread is level with the wear indicator.",
+    "src": [
+     "Tire Safety Ratings and Awareness | TireWise | NHTSA",
+     "https://www.nhtsa.gov/vehicle-safety/tires"
+    ]
+   }
+  ]
+ },
+ "C21": {
+  "body": [
+   "OBD II stores a fault when an emission-related part or system works outside its expected range, and it can turn on the Check Engine light (MIL) (Volvo).",
+   "A scan tool plugs into the vehicle's diagnostic connector; Mode $01 PID $01 reports MIL status and readiness monitors, and Mode $03 returns the stored codes (40 CFR 85.2222).",
+   "Every code is recorded with the MIL status. In an inspection, a MIL commanded on with stored codes fails, a MIL that does not light at key on, engine off fails, and a 2001 or newer vehicle may have no more than one unset monitor.",
+   "History codes and freeze-frame records are checked as well as current codes; GM notes such codes can clear after 40 ignition cycles, and 'C' (chassis) codes cause most Service 4WD warnings on its trucks."
+  ],
+  "car": "Volvo's manual says a fault stays recorded even after the Check Engine light goes out by itself, and the car may then pass or fail an OBD II emissions inspection depending on local practice.",
+  "src": [
+   [
+    "Volvo V60 Owner's Manual MY16 (TP 20238, USA & Canada)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "40 CFR 85.2222 Onboard diagnostic test procedures",
+    "https://www.ecfr.gov/current/title-40/chapter-I/subchapter-C/part-85/subpart-W/section-85.2222"
+   ],
+   [
+    "GM 23-NA-185: Information on Helping Reduce Customer Concern Not Duplicated (CCND) on Transfer Cases",
+    "https://static.nhtsa.gov/odi/tsbs/2025/MC-11017255-0001.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "During an OBD inspection, the MIL is commanded on and two DTCs are stored. What is the result?",
+    "o": [
+     "The vehicle fails, and the codes are recorded",
+     "The vehicle passes if all monitors are ready",
+     "The vehicle passes if the MIL bulb is burned out",
+     "The vehicle passes after one more drive cycle"
+    ],
+    "a": 0,
+    "why": "Under 40 CFR 85.2222(d)(1), when the MIL is commanded on, the stored codes that light it are recorded and the vehicle fails.",
+    "src": [
+     "40 CFR 85.2222 Onboard diagnostic test procedures",
+     "https://www.ecfr.gov/current/title-40/chapter-I/subchapter-C/part-85/subpart-W/section-85.2222"
+    ]
+   },
+   {
+    "q": "Technician A says that once the MIL goes out, no fault is stored. Technician B says history codes and freeze-frame records can show a fault that is no longer current. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "GM has technicians read DTC history and freeze-frame records for faults that are no longer current, and Volvo notes a fault stays recorded after the light goes out.",
+    "src": [
+     "GM 23-NA-185: Information on Helping Reduce Customer Concern Not Duplicated (CCND) on Transfer Cases",
+     "https://static.nhtsa.gov/odi/tsbs/2025/MC-11017255-0001.pdf"
+    ]
+   }
+  ]
+ },
+ "C22": {
+  "body": [
+   "Checking 4WD or AWD operation starts with duplicating the complaint, noting whether it happens only in one 4WD range, then reading current and history codes; some extra noise is normal with the front driveline engaged, so GM compares with a similar known-good vehicle.",
+   "A Service 4WD message with the front axle not engaging has been traced on GM trucks to corroded front axle actuator terminals, with DTC C0379.",
+   "Many AWD cars use an electronically controlled wet multi-plate coupling, run by its own control unit, that sends torque to the rear axle on demand (BorgWarner).",
+   "Volvo's AWD models send most power to the front wheels in normal driving; an electrical fault brings up 'AWD disabled Service required' and a warning light."
+  ],
+  "car": "Volvo's spec sheet lists the T5 (B4204T11) as transverse, front-wheel drive, so this car has no AWD system; the AWD section of its manual covers AWD versions of the V60.",
+  "src": [
+   [
+    "GM 23-NA-185: Information on Helping Reduce Customer Concern Not Duplicated (CCND) on Transfer Cases",
+    "https://static.nhtsa.gov/odi/tsbs/2025/MC-11017255-0001.pdf"
+   ],
+   [
+    "GM PIP5087: Service 4 Wheel Drive Message Front Axle Will Not Engage When 4WD Is Selected",
+    "https://static.nhtsa.gov/odi/tsbs/2013/MC-10112740-9999.pdf"
+   ],
+   [
+    "Gripping Performance – BorgWarner's AWD Coupling Offers Enhanced Traction for Volvo XC40",
+    "https://www.borgwarner.com/newsroom/press-releases/2018/01/11/gripping-performance-borgwarner-s-awd-coupling-offers-enhanced-traction-for-volvo-xc40"
+   ],
+   [
+    "Volvo V60 Owner's Manual MY16 (TP 20238, USA & Canada)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "Volvo V60 specifications (Volvo Cars press PDF, Sept 2016)",
+    "https://mb.cision.com/Public/23609/4188195/aa2ab97f7dbcaad0.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A truck shows Service 4WD, the front axle will not engage, and DTC C0379 is stored. Published diagnostics have not found the cause. What should be inspected?",
+    "o": [
+     "The front axle actuator connector and terminals for moisture corrosion",
+     "The rear axle vent",
+     "Tire tread depth",
+     "The engine air filter"
+    ],
+    "a": 0,
+    "why": "GM's bulletin directs an inspection of the front axle actuator connector for moisture and corroded terminals, replacing the actuator and harness if found.",
+    "src": [
+     "GM PIP5087: Service 4 Wheel Drive Message Front Axle Will Not Engage When 4WD Is Selected",
+     "https://static.nhtsa.gov/odi/tsbs/2013/MC-10112740-9999.pdf"
+    ]
+   },
+   {
+    "q": "A Volvo with AWD shows 'AWD disabled Service required' and a warning light. What is the most likely cause?",
+    "o": [
+     "An electrical fault in the AWD system",
+     "Normal operation on dry pavement",
+     "Low washer fluid",
+     "Worn wiper blades"
+    ],
+    "a": 0,
+    "why": "Volvo's manual says this message and warning light appear when an electrical fault occurs in the AWD system.",
+    "src": [
+     "Volvo V60 Owner's Manual MY16 (TP 20238, USA & Canada)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   }
+  ]
+ },
  "D1": {
   "body": [
    "The supplemental restraint system (SRS) covers more than the airbags: Volvo lists seat belt pretensioners, front airbags, side impact (SIPS) airbags, inflatable curtains and the front passenger occupant weight sensor, all watched by the SRS control module.",
