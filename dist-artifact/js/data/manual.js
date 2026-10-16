@@ -144,6 +144,11 @@ window.V60_MANUAL_DATA = (function () {
         { tier: "D", t: "Diagnose it", d: "Start/stop not stopping the engine is usually a condition, not a fault. And the economical-driving list from Volvo's manual.", steps: [{ tree: "ss" }, { kb: "a-steering", t: "Read: economical driving, Volvo's list (in the steering article)" }] }
       ] },
     { id: "port", view: "cabin", num: "3.3", n: "The diagnostic port", d: "Under the dash on the driver's side. The adapter plugs in here and the car starts talking. Live link lives here.", tags: ["Diagnostics"], at: [62, 186], instrument: true,
+      spec: [["Health check, 2026-10-14, your scan", "Check-engine light on; P0171 (system too lean, bank 1) stored, pending and permanent; all 8 readiness monitors ready"],
+        ["Freeze frame, your scan", "Warm, at idle: 916 rpm, coolant 83 °C; short-term fuel trim +48.4 %, long-term +14.8 %"],
+        ["Drive recording, 2026-10-14, yours", "Long-term trim +22 to +24 % at idle, about 0 to -3 % under load; short-term trim cycling about -20 to +9 % at idle; air flow 2.5–3.0 g/s at about 900 rpm; coolant 84–85 °C; 13.5–13.7 V"],
+        ["What the pattern points to", "Lean at idle but near normal under load: air getting in after the airflow sensor, such as a vacuum or crankcase (PCV) leak, per the Codebook's fuel-trim entry. The cause is not confirmed"],
+        ["P0171 now", "Unconfirmed whether it has cleared since 2026-10-14. Run a new health check"]],
       chapters: [
         { tier: "K", t: "Know it", d: "What OBD-II can and cannot tell you, where the port is, and the Codebook that decodes the adapter's raw labels.", steps: [{ mission: "m-obd" }, { mission: "m-port" }, { kb: "a-obd" }] },
         { tier: "C", t: "Check it", d: "The first real health check with the adapter, saved to the Garage.", steps: [{ mission: "m-scan" }, { scans: 1, t: "One real health check saved", go: "tab:live" }] },
