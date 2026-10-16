@@ -7636,5 +7636,677 @@ window.V60_G1_ENTRIES = {
     ]
    }
   ]
+ },
+ "F12": {
+  "body": [
+   "The starter control circuit is the low-current path that tells the starter to engage: from the battery through the start switch and any relay or magnetic switch to the solenoid's S terminal, and back to the battery.",
+   "Delco Remy notes that too much voltage loss in this circuit can make the solenoid pull in and drop out repeatedly (chatter) or not engage at all, which also damages the solenoid's contact disc and terminals; a deeply discharged battery can cause the same symptom.",
+   "In Delco Remy's solenoid circuit test, a carbon pile loads the switch lead to 100 A and a voltmeter reads from the solenoid BAT terminal to that lead; on a 12-volt system the loss must not exceed 1.0 V, and the wiring alone must not exceed 0.8 V.",
+   "High loss points to loose or corroded terminals, wire that is too small, a switch mounted too far from the starter, or a worn switch, and those parts are repaired or replaced.",
+   "Hella lists a starter that keeps running after the key or button is released as a faulty ignition switch or relay; the engine must be shut off at once and the switch and relay checked.",
+   "For any cranking voltage-drop test, Fluke advises disabling ignition or fuel so the engine cannot start, setting park or neutral with the parking brake on, and keeping hands and leads away from moving parts."
+  ],
+  "car": "On the 2016 V60 with Start/Stop, the 30 A starter motor relay is in the engine compartment cold-zone fuse box, where Volvo says positions A1, A2 and 1–11 are relays or circuit breakers for a trained Volvo technician only. Pressing START/STOP ENGINE runs the starter until the engine starts, for at most 10 seconds per try.",
+  "src": [
+   [
+    "Delco Remy Diagnostic Procedures Manual for Starters and Alternators",
+    "https://www.delcoremy.com/getmedia/30ff0e99-7084-451b-8f2a-6745dd18a3b5/DelcoRemy_DiagnosticManual_Updated_Digital.pdf.aspx"
+   ],
+   [
+    "Checking the starter - Causes of failure, troubleshooting | HELLA",
+    "https://www.hella.com/techworld/us/technical/car-electronics-and-electrics/starting-and-charging-system/checking-the-starter/"
+   ],
+   [
+    "How to Check Starter Circuit Voltage Drop with a Multimeter | Fluke",
+    "https://www.fluke.com/en-us/learn/blog/digital-multimeters/how-to-check-starter-circuit-voltage-drop-with-a-multimeter"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Starting the engine (p. 255); Fuses – engine compartment (p. 359); Fuses – engine compartment cold zone (Start/Stop only) (pp. 365–366)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "With a good, fully charged battery, a starter solenoid clicks in and out rapidly while the start switch is held. Which is the most likely cause?",
+    "o": [
+     "Excessive voltage loss in the solenoid control circuit",
+     "A damaged flywheel ring gear",
+     "An overcharging alternator",
+     "A slipping accessory drive belt"
+    ],
+    "a": 0,
+    "why": "Delco Remy says excessive voltage loss in the solenoid circuit can make the solenoid shift in and out (chatter), resulting in a no-start.",
+    "src": [
+     "Delco Remy Diagnostic Procedures Manual for Starters and Alternators",
+     "https://www.delcoremy.com/getmedia/30ff0e99-7084-451b-8f2a-6745dd18a3b5/DelcoRemy_DiagnosticManual_Updated_Digital.pdf.aspx"
+    ]
+   },
+   {
+    "q": "A 12-volt solenoid circuit shows a 1.6 V loss under Delco Remy's 100 A load test. Technician A says loose or corroded terminals or undersized wire could cause this. Technician B says the starter should be replaced because the circuit failed. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "The limit is 1.0 V; Delco Remy blames excessive loss on terminals, wire size, switch location or a worn switch, and sends the technician to the wiring and switch tests rather than to starter replacement.",
+    "src": [
+     "Delco Remy Diagnostic Procedures Manual for Starters and Alternators",
+     "https://www.delcoremy.com/getmedia/30ff0e99-7084-451b-8f2a-6745dd18a3b5/DelcoRemy_DiagnosticManual_Updated_Digital.pdf.aspx"
+    ]
+   }
+  ]
+ },
+ "F13": {
+  "body": [
+   "Delco Remy checks the battery, cables and switch circuits before blaming the starter; if all of them pass and the engine still cranks poorly, the fault is the starter or the engine, and if a new starter does not fix it, the engine has a mechanical problem.",
+   "Denso's removal order: disconnect the negative battery cable first, label each wire, disconnect the battery cable and the control wire at the solenoid, loosen the mounting bolts, then support the starter while removing them and note each bolt's size and location.",
+   "With the starter out, inspect every tooth of the flywheel or flex plate, through the starter opening if there is no inspection cover; Delco Remy replaces the starter for a damaged pinion, and replaces the ring gear for a damaged ring gear while expecting the pinion to be damaged too.",
+   "Compare the new starter with the old one: case, nose cone, mounting offsets and hole locations, connector positions and nose cone clocking (Denso). Dixie adds cleaning oil and corrosion off the mounting surface and moving heat shields, locating pins and alignment sleeves to the new unit.",
+   "Torque the mounting bolts and terminal nuts to the vehicle maker's specifications, route the harness clear of other parts, reconnect the negative cable last, then start the engine several times, including once it is hot."
+  ],
+  "car": "Volvo's 2016 V60 manual warns never to disconnect the battery while the engine is running or the key is in the ignition, and after three failed start attempts to wait about 3 minutes so the battery can recover. The manual has no starter removal procedure, so the V60's bolt torques are unconfirmed here.",
+  "src": [
+   [
+    "Delco Remy Diagnostic Procedures Manual for Starters and Alternators",
+    "https://www.delcoremy.com/getmedia/30ff0e99-7084-451b-8f2a-6745dd18a3b5/DelcoRemy_DiagnosticManual_Updated_Digital.pdf.aspx"
+   ],
+   [
+    "Starter Removal & Installation | DENSO Auto Parts",
+    "https://densoautoparts.com/?p=239077"
+   ],
+   [
+    "Dixie Electric Tech Tips: Starter Installation Guide (TSB_021)",
+    "https://cdn.motorcarparts.com/dixie/quickconnect/techtip/pdfs/TSB_021.pdf"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Starting the engine (p. 255); Battery – maintenance (p. 353)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A starter was replaced after the battery, cables and control circuit all tested good, but the engine still cranks slowly. What is the most likely cause?",
+    "o": [
+     "A mechanical problem in the engine",
+     "The new starter needs a break-in period",
+     "The alternator is undercharging",
+     "The negative cable was reconnected first"
+    ],
+    "a": 0,
+    "why": "Delco Remy says that if the engine still does not crank properly after the starter is replaced, look for a mechanical problem in the engine.",
+    "src": [
+     "Delco Remy Diagnostic Procedures Manual for Starters and Alternators",
+     "https://www.delcoremy.com/getmedia/30ff0e99-7084-451b-8f2a-6745dd18a3b5/DelcoRemy_DiagnosticManual_Updated_Digital.pdf.aspx"
+    ]
+   },
+   {
+    "q": "Technician A says the negative battery cable is disconnected before removing a starter. Technician B says the flywheel teeth can be inspected through the starter mounting opening when no inspection plate is available. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Denso's starter procedure begins by disconnecting the negative battery cable and calls for inspecting all flywheel or flex plate teeth through the starter port if there is no inspection plate.",
+    "src": [
+     "Starter Removal & Installation | DENSO Auto Parts",
+     "https://densoautoparts.com/?p=239077"
+    ]
+   }
+  ]
+ },
+ "F14": {
+  "body": [
+   "Test the battery first: Denso wants it fully charged (12.6 V) with clean cables, terminals and grounds, and Delco Remy wants it load tested and above 12.4 V with no load before the alternator is judged.",
+   "Denso's output check: at about 2,000 rpm, voltage at the alternator and at the battery should be 13–15 V, then the test is repeated with headlights, blower and defrosters on; refer to the vehicle maker's specification.",
+   "Delco Remy's current test loads the system with a carbon pile until an inductive ammeter on the output wire reads its highest value; output must be within 10% of the rating stamped on the alternator, and an output over 15.5 V means the alternator (internal regulator) is replaced.",
+   "Wiring is checked by voltage drop: Denso allows 0.2 V or less on the positive side (output stud to battery +) and on the negative side (alternator case to battery −) at 2,000 rpm with loads on.",
+   "Undercharge shows as slow cranking, low voltmeter readings and dim lights or slow turn signals; overcharge as high readings, a bad-smelling or acid-spewing battery and bright or burned-out bulbs (Delco Remy). For no charge, Denso lists a loose or worn belt, bad battery connections, a blown fuse or fusible link, wiring faults, a failed alternator or too much electrical load."
+  ],
+  "car": "The 2016 V60 manual says the 'Generator not charging' symbol comes on while driving when the electrical system has a fault, and to contact a Volvo workshop. Hella's charging test is shown on a V60 with Start-Stop, where the engine control module sets charging voltage at the central electronics module's request; whether that matches the T5 Drive-E exactly is unconfirmed.",
+  "src": [
+   [
+    "Charging System Diagnosis - DENSO Auto Parts",
+    "https://www.densoautoparts.com/charging-system-diagnosis"
+   ],
+   [
+    "Charging System Troubleshooting | DENSO Auto Parts",
+    "https://densoautoparts.com/?p=238978"
+   ],
+   [
+    "Delco Remy Diagnostic Procedures Manual for Starters and Alternators",
+    "https://www.delcoremy.com/getmedia/30ff0e99-7084-451b-8f2a-6745dd18a3b5/DelcoRemy_DiagnosticManual_Updated_Digital.pdf.aspx"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Information displays – warning symbols (pp. 74–75)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "Service work on the charging system | HELLA",
+    "https://www.hella.com/techworld/us/technical/car-electronics-and-electrics/starting-and-charging-system/service-work-on-the-charging-system/"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "At about 2,000 rpm with loads off, a voltmeter at a cool, good battery's alternator reads 15.9 V. The alternator has an internal regulator. According to Delco Remy, what is the repair?",
+    "o": [
+     "Replace the alternator",
+     "Tighten the drive belt",
+     "Replace the battery",
+     "Clean the battery terminals"
+    ],
+    "a": 0,
+    "why": "Delco Remy's overcharge chart and replacement criteria call for replacing the alternator when output voltage exceeds 15.5 V and the regulator is internal.",
+    "src": [
+     "Delco Remy Diagnostic Procedures Manual for Starters and Alternators",
+     "https://www.delcoremy.com/getmedia/30ff0e99-7084-451b-8f2a-6745dd18a3b5/DelcoRemy_DiagnosticManual_Updated_Digital.pdf.aspx"
+    ]
+   },
+   {
+    "q": "A battery is not being charged. Technician A says a reading of 0.5 V between the alternator output stud and battery positive at 2,000 rpm with loads on is acceptable. Technician B says a loose or worn drive belt can cause this complaint. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "Denso allows 0.2 V or less on the positive side of the charging circuit and lists insufficient belt tension or a worn belt as a cause of batteries not charging.",
+    "src": [
+     "Charging System Troubleshooting | DENSO Auto Parts",
+     "https://densoautoparts.com/?p=238978"
+    ]
+   }
+  ]
+ },
+ "F15": {
+  "body": [
+   "Gates says modern EPDM belts rarely crack, so the old rule of three cracks in three inches does not apply; wear shows as rib material loss, and as little as 5% loss can cause problems.",
+   "Worn ribs let the belt bottom out in the pulley grooves, causing slip and, when wet, hydroplaning. Gates' belt wear gauge is pressed into the grooves: if it rocks side to side, the belt is worn out; Gates suggests starting belt checks at 60,000 miles.",
+   "Automatic tensioners are wear items. With the engine off and cold, swing the arm through its full travel: sticking or roughness means replacement. Side-to-side arm play means a worn pivot bushing (belt tracking problems), and a bouncing or chattering arm while running means a worn damper and a failed tensioner.",
+   "Squeal points to low tension; Gates says to confirm the belt is the correct length before replacing the tensioner, and to spin each pulley to check its bearing.",
+   "Denso: a belt that is too loose slips and charges irregularly or not at all, while a belt that is too tight damages the alternator bearings.",
+   "An overrunning (decoupler) alternator pulley passes drive in one direction only, which cuts belt vibration and wear (Hella); Dixie warns these clutch pulleys have a short life and should be checked whenever an alternator is replaced."
+  ],
+  "car": "Hella's start-stop service example, shown on a Volvo V60, notes that start-stop systems use alternators with an overrunning pulley; whether the 2016 V60 T5 Drive-E alternator has one is unconfirmed. The owner's manual has no drive belt inspection or replacement interval.",
+  "src": [
+   [
+    "Gates Tech Tip TT002-15: Belt Inspection Changes",
+    "https://www.techtips.ie/Gates/belt-inspection-changes.pdf"
+   ],
+   [
+    "Gates Tech Tip TT004-15: Diagnosing Tensioner Failure",
+    "https://www.techtips.ie/Gates/diagnosing-tensioner-failure.pdf"
+   ],
+   [
+    "Charging System Diagnosis - DENSO Auto Parts",
+    "https://www.densoautoparts.com/charging-system-diagnosis"
+   ],
+   [
+    "Function and assembly of the alternator freewheel clutch explained | HELLA",
+    "https://www.hella.com/techworld/us/technical/car-electronics-and-electrics/starting-and-charging-system/function-and-assembly-of-the-alternator-freewheel-clutch/"
+   ],
+   [
+    "Dixie Electric Tech Tips: Alternator Installation Guide (TSB_011)",
+    "https://cdn.motorcarparts.com/dixie/quickconnect/techtip/pdfs/TSB_011.pdf"
+   ],
+   [
+    "Service work on the charging system | HELLA",
+    "https://www.hella.com/techworld/us/technical/car-electronics-and-electrics/starting-and-charging-system/service-work-on-the-charging-system/"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "An EPDM serpentine belt at 95,000 miles shows no cracks, but a belt wear gauge pressed into its grooves rocks from side to side. What does this indicate?",
+    "o": [
+     "The ribs have lost material and the belt should be replaced",
+     "The belt is fine because it has no cracks",
+     "The tensioner spring is too strong",
+     "The belt is the wrong length"
+    ],
+    "a": 0,
+    "why": "Gates says crack counts do not reveal EPDM wear; if the gauge pivots side to side, rib material is gone and the belt's life has expired.",
+    "src": [
+     "Gates Tech Tip TT002-15: Belt Inspection Changes",
+     "https://www.techtips.ie/Gates/belt-inspection-changes.pdf"
+    ]
+   },
+   {
+    "q": "With the engine running, an automatic belt tensioner arm bounces and chatters. Which is most likely?",
+    "o": [
+     "The tensioner's damper is worn and the tensioner has failed",
+     "The belt is too short",
+     "The alternator is overcharging",
+     "The power steering pump is low on fluid"
+    ],
+    "a": 0,
+    "why": "Gates says abnormal chattering or bouncing of the tensioner arm in normal operation means the damper is worn and the tensioner has already failed.",
+    "src": [
+     "Gates Tech Tip TT004-15: Diagnosing Tensioner Failure",
+     "https://www.techtips.ie/Gates/diagnosing-tensioner-failure.pdf"
+    ]
+   }
+  ]
+ },
+ "F16": {
+  "body": [
+   "Confirm the alternator is at fault first: Dixie calls for a charged, load-tested battery, a voltage-drop test of the cables under load (over 0.2 V needs attention), a check of fusible links, and an inspection of the belt and decoupler pulley.",
+   "Disconnect the battery before removal; Hella warns never to disconnect, short or connect battery terminals while the engine runs, because the voltage spikes can do damage. Denso then labels each wire, releases belt tension (an automatic tensioner is rotated with the proper tool), and supports the alternator while removing its bolts, noting bracket orientation and bolt lengths.",
+   "Compare the new unit with the old: pulley offset, size, type and groove count, mounting holes, and connector locations or rear housing clocking (Denso, Dixie).",
+   "Fit the bolts, install the belt, set tension and torque to the vehicle maker's specifications, check pulley alignment and harness clearance, and never pry or hammer on the alternator housing (Denso).",
+   "Charge a deeply discharged battery before start-up rather than using the new alternator to do it (Dixie). Denso runs the engine 10 minutes to seat a new belt, rechecks tension to the used specification, and retests the charging system."
+  ],
+  "car": "Volvo's 2016 V60 manual says never to disconnect the battery while the engine is running or the key is in the ignition. The manual has no alternator removal procedure, so V60-specific steps and torques are unconfirmed here.",
+  "src": [
+   [
+    "Dixie Electric Tech Tips: Alternator Installation Guide (TSB_011)",
+    "https://cdn.motorcarparts.com/dixie/quickconnect/techtip/pdfs/TSB_011.pdf"
+   ],
+   [
+    "Checking the alternator | HELLA",
+    "https://www.hella.com/techworld/us/technical/car-electronics-and-electrics/starting-and-charging-system/checking-the-alternator/"
+   ],
+   [
+    "Alternator Removal & Installation - DENSO Auto Parts",
+    "https://www.densoautoparts.com/?p=238945"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Battery – maintenance (p. 353)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "All of these help confirm an alternator needs replacing EXCEPT:",
+    "o": [
+     "Disconnecting a battery cable with the engine running to see if it stalls",
+     "Charging and load testing the battery",
+     "Voltage-drop testing the charging cables under load",
+     "Checking the fusible links in the charging circuit"
+    ],
+    "a": 0,
+    "why": "Hella says battery terminals must not be disconnected while the engine is running because voltage peaks can cause damage; the other three are standard checks.",
+    "src": [
+     "Checking the alternator | HELLA",
+     "https://www.hella.com/techworld/us/technical/car-electronics-and-electrics/starting-and-charging-system/checking-the-alternator/"
+    ]
+   },
+   {
+    "q": "Technician A says that after installing an alternator with a new belt, the engine should idle about 10 minutes and the belt be reset to the used tension specification. Technician B says the alternator housing can be pried on to set belt tension. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Denso calls for a 10-minute idle to break in the belt and readjustment to the used specification, and warns not to pry or hit the alternator housing.",
+    "src": [
+     "Alternator Removal & Installation - DENSO Auto Parts",
+     "https://www.densoautoparts.com/?p=238945"
+    ]
+   }
+  ]
+ },
+ "F17": {
+  "body": [
+   "Halogen headlight bulbs must not be touched on the glass: oils from fingers vaporize and leave a deposit that damages the reflector (Volvo).",
+   "FMVSS 108 requires each headlamp to be aimable both up-down and left-right without removing vehicle parts, except covers that come off without tools; adjustments must be possible for one person with ordinary tools.",
+   "On a visually/optically aimable lower beam, the cutoff is set either on the left at 0.4° below the horizontal line or on the right at the horizontal line; a combined upper beam is not re-aimed separately (FMVSS 108).",
+   "Before aiming, Hella checks that the lamps work and the lenses are not chipped, scratched or dull, sets the tire pressures, and loads the driver's seat with a person or 75 kg.",
+   "J.W. Speaker's wall method parks the car 25 ft from a wall marked with each headlamp's center, aims on low beam, adjusts vertical aim first and horizontal second, and checks each lamp on its own; the high beam follows the low-beam aim.",
+   "Fog and other auxiliary lamps are aimed so their cutoff runs as level as possible along the screen's dividing line (Hella)."
+  ],
+  "car": "Volvo lists the 2016 V60's halogen low beam as H11 LL, 55 W, and high beam as H9, 65 W; both are owner-replaceable after lifting out the whole headlight housing with the ignition off and the key removed. Active Bending Light bulbs (an option) are for a Volvo technician only because of their high voltage. The manual gives no aiming procedure.",
+  "src": [
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Bulbs – introduction, headlight housing, cover, low beam, high beam, specifications (pp. 340–347)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "49 CFR 571.108 -- Standard No. 108; Lamps, reflective devices, and associated equipment (eCFR)",
+    "https://www.ecfr.gov/api/renderer/v1/content/enhanced/current/title-49?part=571&section=571.108"
+   ],
+   [
+    "Headlamp adjustment – instructions | HELLA",
+    "https://hella.com/techworld/us/technical/automotive-lighting/headlight-adjustment"
+   ],
+   [
+    "How to Aim Your Headlights After Installation (J.W. Speaker)",
+    "https://info.jwspeaker.com/knowledge/blog/education-center/how-to-aim-headlights-high-low-or-low-beam-headlights"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "While installing a halogen headlight bulb, a technician holds it by the glass with bare fingers. What is the most likely result?",
+    "o": [
+     "Finger oils vaporize and leave a deposit that damages the reflector",
+     "The bulb will only work on high beam",
+     "The headlamp aim shifts to the left",
+     "The headlight washer stops working"
+    ],
+    "a": 0,
+    "why": "Volvo cautions never to touch bulb glass with fingers, because grease and oils vaporize in the heat and leave a deposit that damages the reflector.",
+    "src": [
+     "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Bulbs – headlight housing (p. 341)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   },
+   {
+    "q": "Technician A says a visually aimable lower beam with a left-side cutoff is aimed so the cutoff is 0.4° below horizontal. Technician B says FMVSS 108 requires headlamp aim to be adjustable without removing vehicle parts other than covers that come off without tools. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "FMVSS 108 S10.18.9.1.1 sets a left-side cutoff at 0.4° down from the H-H line, and S10.18.1 requires aim inspection and adjustment without removing vehicle parts except tool-free covers.",
+    "src": [
+     "49 CFR 571.108 -- Standard No. 108; Lamps, reflective devices, and associated equipment (eCFR)",
+     "https://www.ecfr.gov/api/renderer/v1/content/enhanced/current/title-49?part=571&section=571.108"
+    ]
+   }
+  ]
+ },
+ "F18": {
+  "body": [
+   "Volvo separates bulbs an owner may change from those for a technician; it also says to switch off the ignition before changing any bulb and to see a workshop if an error message stays on after a new bulb is fitted.",
+   "A turn signal indicator that flashes faster than normal points to a burned-out turn signal bulb (Volvo). FMVSS 108 requires the turn signal pilot indicator to show a lamp failure by staying on, staying off, or clearly changing its flash rate.",
+   "Hella finds that many lamp failures come from moisture: corroded plug connections, oxidized crimp contacts and decayed bulb holders. Water can also wick along a wire under its insulation from an unsealed connector into the lamp.",
+   "Hella's repair: cut off corroded crimp contacts, strip about 10 mm, fit heat-shrink crimp contacts, seal the cable entry, clean or replace the lamp base contacts, and never glue or seal a lamp into the body with sealant.",
+   "FMVSS 108 sets each lamp's color in its Table I, and any replacement lamp must meet the standard and include every function of the lamp it replaces."
+  ],
+  "car": "On the 2016 V60, the backup, rear fog and rear turn signal bulbs are changed from inside the cargo area; front side markers, cornering lights, mirror turn signals and approach lights, rear parking/side markers and LED lights are for a Volvo technician. Volvo's documents conflict on the brake light: the taillight drawing labels it LED, while the bulb table lists a 21 W P21W LL brake bulb.",
+  "src": [
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Bulbs – introduction, taillight housing, specifications (pp. 340, 345, 347); Turn signals (p. 96)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "49 CFR 571.108 -- Standard No. 108; Lamps, reflective devices, and associated equipment (eCFR)",
+    "https://www.ecfr.gov/api/renderer/v1/content/enhanced/current/title-49?part=571&section=571.108"
+   ],
+   [
+    "Condensation in headlight – troubleshooting | HELLA",
+    "https://www.hella.com/techworld/us/technical/automotive-lighting/condensation-in-headlight/"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "When the driver signals a left turn, the dash indicator flashes much faster than normal. Right turns are normal. What is the most likely cause?",
+    "o": [
+     "A burned-out left turn signal bulb",
+     "A failed hazard warning switch",
+     "An overcharging alternator",
+     "A blown horn fuse"
+    ],
+    "a": 0,
+    "why": "Volvo says a turn signal indicator flashing faster than normal means a turn signal bulb has burned out, and FMVSS 108 requires a lamp failure to change the pilot indicator's signal.",
+    "src": [
+     "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Turn signals (p. 96)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   },
+   {
+    "q": "A tail lamp keeps failing; its socket has green corrosion. Technician A says to replace the corroded crimp contacts and seal the cable entry. Technician B says to seal the lamp to the body with sealant so water cannot get in. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Hella replaces corroded crimp contacts and seals cable ducts, but says recessed lamps should never be fitted or sealed with sealant or adhesive.",
+    "src": [
+     "Condensation in headlight – troubleshooting | HELLA",
+     "https://www.hella.com/techworld/us/technical/automotive-lighting/condensation-in-headlight/"
+    ]
+   }
+  ]
+ },
+ "F19": {
+  "body": [
+   "A light mist inside a lamp lens can be normal: warm air leaves through the vents when the lamp is on, humid air is drawn back in as it cools, and the mist should clear after the lamp has been on for a while (Hella).",
+   "Water droplets on the inside of the lens are a different matter. Hella checks the vents for blockage, dries the lamp with oil-free compressed air, and replaces the lamp if water collects again.",
+   "Most headlamp lenses are now polycarbonate with a scratch-resistant coating. Hella warns never to wipe them with a dry cloth and notes that harsh cleaners can destroy them.",
+   "Before aiming, Hella checks lenses for stone chips, scratches and dullness. After aiming, if a halogen low beam's measured glare clearly exceeds 1.0 lux, Hella says the headlamp must be replaced.",
+   "FMVSS 108 requires original and replacement headlamp lenses to carry the 'DOT' mark; a replacement lens must also be marked with the maker and part number of the headlamp it fits and with the lens maker's name. Plastic headlamp lenses must pass the standard's abrasion test."
+  ],
+  "car": "Volvo's 2016 V60 manual says condensation can form briefly inside the headlights, fog lights or taillights, is normal, and usually clears soon after the lights are switched on. When a headlight housing is removed, Volvo says to set it on a soft surface so the lens is not scratched.",
+  "src": [
+   [
+    "Condensation in headlight – troubleshooting | HELLA",
+    "https://www.hella.com/techworld/us/technical/automotive-lighting/condensation-in-headlight/"
+   ],
+   [
+    "Headlight lens components, types & regulations | HELLA",
+    "https://www.hella.com/techworld/us/technical/automotive-lighting/headlights/"
+   ],
+   [
+    "Headlamp adjustment – instructions | HELLA",
+    "https://hella.com/techworld/us/technical/automotive-lighting/headlight-adjustment"
+   ],
+   [
+    "49 CFR 571.108 -- Standard No. 108; Lamps, reflective devices, and associated equipment (eCFR)",
+    "https://www.ecfr.gov/api/renderer/v1/content/enhanced/current/title-49?part=571&section=571.108"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Bulbs – introduction (p. 340); Bulbs – headlight housing (pp. 341–342)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "On cool, humid mornings a light mist forms inside a taillight lens and clears after the lights have been on for a while. There are no water droplets. What is the correct action?",
+    "o": [
+     "No repair; this condensation is normal",
+     "Replace the taillight assembly",
+     "Seal the vents with silicone",
+     "Replace the bulb with a higher wattage bulb"
+    ],
+    "a": 0,
+    "why": "Volvo and Hella both describe temporary condensation that clears with the lights on as normal; only pooled water or droplets need repair.",
+    "src": [
+     "Condensation in headlight – troubleshooting | HELLA",
+     "https://www.hella.com/techworld/us/technical/automotive-lighting/condensation-in-headlight/"
+    ]
+   },
+   {
+    "q": "Water keeps collecting inside a headlamp even after its vents were cleared and it was dried with oil-free compressed air. What is the correct repair?",
+    "o": [
+     "Replace the lamp",
+     "Drill a drain hole in the lens",
+     "Polish the lens",
+     "Aim the headlamp lower"
+    ],
+    "a": 0,
+    "why": "Hella says that if water still collects after the vents are checked and the lamp is dried with compressed air, the lamp has to be replaced.",
+    "src": [
+     "Condensation in headlight – troubleshooting | HELLA",
+     "https://www.hella.com/techworld/us/technical/automotive-lighting/condensation-in-headlight/"
+    ]
+   }
+  ]
+ },
+ "F20": {
+  "body": [
+   "Volvo's function check: every indicator and warning symbol lights in ignition mode II or at engine start. After start-up all go out except the parking brake symbol while the brake is applied. Without starting, all go out after 5 seconds except the malfunction indicator and low oil pressure symbols.",
+   "Denso describes a normal charge lamp: on with the ignition on and engine off, then out shortly after start-up. Some charging systems will not work properly if the charge lamp bulb has failed.",
+   "Denso's voltmeter readings: 12.0–12.6 V with the ignition on and engine off, and 13.0–14.5 V running. Engine off, below 12 V suggests undercharging, a low battery or poor wiring; running, below 13.2 V suggests a failed alternator or poor wiring, and above 14.5 V a bad battery, failed regulator or poor connections.",
+   "FMVSS 108 requires an upper beam indicator at least the size of a 3/16 in circle, and an inside turn signal pilot indicator that shows green and flashes at the same rate as the lamps.",
+   "Volvo's 'Time for regular maintenance' message is timed by miles driven, months since the last service and engine running time; 'Maintenance overdue' follows if intervals are missed. No owner reset procedure was found in the sources, so the reset method is unconfirmed."
+  ],
+  "car": "On the 2016 V60, the red warning symbol means a safety or drivability problem: stop safely and read the message. With Connected Service Booking, if the owner accepts a booking, Volvo switches off the service reminder light remotely; if not, the light stays on.",
+  "src": [
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Indicator and warning symbols – function check (p. 70); Information displays – warning symbols (pp. 74–75); Information display – messages (p. 114); Connected Service Booking (pp. 331–332)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "Charging System Diagnosis - DENSO Auto Parts",
+    "https://www.densoautoparts.com/charging-system-diagnosis"
+   ],
+   [
+    "49 CFR 571.108 -- Standard No. 108; Lamps, reflective devices, and associated equipment (eCFR)",
+    "https://www.ecfr.gov/api/renderer/v1/content/enhanced/current/title-49?part=571&section=571.108"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "With the ignition on and the engine not running, a dash voltmeter reads 11.6 V. According to Denso, this most likely indicates:",
+    "o": [
+     "A low battery, undercharging, or poor wiring connections",
+     "A normal reading",
+     "A failed regulator causing overcharge",
+     "A gauge that should read 14.5 V with the engine off"
+    ],
+    "a": 0,
+    "why": "Denso gives 12.0–12.6 V as normal with the ignition on and engine off, and says readings below 12 V can mean insufficient charging, a low battery, or poor wiring.",
+    "src": [
+     "Charging System Diagnosis - DENSO Auto Parts",
+     "https://www.densoautoparts.com/charging-system-diagnosis"
+    ]
+   },
+   {
+    "q": "On a 2016 V60, Technician A says that after the engine starts, all warning symbols should go out except the parking brake symbol if the brake is still applied. Technician B says the malfunction indicator lamp goes out 5 seconds after ignition mode II even if the engine is not started. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Volvo says all symbols go out after start-up except the parking brake symbol; in mode II without starting, all go out after 5 seconds except the malfunction indicator and low oil pressure symbols.",
+    "src": [
+     "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Indicator and warning symbols – function check (p. 70)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   }
+  ]
+ },
+ "F21": {
+  "body": [
+   "Hella's diagnosis order: check for voltage at the horn connector, then the ground, then the horn itself. With voltage present, a horn that is silent or only hums usually has a torn or blocked diaphragm and is replaced.",
+   "Check the fuse first; hairline cracks can be invisible, so Hella confirms the fuse with a multimeter and cleans corroded fuse contacts.",
+   "With no voltage at the horn, check the harness for continuity; breaks are common where the wire flexes, near connectors and where it passes from the body into the engine bay.",
+   "A weak, distorted or irregular sound usually means a poor ground or oxidized connectors. A jumper wire to ground isolates a bad ground point, which is then cleaned and protected with contact grease.",
+   "If voltage and ground are good but the button does nothing, test the horn switch or steering wheel slip ring with a multimeter; disconnect the battery first and follow airbag safety rules.",
+   "A replacement horn is mounted facing forward, sheltered from splash water, and clear of body parts so it can vibrate. Hella's example: a 66 W pair of horns draws about 11 A at 12 V, so the wiring, relay and fuse must suit the load."
+  ],
+  "car": "On the 2016 V60, the horn sounds when the steering wheel hub is pressed, and the horn fuse is 15 A in the engine compartment fuse box.",
+  "src": [
+   [
+    "HELLA horns and fanfares: identifying faults and correctly eliminating them | HELLA",
+    "https://www.hella.com/techworld/uk/lounge/hella-horns-and-fanfares-identifying-faults-and-correctly-eliminating-them/"
+   ],
+   [
+    "Replacing the horn - Instructions | HELLA",
+    "https://www.hella.com/techworld/us/technical/car-electronics-and-electrics/car-horn-replacement/"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Steering wheel – horn (p. 88); Fuses – engine compartment (p. 359)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A horn produces only a low hum. Battery voltage and a good ground are present at its connector. What is the most likely cause?",
+    "o": [
+     "A faulty horn with a torn or blocked diaphragm",
+     "A blown horn fuse",
+     "An open horn relay coil",
+     "A broken wire between the relay and the horn"
+    ],
+    "a": 0,
+    "why": "Hella says that if voltage is present but the horn is silent or only hums, the horn itself, usually its diaphragm, is faulty and should be replaced.",
+    "src": [
+     "HELLA horns and fanfares: identifying faults and correctly eliminating them | HELLA",
+     "https://www.hella.com/techworld/uk/lounge/hella-horns-and-fanfares-identifying-faults-and-correctly-eliminating-them/"
+    ]
+   },
+   {
+    "q": "A horn sounds weak and uneven. Technician A says a corroded ground point could cause this. Technician B says a jumper wire from the horn to a good ground can confirm it. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Hella links a weak, distorted or irregular signal to corroded or dirty grounds and suggests a quick jumper-cable test to confirm the ground point is at fault.",
+    "src": [
+     "HELLA horns and fanfares: identifying faults and correctly eliminating them | HELLA",
+     "https://www.hella.com/techworld/uk/lounge/hella-horns-and-fanfares-identifying-faults-and-correctly-eliminating-them/"
+    ]
+   }
+  ]
+ },
+ "F22": {
+  "body": [
+   "A wiper system is a DC motor, usually under the hood near the firewall, driving a linkage that turns rotation into a sweep, plus spring-loaded arms whose down-force is matched to the blade and glass (Trico).",
+   "Trico lists louder motor noise, slower wiping, intermittent operation and wipers stalling mid-glass as signs of motor failure. An arm that stops or moves intermittently may have a loose pivot nut, which is tightened to the specified torque.",
+   "Replace blades when they streak (torn, bent or sun-dried rubber), squeak (grime, dry glass, or worn rubber letting the frame touch the glass) or chatter (heat or cold set); Trico's general rule is every six months.",
+   "To fit blades, use the maker's sizes (too long can scratch the glass), protect the windshield in case the arm snaps back, remove the rubber's plastic protector, click the blade in untwisted, then test at every speed with washer fluid; never run wipers dry.",
+   "Hella lists washer faults as a bad power supply or connection, a jammed motor, a pump cracked by impact or frost, damaged or clogged hoses, a dirty tank, unsuitable cleaning agents, a leaking pump-to-tank seal, and a clogged or faulty nozzle or non-return valve. Dual-outlet pumps reverse direction to feed the front or rear."
+  ],
+  "car": "On the 2016 V60, the wipers are put in the service position by switching the ignition to mode I and off, then holding the right steering wheel lever up for at least 1 second within 3 seconds; the driver's blade is longer than the passenger's. The windshield and optional headlight washers share one reservoir on the driver's side, and Volvo calls for its washer fluid or an equivalent with a pH of 6–8, with antifreeze in cold weather.",
+  "src": [
+   [
+    "How Windshield Wipers Work: Components and Mechanisms (TRICO)",
+    "https://www.tricoproducts.com/resources/how-windshield-wipers-work-components-and-mechanisms.html"
+   ],
+   [
+    "Four Signs You Should Replace Your Wiper Blades (TRICO)",
+    "https://www.tricoproducts.com/resources/four-signs-you-should-replace-your-wiper-blades.html"
+   ],
+   [
+    "How to Replace Windshield Wipers: Step-by-Step Guide | TRICO",
+    "https://www.tricoproducts.com/resources/how-to-replace-your-windshield-wipers.html"
+   ],
+   [
+    "Brief Information: Washer pumps (HELLA)",
+    "https://www.hella.com/forvia-us/assets/documents/BI_Washer_Pumps_2026.pdf"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Web Edition, Model Year 2016, US (TP 20238): Windshield wipers and washers (pp. 98–100); Wiper blades – service position, windshield, tailgate (pp. 348–350); Engine compartment – washer fluid (p. 350)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "When the wipers are switched on, the driver's arm moves only intermittently and sometimes stops partway, while the passenger arm works normally. Which is most likely?",
+    "o": [
+     "A loose attachment nut on the wiper arm pivot shaft",
+     "Worn wiper blade rubber",
+     "A blown washer pump fuse",
+     "A clogged washer nozzle"
+    ],
+    "a": 0,
+    "why": "Trico says intermittent arm travel, or an arm stopping between strokes, may mean the arm's attachment nut on the pivot shaft is loose and needs tightening to the specified torque.",
+    "src": [
+     "How Windshield Wipers Work: Components and Mechanisms (TRICO)",
+     "https://www.tricoproducts.com/resources/how-windshield-wipers-work-components-and-mechanisms.html"
+    ]
+   },
+   {
+    "q": "The washer pump can be heard running, but no fluid reaches the windshield, and the reservoir is full. Technician A says a damaged or clogged hose could be the cause. Technician B says a clogged nozzle or non-return valve could be the cause. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Hella lists damaged or contaminated hoses and a contaminated or faulty nozzle or non-return valve among the causes of washer system failure.",
+    "src": [
+     "Brief Information: Washer pumps (HELLA)",
+     "https://www.hella.com/forvia-us/assets/documents/BI_Washer_Pumps_2026.pdf"
+    ]
+   }
+  ]
  }
 };
