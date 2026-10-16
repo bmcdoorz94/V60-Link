@@ -1303,6 +1303,733 @@ window.V60_G1_ENTRIES = {
    }
   ]
  },
+ "B1": {
+  "body": [
+   "Volvo's owner's manual gives the normal behavior to compare against on a road test: from a cold start the transmission may upshift at slightly higher engine speed until the fluid warms up, and pressing the accelerator right after selecting a gear causes a harsh engagement and early wear.",
+   "Engagement is judged with the engine idling: the selector is moved at idle and the driver waits to feel the gear take before accelerating.",
+   "The same drive screens the axles: GKN links a knock while cornering to a worn CV joint, grinding to rotational play between joint and shaft, and a vibration that grows with speed to joint play or a bent shaft.",
+   "OBD II watches the engine, transmission, electrical and emission systems and lights the malfunction indicator lamp when it finds a fault; a fault stays recorded even if the lamp later goes out on its own.",
+   "SAE J2012 defines the standard trouble codes that OBD systems report and reserves code ranges for each vehicle maker's own use.",
+   "Volvo's shift-quality bulletin TJ 32169 shows the order of work: read and record codes with VIDA (it lists TCM code P089500), then follow its fault tracing to a control-module software update, an adaptation that must log 20 good N-D shifts and 50 good 5-4 shifts, or removing the transmission for repair."
+  ],
+  "car": "The owner's manual says a warning symbol and text message appear if the transmission risks overheating. TJ 32169 states it is only for the 6-speed TF-80SC/SD, so it shows Volvo's method but is not a fix for this car's TG-81SC.",
+  "src": [
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "Workshop Tips (GKN Automotive, LÖBRO driveshafts)",
+    "https://www.gknautomotive.com/media/4w3dhu1e/workshop_tips_loebro_cv_gb.pdf"
+   ],
+   [
+    "J2012_202509: Diagnostic Trouble Code Definitions - Recommended Practice",
+    "https://saemobilus.sae.org/standards/j2012_202509-diagnostic-trouble-code-definitions"
+   ],
+   [
+    "Volvo Technical Journal TJ 32169.11.0: TF80/Rough shift N-D and/or 5-4",
+    "https://static.nhtsa.gov/odi/tsbs/2019/MC-10165235-9999.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A 2016 V60 owner reports a harsh clunk when pulling away immediately after moving the selector from P to D. No codes are stored. Which is the most likely cause?",
+    "o": [
+     "Accelerating before the gear has engaged",
+     "A worn outer CV joint",
+     "Low brake fluid",
+     "A failed wheel bearing"
+    ],
+    "a": 0,
+    "why": "Volvo's manual says the engine should be idling when the selector is moved and that accelerating right after selecting a gear causes harsh engagement and premature transmission wear.",
+    "src": [
+     "Volvo 2016 V60 US Owner's Manual (TP20238)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   },
+   {
+    "q": "Technician A says a fault stays recorded in OBD II even after the check engine light goes out by itself. Technician B says the V60's OBD II system monitors only the engine and emission systems, not the transmission. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Volvo's manual says OBD II monitors the engine, transmission, electrical and emission systems, and that a fault remains recorded if the light went out without any action.",
+    "src": [
+     "Volvo 2016 V60 US Owner's Manual (TP20238)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   }
+  ]
+ },
+ "B2": {
+  "body": [
+   "The 2016 V60 owner's manual specifies AW1 transmission fluid for the TG-81SC, with a volume of 7 US qts (6.6 liters).",
+   "Its pre-trip checklist says to have the transmission oil level checked; the manual describes a dipstick check only for engine oil.",
+   "Some automatics have no transmission dipstick from the factory; febi's guide for the Mercedes 722.6 checks the level with the car level on its wheels and reads it against a temperature-based range on a service dipstick.",
+   "Where a dipstick exists, Mobil's procedure reads the level with the fluid at operating temperature, the car on level ground, the selector moved through all gears and back to P, and the engine idling.",
+   "For condition, AMSOIL puts a drop on a clean white rag: it should look red, while dark or burnt-smelling fluid means a change is due; Mobil also calls for a change when the dipstick shows dark or burnt-smelling fluid.",
+   "Low fluid can cause noise, slipping, overheated clutch components, harsh or rough shifts and no drive engagement in forward or reverse."
+  ],
+  "car": "The manual lists AW1 and 7 US qts (6.6 liters) for the TG-81SC and gives no owner procedure for checking it; it says to have the level checked.",
+  "src": [
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "Tips for Checking the Oil Level in 5-Speed Automatic Transmissions (722.6) from Mercedes-Benz - febi Blog",
+    "https://blog.febi.com/en/tips-for-checking-the-oil-level-in-5-speed-automatic-transmissions-722-6-from-mercedes-benz/"
+   ],
+   [
+    "How to Change Transmission Fluid and Filter | Mobil™",
+    "https://www.mobil.com/en/lubricants/for-personal-vehicles/auto-care/vehicle-maintenance/how-to-change-transmission-fluid-and-filter"
+   ],
+   [
+    "How to Check Your Car's Fluids: All Six, in 15 Minutes - AMSOIL Blog",
+    "https://blog.amsoil.com/how-to-check-fluids-in-a-car/"
+   ],
+   [
+    "Automatic vs Manual Transmission Fluid Types | Castrol® USA",
+    "https://www.castrol.com/en_us/united-states/home/learn/car-maintenance/transmission-fluid-types.html"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A technician wipes a drop of ATF on a white rag. It is dark brown and smells burnt. What does this most likely indicate?",
+    "o": [
+     "The fluid has degraded and a fluid change is due",
+     "The fluid is new and has not circulated yet",
+     "Engine coolant has mixed into the fluid",
+     "The fluid is a CVT fluid, which is always brown"
+    ],
+    "a": 0,
+    "why": "AMSOIL says healthy ATF on a white rag should be red, and dark or burnt-smelling fluid indicates it is time for a change.",
+    "src": [
+     "How to Check Your Car's Fluids: All Six, in 15 Minutes - AMSOIL Blog",
+     "https://blog.amsoil.com/how-to-check-fluids-in-a-car/"
+    ]
+   },
+   {
+    "q": "Technician A says every automatic transmission has an owner dipstick. Technician B says an automatic transmission's fluid level reading depends on the fluid's temperature. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "febi describes an automatic with no dipstick supplied from the factory whose level is read against a temperature-based range, so A is wrong and B is right.",
+    "src": [
+     "Tips for Checking the Oil Level in 5-Speed Automatic Transmissions (722.6) from Mercedes-Benz - febi Blog",
+     "https://blog.febi.com/en/tips-for-checking-the-oil-level-in-5-speed-automatic-transmissions-722-6-from-mercedes-benz/"
+    ]
+   }
+  ]
+ },
+ "B3": {
+  "body": [
+   "Volvo's pre-trip checklist includes looking for fuel, oil and fluid leaks.",
+   "A rotating shaft seal is never completely tight: Victor Reinz explains that a small, defined amount of oil passes under the lip to lubricate it, while the lip must still seal when the shaft stops.",
+   "SKF names poor installation as the most common cause of early seal failure: a seal that got dirty, a lip not lubricated at start-up, or the wrong tool used to seat it; heat also shortens life, and a 15 °C rise can halve a nitrile seal's life.",
+   "PTFE-lip seals are the exception: they go on dry over a dry shaft using the assembly sleeve, oil or grease on the lip makes them fail at once, and the new lip should not run in the old seal's track.",
+   "For a pan gasket, Mobil's procedure cleans both sealing surfaces, holds the new gasket in place with oil-soluble grease instead of sealer or adhesive, and tightens the bolts to spec in a spiral from the center out.",
+   "GKN warns that oil drains out when a front driveshaft is pulled from the gearbox housing."
+  ],
+  "car": "The owner's manual's long-trip list includes checking for fuel, oil and fluid leakage and having the transmission oil level checked.",
+  "src": [
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "PTFE Oil Seals and Their Installation (Victor Reinz)",
+    "https://victorreinz.com/functions/csdownload3.aspx?id=145&org=002&key=a32e8ddf2294b43b571a5a74ebe7443f55a7e3a00e1002a4a10797e0cc4d0099"
+   ],
+   [
+    "Seal analysis pays - Evolution (SKF)",
+    "https://evolution.skf.com/us/seal-analysis-pays/"
+   ],
+   [
+    "How to Change Transmission Fluid and Filter | Mobil™",
+    "https://www.mobil.com/en/lubricants/for-personal-vehicles/auto-care/vehicle-maintenance/how-to-change-transmission-fluid-and-filter"
+   ],
+   [
+    "Workshop Tips (GKN Automotive, LÖBRO driveshafts)",
+    "https://www.gknautomotive.com/media/4w3dhu1e/workshop_tips_loebro_cv_gb.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Technician A says a conventional rubber-lip seal fails early if its lip is not lubricated at start-up. Technician B says a PTFE-lip seal should be oiled before it is installed. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Victor Reinz says oil or grease on the lip, as used with classical rubber-lip seals, makes a PTFE seal fail right after installation, so A is right and B is wrong.",
+    "src": [
+     "PTFE Oil Seals and Their Installation (Victor Reinz)",
+     "https://victorreinz.com/functions/csdownload3.aspx?id=145&org=002&key=a32e8ddf2294b43b571a5a74ebe7443f55a7e3a00e1002a4a10797e0cc4d0099"
+    ]
+   },
+   {
+    "q": "A newly installed transmission shaft seal leaks within a week. Which is the most likely cause?",
+    "o": [
+     "An installation error, such as a dirty seal or the wrong installer tool",
+     "The new fluid was too clean",
+     "The shaft was turning too slowly",
+     "The seal was too new to have worn in"
+    ],
+    "a": 0,
+    "why": "SKF says improper installation is the most common reason for premature seal failure, including a dirty seal, an unlubricated lip and the wrong seating tool.",
+    "src": [
+     "Seal analysis pays - Evolution (SKF)",
+     "https://evolution.skf.com/us/seal-analysis-pays/"
+    ]
+   }
+  ]
+ },
+ "B4": {
+  "body": [
+   "Driveshafts carry torque from the differential to the wheels; GKN ranks age-related wear as the most common cause of joint damage, followed by failed boots, poor grease and mistakes during removal and installation.",
+   "A routine check covers a tight fit, grease on the shaft, a bent or damaged shaft, the boots and clamps, radial play at the slip spline and joints, and the fixed joint through every steering angle; torn, slipped and porous boots are the most frequent cause of failure.",
+   "To replace a wheel-side boot, GKN cuts off the clamps, removes and cleans the joint, fits the boot between the shaft ridges, packs half the supplied grease in the joint, drives the joint on until the circlip snaps in, adds the rest of the grease, lets the air out of the boot and clamps both ends.",
+   "The new boot must be the same material as the original (rubber or TPE), and stainless clamps are tightened to 23–30 Nm unless the vehicle maker specifies otherwise.",
+   "Axle nuts are always replaced with new ones and torqued to the vehicle maker's figure, and the shaft must not be left hanging from the gearbox, which overstretches the plunging joint.",
+   "Cardone notes that pulling on an axle can slide the CV joint out of its housing, making an old axle look longer than its replacement; its shafts are measured fully compressed."
+  ],
+  "car": null,
+  "src": [
+   [
+    "Workshop Tips (GKN Automotive, LÖBRO driveshafts)",
+    "https://www.gknautomotive.com/media/4w3dhu1e/workshop_tips_loebro_cv_gb.pdf"
+   ],
+   [
+    "Custom-fit boot kits for every vehicle (GKN Automotive)",
+    "https://www.gknautomotive.com/media/aobox3nb/gkn-068-24-factsheet-manschetten-gb-251013-screen.pdf"
+   ],
+   [
+    "PT60-0011 Why is the replacement axle a different length than the OE?",
+    "https://www.cardone.com/content/Products/PT60-0011.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A front-wheel-drive car makes a rhythmic knocking noise only while turning. Which is the most likely cause?",
+    "o": [
+     "A worn CV joint",
+     "A worn transmission mount",
+     "Low automatic transmission fluid",
+     "An out-of-balance tire"
+    ],
+    "a": 0,
+    "why": "GKN's test-drive guide links knocking in corners to the balls riding over pits worn into the CV joint.",
+    "src": [
+     "Workshop Tips (GKN Automotive, LÖBRO driveshafts)",
+     "https://www.gknautomotive.com/media/4w3dhu1e/workshop_tips_loebro_cv_gb.pdf"
+    ]
+   },
+   {
+    "q": "Technician A says torn or misaligned boots are the most common cause of CV joint failure. Technician B says stainless steel boot clamps only need to be hand tight. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "GKN says distorted, misaligned or leaking boots are the most common cause of joint failure and that stainless clamps are tightened to 23–30 Nm with a clamp tool unless the maker says otherwise.",
+    "src": [
+     "Custom-fit boot kits for every vehicle (GKN Automotive)",
+     "https://www.gknautomotive.com/media/aobox3nb/gkn-068-24-factsheet-manschetten-gb-251013-screen.pdf"
+    ]
+   }
+  ]
+ },
+ "B5": {
+  "body": [
+   "Volvo monitors transmission temperature; if overheating threatens, a warning symbol and text message appear, and selecting P or N during long idles at a standstill helps keep the fluid from overheating.",
+   "Hayden explains that many original-equipment transmission coolers are a water-cooled oil cooler inside the radiator, so heavy loads and stop-and-go traffic heat the engine coolant too.",
+   "The steel lines run from the transmission to the radiator tank; with the engine warm, the hotter line is the supply and the cooler one is the return.",
+   "Derale's instructions keep hoses away from sharp edges, moving parts and hot engine parts, because a kinked hose restricts flow and can cause transmission failure; its minimum bend radius is 3 in for one kit and more than 5 in for another.",
+   "Fittings are tightened with two wrenches, one holding the cooler port, so the core is not damaged.",
+   "After any cooler or line work, the engine is run, the lines are checked for leaks, and the fluid level is checked and topped up."
+  ],
+  "car": "The owner's manual describes the overheating warning and says a message appears if the automatic transmission overheats while towing. Where this car's transmission cooler sits is unconfirmed.",
+  "src": [
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "Transmission Oil Cooler Kit Installation Procedure (Hayden, 8P103)",
+    "https://www.haydenauto.com/media/10936/8p103_en_ada.pdf"
+   ],
+   [
+    "Derale Installation Instructions: Automatic Transmission Filter Kit w/ Gauge, Part # 13091",
+    "https://derale.com/images/stories/virtuemart/product/pdfs/13091.pdf"
+   ],
+   [
+    "Derale 13602-13603 Fin and Plate Transmission Oil Cooler Installation Instructions",
+    "https://derale.com/product-footer/product-instructions-footer?download=89%3A13602&start=80"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "With the engine warmed up, a technician feels the two transmission cooler lines at the radiator. Which line is the return to the transmission?",
+    "o": [
+     "The cooler of the two lines",
+     "The hotter of the two lines",
+     "Whichever line is on top",
+     "Both lines carry fluid in both directions"
+    ],
+    "a": 0,
+    "why": "Hayden's instructions identify the return line as the cooler of the two lines after running the engine.",
+    "src": [
+     "Transmission Oil Cooler Kit Installation Procedure (Hayden, 8P103)",
+     "https://www.haydenauto.com/media/10936/8p103_en_ada.pdf"
+    ]
+   },
+   {
+    "q": "Technician A says a common original-equipment transmission cooler is a water-cooled oil cooler inside the radiator. Technician B says the fluid level should be checked and topped up after cooler work. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Hayden describes the stock cooler as a water-cooled oil cooler located in the radiator and ends both installation methods with a leak check and a fluid level check.",
+    "src": [
+     "Transmission Oil Cooler Kit Installation Procedure (Hayden, 8P103)",
+     "https://www.haydenauto.com/media/10936/8p103_en_ada.pdf"
+    ]
+   }
+  ]
+ },
+ "B6": {
+  "body": [
+   "Powertrain mounts isolate the engine's noise, vibration and harshness from the body; febi groups them as rubber, hydraulic and electronically controlled types.",
+   "A rubber mount's stiffness comes from its elastomer, while a hydraulic mount has upper and lower fluid chambers joined by channels and a rubber valve that changes its damping under load.",
+   "Vacuum-controlled and electronically switched mounts stay soft at idle and firm up at higher engine speeds or while driving.",
+   "All mounts wear out over time, which shows as added vibration, noise and harshness; hydraulic mounts can also leak fluid.",
+   "Vacuum-controlled mounts can leak air and affect engine management, and electronically controlled mounts can log fault codes in the control unit.",
+   "Stop/start, cylinder deactivation and higher compression ratios all increase the vibration the mounts must absorb, and replacement follows the correct procedure for the vehicle."
+  ],
+  "car": "The V60 has engine start/stop (owner's manual, Start/Stop section), which febi lists as a feature that increases the vibration mounts must absorb. The type of mounts on this car is unconfirmed.",
+  "src": [
+   [
+    "Bad Vibrations: A Closer Look at Engine Mounts - febi Blog",
+    "https://blog.febi.com/en/bad-vibrations-a-closer-look-at-engine-mounts/"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A hydraulic engine mount has an oily, wet film on its body and the car vibrates more than before at idle. What is the most likely cause?",
+    "o": [
+     "The mount is leaking its damping fluid",
+     "The mount is working normally",
+     "The ATF level is too high",
+     "The engine oil is the wrong grade"
+    ],
+    "a": 0,
+    "why": "febi says hydraulic mounts can fail by leaking fluid, which reduces their damping and lets more vibration through.",
+    "src": [
+     "Bad Vibrations: A Closer Look at Engine Mounts - febi Blog",
+     "https://blog.febi.com/en/bad-vibrations-a-closer-look-at-engine-mounts/"
+    ]
+   },
+   {
+    "q": "Technician A says an electronically controlled engine mount can set a fault code. Technician B says a leaking vacuum-controlled mount can cause engine management problems. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "febi notes that electrical faults in electronic mounts can be logged as fault codes and that vacuum-mount leaks can cause engine management problems.",
+    "src": [
+     "Bad Vibrations: A Closer Look at Engine Mounts - febi Blog",
+     "https://blog.febi.com/en/bad-vibrations-a-closer-look-at-engine-mounts/"
+    ]
+   }
+  ]
+ },
+ "B7": {
+  "body": [
+   "Volvo's manual says the transmission oil does not need changing for its service life under normal driving, though a change may be needed under adverse conditions; the TG-81SC takes 7 US qts (6.6 liters) of AW1.",
+   "Generic schedules differ: Mobil suggests about every 30,000 miles or 30 months and Castrol 60,000 to 100,000 miles, but for this car Volvo's statement governs.",
+   "A drain and fill replaces only about 40 to 60 percent of the fluid because the rest stays in the torque converter and cooler lines; a machine flush replaces up to 95 percent.",
+   "Castrol advises a drain and fill rather than a flush on a high-mileage transmission that has never been serviced, since a flush can dislodge debris, and an inspection first if it is already slipping; metal pieces big enough to pick up mean the transmission needs inspection.",
+   "Mobil's pan-and-filter service drains warm fluid, removes and inspects the pan for metal, fits a new filter, O-ring and gasket, torques the pan bolts, refills, then warms the car up and checks for leaks and level.",
+   "Fluid is added in small amounts, because overfilling can cause foaming and erratic shifts."
+  ],
+  "car": "Volvo states the TG-81SC's fluid does not need changing under normal driving but may under adverse conditions. This car was bought with no service history, so any past fluid change is unknown.",
+  "src": [
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "How to Change Transmission Fluid and Filter | Mobil™",
+    "https://www.mobil.com/en/lubricants/for-personal-vehicles/auto-care/vehicle-maintenance/how-to-change-transmission-fluid-and-filter"
+   ],
+   [
+    "How to Change Transmission Fluid Yourself | Castrol® USA",
+    "https://www.castrol.com/en_us/united-states/home/learn/car-maintenance/10-steps-to-change-transmission-fluid.html"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Technician A says a pan drain and refill replaces nearly all of the automatic transmission fluid. Technician B says part of the old fluid stays in the torque converter and cooler lines. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "Castrol says a drain and fill replaces about 40 to 60 percent of the fluid because the rest stays in the torque converter and cooler lines.",
+    "src": [
+     "How to Change Transmission Fluid Yourself | Castrol® USA",
+     "https://www.castrol.com/en_us/united-states/home/learn/car-maintenance/10-steps-to-change-transmission-fluid.html"
+    ]
+   },
+   {
+    "q": "According to Volvo's 2016 V60 owner's manual, when does the automatic transmission oil need changing?",
+    "o": [
+     "Every 30,000 miles",
+     "Not under normal driving conditions, but possibly under adverse conditions",
+     "At every engine oil change",
+     "Every 60,000 miles"
+    ],
+    "a": 1,
+    "why": "The manual's specification table footnote says the transmission oil does not need changing under normal driving but may need it under adverse conditions.",
+    "src": [
+     "Volvo 2016 V60 US Owner's Manual (TP20238)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   }
+  ]
+ },
+ "C1": {
+  "body": [
+   "A hydraulic clutch works like hydraulic brakes: the pedal moves a master cylinder, a line carries the fluid, and a slave cylinder releases the clutch, either an external release cylinder or a concentric slave cylinder (CSC) inside the bell housing.",
+   "The master cylinder's reservoir is either shared with the brakes or separate, and in almost all cases the clutch uses brake fluid; the owner's manual names the grade when the reservoir is separate.",
+   "Air in the system makes the clutch hard to disengage, so ZF calls for bleeding to the vehicle maker's instructions after clutch work or replacing hydraulic parts.",
+   "ZF's pressure method: connect the bleeder at the reservoir, apply no more than 2 bar, open the slave's bleed nipple into a clear tube until no bubbles appear, close it, set the level to MAX, then press the pedal several times and confirm it returns on its own; the pedal is not pressed during bleeding.",
+   "Methods vary by car: a Bilstein tip for some Nissan and Renault CSCs bleeds by holding the pedal down and forbids pressure or vacuum bleeders, while a LuK tip for a CSC on Dacia, Nissan and Renault models uses a bleeding device, so the vehicle maker's method decides.",
+   "Valeo's replacement signs are a pedal that sinks slowly or does not return and leaks at the master, a pushrod that does not return or leaks at the release cylinder, and noise or a pedal that stays down at the CSC; brake fluid absorbs moisture, and Brembo generally suggests replacing it every 2 to 3 years unless the maker says otherwise."
+  ],
+  "car": "Not on this car: the 2016 V60 US owner's manual lists only automatic transmissions (TF-80SC, TG-81SC, TF-71SC) in its transmission oil table, so there is no clutch hydraulic system to service. Its brakes use DOT 4, which the manual says must never be mixed with another fluid type.",
+  "src": [
+   [
+    "Clutch Hydraulics | Valeo Service Asean",
+    "https://th.valeoservice.com/en-th/passenger-car/transmission-systems/clutch-hydraulics"
+   ],
+   [
+    "Bleeding the Hydraulic Clutch Actuation System - ZF Aftermarket",
+    "https://aftermarket.zf.com/en/aftermarket-portal/for-workshops/useful-tips/clutches/bleeding-clutch-actuations/"
+   ],
+   [
+    "INF12231 GB: Concentric Slave Cylinder Bleeding (Ferdinand Bilstein UK)",
+    "https://cdn.partsfinder.bilsteingroup.com/pf-document/INF12231_GB.PDF"
+   ],
+   [
+    "LuK Service Info: Bleeding process of CSC 510 0097 10 (Schaeffler, LuK 0081)",
+    "https://www.techtips.ie/LuK/concentric-slave-cylinder-csc-bleeding-process.pdf"
+   ],
+   [
+    "Replacing the Slave Cylinder - ZF Aftermarket",
+    "https://aftermarket.zf.com/us/aftermarket-portal/for-workshops/useful-tips/clutches/replacing-the-slave-cylinder/"
+   ],
+   [
+    "Brake fluid: when changing it saves the whole team - Brembo - Brembo Parts",
+    "https://www.bremboparts.com/europe/en/news/brake-fluid-when-changing-it-saves-the-whole-team-90475"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "After a clutch slave cylinder is replaced, the clutch is hard to disengage. Which is the most likely cause?",
+    "o": [
+     "Air left in the hydraulic system",
+     "Overfilled engine oil",
+     "A worn CV boot",
+     "Low transmission fluid in an automatic"
+    ],
+    "a": 0,
+    "why": "ZF names difficulty disengaging the clutch as a symptom of air in the hydraulic release system and calls for bleeding after hydraulic parts are replaced.",
+    "src": [
+     "Bleeding the Hydraulic Clutch Actuation System - ZF Aftermarket",
+     "https://aftermarket.zf.com/en/aftermarket-portal/for-workshops/useful-tips/clutches/bleeding-clutch-actuations/"
+    ]
+   },
+   {
+    "q": "Technician A says the clutch pedal should be pumped during pressure bleeding to push air out faster. Technician B says the bleeding pressure should be kept low because slow-moving fluid carries more air out. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "ZF says not to operate the pedal while pressure bleeding, since excess travel can make the cylinder leak, and to keep pressure as low as possible because slow flow removes more air.",
+    "src": [
+     "Bleeding the Hydraulic Clutch Actuation System - ZF Aftermarket",
+     "https://aftermarket.zf.com/en/aftermarket-portal/for-workshops/useful-tips/clutches/bleeding-clutch-actuations/"
+    ]
+   }
+  ]
+ },
+ "C2": {
+  "body": [
+   "Engine and transmission mounts hold the powertrain and keep its noise, vibration and harshness out of the body; the engine is the largest source of all three.",
+   "Makers choose rubber, hydraulic or electronically controlled mounts depending on the engine's features, cost and the brand's quality target.",
+   "Mounts deteriorate with age and stress; worn ones pass more vibration and noise, and hydraulic mounts can leak their fluid.",
+   "Electronically controlled mounts can store fault codes, and leaking vacuum-controlled mounts can disturb engine management, so a scan belongs in the diagnosis."
+  ],
+  "car": "This car is an automatic (owner's manual transmission oil table), so its mounts are covered under task B6; there is no manual-drivetrain version of the job on the V60.",
+  "src": [
+   [
+    "Bad Vibrations: A Closer Look at Engine Mounts - febi Blog",
+    "https://blog.febi.com/en/bad-vibrations-a-closer-look-at-engine-mounts/"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Which type of powertrain mount changes its stiffness by moving fluid between two chambers through channels and a rubber valve?",
+    "o": [
+     "Hydraulic mount",
+     "Solid rubber mount",
+     "Polyurethane bushing",
+     "Torque strut with a steel sleeve"
+    ],
+    "a": 0,
+    "why": "febi describes the hydraulic mount as having upper and lower fluid chambers joined by channels and a rubber valve that alters its stiffness.",
+    "src": [
+     "Bad Vibrations: A Closer Look at Engine Mounts - febi Blog",
+     "https://blog.febi.com/en/bad-vibrations-a-closer-look-at-engine-mounts/"
+    ]
+   },
+   {
+    "q": "febi lists all of these as features that increase the vibration a mount must absorb EXCEPT:",
+    "o": [
+     "Stop/start",
+     "Cylinder deactivation",
+     "Higher compression ratio",
+     "Electric power steering"
+    ],
+    "a": 3,
+    "why": "febi names stop/start, cylinder deactivation and increased compression ratios as magnifying engine vibration; power steering is not on its list.",
+    "src": [
+     "Bad Vibrations: A Closer Look at Engine Mounts - febi Blog",
+     "https://blog.febi.com/en/bad-vibrations-a-closer-look-at-engine-mounts/"
+    ]
+   }
+  ]
+ },
+ "C3": {
+  "body": [
+   "On a cable shifter, the cable runs from the shift lever to the transmission's control lever, clips into a bracket, and pivots on a bushing at the cable end; Ford's bulletin 21-2033 for its automatic transaxles shows these parts.",
+   "A damaged or missing bushing lets the lever move without putting the transmission in the matching gear, and the cluster can show a different gear from the one selected.",
+   "The repair presses the old bushing out, fits the new one by hand with no grease, and replaces the cable if its end is damaged.",
+   "Adjustment puts the selector and the transmission lever in the same detent, then locks the cable adjuster.",
+   "The check afterward is that the engine starts only in Park and Neutral and the reverse lamps light in Reverse."
+  ],
+  "car": "The V60 has no manual gearbox. Its gear selector is held in P until the brake pedal is pressed and the ignition is in at least mode II, and a shiftlock override under the mat behind the center console releases it with the key blade (owner's manual).",
+  "src": [
+   [
+    "Ford TSB 21-2033: Shifter Not Moving The Transmission To The Proper Gear Position",
+    "https://static.nhtsa.gov/odi/tsbs/2021/MC-10189767-0001.pdf"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "The instrument cluster shows D, but the transmission is not in Drive. Which is the most likely cause?",
+    "o": [
+     "A damaged or missing shift cable bushing",
+     "A worn CV boot",
+     "Low engine oil",
+     "A failed engine mount"
+    ],
+    "a": 0,
+    "why": "Ford's bulletin 21-2033 lists a damaged or missing shifter bushing as causing the transmission not to reach the selected position and a cluster/gear mismatch.",
+    "src": [
+     "Ford TSB 21-2033: Shifter Not Moving The Transmission To The Proper Gear Position",
+     "https://static.nhtsa.gov/odi/tsbs/2021/MC-10189767-0001.pdf"
+    ]
+   },
+   {
+    "q": "Technician A says a new shift cable bushing should be greased before it is installed. Technician B says the repair is checked by confirming the engine starts only in Park and Neutral. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "Ford's procedure installs the bushing dry with no grease and ends by verifying the engine starts only in Park and Neutral.",
+    "src": [
+     "Ford TSB 21-2033: Shifter Not Moving The Transmission To The Proper Gear Position",
+     "https://static.nhtsa.gov/odi/tsbs/2021/MC-10189767-0001.pdf"
+    ]
+   }
+  ]
+ },
+ "C4": {
+  "body": [
+   "A conventional oil seal is a metal case carrying a rubber lip that a spring presses onto the shaft; a small amount of oil passes the lip to lubricate it, and the lip must still seal when the shaft stops.",
+   "SKF lists the installation basics: a burr-free shaft lead-in of about 15 degrees, a housing bore chamfer of 15 to 30 degrees, a clean seal, a lubricated lip at start-up, and the correct tool to seat it fully; a worn shaft can take a repair sleeve such as SKF's Speedi-Sleeve.",
+   "PTFE-lip seals go on dry with their assembly sleeve, and Victor Reinz says to wait four hours before starting the engine so the new lip can conform to the shaft.",
+   "GKN warns that oil drains when a driveshaft is pulled from the gearbox, and on reassembly a lock ring at the gearbox must engage.",
+   "On a concentric slave cylinder, ZF warns that lubricants make the seals swell and that squeezing the piston by hand damages the seals."
+  ],
+  "car": "Not on this car: the US owner's manual lists only automatic transmissions. The same seal practice applies to its automatic transmission under task B3.",
+  "src": [
+   [
+    "PTFE Oil Seals and Their Installation (Victor Reinz)",
+    "https://victorreinz.com/functions/csdownload3.aspx?id=145&org=002&key=a32e8ddf2294b43b571a5a74ebe7443f55a7e3a00e1002a4a10797e0cc4d0099"
+   ],
+   [
+    "Seal analysis pays - Evolution (SKF)",
+    "https://evolution.skf.com/us/seal-analysis-pays/"
+   ],
+   [
+    "Workshop Tips (GKN Automotive, LÖBRO driveshafts)",
+    "https://www.gknautomotive.com/media/4w3dhu1e/workshop_tips_loebro_cv_gb.pdf"
+   ],
+   [
+    "Replacing the Slave Cylinder - ZF Aftermarket",
+    "https://aftermarket.zf.com/us/aftermarket-portal/for-workshops/useful-tips/clutches/replacing-the-slave-cylinder/"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "When installing a PTFE-lip shaft seal, which step is correct?",
+    "o": [
+     "Install it dry using the supplied assembly sleeve",
+     "Coat the lip with grease first",
+     "Start the engine right away to seat the lip",
+     "Position the new lip in the old seal's wear track"
+    ],
+    "a": 0,
+    "why": "Victor Reinz says PTFE lips and the shaft must be dry, the sleeve is used for assembly, and the new lip should not run where the old one did.",
+    "src": [
+     "PTFE Oil Seals and Their Installation (Victor Reinz)",
+     "https://victorreinz.com/functions/csdownload3.aspx?id=145&org=002&key=a32e8ddf2294b43b571a5a74ebe7443f55a7e3a00e1002a4a10797e0cc4d0099"
+    ]
+   },
+   {
+    "q": "Technician A says the seal bore should have a burr-free chamfered lead-in. Technician B says heat has little effect on a nitrile seal's life. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "SKF recommends a 15 to 30 degree burr-free chamfer on the bore and says a 15 °C temperature rise can halve a nitrile seal's life.",
+    "src": [
+     "Seal analysis pays - Evolution (SKF)",
+     "https://evolution.skf.com/us/seal-analysis-pays/"
+    ]
+   }
+  ]
+ },
+ "C5": {
+  "body": [
+   "Manual transmission fluid must give smooth synchronizer engagement, durability and good shift quality; it is usually brown to amber.",
+   "Common grades include SAE 80W, 75W-90, 80W-90 and SAE 90, but some makers call for engine oil or ATF, so the owner's manual decides.",
+   "Castrol's generic guide suggests changing manual transmission fluid every 30,000 to 60,000 miles, with the owner's manual taking priority.",
+   "Gear housings checked at a fill plug follow the method AMSOIL gives for differentials: clean around the plug, remove it, and the fluid should come up to the bottom of the fill port; add the specified lube until it does.",
+   "Leaking or worn-out transmission fluid shows up as grinding or slipping gears."
+  ],
+  "car": "Not on this car: the US owner's manual lists only automatic transmissions. Volvo's 2016 V60 Cross Country support page for Malta lists an M66 manual gearbox taking about 1.45 litres of BOT 350M3, so Volvo built manual versions for other markets.",
+  "src": [
+   [
+    "Automatic vs Manual Transmission Fluid Types | Castrol® USA",
+    "https://www.castrol.com/en_us/united-states/home/learn/car-maintenance/transmission-fluid-types.html"
+   ],
+   [
+    "How to Change Transmission Fluid Yourself | Castrol® USA",
+    "https://www.castrol.com/en_us/united-states/home/learn/car-maintenance/10-steps-to-change-transmission-fluid.html"
+   ],
+   [
+    "How to Check Your Car's Fluids: All Six, in 15 Minutes - AMSOIL Blog",
+    "https://blog.amsoil.com/how-to-check-fluids-in-a-car/"
+   ],
+   [
+    "V60 Cross Country Transmission fluid - grade and volume | Volvo Support MT",
+    "https://www.volvocars.com/mt/support/car/v60-cross-country/2016/article/8dc58964f78de60cc0a801e8001b6214/"
+   ],
+   [
+    "Volvo 2016 V60 US Owner's Manual (TP20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "How to check transmission fluid | Castrol UK & Ireland",
+    "https://www.castrol.com/en_gb/united-kingdom/home/learn/car-maintenance/how-to-check-transmission-fluid.html"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Technician A says manual transmission fluid must protect the synchronizers. Technician B says some manual transmissions specify ATF or engine oil instead of gear oil. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 2,
+    "why": "Castrol lists synchronizer compatibility as a key requirement of manual transmission fluid and notes that some makers recommend engine oil or ATF.",
+    "src": [
+     "Automatic vs Manual Transmission Fluid Types | Castrol® USA",
+     "https://www.castrol.com/en_us/united-states/home/learn/car-maintenance/transmission-fluid-types.html"
+    ]
+   },
+   {
+    "q": "A technician removes the fill plug on a gear oil housing to check the level. Where should the fluid be?",
+    "o": [
+     "At the bottom of the fill port",
+     "One inch below the fill port",
+     "Halfway up the housing",
+     "Overflowing from the fill port with the engine running"
+    ],
+    "a": 0,
+    "why": "AMSOIL's fill-plug check says the lube should come up to the bottom of the fill port, and to add lube until it reaches that point.",
+    "src": [
+     "How to Check Your Car's Fluids: All Six, in 15 Minutes - AMSOIL Blog",
+     "https://blog.amsoil.com/how-to-check-fluids-in-a-car/"
+    ]
+   }
+  ]
+ },
  "D1": {
   "body": [
    "The supplemental restraint system (SRS) covers more than the airbags: Volvo lists seat belt pretensioners, front airbags, side impact (SIPS) airbags, inflatable curtains and the front passenger occupant weight sensor, all watched by the SRS control module.",
