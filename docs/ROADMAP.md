@@ -73,9 +73,11 @@ The car is the menu (manual shell), Live link works on the real car in Bluefy, G
 - [ ] Wheel and underside figures: better drawings, or photos.
 - [ ] Desktop: consider the figure and the sheet side by side above 1000 px.
 
-## Next (draft on branch g1-track, awaiting Kyle's approval)
-- [ ] Merge g1-track once approved; run `npm test` on the PC for the WebKit side.
-- [ ] Grow the quiz bank: Automatic transmission (3), Manual drivetrain (2) and HVAC (2) are thin, so the mock G1 draws 42 of 55. Technician questions exist only for Engine, Suspension, Brakes and Electrical.
+## Next (G1 study guide)
+- [x] Merged to main 2026-10-15. Still to do: run `npm test` on the PC for the WebKit side.
+- [x] Phase 2: a sourced study entry for every one of ASE's 173 G1 tasks (`src/js/data/g1entries.js`, 335 questions; written by research agents under the brief in docs/HANDOFF_STATE.md section 3, merged with `tools/gen/g1merge.py`). The mock G1 now draws all 55.
+- [ ] Technician (rung 2) diagnosis questions: the study-entry questions count toward the Owner bank; the Technician bank still has questions only for Engine, Suspension, Brakes and Electrical.
+- [ ] Thin areas for practice: Automatic transmission (14 entry questions) and HVAC (14) against Suspension (111). More scenario questions there, sourced the same way.
 - [ ] Heating & A/C has no part of its own (it shares coolant and the cabin filter); a Cabin item for the climate system would give it hands-on steps.
 - [ ] Retire the Today tab's remaining cards into the home (the Now strip already counts them).
 
