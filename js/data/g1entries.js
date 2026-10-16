@@ -9959,5 +9959,459 @@ window.V60_G1_ENTRIES = {
     ]
    }
   ]
+ },
+ "G1": {
+  "body": [
+   "HELLA's A/C check is a visual inspection of every part plus a function and performance test: the high- and low-side pressures are read on gauges and compared with the maker's values, and the air temperature at the center vent is compared with the maker's figure.",
+   "Cabin temperature comes from blending cold and hot air; on Volvo's ECC the driver picks where the air goes with three buttons (floor, dashboard vents, defroster), or AUTO, which runs temperature, A/C, blower speed, recirculation and air distribution by itself.",
+   "In HELLA's pressure table, both sides high with vent air near outside temperature points to a dirty condenser, a condenser fan that is dead or spinning the wrong way, an overfilled system or an overheated engine; both sides low with warm air points to low refrigerant; equal pressures with ambient-temperature air point to no refrigerant, a failed compressor or an electrical fault.",
+   "Many newer compressors have no clutch: they turn whenever the engine runs, and the climate control unit sets their output through a control valve fed a pulse-width signal, so a working compressor is confirmed by a change in signal followed by a change in pressure and vent temperature.",
+   "Volvo's A/C pressure check (an attachment to TJ 34648) runs the engine with both sides set to 20 °C in automatic mode, all doors, windows and the tailgate closed, lets the system settle, then reads the gauges against Volvo's specification.",
+   "Some behavior is normal on this car: Volvo says the A/C cuts out briefly at full acceleration or when towing uphill, switching the blower fully off also switches the A/C off, and the radiator cooling fan may run for up to 6 minutes after the engine is turned off."
+  ],
+  "car": "Volvo's fuse list gives 4-cylinder engines an \"A/C solenoid\" fuse (7.5 A, shared with fuel leakage detection) and marks the separate \"A/C compressor\" fuse as not for 4-cylinder engines; whether the B4204T11's compressor has a clutch is unconfirmed. Volvo's pressure-check attachment to TJ 34648 lists 2017-2018 V60s of this generation, not the 2016 model year.",
+  "src": [
+   [
+    "Air-conditioning service: Car function & repairs | HELLA",
+    "https://www.hella.com/techworld/us/technical/car-air-conditioning/car-air-conditioning/"
+   ],
+   [
+    "Changing the air conditioning compressor | HELLA",
+    "https://www.hella.com/techworld/us/technical/car-air-conditioning/change-air-conditioning-compressor/"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "Volvo TJ 34648.1.2: Prior Approval - Lack of airflow causing poor cabin cooling",
+    "https://static.nhtsa.gov/odi/tsbs/2019/MC-10164854-9999.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "An A/C system with an expansion valve shows high readings on both the high and low sides, and the center-vent air is almost as warm as the outside air. Which is LEAST likely to be the cause?",
+    "o": [
+     "A condenser packed with dirt",
+     "A condenser fan that does not run",
+     "Too much refrigerant in the system",
+     "A low refrigerant charge"
+    ],
+    "a": 3,
+    "why": "HELLA links high pressure on both sides with a dirty condenser, a faulty condenser fan or an overfilled system; a low charge gives low readings on both sides.",
+    "src": [
+     "Air-conditioning service: Car function & repairs | HELLA",
+     "https://www.hella.com/techworld/us/technical/car-air-conditioning/car-air-conditioning/"
+    ]
+   },
+   {
+    "q": "On a 2016 V60, Technician A says the A/C cutting out for a moment at full throttle is normal. Technician B says that with the blower switched fully off, the A/C keeps running to keep the windows clear. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Volvo's manual says the A/C disengages briefly during full acceleration, and that switching the blower fully off disengages the A/C, which can let the windows fog.",
+    "src": [
+     "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   }
+  ]
+ },
+ "G2": {
+  "body": [
+   "Anyone who services a vehicle A/C system for pay or barter must be certified under Clean Air Act section 609 by an EPA-approved program (ASE is one), whatever the refrigerant, and must use refrigerant handling equipment certified by EPA, UL or Intertek (formerly ETL).",
+   "Refrigerant must be recovered with that equipment before the system is opened, and recycled on site or reclaimed off site to AHRI Standard 700 before it goes back into any car, even the one it came from; venting is illegal for every MVAC refrigerant except CO2 (R-744).",
+   "The refrigerant is identified by its service fittings: each EPA-approved refrigerant has its own set (R-134a quick-connect ports; R-1234yf quick-connects with 17 mm high-side and 14 mm low-side outside diameters), adapters may not be used to convert them, and EPA's assigned label color for HFC-134a is sky blue.",
+   "EPA lists separate certified recover/recycle/recharge machines for HFC-134a (SAE J2788) and HFO-1234yf (SAE J2843); Robinair's R-134a unit is to be used with R-134a only, because mixed refrigerants damage both the machine and the car.",
+   "In Robinair's sequence the machine recovers to 0 psi, drains the oil it pulled out (that amount of new oil goes back in), evacuates to remove air and boil off moisture, then charges the weight entered; Robinair's manual gives both a 10-minute minimum and a 15-minute recommendation for vacuum, HELLA suggests about 30 minutes, and the vehicle maker's figure overrides both.",
+   "Since model year 2025, new light-duty vehicles cannot use refrigerants with a global warming potential of 150 or more, such as HFC-134a (GWP 1,430), but existing HFC-134a cars may still be serviced with HFC-134a."
+  ],
+  "car": "Volvo's manual says this car uses R134a (HFC134a) with PAG oil, but gives two charge amounts: 1.76 lbs (800 g) on the climate page and 1.7 lbs (770 g) in the specifications. Volvo says climate system work needs special tools and should be done only by a trained and qualified Volvo technician.",
+  "src": [
+   [
+    "Regulatory Requirements for MVAC System Servicing | US EPA",
+    "https://www.epa.gov/mvac/regulatory-requirements-mvac-system-servicing"
+   ],
+   [
+    "Section 609 Technician Training and Certification Programs | US EPA",
+    "https://www.epa.gov/mvac/section-609-technician-training-and-certification-programs"
+   ],
+   [
+    "Certified Equipment | US EPA",
+    "https://www.epa.gov/mvac/certified-equipment"
+   ],
+   [
+    "Unique Fittings and Label Colors | US EPA",
+    "https://www.epa.gov/mvac/unique-fittings-and-label-colors"
+   ],
+   [
+    "Acceptable Refrigerants and their Impacts | US EPA",
+    "https://www.epa.gov/mvac/acceptable-refrigerants-and-their-impacts"
+   ],
+   [
+    "Robinair: Operating Manual for Model 34288 Recovery, Recycling, Recharging Unit",
+    "https://www.robinair.com/sites/default/files/documents/543175_EN_1.pdf"
+   ],
+   [
+    "Air-conditioning service: Car function & repairs | HELLA",
+    "https://www.hella.com/techworld/us/technical/car-air-conditioning/car-air-conditioning/"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A shop is paid to recharge a customer's R-134a system. All of the following are EPA requirements EXCEPT:",
+    "o": [
+     "The technician holds section 609 certification",
+     "The refrigerant is removed with certified recovery equipment",
+     "Recovered refrigerant is recycled or reclaimed before going back into the same car",
+     "Old refrigerant may be vented if it will not be reused"
+    ],
+    "a": 3,
+    "why": "EPA requires 609 certification, certified equipment, and recycling or reclaiming before reuse, and the Clean Air Act forbids intentionally venting MVAC refrigerant other than CO2.",
+    "src": [
+     "Regulatory Requirements for MVAC System Servicing | US EPA",
+     "https://www.epa.gov/mvac/regulatory-requirements-mvac-system-servicing"
+    ]
+   },
+   {
+    "q": "Technician A says an adapter can be used to connect an R-134a machine to an R-1234yf service port. Technician B says EPA assigned a sky-blue label color to HFC-134a. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "EPA requires a unique set of fittings for each refrigerant and says an adapter may not be used to convert a fitting; its label color table lists HFC-134a as sky blue.",
+    "src": [
+     "Unique Fittings and Label Colors | US EPA",
+     "https://www.epa.gov/mvac/unique-fittings-and-label-colors"
+    ]
+   }
+  ]
+ },
+ "G3": {
+  "body": [
+   "Leaks are one of the most common causes of A/C trouble: the charge drops unnoticed until cooling fades or fails, and a low charge also damages parts.",
+   "HELLA notes R-134a slowly passes through rubber hoses and joints, with losses of up to 10% a year even in a new system, so a careful leak search is needed to tell a real leak from normal loss.",
+   "With fluorescent dye, the dye is added to the system, allowed to circulate, and the parts are then scanned with a UV lamp; Spectroline says this takes 5 to 45 minutes depending on system size and works best in a dark area.",
+   "An electronic leak detector senses halogen gas and sounds a tone, and can find very small leaks in places that are hard to reach, such as the evaporator.",
+   "An empty system can be pressure tested with nitrogen (HELLA's maximum is 12 bar) and watched for 5 to 10 minutes for a pressure drop, with foam spray to show the spot, or filled with forming gas (95% nitrogen, 5% hydrogen) and checked by moving the sensor slowly above suspect joints, because hydrogen rises.",
+   "Robinair warns never to pressure test or leak test an A/C system with compressed air, because some air and refrigerant mixtures can ignite at high pressure; HELLA lists leaks at the compressor shaft or housing among compressor failures."
+  ],
+  "car": "Volvo's manual lists the system as R134a with PAG oil and says climate system work needs special tools and a trained and qualified Volvo technician.",
+  "src": [
+   [
+    "Air-conditioning system leak detection - Instructions | HELLA",
+    "https://www.hella.com/techworld/us/technical/car-air-conditioning/car-air-conditioning-leak-detection/"
+   ],
+   [
+    "Air-conditioning service: Car function & repairs | HELLA",
+    "https://www.hella.com/techworld/us/technical/car-air-conditioning/car-air-conditioning/"
+   ],
+   [
+    "Changing the air conditioning compressor | HELLA",
+    "https://www.hella.com/techworld/us/technical/car-air-conditioning/change-air-conditioning-compressor/"
+   ],
+   [
+    "How Fluorescent Leak Detection Works - Spectroline.com",
+    "https://spectroline.com/how-fluorescent-leak-detection-works/"
+   ],
+   [
+    "Robinair: Operating Manual for Model 34288 Recovery, Recycling, Recharging Unit",
+    "https://www.robinair.com/sites/default/files/documents/543175_EN_1.pdf"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A technician wants to pressure test an empty A/C system to find a leak. Which should NOT be used?",
+    "o": [
+     "Compressed shop air",
+     "Dry nitrogen",
+     "Forming gas (95% nitrogen, 5% hydrogen)",
+     "Nitrogen, followed by foam spray on suspect joints"
+    ],
+    "a": 0,
+    "why": "Robinair warns against pressure or leak testing A/C systems with compressed air because some air and refrigerant mixtures can ignite at high pressure.",
+    "src": [
+     "Robinair: Operating Manual for Model 34288 Recovery, Recycling, Recharging Unit",
+     "https://www.robinair.com/sites/default/files/documents/543175_EN_1.pdf"
+    ]
+   },
+   {
+    "q": "Technician A says that when using forming gas, the detector should be held below each joint because hydrogen sinks. Technician B says an R-134a system can lose some refrigerant through its rubber hoses without a failed part. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "HELLA says the sensor must be moved slowly above suspect spots because hydrogen is lighter than air, and that R-134a is known to diffuse out of rubber pipes and connections.",
+    "src": [
+     "Air-conditioning system leak detection - Instructions | HELLA",
+     "https://www.hella.com/techworld/us/technical/car-air-conditioning/car-air-conditioning-leak-detection/"
+    ]
+   }
+  ]
+ },
+ "G4": {
+  "body": [
+   "The condenser sits at the front of the car to catch airflow; hot, high-pressure gas from the compressor gives up its heat there and turns into a high-pressure liquid, helped by a fan or by air from driving.",
+   "Because it faces the road, the condenser collects dirt and corrosion, and its coils can be bent, cracked or crushed by debris or impact; any of these cuts its ability to shed heat, and severe corrosion can cause leaks or blockages that call for replacement.",
+   "Restricted condenser airflow shows on the gauges as high pressure on both sides with vent air that gets warmer, up to outside temperature; a condenser fan that is dead or turning the wrong way gives the same pattern.",
+   "HELLA lists a high-side reading that drops when the condenser is cooled with water among the signs of this fault, and the fix is to clean or replace the condenser and check the fan."
+  ],
+  "car": "Volvo's manual advises removing auxiliary lights from in front of the grille when driving in hot weather, as part of avoiding engine overheating. It also warns that the cooling fan can start or keep running for up to 6 minutes after the engine is switched off, and lists a 60 A cooling fan fuse for 4- and 5-cylinder engines.",
+  "src": [
+   [
+    "HELLA A/C Condensers – High-Performance Cooling | HELLA",
+    "https://www.hella.com/techworld/uk/car-parts/thermal-management/a-c-condensers/"
+   ],
+   [
+    "Air-conditioning service: Car function & repairs | HELLA",
+    "https://www.hella.com/techworld/us/technical/car-air-conditioning/car-air-conditioning/"
+   ],
+   [
+    "Changing the air conditioning compressor | HELLA",
+    "https://www.hella.com/techworld/us/technical/car-air-conditioning/change-air-conditioning-compressor/"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A car's A/C blows warm at idle on a hot day and both gauges read high. Spraying water on the condenser makes the high-side reading drop. Which is the most likely cause?",
+    "o": [
+     "Restricted airflow through the condenser",
+     "A low refrigerant charge",
+     "A blockage on the suction side",
+     "Too much refrigerant oil"
+    ],
+    "a": 0,
+    "why": "HELLA pairs high readings on both sides, plus a high side that falls when the condenser is cooled with water, with a dirty or blocked condenser or a fan problem.",
+    "src": [
+     "Changing the air conditioning compressor | HELLA",
+     "https://www.hella.com/techworld/us/technical/car-air-conditioning/change-air-conditioning-compressor/"
+    ]
+   },
+   {
+    "q": "Technician A says condenser coils bent by road debris can reduce A/C performance. Technician B says the condenser's job is to turn liquid refrigerant into a gas. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "HELLA says bent, cracked or damaged coils can stop the condenser working properly, and that the condenser turns high-pressure gas into high-pressure liquid, not the other way round.",
+    "src": [
+     "HELLA A/C Condensers – High-Performance Cooling | HELLA",
+     "https://www.hella.com/techworld/uk/car-parts/thermal-management/a-c-condensers/"
+    ]
+   }
+  ]
+ },
+ "G5": {
+  "body": [
+   "The cabin air filter cleans the outside air coming in through the ventilation system, trapping dust and pollen; some types also use carbon to cut odors and gases.",
+   "A clogged filter shows as weak airflow on the highest blower setting, bad or musty smells from the vents, slower heating and cooling, and fog that is slow to clear from the windshield.",
+   "FRAM suggests changing it at least once a year or as the carmaker recommends, and sooner in dusty or polluted areas or when the symptoms appear; HELLA includes a new cabin filter in its yearly A/C check.",
+   "When fitting the new filter, keep debris from dropping into the blower motor; a blower that is louder after the change can mean something fell in."
+  ],
+  "car": "Volvo's manual says the cabin filter cannot be cleaned and must be replaced, more often in dirty and dusty driving, and that several filter types exist, so the correct one must be fitted; for the interval it points to the Warranty and Service Records booklet or a Volvo technician. Cars with the optional Interior Air Quality System use a multifilter, and Volvo says to ask a retailer for its interval.",
+  "src": [
+   [
+    "How Often Should You Change Your Cabin Air Filter | FRAM",
+    "https://www.fram.com/vehicle-maintenance-center/post/how-often-should-you-change-your-cabin-air-filter"
+   ],
+   [
+    "How to Tell if Your Cabin Air Filter is Dirty | FRAM",
+    "https://www.fram.com/vehicle-maintenance-center/post/dirty-cabin-air-filter-symptoms"
+   ],
+   [
+    "Air-conditioning service: Car function & repairs | HELLA",
+    "https://www.hella.com/techworld/us/technical/car-air-conditioning/car-air-conditioning/"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "A customer reports weak airflow from every vent even on the highest blower speed, plus a musty smell. Which is the most likely cause?",
+    "o": [
+     "A clogged cabin air filter",
+     "A low refrigerant charge",
+     "A slipping compressor belt",
+     "A dirty condenser"
+    ],
+    "a": 0,
+    "why": "FRAM lists reduced airflow on the high setting and bad or musty smells from the vents as signs of a clogged cabin air filter.",
+    "src": [
+     "How to Tell if Your Cabin Air Filter is Dirty | FRAM",
+     "https://www.fram.com/vehicle-maintenance-center/post/dirty-cabin-air-filter-symptoms"
+    ]
+   },
+   {
+    "q": "Technician A says a dirty Volvo cabin filter can be blown clean and reused. Technician B says Volvo calls for replacing it more often when the car is driven in dusty conditions. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 1,
+    "why": "Volvo's manual says the filter cannot be cleaned and must always be replaced with a new one, and should be replaced more often in dirty and dusty conditions.",
+    "src": [
+     "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   }
+  ]
+ },
+ "G6": {
+  "body": [
+   "The A/C compressor is driven by the engine through a ribbed (serpentine) belt, so belt slip shows up as poor A/C performance along with weaker engine cooling and other symptoms.",
+   "Gates says the old rule of replacing a belt with three cracks in three inches suits neoprene belts but not modern EPDM belts, which can pass 100,000 miles without visible cracks; on EPDM the wear is lost rib material.",
+   "Worn ribs round off and the belt sits deeper in the pulley, so it grips less, slips, and can hydroplane on water; Gates says as little as 5% rib loss can cause trouble and suggests starting checks at 60,000 miles.",
+   "With the engine off, a belt wear gauge is pressed into the grooves: if it stays seated and will not rock, the belt has life left; if it rocks side to side, the belt is worn out.",
+   "Other reasons to replace: chunks missing (the belt can fail at any time), a rib separating from the base, or oil contamination (fix the leak first and do not use belt dressing); tension is checked with a tension tester on a correctly aligned drive.",
+   "HELLA lists defective tensioning parts among the causes of compressor failure, and Gates advises checking the belt and tensioner together when any part of the drive gives trouble."
+  ],
+  "car": "Volvo's manual lists checking the condition of the drive belts before any long trip. It gives no belt tension figure or adjustment procedure, and whether this engine uses an automatic tensioner is unconfirmed.",
+  "src": [
+   [
+    "Changing the air conditioning compressor | HELLA",
+    "https://www.hella.com/techworld/us/technical/car-air-conditioning/change-air-conditioning-compressor/"
+   ],
+   [
+    "Gates Tech Tip TT002-15: Belt Inspection Changes",
+    "https://www.gates.com/content/dam/documents-library/tech-tips-bulletins/tt002-15.pdf"
+   ],
+   [
+    "Gates: Accessory Belt Wear Symptoms",
+    "https://www.gatestechzone.com/en/problem-diagnosis/accessory-drive-system/micro-v-belt-wear-symptoms"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "Technician A says an EPDM serpentine belt with no visible cracks can still be worn out. Technician B says that if a belt wear gauge rocks from side to side in the grooves, the belt still has plenty of life. Who is correct?",
+    "o": [
+     "Technician A only",
+     "Technician B only",
+     "Both A and B",
+     "Neither A nor B"
+    ],
+    "a": 0,
+    "why": "Gates says EPDM belts resist cracking and wear by losing rib material, and that a gauge that rocks side to side means the belt is worn out.",
+    "src": [
+     "Gates Tech Tip TT002-15: Belt Inspection Changes",
+     "https://www.gates.com/content/dam/documents-library/tech-tips-bulletins/tt002-15.pdf"
+    ]
+   },
+   {
+    "q": "A drive belt's surface is swollen and sticky from an oil leak. Which is the best repair?",
+    "o": [
+     "Fix the oil leak and replace the belt",
+     "Apply belt dressing and recheck tension",
+     "Wipe the belt with solvent and reinstall it",
+     "Tighten the belt to stop it slipping"
+    ],
+    "a": 0,
+    "why": "Gates says oil weakens belt rubber, so the source must be eliminated and the belt replaced, and it advises against belt sprays.",
+    "src": [
+     "Gates: Accessory Belt Wear Symptoms",
+     "https://www.gatestechzone.com/en/problem-diagnosis/accessory-drive-system/micro-v-belt-wear-symptoms"
+    ]
+   }
+  ]
+ },
+ "G7": {
+  "body": [
+   "The evaporator cools the incoming air, and moisture from that air condenses on its fins; the water leaves the car through a drain, and HELLA notes the wet fins can grow bacteria and mold, so the evaporator is disinfected when needed.",
+   "A drain hose that is blocked, kinked, loose or badly fitted sends the water into the cabin instead, with a damp front footwell carpet and a musty smell as the usual complaints.",
+   "MINI's bulletin names three causes: a drain blocked by a heat shield, a drain not attached properly to the HVAC housing, or one damaged at installation; the drain is replaced if it is damaged or drains slowly, and if no leak is found there the water entry is searched for elsewhere.",
+   "GM's fix for water on the front passenger floor is to dry the carpet and fully seat or reinstall the evaporator drain hose.",
+   "Volvo recalled 2016-2017 XC90 and 2017 S90 models (R89707) because a misinstalled drain hose could leak condensation into the cabin, which over time could affect airbag and engine management electronics; the fix was to inspect or replace the hose and check any wet wiring under the carpet."
+  ],
+  "car": "Volvo's manual says a small amount of water under the car after parking in warm weather is condensation from the A/C and is normal. Volvo's drain-hose recall and the drain check in TJ 34648 cover other models (XC90, S90 and vehicle types 234, 238 and 256), not the 2016 V60.",
+  "src": [
+   [
+    "Air-conditioning service: Car function & repairs | HELLA",
+    "https://www.hella.com/techworld/us/technical/car-air-conditioning/car-air-conditioning/"
+   ],
+   [
+    "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+    "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+   ],
+   [
+    "MINI SIM 64 01 16: Water Ingress in Footwell Area from A/C Condensate Drain",
+    "https://static.nhtsa.gov/odi/tsbs/2024/MC-10249431-0001.pdf"
+   ],
+   [
+    "GM PI1299B: Water Present on Front Passenger Floor, A/C Drain Hose Not Positioned Correctly",
+    "https://static.nhtsa.gov/odi/tsbs/2015/MC-10126360-9999.pdf"
+   ],
+   [
+    "Volvo Quality Bulletin R89707.1.2: Recall R89707, Air Conditioning Drain Hose, 2016-2017 XC90, 2017 S90",
+    "https://static.nhtsa.gov/odi/tsbs/2016/MC-10167744-9999.pdf"
+   ],
+   [
+    "Volvo TJ 34648.1.2: Prior Approval - Lack of airflow causing poor cabin cooling",
+    "https://static.nhtsa.gov/odi/tsbs/2019/MC-10164854-9999.pdf"
+   ]
+  ],
+  "qs": [
+   {
+    "q": "After parking on a hot day with the A/C on, a 2016 V60 owner finds a small puddle of clear water under the car. The carpets are dry. What is most likely?",
+    "o": [
+     "Normal A/C condensation draining",
+     "A heater core leak",
+     "A refrigerant leak",
+     "A blocked evaporator drain"
+    ],
+    "a": 0,
+    "why": "Volvo's manual says water collecting under the parked car in warm weather is condensation from the A/C system and is normal.",
+    "src": [
+     "Volvo V60 Owner's Manual, Model Year 2016 (US, TP 20238)",
+     "https://ldgsvccassets.blob.core.windows.net/pdfs/610e4b1a5665ac4d99bd89bd1971f063df1c7284/V60_OwnersManual_MY16_en-US_TP20238.pdf"
+    ]
+   },
+   {
+    "q": "A car has a damp front footwell carpet and a musty smell. Which is LEAST likely to be the cause?",
+    "o": [
+     "A condensate drain blocked by a heat shield",
+     "A drain hose not attached properly to the HVAC housing",
+     "A drain hose damaged during installation",
+     "A low refrigerant charge"
+    ],
+    "a": 3,
+    "why": "MINI's bulletin lists a drain blocked by the heat shield, an improperly attached drain and a damaged drain as causes of a damp footwell and musty odor; a low refrigerant charge is not among them.",
+    "src": [
+     "MINI SIM 64 01 16: Water Ingress in Footwell Area from A/C Condensate Drain",
+     "https://static.nhtsa.gov/odi/tsbs/2024/MC-10249431-0001.pdf"
+    ]
+   }
+  ]
  }
 };
