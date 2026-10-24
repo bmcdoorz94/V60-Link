@@ -1,11 +1,11 @@
 # Non-work ideas: the chat where V60 Garage was built (Oct 10 to 14, 2026)
 
-Chat on claude.ai: https://claude.ai/chat/ab69dd68-dbe4-4029-bb60-2f3028d531db (private to Kyle). 200 turns. It opened on unrelated work ideas and turned to the car at turn 4; only the car and the app are covered here. Summarised in two halves on 2026-10-15. The VIN, plate, chassis number, contact details, job details and sync tokens are left out on purpose.
+Chat on claude.ai: https://claude.ai/chat/ab69dd68-dbe4-4029-bb60-2f3028d531db (private to Kyle). 200 turns. It opened on unrelated ideas and turned to the car at turn 4; only the car and the app are covered here. Summarised in two halves on 2026-10-15. The VIN, plate, chassis number, contact details, job details and sync tokens are left out on purpose.
 
 Turn numbers are the chat's own (t12 and T112 both mean turn 12 or 112). Open questions are as of the end of each half: many were answered later in the chat or in Claude Code sessions, and docs/ROADMAP.md holds the current list. Where this record and the app disagree, the app's sourced version is the later one (for example the maintenance intervals corrected at t34 against Volvo's own schedule).
 
 ## Turns 0 to 99 (Oct 10 to 11)
-The chat started on work-related automation ideas (turns 0-1) and a survey of hobby builds (turns 2-3), then turned to the car at turn 4. Dates in this range run from 2026-10-10 to 2026-10-11.
+The chat started on other ideas (turns 0-1) and a survey of hobby builds (turns 2-3), then turned to the car at turn 4. Dates in this range run from 2026-10-10 to 2026-10-11.
 
 ### 1. What Kyle said
 
