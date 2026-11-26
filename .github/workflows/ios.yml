@@ -1,5 +1,11 @@
-# Builds the V60 iPhone app's test .ipa on GitHub's Mac (free for this public repo). Kyle installs it with Sideloadly.
+# Builds the V60 iPhone app's .ipa on GitHub's Mac (free for this public repo) and publishes it for SideStore:
+# each build becomes a release ios-<version>.<build>, and the source SideStore reads is the asset source.json on
+# the release "sidestore" (ios/sidestore_source.py). Sideloadly can still install the artifact V60-test.
+# Bump MARKETING_VERSION / CURRENT_PROJECT_VERSION in ios/project.yml for SideStore to offer an update.
 name: Build iPhone app
+
+permissions:
+  contents: write
 
 on:
   workflow_dispatch:
@@ -58,6 +64,24 @@ jobs:
           name: V60-test
           path: ios/V60-test.ipa
           retention-days: 14
+
+      - name: Publish for SideStore
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PLIST=build/Build/Products/Release-iphoneos/V60.app/Info.plist
+          V=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$PLIST")
+          B=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$PLIST")
+          TAG="ios-$V.$B"
+          cp V60-test.ipa "V60-$V.ipa"
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --prerelease --title "V60 iPhone app $V" \
+            --notes "V60 iPhone app $V (build $B), from commit ${GITHUB_SHA::7}."
+          gh release upload "$TAG" "V60-$V.ipa" --clobber
+          python3 sidestore_source.py > source.json
+          python3 -c "import json; s=json.load(open('source.json')); print('source lists', [v['version'] + '.' + v['buildVersion'] for v in s['apps'][0]['versions']])"
+          gh release view sidestore >/dev/null 2>&1 || gh release create sidestore --prerelease --title "SideStore source" \
+            --notes "In SideStore: Sources, +, then https://github.com/$GITHUB_REPOSITORY/releases/download/sidestore/source.json"
+          gh release upload sidestore source.json --clobber
 
       - uses: actions/upload-artifact@v4
         if: always()
