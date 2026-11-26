@@ -11,7 +11,7 @@ function ok(c, m) { if (!c && !REPORT) { console.log('FAIL', m); process.exitCod
   const ctx = await b.newContext({ viewport: { width: 390, height: 844 } }); await ctx.addInitScript(() => { window.__V60_TEST = true; });
   const p = await ctx.newPage(); const errs = []; p.on('pageerror', e => errs.push(e.message));
   await p.goto('file://' + ROOT + '/index.html'); await p.waitForTimeout(600);
-  await p.evaluate(() => { __v60.go('story'); const o = document.getElementById('stOpts'); if (o) o.open = true; }); await p.check('#stAll'); await p.waitForTimeout(200);
+  /* every page is open since the reference redesign (2026-11-26); nothing to switch on */
   const tabs = await p.evaluate(() => [...document.querySelectorAll('main > .panel')].map(x => x.id.slice(2)));
   const views = await p.evaluate(() => V60_MANUAL.data.views.map(v => v.id));
   const pages = tabs.filter(t => t !== 'view').map(t => ['tab', t]).concat(views.map(v => ['view', v]));

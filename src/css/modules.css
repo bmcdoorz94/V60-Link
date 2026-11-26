@@ -555,3 +555,26 @@ html.guiding, html.guiding body { overflow: hidden; }
 .dc-img { display: block; max-width: 100%; max-height: 240px; margin: 6px 0; border: 1px solid var(--line); }
 .dc-rev .ans-k { margin-bottom: 4px; }
 @media (max-width: 480px) { .dc-row { grid-template-columns: 1fr auto; } .dc-row .pill { grid-column: 1 / -1; justify-self: start; } }
+
+/* ---------- Home (status board) and Maintain, 2026-11-26 ---------- */
+.hm-sec { margin: 18px 0 6px; }
+.hm-sec > .mn-kick { padding-bottom: 5px; border-bottom: 1px solid var(--ink); }
+.hm-row { display: flex; align-items: flex-start; gap: 12px; width: 100%; text-align: left; padding: 11px 0; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; color: var(--ink); font: inherit; min-height: 48px; cursor: pointer; }
+.hm-row.hm-static { cursor: default; }
+.hm-row .pill { flex: none; margin-top: 2px; }
+.hm-b { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.hm-t { font-weight: 600; }
+.hm-s { font-size: 13px; color: var(--muted); }
+.hm-i { font-size: 12px; }
+.hm-empty { margin: 10px 0; color: var(--muted); font-size: 14px; }
+.hm-more { margin-top: 8px; }
+.hm-wide { width: 100%; margin-top: 12px; min-height: 44px; }
+.hm-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: 10px; }
+.hm-tile { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; min-height: 76px; padding: 12px; border: 0; border-radius: 0; background: var(--panel); color: var(--ink); text-align: left; font: inherit; cursor: pointer; }
+.hm-tile b { font-family: var(--font-display); font-size: 19px; font-weight: 600; line-height: 1.1; }
+.hm-tile span { font-size: 12px; color: var(--muted); line-height: 1.35; }
+.hm-foot { margin-top: 12px; }
+.hm-note { margin-top: 4px; font-size: 13px; }
+.hm-note summary { color: var(--muted); cursor: pointer; min-height: 32px; display: flex; align-items: center; }
+.hm-note p { margin: 4px 0 0; color: var(--muted); }
+@media (min-width: 900px) { .hm-tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); } }

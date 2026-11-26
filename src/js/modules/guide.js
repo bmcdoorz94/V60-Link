@@ -206,6 +206,7 @@
 
   /* ---------- one-time intro line on newly opened tabs ---------- */
   function intro(tab) {
+    return; /* 2026-11-26: no "New" intro cards in the reference app */
     if (!API || !INTRO[tab]) return;
     var d = G(); if (d.seen[tab]) return;
     var anyGuided = AREAS.some(function (a) { return !d.lvl[a] || d.keep[a]; }); if (!anyGuided) return;

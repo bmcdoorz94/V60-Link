@@ -1,5 +1,6 @@
 /* The certification track: readiness meters, hands-on-first quiz gating, an area quiz end to end with weak spots,
-   the Owner rung, the mock G1 with its clock, and the HUD chip. */
+   the Owner rung and the mock G1 with its clock. Since the reference redesign (2026-11-26) the track is an optional
+   shelf: no header chip, no home strip, nothing waits for the path. */
 const { chromium } = require(process.env.PLAYWRIGHT_PATH || 'playwright');
 const path = require('path'); const ROOT = path.resolve(__dirname, '..');
 function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } else console.log(' ok', m); }
@@ -9,7 +10,7 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
   const p = await ctx.newPage(); const errs = []; p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
   await p.goto('file://' + ROOT + '/index.html'); await p.waitForTimeout(600);
 
-  ok(/%$/.test((await p.textContent('#hudRank')).trim()) && /G1/.test(await p.textContent('#hudRankName')), 'the header chip shows G1 readiness instead of a level');
+  ok(!(await p.$('#hudRank')), 'no readiness chip in the header');
   const D = await p.evaluate(() => window.V60_TRACK_DATA);
   ok(D.areas.reduce((s, a) => s + a.q, 0) === D.test.scored, 'area question counts add up to the scored total (' + D.test.scored + ')');
   ok(await p.evaluate(() => window.V60_QUIZ.every(q => q.o.length === 4 && q.a >= 0 && q.a < 4 && q.src && window.V60_TRACK_DATA.areas.some(a => a.id === q.area))), 'every quiz question has four options, a right one, a source and an area');
@@ -19,7 +20,7 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
   ok(/G1 readiness/.test(await p.textContent('#tkBody')), 'the track page renders');
   ok(await p.evaluate(() => document.querySelectorAll('#tkBody [data-area]').length === 7), 'seven areas listed');
   await p.click('#tkBody [data-area="eng"]'); await p.waitForTimeout(150);
-  ok(await p.evaluate(() => !document.querySelector('#tkBody [data-quiz="1"]') && /step \d+ of your path/.test(document.querySelector('#tkBody').textContent)), 'the Engine quiz is locked until the path reaches it');
+  ok(await p.evaluate(() => !/of your path/.test(document.querySelector('#tkBody').textContent)), 'the Engine area does not wait for the path');
   /* close every Know and Check chapter of the engine area by faking their evidence, then the quiz opens */
   await p.evaluate(() => { const st = V60.mod('story'); st.all = true; V60.setMod('story', st); const d = V60.mod('manual'); const a = window.V60_TRACK_DATA.areas.filter(x => x.id === 'eng')[0];
     const A = V60.acad(), dy = V60.mod('diy') || { done: {} }, today = V60.todayStr();
@@ -74,7 +75,7 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
   ok(await p.evaluate(() => (V60.mod('track').g1.tries || 0) === 1), 'the mock attempt is saved');
   /* the home strip */
   await p.evaluate(() => __v60.go('car')); await p.waitForTimeout(150);
-  ok(await p.evaluate(() => !document.querySelector('#mnHome .tk-strip') && !!document.querySelector('#mnHome .mn-next .mn-pbar')), 'the home carries one Next card with the path progress, not the readiness strip');
+  ok(await p.evaluate(() => !document.querySelector('#mnHome .tk-strip') && !document.querySelector('#mnHome .mn-next')), 'the home carries neither the readiness strip nor a path card');
   ok(errs.length === 0, 'no errors ' + JSON.stringify(errs));
   await b.close();
 })();

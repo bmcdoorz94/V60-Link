@@ -12,7 +12,7 @@ for (const t of tabs){await p.evaluate(t=>__v60.go(t),t);await p.waitForTimeout(
  const o=await p.evaluate(()=>document.documentElement.scrollWidth-innerWidth); if(o>0) ovs[t]=o;
  // find wide elements
  if(o>0) ovs[t+'_el']=await p.evaluate(()=>[...document.querySelectorAll('main *')].filter(e=>e.getBoundingClientRect().right>innerWidth+1 && e.offsetParent).slice(0,4).map(e=>e.tagName+'.'+e.className+'#'+e.id));
- if(['today','bulletins','upgrades','live','kb'].includes(t)) await p.screenshot({path:SH+t+'-'+nm+'.png',fullPage:true});
+ if(['car','maint','trouble','settings','know','bulletins','upgrades','live','kb'].includes(t)) await p.screenshot({path:SH+t+'-'+nm+'.png',fullPage:true});
 }
 // data-jump targets
 const bad=await p.evaluate((tabs)=>{const s=new Set();document.querySelectorAll('[data-jump^="tab:"]').forEach(e=>{const t=e.getAttribute('data-jump').slice(4); if(!tabs.includes(t)) s.add(t)}); return [...s];},tabs);

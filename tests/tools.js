@@ -1,5 +1,5 @@
 /* Glovebox tool inventory: tiers, sourced store prices, the owner's own price (saved, survives reload, cleared back to the store price),
-   tier totals. Also the ASE article: it opens in the Library and The Belt case unlocks it. */
+   tier totals. Also the ASE article: it is in the Library from the start and opens with its sources. */
 const { chromium } = require(process.env.PLAYWRIGHT_PATH || 'playwright');
 const path = require('path'); const ROOT = path.resolve(__dirname, '..');
 function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } else console.log(' ok', m); }
@@ -9,10 +9,8 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
   const p = await ctx.newPage(); const errs = []; p.on('pageerror', e => errs.push(e.message));
   await p.goto('file://' + ROOT + '/index.html'); await p.waitForTimeout(400);
 
-  // the ASE article is locked at the start and unlocked by The Belt case
-  const belt = await p.evaluate(() => (window.V60_STORY.cases || []).filter(c => c.id === 'belt')[0]);
-  ok(belt && belt.know.arts.indexOf('a-ase') >= 0, 'The Belt case unlocks the ASE article');
-  ok(await p.evaluate(() => !window.V60_KNOW.article('a-ase')), 'ASE article is not in the Library on day one');
+  // since the reference redesign (2026-11-26) every article is in the Library from the start
+  ok(await p.evaluate(() => window.V60_KNOW.article('a-ase')), 'the ASE article is in the Library on day one');
 
   await p.evaluate(() => { const s = V60.mod('story'); s.all = true; V60.setMod('story', s); V60.save(); __v60.go('glove'); });
   await p.waitForTimeout(300);

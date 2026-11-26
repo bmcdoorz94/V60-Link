@@ -1,4 +1,6 @@
-# V60 Garage: how the game works
+# V60 Garage: how the game worked (retired 2026-11-26)
+
+Since 2026-11-26 the app is an owner's reference: everything is open, the home is a status board, and the path, story, guide and certification gating below are out of sight (their code and saved data are kept). See ROADMAP, "Reference redesign". This file records how the game worked.
 
 ## The path (2026-10-15): one line, one step at a time
 Kyle's brief: "one seed planted of info turns into a tree of knowledge but potentially more linear", without so many ways in that it overwhelms. His answers: strict (later steps stay locked), in the order a beginner learns a car, and the home cut down to the car, one next step and a progress bar.

@@ -127,9 +127,7 @@
     var x = compute(api), d = x.d;
     if (x.closed[c.id]) return "closed";
     if (!x.open[c.id]) return "locked";
-    if (d.last === c.id) return "resume";
-    if (!d.opened[c.id]) return "new";
-    return "open";
+    return "open"; /* 2026-11-26: no "new" glow or "pick up here" dot; everything is open */
   }
   function why(api, c) {
     var s = STAGE_OF_CH[c.id], x = compute(api);
@@ -162,7 +160,7 @@
   function sweep(api) {
     bust(); var x = compute(api), d = x.d, changed = false, closedNow = [], first = !Object.keys(d.closed).length && !Object.keys(d.opened).length;
     CHLIST.forEach(function (c) { if (x.closed[c.id] && !d.closed[c.id]) { d.closed[c.id] = api.todayStr(); closedNow.push(c); changed = true; } });
-    if (closedNow.length && !first) toast = { t: closedNow.map(label).join(", ") + " closed", d: x.cur ? "Next on your path: step " + x.cur.n + ", " + stageTitle(x.cur) : "The path is complete.", go: x.cur ? 1 : 0 };
+    if (false) toast = { t: closedNow.map(label).join(", ") + " closed", d: x.cur ? "Next on your path: step " + x.cur.n + ", " + stageTitle(x.cur) : "The path is complete.", go: x.cur ? 1 : 0 };
     if (changed) api.save();
     unlockTerms(api);
     return changed;
@@ -170,7 +168,7 @@
 
   /* ---------- gate: which old pages exist yet ---------- */
   /* Glovebox and Link are workbenches, not lessons, so they are always open; the path decides the lessons */
-  var ROOTS = { car: 1, view: 1, item: 1, index: 1, story: 1, today: 1, academy: 1, glove: 1, live: 1, path: 1 };
+  var ROOTS = { car: 1, know: 1, view: 1, item: 1, index: 1, story: 1, today: 1, academy: 1, glove: 1, live: 1, path: 1, maint: 1, trouble: 1, settings: 1 };
   var GO_TAB = { mission: "academy", kb: "kb", diy: "diy", tree: "trouble", tsb: "bulletins", bay: "engine", part: "bay", tab: null };
   function neededTabs(api) {
     var x = compute(api), set = {};
@@ -273,22 +271,29 @@
     else if (pend.length) h += '<button type="button" class="mn-row" data-jump="story:' + esc(pend[0]) + '"><span class="mn-pill new">Scene</span><span>' + pend.length + (pend.length === 1 ? " scene is" : " scenes are") + " waiting. Watch</span></button>";
     return h + "</article>";
   }
+  /* Home (2026-11-26, Kyle chose the status board): what is wrong and what is due, then every section. home.js draws it. */
   function renderHome(api) {
+    sweep(api);
+    $("mnHome").innerHTML = (window.V60_HOME ? window.V60_HOME.html(api) : "") + sosHtml();
+  }
+  /* Know your car: the side view and its five views, all open */
+  function renderKnow(api) {
     sweep(api);
     var vi = VIEWS.map(function (v) { return { id: v.id, num: String(v.num), label: v.n, status: viewStatus(api, v), v: v }; });
     var at = function (it) { return { bay: [70, 74], wheel: [84, 156], cabin: [181, 76], under: [180, 174], body: [334, 116] }[it.id]; };
-    var h = toastHtml() + nextCard(api);
-    h += '<div class="mn-figwrap"><div class="mn-kick"><span>THE CAR · ' + ITEMS.filter(function (it) { return itemOpen(api, it); }).length + ' OF ' + ITEMS.length + ' PARTS OPEN</span><button type="button" class="mn-link" data-ch="legend">Key</button></div>' + figure(api, { id: "home", n: "The car", fig: "side" }, vi, null, at) + (ui.homeNote ? '<p class="status mn-homenote">' + esc(ui.homeNote) + "</p>" : "") + "</div>";
-    ui.homeNote = null;
-    h += '<div class="row mn-homefoot"><button type="button" class="quiet" data-jump="tab:index">Index: every page</button></div>';
-    h += sosHtml();
-    $("mnHome").innerHTML = h;
+    var h = '<div class="mn-top"><div class="mn-kick"><button type="button" class="mn-link" data-jump="tab:car">← Home</button><span>KNOW YOUR CAR</span></div><h2 class="mn-h1">Know your car</h2>' +
+      "<p>Tap a number to look into that part of the car. Each part has its own pages: what it is, how to check it, service, diagnosis and upgrades.</p></div>";
+    h += '<div class="mn-figwrap"><div class="mn-kick"><span>FIG. 0 · SIDE VIEW · SCHEMATIC</span></div>' + figure(api, { id: "home", n: "The car", fig: "side" }, vi, null, at) + "</div>";
+    h += '<section class="mn-list"><div class="mn-kick"><span>THE FIVE VIEWS</span></div><button type="button" class="mn-ix open" data-ch="0"><span class="n">0</span><span>' + esc(PREFACE.n) + '</span><span class="st"></span></button>' +
+      VIEWS.map(function (v) { return '<button type="button" class="mn-ix open" data-view="' + v.id + '"><span class="n">' + v.num + "</span><span>" + esc(v.n) + '</span><span class="st">' + v.items.length + " parts</span></button>"; }).join("") + "</section>";
+    h += alsoHtml(["engine", "bay", "my", "kb", "learn"]);
+    $("mnKnow").innerHTML = h;
   }
   /* ---------- the whole path: done units folded, the current unit open, later units by name only ---------- */
   function renderPath(api) {
     sweep(api);
     var x = compute(api), cur = x.cur;
-    var h = '<div class="mn-top"><div class="mn-kick"><button type="button" class="mn-link" data-jump="tab:car">← The car</button><span>THE PATH</span></div><h2 class="mn-h1">One step at a time</h2>' +
+    var h = '<div class="mn-top"><div class="mn-kick"><button type="button" class="mn-link" data-jump="tab:car">← Home</button><span>THE PATH</span></div><h2 class="mn-h1">One step at a time</h2>' +
       "<p>Safety first, then what the car is telling you and its history, then looking and checking one system at a time, each ending with its G1 study and quiz. Then servicing, diagnosing, upgrades, and the test. Each step opens when the one before it is done.</p>" +
       '<div class="mn-pbar"><i style="width:' + Math.round(x.nDone / STAGES.length * 100) + '%"></i></div><p class="status mn-mono">' + x.nDone + " OF " + STAGES.length + " STEPS DONE</p></div>";
     UNITS.forEach(function (u) {
@@ -313,8 +318,7 @@
   function renderIndex(api) {
     sweep(api);
     var x = compute(api);
-    var h = '<div class="mn-top"><div class="mn-kick"><button type="button" class="mn-link" data-jump="tab:car">← The car</button><span>INDEX</span></div><h2 class="mn-h1">Every page</h2><p>The back of the book, for looking things up. Only pages your path has reached are listed.</p></div>';
-    h += '<section class="mn-list"><div class="mn-kick"><span>YOUR PATH</span></div><button type="button" class="mn-ix resume" data-jump="tab:path"><span class="n">' + (x.cur ? x.cur.n : "✓") + '</span><span>The whole path, step by step</span><span class="st">' + x.nDone + " / " + STAGES.length + "</span></button></section>";
+    var h = '<div class="mn-top"><div class="mn-kick"><button type="button" class="mn-link" data-jump="tab:car">← Home</button><span>INDEX</span></div><h2 class="mn-h1">Every page</h2><p>The back of the book, for looking things up.</p></div>';
     h += '<section class="mn-list"><div class="mn-kick"><span>THE CAR</span></div><button type="button" class="mn-ix ' + chStatus(api, PREFACE) + '" data-ch="0"><span class="n">0</span><span>' + esc(PREFACE.n) + '</span><span class="st">' + (chStatus(api, PREFACE) === "closed" ? "CLOSED" : PREFACE.steps.filter(function (s, i) { return info(api, PREFACE, i).done; }).length + " / " + PREFACE.steps.length) + "</span></button>" +
       VIEWS.map(function (v) { var st = viewStatus(api, v), n = v.items.filter(function (it) { return itemClosedN(api, it) === it.chapters.length; }).length; return '<button type="button" class="mn-ix ' + st + '" data-view="' + v.id + '"' + (st === "locked" ? ' aria-disabled="true"' : "") + '><span class="n">' + v.num + "</span><span>" + esc(v.n) + " · " + v.items.length + ' parts</span><span class="st">' + (st === "locked" ? "after " + esc(firstGate(api, v)) : n + " / " + v.items.length) + "</span></button>"; }).join("") + "</section>";
     h += backMatter(api) + sosHtml();
@@ -324,12 +328,12 @@
   function firstCh(v) { var best = null; v.items.forEach(function (it) { it.chapters.forEach(function (c) { var s = STAGE_OF_CH[c.id]; if (s && (!best || s.n < STAGE_OF_CH[best.id].n)) best = c; }); }); return best; }
   function firstGate(api, v) { var c = firstCh(v); return c ? "step " + STAGE_OF_CH[c.id].n : "later"; }
   function firstWhy(api, v) { var c = firstCh(v); return c ? why(api, c) : ""; }
-  var BACK = [["kb", "Library"], ["cards", "Flashcards"], ["track", "Certification track"], ["academy", "Training library"], ["health", "Health score"], ["records", "Service log"], ["fuel", "Fuel & costs"], ["lab", "Data lab"], ["sim", "Simulator"], ["diy", "All DIY jobs"], ["trouble", "Troubleshoot"], ["bulletins", "Bulletins"], ["upgrades", "Upgrades"], ["my", "My V60 & photos"], ["bay", "Whole-car parts list"], ["engine", "Engine bay map"], ["achieve", "Achievements"], ["today", "Today's notes"], ["index", "Index"], ["path", "The path"], ["story", "Cases & options"]];
+  var BACK = [["kb", "Library"], ["cards", "Flashcards"], ["track", "G1 study and quizzes (optional)"], ["academy", "Training library"], ["health", "Health score"], ["records", "Service log"], ["fuel", "Fuel & costs"], ["lab", "Data lab"], ["sim", "Simulator"], ["diy", "All DIY jobs"], ["trouble", "Troubleshoot"], ["bulletins", "Bulletins"], ["upgrades", "Upgrades"], ["my", "My V60 & photos"], ["bay", "Whole-car parts list"], ["engine", "Engine bay map"], ["achieve", "Achievements"], ["today", "Today's notes"], ["index", "Index"], ["path", "The path"], ["story", "Cases"]];
   /* every other page, grouped by what you want to do; only pages the story has opened are listed */
-  var INDEX = [["Your car", ["engine", "bay", "health", "my", "upgrades", "bulletins"]], ["Fix & maintain", ["records", "diy", "trouble", "fuel", "unlocks"]], ["Learn", ["track", "academy", "learn", "kb", "cards"]], ["Data", ["lab", "diag", "sim"]], ["Progress", ["story", "achieve", "today"]]];
+  var INDEX = [["Your car", ["know", "engine", "bay", "my", "health", "bulletins"]], ["Maintain", ["maint", "records", "fuel", "diy", "upgrades", "glove", "docs"]], ["Fix & diagnose", ["trouble", "diag", "live", "lab", "sim"]], ["Learn", ["kb", "learn", "academy", "cards", "track"]], ["Settings", ["settings"]]];
   /* "see also" on each view and on the other three roots */
   var ALSO = { bay: ["bay", "diy", "records"], wheel: ["diy", "records", "bulletins"], cabin: ["live", "diag", "trouble"], under: ["trouble", "diy"], body: ["upgrades", "diy", "bulletins"],
-    glove: ["records", "fuel", "docs", "bulletins"], live: ["lab", "diag", "sim", "health"], story: ["track", "academy", "kb", "cards", "achieve"] };
+    glove: ["records", "fuel", "docs", "bulletins"], live: ["lab", "diag", "sim", "health"], trouble: ["diag", "bulletins", "diy", "live"], story: ["track", "academy", "kb", "cards", "achieve"] };
   function seen(tab) { return !!($("p-" + tab) && (!window.V60_GATE || window.V60_GATE.visible(tab))); }
   function pageName(tab) { var b = BACK.filter(function (x) { return x[0] === tab; })[0]; return NAMES[tab] || (b && b[1]) || tab; }
   function alsoHtml(tabs, kick) {
@@ -356,7 +360,7 @@
     var sel = ui.item && items.some(function (q) { return q.id === ui.item && q.it.view === v.id; }) ? ui.item : (d.sel[v.id] || (resumeChapter(api) && resumeChapter(api).item && resumeChapter(api).item.view === v.id ? resumeChapter(api).item.id : null) || (items.filter(function (q) { return q.status === "new" || q.status === "resume"; })[0] || items.filter(function (q) { return q.status !== "locked"; })[0] || items[0]).id);
     d.sel[v.id] = sel;
     var pv = d.views[v.id], photo = pv && pv.photo ? (api.state.photos || []).filter(function (p) { return p.id === pv.photo; })[0] : null;
-    var h = '<div class="mn-top"><div class="mn-kick"><button type="button" class="mn-link" data-jump="tab:car">← The car</button><span>VIEW ' + v.num + "</span></div>" +
+    var h = '<div class="mn-top"><div class="mn-kick"><button type="button" class="mn-link" data-jump="tab:know">← Know your car</button><span>VIEW ' + v.num + "</span></div>" +
       '<div class="mn-title"><h2>' + esc(v.n) + '</h2><div class="mn-seg" role="group" aria-label="Figure"><button type="button" data-fm="draw" aria-pressed="' + !photo + '">Drawing</button><button type="button" data-fm="photo" aria-pressed="' + !!photo + '">Your photo</button></div></div></div>' + toastHtml();
     h += '<div class="mn-figwrap"><div class="mn-kick"><span>FIG. ' + v.num + "-1 · " + esc(photo ? "YOUR PHOTO, " + photo.date : (FIG[v.fig] || FIG.side).cap.toUpperCase() + " · SCHEMATIC") + "</span>" + (photo ? '<button type="button" class="mn-link" data-arrange="1" aria-pressed="' + ui.arrange + '">' + (ui.arrange ? "Done moving" : "Move points") + "</button>" : "") + "</div>" + figure(api, v, items, sel, function (it) { return it.it.at; }) +
       (ui.arrange ? '<p class="status">Drag a number to where that part really is on your photo. Positions are saved as you go.</p>' : "") + "</div>";
@@ -449,9 +453,9 @@
     /* arriving at a chapter opens it (the glow stops) and makes it the one to pick up */
     if (ui.openCh && CH[ui.openCh] && x.open[ui.openCh]) { var oc = CH[ui.openCh]; if (!d.opened[oc.id]) d.opened[oc.id] = api.todayStr(); if (!x.closed[oc.id]) d.last = oc.id; if (!ui.openStep) for (var i = 0; i < oc.steps.length; i++) if (!info(api, oc, i).done) { ui.openStep = stepKey(oc, i); break; } api.save(); bust(); x = compute(api); }
     var areas = it && window.V60_TRACK ? window.V60_TRACK.areaOf(it.id) : [];
-    var h = '<div class="mn-top"><div class="mn-kick"><button type="button" class="mn-link" ' + (v ? 'data-view="' + v.id + '">← ' + esc(v.n) : 'data-jump="tab:car">← The car') + "</button><span>" + (it ? "PART " + esc(it.num) + " · VIEW " + v.num : "CHAPTER 0") + "</span></div>" +
+    var h = '<div class="mn-top"><div class="mn-kick"><button type="button" class="mn-link" ' + (v ? 'data-view="' + v.id + '">← ' + esc(v.n) : 'data-jump="tab:know">← Know your car') + "</button><span>" + (it ? "PART " + esc(it.num) + " · VIEW " + v.num : "CHAPTER 0") + "</span></div>" +
       '<h2 class="mn-h1">' + esc(it ? it.n : PREFACE.n) + '</h2><div class="mn-prog">' + segs(api, { chapters: chapters }) + '<span class="mn-mono">' + nc + " / " + chapters.length + " closed</span></div>" +
-      (areas.length ? '<div class="mn-chips mn-areas">' + areas.map(function (a) { return '<button type="button" class="mn-chip" data-jump="track:' + a.id + '">' + esc(a.letter + " · " + a.n) + " · " + Math.round(window.V60_TRACK.areaReady(a.id) * 100) + " %</button>"; }).join("") + "</div>" : "") + "</div>" + toastHtml();
+      "</div>" + toastHtml();
     if (it) {
       h += "<p>" + esc(it.d) + "</p>";
       var spec = (it.spec || []).slice(), dot = lastDot(api, it); if (dot) spec.push(["DOT read from your photo", dot + " (unconfirmed)"]);
@@ -499,8 +503,8 @@
 
   /* ---------- crumb: "← Back to …" on every page that is not one of the four roots or the manual itself ----------
      trail holds where you came from, newest last. A root clears it; the manual's own pages keep their own back links. */
-  var NAMES = { car: "The car", story: "Cases & options", path: "The path", glove: "Glovebox", live: "Link", docs: "Documents", diag: "Diagnose", learn: "How it works", unlocks: "Unlocks: beyond the app", today: "Today" };
-  var TAB_ROOT = { car: 1, glove: 1, live: 1 }, trail = [], here = null, goingBack = false;
+  var NAMES = { car: "Home", know: "Know your car", maint: "Maintenance", trouble: "Fix & diagnose", settings: "Settings", story: "Cases", path: "The path", glove: "Glovebox", live: "Link", docs: "Documents", diag: "Diagnose", learn: "How it works", unlocks: "Unlocks: beyond the app", today: "Today" };
+  var TAB_ROOT = { car: 1, maint: 1, trouble: 1, glove: 1, live: 1 }, trail = [], here = null, goingBack = false;
   function where(tab) {
     if (tab === "view") { var v = VIEWS.filter(function (q) { return q.id === ui.view; })[0]; return v && { tab: "view", id: v.id, label: v.n }; }
     if (tab === "item") { if (ui.item === "0") return { tab: "item", id: "0", label: "0 " + PREFACE.n }; var it = ITEMS.filter(function (q) { return q.id === ui.item; })[0]; return it && { tab: "item", id: it.id, label: it.num + " " + it.n }; }
@@ -516,7 +520,7 @@
     if (trail.length > 20) trail = trail.slice(-20);
     ui.from = trail.length ? trail[trail.length - 1] : null;
     if (!el) return;
-    if (tab === "view" || tab === "item" || TAB_ROOT[tab] || !ui.from) { el.hidden = true; el.innerHTML = ""; return; }
+    if (tab === "view" || tab === "item" || tab === "know" || tab === "index" || TAB_ROOT[tab] || !ui.from) { el.hidden = true; el.innerHTML = ""; return; }
     el.hidden = false; el.innerHTML = '<button type="button" class="mn-link" data-back="1">← Back to ' + esc(ui.from.label) + "</button>";
   }
   function goBack(api) {
@@ -624,14 +628,15 @@
   (window.V60_MODULES = window.V60_MODULES || []).push({
     id: "manual",
     tabs: [
-      { id: "car", section: "car", label: "The car", order: 1, html: '<div id="mnHome" class="mn"></div>' },
+      { id: "car", section: "car", label: "Home", order: 1, html: '<div id="mnHome" class="mn"></div>' },
+      { id: "know", section: "car", label: "Know your car", order: 2, hidden: true, html: '<div id="mnKnow" class="mn"></div>' },
       { id: "view", section: "car", label: "View", order: 2, hidden: true, html: '<div id="mnView" class="mn"></div>' },
       { id: "item", section: "car", label: "Part", order: 3, hidden: true, html: '<div id="mnItem" class="mn"></div>' },
       { id: "index", section: "car", label: "Index", order: 4, hidden: true, html: '<div id="mnIndex" class="mn"></div>' },
       { id: "path", section: "car", label: "The path", order: 5, hidden: true, html: '<div id="mnPath" class="mn"></div>' }
     ],
     init: function (api) { API = api; installGate(); wire(api); },
-    render: function (api, tab) { bust(); if (tab === "car") renderHome(api); else if (tab === "view") renderView(api); else if (tab === "item") renderItem(api); else if (tab === "index") renderIndex(api); else if (tab === "path") renderPath(api); },
+    render: function (api, tab) { bust(); if (tab === "car") renderHome(api); else if (tab === "know") renderKnow(api); else if (tab === "view") renderView(api); else if (tab === "item") renderItem(api); else if (tab === "index") renderIndex(api); else if (tab === "path") renderPath(api); },
     refresh: function (api) { bust(); },
     shown: function (api, tab) { crumb(api, tab); rootAlso(tab); if (tab !== "item" && api.trainReset) api.trainReset(); },
     clean: function (v) { return v && typeof v === "object" ? v : {}; },
