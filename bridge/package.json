@@ -1,0 +1,15 @@
+{
+  "name": "v60-claude-live",
+  "private": true,
+  "type": "module",
+  "description": "Claude live: an MCP channel that connects the Claude Code session on Kyle's PC to V60-Link on his phone.",
+  "scripts": {
+    "start": "node server.js",
+    "pair": "node pair.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "ws": "^8.23.0",
+    "zod": "^3.25.0"
+  }
+}

@@ -1012,6 +1012,37 @@ ol.jsteps input:checked ~ span { color: var(--muted); text-decoration: line-thro
 #p-live .coach li.done .cdot { background: var(--ok); border-color: var(--ok); color: var(--panel); }
 #p-live .coach li.done b { text-decoration: line-through; text-decoration-color: var(--muted); }
 
+/* Claude live (tools/gen/live_claude.js): a radio log between the car and the PC */
+#p-live .cl { border-left: 3px solid var(--teal); }
+#p-live .clsw { display: flex; gap: 10px; align-items: center; min-height: 40px; font-weight: 700; font-size: 15px; }
+#p-live .clsw input { width: 22px; height: 22px; margin: 0; accent-color: var(--teal); flex: none; }
+#p-live .clfeed { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; max-height: 340px; overflow-y: auto; }
+#p-live .clfeed li { display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; border: 1px solid var(--line); background: var(--panel); }
+#p-live .clfeed li.cc { border-left: 3px solid var(--teal); }
+#p-live .clfeed li.cy { background: var(--panel2); border-color: transparent; }
+#p-live .clfeed .who { font-family: var(--font-data); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+#p-live .clfeed .tx { font-size: 15px; line-height: 1.4; white-space: pre-wrap; overflow-wrap: anywhere; }
+#p-live .clsay { display: flex; gap: 8px; }
+#p-live .clsay input { flex: 1 1 auto; min-height: 44px; font-size: 16px; }
+#p-live .clsay button { min-height: 44px; flex: none; }
+/* the Allow card and the message toast sit on the body, above the bottom bar, over any screen */
+.clsheet { position: fixed; z-index: 40; left: 8px; right: 8px; bottom: calc(72px + env(safe-area-inset-bottom)); max-height: 64vh; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+.clq { border: 2px solid var(--bad); border-top-width: 6px; background: var(--panel); padding: 12px; display: flex; flex-direction: column; gap: 6px; }
+.clq b { font-size: 16px; }
+.clq .clw { margin: 0; font-size: 15px; }
+.clq .row { display: flex; gap: 8px; flex-wrap: wrap; }
+.clq button { min-height: 44px; }
+.clq button.danger { background: var(--bad); border-color: var(--bad); color: #fff; }
+.clq button.quiet { background: var(--panel); color: var(--ink); border: 1px solid var(--line); }
+.clq .status { margin: 0; font-size: 13.5px; color: var(--muted); }
+.clq .clpre, #p-live .clpre { margin: 6px 0 0; font-family: var(--font-data); font-size: 13px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.cltoast { position: fixed; z-index: 39; left: 8px; right: 8px; bottom: calc(72px + env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 2px; min-height: 44px; padding: 10px 12px; text-align: left; font: inherit; font-weight: 400; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--teal); border-radius: 0; }
+.cltoast .who { font-family: var(--font-data); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.cltoast .tx { font-size: 15px; line-height: 1.35; }
+@media (min-width: 1000px) { .clsheet, .cltoast { left: auto; right: 16px; width: 380px; bottom: 16px; } }
+#p-live .clf { display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 700; color: var(--muted); margin-bottom: 8px; }
+#p-live .clf input { min-height: 44px; font-size: 16px; font-family: var(--font-data); font-weight: 400; color: var(--ink); }
+
 /* Toggle groups (bulletins, upgrades) */
 .seg { display: flex; flex-wrap: wrap; gap: 6px; }
 .seg button { min-height: 38px; padding: 6px 12px; font-size: 14px; font-weight: 700; background: var(--panel); color: var(--ink); border: 1px solid var(--line); }

@@ -1,3 +1,4 @@
 tests/shots/
 HANDOFF.md
 node_modules/
+bridge/data/

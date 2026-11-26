@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__v60__reply",
+      "mcp__v60__car_status",
+      "mcp__v60__car_send",
+      "mcp__v60__car_restore",
+      "mcp__v60__car_log"
+    ]
+  },
+  "enabledMcpjsonServers": ["v60"]
+}

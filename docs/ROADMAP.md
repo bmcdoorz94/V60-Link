@@ -6,6 +6,7 @@ Living tracker. Update it at the end of every work session: move finished items 
 The car is the menu (manual shell), Live link works on the real car in Bluefy, Glovebox documents intake shipped. Work now also happens in Claude Code on Kyle's Windows PC (docs/LOCAL_SETUP.md). `npm test` runs all 12 test files in Chromium and in iPhone WebKit (Bluefy's engine): 24 of 24 pass.
 
 ## Next
+- [ ] **Claude live** (2026-11-26, Kyle: "as if you were side by side with me", plug and play, text only): built and tested against the simulated car (tests/claude.js, 27 checks). Kyle to do on the PC: bridge/SETUP.md with Claude Code there (Tailscale serve, pairing, desktop shortcut). Then the first session at the car with the CX: confirm 11-bit addressing (CEM 22402A on 726/72E), read the brake module's codes (760, 19 02 FF) for the tire light. Next hardware (research report "V60 electronic mechanic setup"): a vLinker FD+ or MC+ (BLE + MS-CAN) so Claude reaches the cluster, climate, doors and airbags; then an always-on box (AutoPi CAN-FD Pro) feeding the same bridge so the phone becomes optional.
 - [ ] Auto-read uploads with privacy redaction (on-device OCR in Bluefy, black out VIN/plate/name/address/phone/card before saving or syncing). Full spec in docs/HANDOFF_STATE.md, step 2.
 - [ ] Close the feature-audit gaps listed in docs/HANDOFF_STATE.md, step 3 (86 of ~150 cards, missing DIY cards, interactive diagrams, Mode 06, resale tracker, and more).
 - [ ] Ask Kyle for his build month (door-pillar label) and the other backlog questions below.
@@ -45,6 +46,7 @@ The car is the menu (manual shell), Live link works on the real car in Bluefy, G
   - Contents of TJ30087
 
 ## Decisions
+- 2026-11-26 (Kyle): Claude live replies are text only (no read-aloud). Claude may read anything; every write to the car waits for his tap on the phone. He is fine with a powered box living in the car year-round. The test version is a switch on Link that stays off until paired, instead of a second copy of the app at another address.
 - 2026-10-24 (Kyle): the ASE article is car-owner content only: no job listings, hiring companies or career advice. The repo is public.
 - 2026-10-15 (Kyle: put all the V60 chats into the project): digests in docs/chats/, personal details left out (the repo is public), and anything the app lacked added with sources: the Oct 14 scan and drive recording on 3.3, photo readings on tires, brakes and the cowl.
 - 2026-10-15 (Kyle: "one seed planted of info turns into a tree of knowledge but potentially more linear"): strict (later steps locked), in the order a beginner learns a car starting with this one, and the home cut to the car, one next step and a progress bar. Built as the path.

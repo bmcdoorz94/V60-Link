@@ -44,6 +44,28 @@ dash = '''
 '''
 i = html.index('  <section class="card" aria-labelledby="lk-h-live">')
 html = html[:i] + dash.strip('\n') + '\n\n' + html[i:]
+# Claude live (tools/gen/live_claude.js) sits right under Connect
+claude_html = '''
+  <section class="card cl" aria-labelledby="lk-h-cl" id="lk-cl">
+    <h2 id="lk-h-cl">Claude live</h2>
+    <p class="lede">Links this page to the Claude session on your PC. While it is on, Claude sees the adapter connect, reads the car through it and writes to you here. Anything that could change the car waits for your OK on this screen.</p>
+    <div class="row"><span class="conn" id="lk-clConn" role="status"><i></i><span id="lk-clText">Off</span></span></div>
+    <label class="clsw"><input type="checkbox" id="lk-clOn"> Let Claude watch</label>
+    <div class="clsheet" id="lk-clAsk" role="alertdialog" aria-label="Claude is asking" hidden></div>
+    <ol class="clfeed" id="lk-clFeed" aria-live="polite" hidden></ol>
+    <div class="clsay" id="lk-clSay" hidden><input type="text" id="lk-clMsg" placeholder="Message Claude" autocomplete="off" enterkeyhint="send" aria-label="Message Claude"><button type="button" id="lk-clSend" disabled>Send</button></div>
+    <details id="lk-clSetup">
+      <summary>Pair with your PC</summary>
+      <p class="lede" style="margin:8px 0">Start Claude live on the PC (bridge/start.cmd in the V60-Link folder). Its window shows the PC address and a pairing code. Tailscale has to be on, on this phone.</p>
+      <label class="clf">PC address<input type="text" id="lk-clHost" placeholder="kitty.tail1234.ts.net" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+      <label class="clf">Pairing code<input type="text" id="lk-clCode" inputmode="numeric" placeholder="6 digits" autocomplete="off"></label>
+      <div class="row"><button type="button" id="lk-clSave">Save and connect</button><button type="button" class="quiet" id="lk-clClear">Clear the messages</button></div>
+      <p class="status" id="lk-clSaved"></p>
+    </details>
+  </section>
+'''
+i = html.index('  <section class="card" aria-labelledby="lk-h-scan">')
+html = html[:i] + claude_html.strip('\n') + '\n\n' + html[i:]
 intro = '''  <section><h2>Live link</h2><p class="lede">Talks to the car through a Bluetooth LE OBD-II adapter such as the OBDLink CX: health check, gauges, recordings, 0–60 and clearing codes with safeguards. Results go straight into this Garage.</p></section>
 '''
 html = intro + html
@@ -90,12 +112,16 @@ s = s.replace('''  function stopLive() { live.on = false; $("btnLive").textConte
 s = s.replace('''return readPid(pd.pid).then(function (d) { if (d) { var v = pd.f(d[0], d[1]); row[pd.pid] = v; var el = $("tv" + pd.pid); if (el) el.textContent = shown(pd, v); } }).catch(function () {}); }); }, Promise.resolve())''',
 '''return readPid(pd.pid).then(function (d) { if (d) { var v = pd.f(d[0], d[1]); row[pd.pid] = v; var el = $("tv" + pd.pid); if (el) el.textContent = shown(pd, v); onValue(pd.pid, v); } }).catch(function () {}); }); }, Promise.resolve())''')
 s = s.replace('''          live.rows.push(row);''', '''          live.rows.push(row); trip.add(row); updateDials(row);''')
-s = s.replace('''      enable(true); renderPicks();''', '''      enable(true); renderPicks(); $("zArm").disabled = false;''')
-s = s.replace('''    transport.onclose = function () { link = null; enable(false); setConn("", "Disconnected"); stopLive(); };''', '''    transport.onclose = function () { link = null; enable(false); setConn("", "Disconnected"); stopLive(); $("zArm").disabled = true; };''')
-s = s.replace('''  $("btnDisconnect").addEventListener("click", function () { stopLive(); if (link) link.close(); link = null; enable(false); setConn("", "Disconnected"); });''', '''  $("btnDisconnect").addEventListener("click", function () { stopLive(); if (link) link.close(); link = null; enable(false); setConn("", "Disconnected"); $("zArm").disabled = true; });''')
+s = s.replace('''      enable(true); renderPicks();''', '''      enable(true); renderPicks(); $("zArm").disabled = false; clLink(true);''')
+s = s.replace('''    transport.onclose = function () { link = null; enable(false); setConn("", "Disconnected"); stopLive(); };''', '''    transport.onclose = function () { link = null; enable(false); setConn("", "Disconnected"); stopLive(); $("zArm").disabled = true; clLink(false); };''')
+s = s.replace('''  $("btnDisconnect").addEventListener("click", function () { stopLive(); if (link) link.close(); link = null; enable(false); setConn("", "Disconnected"); });''', '''  $("btnDisconnect").addEventListener("click", function () { stopLive(); if (link) link.close(); link = null; enable(false); setConn("", "Disconnected"); $("zArm").disabled = true; clLink(false); });''')
 s = s.replace('''    $("tiles").innerHTML = PIDS''', '''    renderCluster();
     $("tiles").innerHTML = PIDS''')
-s = s.replace('''      report = R; renderReport();''', '''      report = R; renderReport(); renderCoach();''')
+s = s.replace('''      report = R; renderReport();''', '''      report = R; renderReport(); renderCoach(); clReport(R);''')
+s = s.replace('''  function log(dir, text) {
+''', '''  function log(dir, text) {
+    clLog(dir, text);
+''')
 s = s.replace('''      $("clearStatus").textContent = "Cleared by: " + okE.join(", ") + ". Running a new health check...";''', '''      $("clearStatus").textContent = "Cleared by: " + okE.join(", ") + ". Running a new health check...";
       api.state.codes.forEach(function (c) { if (c.status === "active") { c.status = "cleared"; c.note = (c.note ? c.note + " · " : "") + "Cleared with Live link " + api.todayStr(); } }); api.save();''')
 import sys
@@ -103,6 +129,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import cipher
 s = cipher.apply(s)
 extra = open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'live_extra.js'), encoding='utf-8').read()
+extra += '\n' + open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'live_claude.js'), encoding='utf-8').read()
 s = s.replace('  /* ---------------- clear codes ---------------- */', extra + '\n  /* ---------------- clear codes ---------------- */')
 out = '''/* Live link: V60 Link ported into the Garage (generated by tools from src/link-legacy.html, then extended). Web Bluetooth to a BLE OBD-II adapter.
    Adds: direct import into the Garage, Data lab hand-off, gauge cluster, 0-60 timer, drive-cycle coach, trip log, scan history, wake lock. */
@@ -118,8 +145,8 @@ out = '''/* Live link: V60 Link ported into the Garage (generated by tools from 
     today: function (api) { var d = api.mod("live"); if (!d || !d.scans.length) return []; var last = d.scans[d.scans.length - 1], nr = (last.monitors || []).filter(function (m) { return !m.ready; }).length; return nr > 1 ? [{ k: "live-ready", pri: 40, t: nr + " readiness monitors not ready", d: "From your last health check on " + String(last.date).slice(0, 10) + ". The drive-cycle coach in Live link shows what helps.", go: "tab:live", btn: "Open coach" }] : []; },
     init: function (api) { if (booted) return; booted = true;
 %s
-  window.__link = { parseResponse: parseResponse, dtcsFrom: dtcsFrom, decodeDTC: decodeDTC, SimTransport: SimTransport, csv: csv, live: live, getReport: function () { return report; }, sim: function () { return link; }, zero: zero, trip: trip, onValue: onValue };
-  window.__lkRender = function () { renderHistory(); renderCoach(); renderZero(); renderCluster(); if (link) renderPicks(); if (report) renderReport(); };
+  window.__link = { parseResponse: parseResponse, dtcsFrom: dtcsFrom, decodeDTC: decodeDTC, SimTransport: SimTransport, csv: csv, live: live, getReport: function () { return report; }, sim: function () { return link; }, zero: zero, trip: trip, onValue: onValue, carWrite: carWrite, claude: cl };
+  window.__lkRender = function () { clDrawFeed(); renderHistory(); renderCoach(); renderZero(); renderCluster(); if (link) renderPicks(); if (report) renderReport(); };
   renderHistory(); renderCoach(); renderZero();
     }
   });
