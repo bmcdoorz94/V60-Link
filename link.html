@@ -495,8 +495,9 @@ details summary { cursor: pointer; font-weight: 600; }
     $("btnConnect").disabled = on; $("btnDemo").disabled = on;
   }
   /* warm: ATWS (software reset) instead of ATZ (full reset). Used on the retry, in case the full reset is what drops the Bluetooth link. ELM327 data sheet: AT WS. */
-  function initElm(warm) {
-    var seq = [[warm ? "ATWS" : "ATZ", 6000], ["ATE0"], ["ATL0"], ["ATS1"], ["ATH1"], ["ATCAF1"], ["ATAT1"], ["ATSP0"]];
+  /* skipSetup: the V60 iPhone app already set the adapter up (ios/V60App/Car.swift) and is recording through it; a reset here would interrupt that. */
+  function initElm(warm, skipSetup) {
+    var seq = skipSetup ? [] : [[warm ? "ATWS" : "ATZ", 6000], ["ATE0"], ["ATL0"], ["ATS1"], ["ATH1"], ["ATCAF1"], ["ATAT1"], ["ATSP0"]];
     return seq.reduce(function (p, s) { return p.then(function () { return cmd(s[0], s[1]).catch(function () {}); }).then(function () { return sleep(60); }); }, Promise.resolve())
       .then(function () { return query("0100", 12000); })
       .then(function (r) { if (!r.length) throw new Error("The adapter answered but the car did not. Check that the ignition is on."); return cmd("ATDPN").catch(function () { return "A6"; }); })
@@ -508,7 +509,7 @@ details summary { cursor: pointer; font-weight: 600; }
     transport.onclose = function () { link = null; enable(false); setConn("", "Disconnected"); stopLive(); };
     transport.connecting = true;
     function attempt(first) {
-      return (first ? transport.open() : transport.reopen()).then(function () { setConn("busy", "Talking to the car..."); if (!first) log("..", "warm start (ATWS) this time instead of a full reset (ATZ)"); return initElm(!first); });
+      return (first ? transport.open() : transport.reopen()).then(function () { setConn("busy", "Talking to the car..."); if (!first) log("..", "warm start (ATWS) this time instead of a full reset (ATZ)"); return initElm(!first, transport.native); });
     }
     return attempt(true).catch(function (e) {
       var em0 = String((e && e.message) || "") + " " + String((e && e.name) || "");

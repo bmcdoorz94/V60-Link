@@ -313,8 +313,9 @@
     $("btnConnect").disabled = on; $("btnDemo").disabled = on;
   }
   /* warm: ATWS (software reset) instead of ATZ (full reset). Used on the retry, in case the full reset is what drops the Bluetooth link. ELM327 data sheet: AT WS. */
-  function initElm(warm) {
-    var seq = [[warm ? "ATWS" : "ATZ", 6000], ["ATE0"], ["ATL0"], ["ATS1"], ["ATH1"], ["ATCAF1"], ["ATAT1"], ["ATSP0"]];
+  /* skipSetup: the V60 iPhone app already set the adapter up (ios/V60App/Car.swift) and is recording through it; a reset here would interrupt that. */
+  function initElm(warm, skipSetup) {
+    var seq = skipSetup ? [] : [[warm ? "ATWS" : "ATZ", 6000], ["ATE0"], ["ATL0"], ["ATS1"], ["ATH1"], ["ATCAF1"], ["ATAT1"], ["ATSP0"]];
     return seq.reduce(function (p, s) { return p.then(function () { return cmd(s[0], s[1]).catch(function () {}); }).then(function () { return sleep(60); }); }, Promise.resolve())
       .then(function () { return query("0100", 12000); })
       .then(function (r) { if (!r.length) throw new Error("The adapter answered but the car did not. Check that the ignition is on."); return cmd("ATDPN").catch(function () { return "A6"; }); })
@@ -326,7 +327,7 @@
     transport.onclose = function () { link = null; enable(false); setConn("", "Disconnected"); stopLive(); $("zArm").disabled = true; clLink(false); };
     transport.connecting = true;
     function attempt(first) {
-      return (first ? transport.open() : transport.reopen()).then(function () { setConn("busy", "Talking to the car..."); if (!first) log("..", "warm start (ATWS) this time instead of a full reset (ATZ)"); return initElm(!first); });
+      return (first ? transport.open() : transport.reopen()).then(function () { setConn("busy", "Talking to the car..."); if (!first) log("..", "warm start (ATWS) this time instead of a full reset (ATZ)"); return initElm(!first, transport.native); });
     }
     return attempt(true).catch(function (e) {
       var em0 = String((e && e.message) || "") + " " + String((e && e.name) || "");
@@ -363,7 +364,7 @@
 
   (function checkSupport() {
     var n = $("noBt"), ua = navigator.userAgent || "", url = "https://bmcdoorz94.github.io/V60-Link/";
-    if (window.V60_NATIVE) { n.hidden = false; $("btnConnect").disabled = true; n.textContent = "In the V60 app, the adapter and Claude live are under the round car button at the bottom right. This page's health check and gauges still need Bluefy for now."; return; }
+    if (window.V60_NATIVE) { n.hidden = false; n.textContent = "In the V60 app this page uses the app's own connection to the adapter. It connects by itself when the ignition is on, and the gauges fill by themselves. Adapter settings and Claude live are under the round car button."; return; }
     if (api.inClaude()) { n.hidden = false; $("btnConnect").disabled = true; n.innerHTML = 'Bluetooth is blocked inside Claude. On your iPhone, open <a href="' + url + '" target="_blank" rel="noopener">' + url + '</a> in the free Bluefy browser to connect to the car. The simulated car works here.'; return; }
     if (navigator.bluetooth) { if (navigator.bluetooth.getAvailability) navigator.bluetooth.getAvailability().then(function (a) { if (!a) { n.hidden = false; n.textContent = "Bluetooth looks turned off or unavailable on this device."; } }).catch(function () {}); return; }
     n.hidden = false; $("btnConnect").disabled = true;
@@ -580,12 +581,18 @@
      It drives the same recording as Live data's Start recording, so the two always agree (a MutationObserver keeps the label in step). */
   function dashSync() {
     var go = $("dashGo"); if (!go) return;
+    if (link && link.native) { /* inside the V60 iPhone app the gauges fill from the app's own readings (live_native.js) */
+      go.disabled = true; go.textContent = "Gauges run by themselves";
+      $("driveSt").textContent = "Reading the car through the V60 app.";
+      if (drive && drive.el && !drive.el.hidden) $("dvMsg").textContent = "";
+      return;
+    }
     go.disabled = !link; go.textContent = live.on ? "Stop gauges" : "Start gauges";
     $("driveSt").textContent = !link ? "Connect the adapter first." : (live.on ? "Reading the car." : "Connected. Tap Start gauges.");
     if (drive && drive.el && !drive.el.hidden) $("dvMsg").textContent = !link ? "Not connected. Exit, connect the adapter, then open Drive mode again." : (live.on ? "" : "Starting...");
   }
   function startGauges(chans) {
-    if (!link || live.on) return;
+    if (!link || live.on || link.native) return;
     (chans || []).forEach(function (p) { if (pidSupported(p)) live.sel[p] = true; });
     renderCluster(); $("btnLive").click();
   }
@@ -607,7 +614,7 @@
     DRV.forEach(function (d) { var el = document.getElementById("lk-dv2-" + d[0]); if (el) el.textContent = "--"; });
     drive.el.hidden = false; document.body.classList.add("cine-open"); wake(true);
     drive.started = false;
-    if (link && !live.on) { drive.started = true; startGauges([0x0D, 0x0C, 0x05, 0x42]); }
+    if (link && !live.on && !link.native) { drive.started = true; startGauges([0x0D, 0x0C, 0x05, 0x42]); }
     dashSync();
   }
   function driveClose() {
@@ -984,6 +991,75 @@
     });
     setInterval(auTick, 3000);
     setTimeout(auTick, 600);
+  })();
+
+  /* ---------------- Inside the V60 iPhone app ----------------
+     The app (ios/V60App) holds the adapter link natively, also in the background, and reads the car about once a
+     second for its drive recording. Web Bluetooth does not exist in the app's web view, so this page uses the app's
+     link instead: commands go through window.webkit.messageHandlers.v60car (status / send), the app says when the
+     car is ready or gone (V60_NATIVE.onLink) and hands over every reading it takes (V60_NATIVE.onSample). The gauges
+     therefore fill by themselves from the app's readings; nothing here polls the car a second time.
+     Bridge: ios/V60App/CarBridge.swift. Readings: {v: {"0C": [A, B], ...}}, mode 01 PID in hex to its data bytes. */
+  var NV = (window.V60_NATIVE && window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.v60car) || null;
+  function NativeTransport() {
+    var self = this;
+    self.native = true; self.name = "adapter";
+    self.open = function () {
+      return NV.postMessage({ op: "status" }).then(function (s) {
+        if (!s || !s.ready) { var e = new Error("Waiting for the car. The app connects by itself when the ignition is on."); e.name = "AutoWait"; throw e; }
+        self.name = s.name || "adapter";
+      });
+    };
+    self.send = function (c, timeout) {
+      self.lastCmd = c;
+      return NV.postMessage({ op: "send", cmd: String(c), timeout: timeout || 4000 }).then(function (r) {
+        if (r && r.ok) return String(r.raw || "");
+        var e = new Error((r && r.error) || "failed");
+        if (/not connected/i.test(e.message)) e.name = "NetworkError";
+        throw e;
+      });
+    };
+    self.close = function () {};
+  }
+  function nvConnect() {
+    if (!NV || link) return; // already on the app's link (or the simulated car is in use)
+    var t = new NativeTransport();
+    t.onAutoFail = function (e) { setConn("", (e && e.message) || "Waiting for the car."); };
+    connect(t);
+  }
+  function nvGone() {
+    if (!link || !link.native) return;
+    var l = link;
+    if (l.onclose) l.onclose(); else link = null;
+    setConn("", "Waiting for the car. The app connects by itself when the ignition is on.");
+  }
+  /* one reading cycle from the app: decode with this page's own PID table, then feed the gauges and drive mode */
+  function nvSample(s) {
+    if (!s || !s.v) return;
+    var row = { t: Date.now() / 1000 }, changed = false;
+    if (!supported) supported = {};
+    Object.keys(s.v).forEach(function (k) {
+      var pid = parseInt(k, 16), b = s.v[k], pd = PIDS.filter(function (p) { return p.pid === pid; })[0];
+      if (!pd || !b || !b.length) return;
+      var v = pd.f(b[0], b.length > 1 ? b[1] : 0);
+      row[pid] = v;
+      if (!supported[pid]) { supported[pid] = true; changed = true; }
+      if (!live.sel[pid]) { live.sel[pid] = true; changed = true; }
+      onValue(pid, v);
+    });
+    if (changed) renderCluster();
+    updateDials(row);
+  }
+  (function nvBoot() {
+    if (!NV) return;
+    window.V60_NATIVE.onLink = function (on) { if (on) nvConnect(); else nvGone(); };
+    window.V60_NATIVE.onSample = nvSample;
+    /* Connect by itself is how the app always works here; the Bluefy switch and its Shortcuts help do not apply */
+    var sw = $("autoOn"); if (sw && sw.closest("label")) sw.closest("label").hidden = true;
+    if ($("autoHow")) $("autoHow").hidden = true;
+    if ($("autoSt")) $("autoSt").hidden = true;
+    $("btnConnect").addEventListener("click", nvConnect);
+    setTimeout(nvConnect, 400);
   })();
 
   /* ---------------- clear codes ---------------- */
