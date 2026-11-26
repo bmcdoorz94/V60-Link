@@ -58,8 +58,10 @@ struct GarageWeb: UIViewRepresentable {
         let config = WKWebViewConfiguration()
         config.websiteDataStore = .default()
         let content = config.userContentController
+        // pc: Kyle's PC on Tailscale, where the drive reports and the Garage's summary.json live (bridge/drives.js)
+        let pc = ClaudeLink.shared.host.filter { $0.isLetter || $0.isNumber || $0 == "." || $0 == "-" }
         content.addUserScript(WKUserScript(
-            source: "window.V60_NATIVE = { app: '\(ClaudeLink.version)' };",
+            source: "window.V60_NATIVE = { app: '\(ClaudeLink.version)', pc: '\(pc)' };",
             injectionTime: .atDocumentStart, forMainFrameOnly: true))
         content.addScriptMessageHandler(context.coordinator.bridge, contentWorld: .page, name: "v60car")
         let web = WKWebView(frame: .zero, configuration: config)

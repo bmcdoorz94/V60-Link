@@ -8,7 +8,7 @@ import UserNotifications
 /// Anything that could change the car waits for Allow, which needs the phone unlocked (Face ID).
 final class ClaudeLink: NSObject, ObservableObject {
     static let shared = ClaudeLink()
-    static let version = "0.3"
+    static let version = "0.4"
 
     struct Line: Codable, Identifiable {
         var id = UUID()
@@ -59,6 +59,12 @@ final class ClaudeLink: NSObject, ObservableObject {
         Car.shared.onLine = { [weak self] dir, text in self?.sendLine(dir, text) }
         Journal.shared.onAdd = { [weak self] line in self?.sendJournal(line) }
         Car.shared.onDriveDone = { [weak self] _ in self?.uploadDrives() }
+        // Alerts while driving reach Kyle from the phone itself (no PC needed), then the PC and Claude if linked.
+        Car.shared.onAlert = { [weak self] kind, text in
+            Journal.shared.add("alert: " + text)
+            self?.notify(title: "V60", body: text, id: "alert-" + UUID().uuidString)
+            self?.send(["t": "alert", "kind": kind, "text": text])
+        }
         if isOn { open() }
     }
 

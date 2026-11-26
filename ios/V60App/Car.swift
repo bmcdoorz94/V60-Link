@@ -68,6 +68,9 @@ final class Car: NSObject, ObservableObject {
     var onSample: (([String: [Int]]) -> Void)?
     /// A finished drive's id, for upload to the PC.
     var onDriveDone: ((String) -> Void)?
+    /// Something worth telling Kyle at once while driving (kind, plain text).
+    var onAlert: ((String, String) -> Void)?
+    private var watch = DriveWatch()
 
     private static let idKey = "adapterId", nameKey = "adapterName", keepKey = "keepAlive"
     /// Serial channels: service, notify characteristic, write characteristic (the same list as the web page).
@@ -311,8 +314,8 @@ final class Car: NSObject, ObservableObject {
     /// Two of these per cycle, in turn: coolant, intake air, timing, module voltage, oil, outside air, fuel level,
     /// barometric pressure, commanded air-fuel ratio, O2 sensors, run time, distance with the light on, warm-ups and
     /// distance since codes were cleared, time with the light on and since clearing. Only those the car supports.
-    private static let slowWanted = [0x05, 0x0F, 0x0E, 0x42, 0x5C, 0x46, 0x2F, 0x33, 0x44, 0x14, 0x15, 0x24, 0x34,
-                                     0x1F, 0x21, 0x30, 0x31, 0x4D, 0x4E]
+    private static let slowWanted = [0x05, 0x01, 0x42, 0x0F, 0x0E, 0x5C, 0x46, 0x2F, 0x33, 0x44, 0x14, 0x15, 0x24,
+                                     0x34, 0x41, 0x1F, 0x21, 0x30, 0x31, 0x4D, 0x4E]
 
     /// Learn which readings the car supports (mode 01 PIDs 00, 20, 40), then record until the adapter drops.
     private func startRecording(first: String) {
@@ -325,6 +328,7 @@ final class Car: NSObject, ObservableObject {
             if self.drive == nil {
                 let d = DriveFile()
                 self.drive = d
+                self.watch = DriveWatch()
                 Journal.shared.add("recording drive \(d.id)")
             }
             self.scheduleKeepAlive(after: 0.2)
@@ -399,6 +403,7 @@ final class Car: NSObject, ObservableObject {
         if !sample.isEmpty {
             drive?.append(ms: Int(Date().timeIntervalSince1970 * 1000), values: sample)
             onSample?(sample)
+            watch.check(sample) { [weak self] kind, text in self?.onAlert?(kind, text) }
         }
         if cycles % 60 == 1 { // about once a minute; check.js looks for "still linked" in the background
             let v = sample["42"].flatMap { $0.count >= 2 ? Double($0[0] * 256 + $0[1]) / 1000 : nil }
