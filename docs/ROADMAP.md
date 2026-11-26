@@ -5,6 +5,12 @@ Living tracker. Update it at the end of every work session: move finished items 
 ## Status (2026-10-14)
 The car is the menu (manual shell), Live link works on the real car in Bluefy, Glovebox documents intake shipped. Work now also happens in Claude Code on Kyle's Windows PC (docs/LOCAL_SETUP.md). `npm test` runs all 12 test files in Chromium and in iPhone WebKit (Bluefy's engine): 24 of 24 pass.
 
+## Recorded drives in the Garage (2026-11-26, built)
+Kyle said "Do it all" to mileage and service tracking from the iPhone app's recorded drives, fuel economy, trends and emissions-test readiness. The PC side (`bridge/drives.js`) publishes `drives/summary.json` over Tailscale; the Garage side (`src/js/modules/drives.js`) reads it.
+- Miles since the last odometer reading are added to it as an **estimate** (speed integrated once a second), used for every due-by-miles figure and marked "(estimated)". Kyle's typed reading is never changed; typing a new one restarts the count.
+- Maintain: a Recorded drives card (estimate, last drive, miles this week, estimated mpg, links to the PC's report pages, emissions readiness). Glovebox: readiness next to the inspection date. Health: a lit check-engine light, or more than one monitor not ready.
+- Open: the estimate drifts from the real odometer over time (tire size, speedometer error); the app asks for a typed reading only when Kyle chooses. Trends live on the PC's pages, not in the Garage.
+
 ## Reference redesign (2026-11-26): a status board, not a game
 Kyle (2026-11-26): "not so gamified ... more of an informative thing", keeping "all the general functions ... maintenance and upgrades and all that self-care stuff". He hadn't opened the app in weeks. Three directions were mocked on the Design canvas https://claude.ai/artifact/FgGtaUHs7zq77Zm97YkTMe; he chose **A · Status board**.
 

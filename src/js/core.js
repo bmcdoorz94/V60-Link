@@ -233,6 +233,7 @@
     var out = { odo: null, log: [], oil: [], rate: {}, codes: [], runs: [], mods: {} };
     if (!raw || typeof raw !== "object") return out;
     if (isNum(raw.odo)) out.odo = raw.odo;
+    if (typeof raw.odoAt === "string" && /^\d{4}-\d\d-\d\dT/.test(raw.odoAt)) out.odoAt = raw.odoAt.slice(0, 30);
     ["log", "oil"].forEach(function (k) {
       if (Array.isArray(raw[k])) out[k] = raw[k].filter(function (e) { return e && isNum(e.miles) && typeof e.date === "string"; });
     });
@@ -287,16 +288,26 @@
     });
     return best;
   }
+  /* the odometer for interval maths: the last reading entered plus miles from drives the iPhone app recorded after it
+     (drives.js, window.V60_DRIVES). Estimated, never saved over the entered reading. */
+  function odoEst() {
+    if (state.odo == null) return { miles: null, est: false, added: 0, drives: 0 };
+    var D = window.V60_DRIVES, a = D && state.odoAt ? D.since(state.odoAt) : null;
+    if (!a || !(a.miles > 0)) return { miles: state.odo, est: false, added: 0, drives: 0, at: state.odoAt || null };
+    return { miles: Math.round(state.odo + a.miles), est: true, added: a.miles, drives: a.drives, at: state.odoAt };
+  }
+  function setOdo(m) { state.odo = Math.round(m); state.odoAt = new Date().toISOString(); }
   function itemByKey(k) { for (var i = 0; i < ITEMS.length; i++) if (ITEMS[i].key === k) return ITEMS[i]; return null; }
   function statusFor(item) {
     var last = lastFor(item.key);
     if (!last) return { cls: "none", label: "No record", detail: "", ratio: null };
     var ratios = [], parts = [];
-    if (item.mi && state.odo != null) {
-      var since = state.odo - last.miles;
+    var oe = odoEst();
+    if (item.mi && oe.miles != null) {
+      var since = oe.miles - last.miles;
       ratios.push(since / item.mi);
       var left = item.mi - since;
-      parts.push(left >= 0 ? fmt(Math.round(left)) + " mi left" : fmt(Math.round(-left)) + " mi over");
+      parts.push((left >= 0 ? fmt(Math.round(left)) + " mi left" : fmt(Math.round(-left)) + " mi over") + (oe.est ? " (estimated)" : ""));
     }
     if (item.mo) {
       var m = monthsSince(last.date);
@@ -1031,7 +1042,7 @@
     var lowParts = PARTS.filter(function (p) { var r = ratingOf(p.id); return r > 0 && r <= 3; }).map(function (p) { return { part: p.name, system: sysName(p.sys), rating: ratingOf(p.id), note: state.rate[p.id].n }; });
     var codes = state.codes.filter(function (c) { return c.status !== "resolved"; }).map(function (c) { return { code: c.code, state: c.status, meaning: codeTitle(c.code), note: c.note || "" }; });
     var o = oilRate(), run = latestRun();
-    return JSON.stringify({ odometerMiles: state.odo, service: due, partsRatedFairOrWorse: lowParts, codes: codes, oilQuartsPer1000mi: o ? Math.round(o.rate * 100) / 100 : null, latestRun: run ? { date: run.date, coolMaxC: run.coolMax, warmUpMin: run.warmMin, ltftPct: run.ltft, stftPct: run.stft, volts: run.volt, idleRpm: run.idleRpm, findings: run.titles } : null, ratingScale: "1 failed, 2 poor, 3 fair, 4 good, 5 new" });
+    return JSON.stringify({ odometerMiles: state.odo, odometerEstimatedFromDrives: odoEst().est ? odoEst().miles : null, service: due, partsRatedFairOrWorse: lowParts, codes: codes, oilQuartsPer1000mi: o ? Math.round(o.rate * 100) / 100 : null, latestRun: run ? { date: run.date, coolMaxC: run.coolMax, warmUpMin: run.warmMin, ltftPct: run.ltft, stftPct: run.stft, volts: run.volt, idleRpm: run.idleRpm, findings: run.titles } : null, ratingScale: "1 failed, 2 poor, 3 fair, 4 good, 5 new" });
   }
   function askClaude() {
     var q = $("askQ").value.trim();
@@ -1365,7 +1376,7 @@
   function finishMission(m, outcome) {
     var A = acad(), vals = readInputs(m), note = ($("mNote") && $("mNote").value.trim()) || "", msg = "";
     A.data[m.id] = A.data[m.id] || {}; A.data[m.id].vals = vals;
-    if (m.input === "odo") { if (!isNum(vals.odo)) { $("mStatus").textContent = "Enter your mileage first."; return; } state.odo = Math.round(vals.odo); }
+    if (m.input === "odo") { if (!isNum(vals.odo)) { $("mStatus").textContent = "Enter your mileage first."; return; } setOdo(vals.odo); }
     if (m.input === "psi" && outcome !== "skip") {
       var ks = ["lf", "rf", "lr", "rr"].filter(function (k) { return isNum(vals[k]); });
       if (ks.length < 4) { $("mStatus").textContent = "Enter all four readings."; return; }
@@ -2039,15 +2050,15 @@
   var CAR_START = new Date("2016-01-01T12:00:00");
   function carAgeMonths() { return (Date.now() - CAR_START.getTime()) / (30.4375 * 864e5); }
   function dueWithin(it, months, milesPerYear) {
-    var last = lastFor(it.key);
+    var last = lastFor(it.key), odo = odoEst().miles;
     if (!it.mi && !it.mo) return null;
     if (!last) {
-      if (state.odo != null && it.mi && state.odo + milesPerYear * months / 12 >= it.mi) return "No record, and you are past or near " + fmt(it.mi) + " miles";
+      if (odo != null && it.mi && odo + milesPerYear * months / 12 >= it.mi) return "No record, and you are past or near " + fmt(it.mi) + " miles";
       if (it.mo && carAgeMonths() + months >= it.mo) return "No record, and the car's age is past or near the " + Math.round(it.mo / 12) + "-year limit";
       return null;
     }
     var reasons = [];
-    if (it.mi && state.odo != null && (state.odo + milesPerYear * months / 12) - last.miles >= it.mi) reasons.push("by miles");
+    if (it.mi && odo != null && (odo + milesPerYear * months / 12) - last.miles >= it.mi) reasons.push("by miles");
     if (it.mo && monthsSince(last.date) + months >= it.mo) reasons.push("by time");
     return reasons.length ? "Due within " + months + " months " + reasons.join(" and ") : null;
   }
@@ -2193,7 +2204,7 @@
       var el = $("part-" + id); if (el && el.scrollIntoView) el.scrollIntoView({ block: "center" });
     }
   }
-  function bumpOdo(m) { if (state.odo == null || m > state.odo) { state.odo = Math.round(m); $("odo").value = state.odo; } }
+  function bumpOdo(m) { if (state.odo == null || m > state.odo) { setOdo(m); $("odo").value = state.odo; } }
 
   function importLinkReport(R) {
     var date = String(R.date || "").slice(0, 10) || todayStr(), added = 0;
@@ -2216,7 +2227,7 @@
     acad: function () { return acad(); }, xp: function () { return xpTotal(); }, rankFor: rankFor, PARTS: PARTS, ITEMS: ITEMS, partById: partById, lastFor: lastFor, statusFor: statusFor, ratingOf: ratingOf,
     JOBS: JOBS, CHAPTERS: CHAPTERS, SPECS: SPECS, BAYITEMS: BAYITEMS, SCHEDULE: SCHEDULE, BUILD: BUILD, RECALLS: RECALLS, CODES: CODES, decodeCode: decodeCode, monthsSince: monthsSince,
     computeHealth: function () { return computeHealth(); }, loadDataset: function (ds, n) { loadDataset(ds, n); }, parseCSV: parseCSV, analyze: analyze, autoMap: autoMap,
-    dueWithin: function (it, m, y) { return dueWithin(it, m, y); },
+    dueWithin: function (it, m, y) { return dueWithin(it, m, y); }, odoEst: function () { return odoEst(); },
     bumpOdo: function (m) { bumpOdo(m); }, updateHud: function () { hud(); },
     /* the part page mounts a Training lesson inside itself; reset puts Training back on its own page */
     trainInto: function (rootId, id) { var m = missionById(id); if (!m || !$(rootId)) return false; aui.view = "mission"; aui.id = id; aui.root = rootId; renderMission(m); return true; },
@@ -2241,9 +2252,9 @@
     wireEngine();
     wireBudget();
 
-    $("odo").addEventListener("change", function () { var v = parseFloat(this.value); state.odo = isFinite(v) && v >= 0 ? Math.round(v) : null; renderAll(); save(); });
+    $("odo").addEventListener("change", function () { var v = parseFloat(this.value); if (isFinite(v) && v >= 0) { if (Math.round(v) !== state.odo) setOdo(v); } else { state.odo = null; delete state.odoAt; } renderAll(); save(); });
     /* Saving only on "change" lost the number when the page was left before the field lost focus (switching apps, tapping a tab). Save while typing and again when the page is hidden. */
-    function odoNow() { var v = parseFloat($("odo").value); if (isFinite(v) && v >= 0 && Math.round(v) !== state.odo) { state.odo = Math.round(v); save(); } }
+    function odoNow() { var v = parseFloat($("odo").value); if (isFinite(v) && v >= 0 && Math.round(v) !== state.odo) { setOdo(v); save(); } }
     $("odo").addEventListener("input", odoNow);
     document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") odoNow(); });
     window.addEventListener("pagehide", odoNow);
