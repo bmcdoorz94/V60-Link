@@ -49,12 +49,18 @@
      It drives the same recording as Live data's Start recording, so the two always agree (a MutationObserver keeps the label in step). */
   function dashSync() {
     var go = $("dashGo"); if (!go) return;
+    if (link && link.native) { /* inside the V60 iPhone app the gauges fill from the app's own readings (live_native.js) */
+      go.disabled = true; go.textContent = "Gauges run by themselves";
+      $("driveSt").textContent = "Reading the car through the V60 app.";
+      if (drive && drive.el && !drive.el.hidden) $("dvMsg").textContent = "";
+      return;
+    }
     go.disabled = !link; go.textContent = live.on ? "Stop gauges" : "Start gauges";
     $("driveSt").textContent = !link ? "Connect the adapter first." : (live.on ? "Reading the car." : "Connected. Tap Start gauges.");
     if (drive && drive.el && !drive.el.hidden) $("dvMsg").textContent = !link ? "Not connected. Exit, connect the adapter, then open Drive mode again." : (live.on ? "" : "Starting...");
   }
   function startGauges(chans) {
-    if (!link || live.on) return;
+    if (!link || live.on || link.native) return;
     (chans || []).forEach(function (p) { if (pidSupported(p)) live.sel[p] = true; });
     renderCluster(); $("btnLive").click();
   }
@@ -76,7 +82,7 @@
     DRV.forEach(function (d) { var el = document.getElementById("lk-dv2-" + d[0]); if (el) el.textContent = "--"; });
     drive.el.hidden = false; document.body.classList.add("cine-open"); wake(true);
     drive.started = false;
-    if (link && !live.on) { drive.started = true; startGauges([0x0D, 0x0C, 0x05, 0x42]); }
+    if (link && !live.on && !link.native) { drive.started = true; startGauges([0x0D, 0x0C, 0x05, 0x42]); }
     dashSync();
   }
   function driveClose() {

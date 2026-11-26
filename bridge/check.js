@@ -117,6 +117,13 @@ if (appRows.length) {
   if (held) ok('iPhone app: stayed linked in the background during a drive', held.x)
 }
 
+// Drive reports the bridge built from the app's recordings (bridge/drives.js)
+const reports = (() => { try { return fs.readdirSync(path.join(DATA, 'drives')).filter((f) => f.endsWith('.json')).sort() } catch { return [] } })()
+if (reports.length) {
+  const latestId = reports.at(-1).replace(/\.json$/, '')
+  ok(`${reports.length} drive report(s); the latest is ${latestId}`, (host ? `https://${host}` : `http://127.0.0.1:${PORT}`) + `/drives/${latestId}  (all: /drives)`)
+} else note('No drive reports yet', 'The iPhone app 0.3 records each drive and sends it here when the car is switched off.')
+
 // 4. What actually happened
 console.log(`\n  Activity in the last ${hours} hours (from bridge/data/logs)`)
 const since = Date.now() - hours * 3600e3
