@@ -345,13 +345,67 @@ ${chart(rows, 'Coolant peak', [{ k: 'coolMax', n: '°F' }], { ...x })}`)
 
 /** GET /drives (list), /drives/latest, /drives/week, /drives/trends, /drives/summary.json (the Garage's feed),
  *  /drives/<id> (report). Returns true when it answered. */
-export function route(req, res) {
+/* ---------------- deep scans from the Live link page (tools/gen/live_deep.js) ---------------- */
+
+const DEEP = path.join(DATA, 'deep')
+const DEEP_ID = /^\d{8}-\d{6}$/
+
+function deepPage(id, R) {
+  const mods = (R.modules || []).map((m) => {
+    const word = !m.answered ? 'no answer' : m.neg ? 'declined (' + esc(m.neg) + ')' : m.codes.length ? m.codes.length + ' code(s)' : 'clean'
+    const codes = (m.codes || []).map((c) => `<li><code>${esc(c.code)}</code>, ${esc(c.label)}${c.light ? ', asks for a warning light' : ''}</li>`).join('')
+    return `<li><b>${esc(m.name)}</b> <span class="sub">${word}</span>${codes ? '<ul>' + codes + '</ul>' : ''}</li>`
+  }).join('')
+  const tests = (R.tests || []).map((t) => `<tr><td>${esc(t.name)}<br><span class="sub">${esc(t.test)}</span></td><td>${t.uasid === 0x24 ? t.value + ' counts' : t.value}</td><td>${t.min} to ${t.max}</td><td class="${t.pass ? 'good' : 'bad'}"><b>${t.pass ? 'ok' : 'outside'}</b></td></tr>`).join('')
+  return shell('Deep scan', `<h1>Deep scan, ${esc(when(id))}</h1><p class="sub">${esc(R.summary || '')}</p>
+<h2>Modules</h2><ul class="dr">${mods}</ul>
+<h2>Engine self-tests (OBD mode 06)</h2>${tests ? `<table><tr><th>Monitor</th><th>reading</th><th>limits</th><th></th></tr>${tests}</table>` : '<p>No results.</p>'}
+<p class="note">Readings are in the engine computer's own units; only counts are labelled. "Outside" means the result fell outside the computer's own limits. Module addresses come from P3 sources and are unconfirmed on this car until they answer.</p>`)
+}
+
+function readBody(req) {
+  return new Promise((resolve, reject) => {
+    let n = 0; const parts = []
+    req.on('data', (c) => { n += c.length; if (n > 512 * 1024) { reject(new Error('too large')); req.destroy() } else parts.push(c) })
+    req.on('end', () => resolve(Buffer.concat(parts).toString('utf8')))
+    req.on('error', reject)
+  })
+}
+
+async function takeDeep(req, ctx) {
+  const R = JSON.parse(await readBody(req))
+  if (!R || !Array.isArray(R.modules) || !Array.isArray(R.tests)) throw new Error('not a deep scan')
+  const d = new Date(Date.parse(R.date) || Date.now()), p = (n) => String(n).padStart(2, '0')
+  const id = `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}`
+  fs.mkdirSync(DEEP, { recursive: true })
+  fs.writeFileSync(path.join(DEEP, id + '.json'), JSON.stringify(R))
+  fs.writeFileSync(path.join(DEEP, id + '.html'), deepPage(id, R))
+  const url = `${baseUrl()}/drives/deep/${id}`
+  if (ctx && ctx.record) ctx.record({ k: 'deep', id, summary: String(R.summary || '').slice(0, 1000) })
+  if (ctx && ctx.wake) ctx.wake('deep_scan', `Kyle ran a deep scan (every module's codes and the engine's mode 06 self-tests). ${R.summary || ''} Full results: ${url} (pass it as url to reply). Explain in plain words what matters, especially misfire counts per cylinder and anything outside limits, and say plainly where a Volvo code's meaning is your reading rather than Volvo's published text.`)
+  return { id, url }
+}
+
+export async function route(req, res, ctx) {
   const u = new URL(req.url, 'http://x')
   if (!u.pathname.startsWith('/drives')) return false
   // The Garage (GitHub Pages) reads summary.json from this PC through Tailscale.
   const cors = req.headers.origin === 'https://bmcdoorz94.github.io' ? { 'access-control-allow-origin': req.headers.origin, vary: 'Origin' } : {}
   const send = (code, body, type = 'text/html; charset=utf-8') => { res.writeHead(code, { 'content-type': type, 'cache-control': 'no-store', ...cors }); res.end(body) }
-  if (req.method === 'OPTIONS') { res.writeHead(204, { ...cors, 'access-control-allow-methods': 'GET' }); res.end(); return true }
+  if (req.method === 'OPTIONS') { res.writeHead(204, { ...cors, 'access-control-allow-methods': 'GET, POST', 'access-control-allow-headers': 'content-type' }); res.end(); return true }
+  if (u.pathname === '/drives/deep' && req.method === 'POST') {
+    // only the Garage page (or the app's web view showing it) may post; the bridge is reachable from Kyle's devices only
+    if (!cors['access-control-allow-origin']) { send(403, 'Not allowed.', 'text/plain'); return true }
+    try { send(200, JSON.stringify(await takeDeep(req, ctx)), 'application/json') } catch (e) { send(400, JSON.stringify({ error: e.message }), 'application/json') }
+    return true
+  }
+  if (u.pathname.startsWith('/drives/deep/')) {
+    const did = u.pathname.split('/')[3] || ''
+    const f = path.join(DEEP, did + '.html')
+    if (!DEEP_ID.test(did) || !fs.existsSync(f)) { send(404, 'No such scan.', 'text/plain'); return true }
+    send(200, fs.readFileSync(f))
+    return true
+  }
   const id = u.pathname.split('/')[2] || ''
   if (id === 'latest') { const d = list()[0]; res.writeHead(302, { location: d ? '/drives/' + d.id : '/drives' }); res.end(); return true }
   if (id === 'week') { send(200, weekPage()); return true }

@@ -177,7 +177,8 @@ function ask(o, ms) {
 }
 
 const httpServer = http.createServer(async (req, res) => {
-  try { if ((await drives()).route(req, res)) return } catch (e) { say('drive page failed:', e.message) }
+  // ctx lets drives.js (reloaded on change) wake Claude and reach the phone without restarting this window
+  try { if (await (await drives()).route(req, res, { wake, toPhone, record })) return } catch (e) { say('drive page failed:', e.message) }
   res.setHeader('Content-Type', 'text/plain; charset=utf-8')
   res.end(`Claude live (V60) is running. Phone linked: ${phone ? 'yes' : 'no'}. Adapter: ${car.connected ? car.adapter : 'not connected'}.\n`)
 })
