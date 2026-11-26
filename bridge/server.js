@@ -59,7 +59,10 @@ function linkOn(m) {
   drive = fresh()
   wake('adapter_on', `Kyle's adapter connected in V60-Link: ${car.adapter || 'unknown adapter'}${car.sim ? ' (the page\'s simulated car, not the real V60)' : ''}${car.can === false ? ', non-CAN protocol' : ''}. ${new Date().toLocaleString()}.`, { adapter: String(car.adapter || '') })
 }
-function linkOff() {
+// wait: how long the adapter must stay gone before Claude hears "adapter_off". 10 s after the phone says the adapter
+// dropped; 3 min when only the phone's link to this PC dropped (in the background it blips every minute or two,
+// e.g. while the phone changes networks), so a blip is not taken for the car being switched off.
+function linkOff(wait = 10000) {
   car.connected = false
   clearTimeout(offTimer)
   offTimer = setTimeout(() => {
@@ -68,7 +71,7 @@ function linkOff() {
     car.announced = false
     const mins = car.since ? Math.round((Date.now() - Date.parse(car.since)) / 60000) : null
     wake('adapter_off', `The adapter disconnected (${car.adapter || 'adapter'})${mins !== null ? ` after ${mins} min connected` : ''}. This drive: you sent ${drive.cmds} adapter command(s) and ${drive.replies} message(s); Kyle wrote ${drive.kyle}; the iPhone app logged ${drive.bg} entr${drive.bg === 1 ? 'y' : 'ies'} while in the background. Phone linked now: ${phone ? 'yes' : 'no'}.`)
-  }, 10000)
+  }, wait)
 }
 function summarize(r) {
   if (!r) return 'empty report'
@@ -81,10 +84,11 @@ function fromPhone(m) {
   switch (m.t) {
     case 'hello':
       car.page = m.page || null; car.lastSeen = new Date().toISOString()
-      record({ k: 'hello', auto: !!m.auto, known: !!m.known })
+      record({ k: 'hello', page: String(m.page || '').slice(0, 80), auto: !!m.auto, known: !!m.known, connected: !!m.connected })
       toPhone({ t: 'welcome' })
       while (later.length && toPhone({ t: 'msg', text: later[0] })) record({ k: 'delivered', text: later.shift() })
-      if (m.connected) linkOn({ adapter: m.adapter, can: m.can })
+      if (m.connected) linkOn({ adapter: m.adapter, can: m.can }) // back within the grace: the same drive, no new hello
+      else if (offTimer && car.announced) linkOff() // the phone is back but the adapter is not: say so in 10 s
       return
     case 'link':
       record({ k: 'link', ...m })
@@ -152,7 +156,7 @@ httpServer.on('upgrade', (req, socket, head) => {
       phone = null; say('phone gone'); record({ k: 'phone', state: 'off' })
       for (const [id, w] of waiting) { clearTimeout(w.timer); w.resolve({ ok: false, error: 'The phone link closed before it answered.' }) }
       waiting.clear()
-      if (car.connected) linkOff()
+      if (car.connected) linkOff(180000)
     })
   })
 })
