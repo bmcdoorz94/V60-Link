@@ -87,6 +87,7 @@ function load(id) {
     const row = { t: o.t, _got: {} }
     for (const [k, v] of Object.entries(latest)) if (o.t - v.t <= 30000) row[k] = v.v
     for (const [k, b] of Object.entries(o.v || {})) {
+      if ((k === '01' || k === '41') && Array.isArray(b) && b.length >= 4) { row[k === '01' ? 'status' : 'cycle'] = monitors(b); continue }
       const p = PIDS[k]; if (!p || !Array.isArray(b) || !b.length) continue
       const v = p[3](b[0], b.length > 1 ? b[1] : 0)
       if (Number.isFinite(v)) { row[p[0]] = v; row._got[p[0]] = true; latest[p[0]] = { t: o.t, v } }
@@ -97,6 +98,23 @@ function load(id) {
 }
 
 /* ---------------- numbers ---------------- */
+
+// PID 01 (since codes were cleared) and 41 (this drive cycle), SAE J1979, spark-ignition layout: A bit 7 = check-engine
+// light, A bits 0-6 = stored code count; B bits 0-2 = misfire, fuel system, components supported, bits 4-6 = not
+// complete; C = supported and D = not complete for catalyst, heated catalyst, evaporative system, secondary air,
+// A/C refrigerant, O2 sensor, O2 sensor heater, EGR/VVT (the same names the Live link page uses).
+const MON_B = ['Misfire', 'Fuel system', 'Components']
+const MON_CD = ['Catalyst', 'Heated catalyst', 'Evaporative system', 'Secondary air', 'A/C refrigerant', 'Oxygen sensor', 'Oxygen sensor heater', 'EGR / VVT']
+function monitors([a, b, c, d]) {
+  const notReady = []
+  MON_B.forEach((n, i) => { if (b & (1 << i) && b & (1 << (i + 4))) notReady.push(n) })
+  MON_CD.forEach((n, i) => { if (c & (1 << i) && d & (1 << i)) notReady.push(n) })
+  return { mil: !!(a & 0x80), dtcs: a & 0x7f, notReady }
+}
+
+// Fuel use from air flow at the stoichiometric 14.7:1 air-fuel ratio, gasoline about 2,835 g per US gallon.
+// An estimate: fuel trims, ethanol blend and rich running under load all move the real figure.
+const GRAMS_AIR_PER_GALLON = 14.7 * 2835
 
 const mean = (a) => (a.length ? a.reduce((s, x) => s + x, 0) / a.length : null)
 const last = (rows, k) => { for (let i = rows.length - 1; i >= 0; i--) if (rows[i][k] != null) return rows[i][k]; return null }
@@ -116,11 +134,28 @@ function trims(rows) {
 }
 
 function statsOf(rows) {
-  const s = { n: rows.length, minutes: rows.length > 1 ? (rows[rows.length - 1].t - rows[0].t) / 60000 : 0, miles: 0 }
+  const s = { n: rows.length, minutes: rows.length > 1 ? (rows[rows.length - 1].t - rows[0].t) / 60000 : 0, miles: 0, gallons: 0 }
+  s.start = rows.length ? new Date(rows[0].t).toISOString() : null
+  s.end = rows.length ? new Date(rows[rows.length - 1].t).toISOString() : null
   for (let i = 1; i < rows.length; i++) {
     const dt = (rows[i].t - rows[i - 1].t) / 3600000
-    if (dt > 0 && dt < 0.01 && rows[i].mph != null) s.miles += rows[i].mph * dt
+    if (!(dt > 0 && dt < 0.01)) continue
+    if (rows[i].mph != null) s.miles += rows[i].mph * dt
+    if (rows[i].maf != null) s.gallons += (rows[i].maf * 3600 / GRAMS_AIR_PER_GALLON) * dt
   }
+  s.mpg = s.gallons > 0.02 && s.miles > 0.5 ? s.miles / s.gallons : null
+  // warm-up: from a cold start (coolant under 100 °F) to 175 °F
+  const coolRows = rows.filter((r) => r._got.coolant)
+  if (coolRows.length && coolRows[0].coolant < 100) {
+    const hot = coolRows.find((r) => r.coolant >= 175)
+    s.warmupMin = hot ? (hot.t - coolRows[0].t) / 60000 : null
+  } else s.warmupMin = null
+  const charging = rows.filter((r) => r._got.volts && (r.rpm ?? 0) > 600).map((r) => r.volts)
+  s.voltsCharging = mean(charging)
+  const st = rows.filter((r) => r.status).at(-1)
+  s.status = st ? st.status : null
+  const cy = rows.filter((r) => r.cycle).at(-1)
+  s.cycle = cy ? cy.cycle : null
   const mph = vals(rows, 'mph'), cool = vals(rows, 'coolant'), volts = vals(rows, 'volts')
   s.topMph = mph.length ? Math.max(...mph) : null
   s.coolStart = cool.length ? cool[0] : null
@@ -141,7 +176,9 @@ function summaryOf(s) {
   if (t.idle.n) parts.push(`Warm idle (${t.idle.n} readings): short-term ${pct(t.idle.stft)}, long-term ${pct(t.idle.ltft)}, total ${pct(t.idle.total)}, air flow ${num(t.idle.maf, 1)} g/s.`)
   if (t.cruise.n) parts.push(`Cruise over 35 mph (${t.cruise.n}): short-term ${pct(t.cruise.stft)}, long-term ${pct(t.cruise.ltft)}, total ${pct(t.cruise.total)}.`)
   if (!t.idle.n && !t.cruise.n) parts.push('No warm idle or steady cruise long enough to compare fuel trims.')
-  if (s.coolMax != null) parts.push(`Coolant ${num(s.coolStart)}→${num(s.coolMax)}°F.`)
+  if (s.mpg != null) parts.push(`About ${num(s.mpg, 1)} mpg (estimated from air flow).`)
+  if (s.coolMax != null) parts.push(`Coolant ${num(s.coolStart)}→${num(s.coolMax)}°F${s.warmupMin != null ? `, warm (175°F) after ${num(s.warmupMin, 1)} min` : ''}.`)
+  if (s.status) parts.push(`Check-engine light ${s.status.mil ? 'ON' : 'off'}, ${s.status.dtcs} stored code(s); emissions monitors ${s.status.notReady.length ? 'not ready: ' + s.status.notReady.join(', ') : 'all complete'}.`)
   if (s.voltsMin != null) parts.push(`Voltage ${num(s.voltsMin, 1)}–${num(s.voltsMax, 1)} V.`)
   if (s.milMiles != null) parts.push(`Driven ${num(s.milMiles)} mi with the light on.`)
   if (s.warmups != null) parts.push(`${s.warmups} warm-ups and ${num(s.clearedMiles)} mi since codes were last cleared.`)
@@ -176,7 +213,7 @@ function chart(rows, title, series, opt = {}) {
 <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(title)}">${band}${zero}
 <text x="${L - 4}" y="${T + 10}" class="ax" text-anchor="end">${num(yMax, opt.d ?? 0)}</text>
 <text x="${L - 4}" y="${H - B}" class="ax" text-anchor="end">${num(yMin, opt.d ?? 0)}</text>
-<text x="${L}" y="${H - 6}" class="ax">0</text><text x="${W - R}" y="${H - 6}" class="ax" text-anchor="end">${num(xMax)} min</text>
+<text x="${L}" y="${H - 6}" class="ax">${opt.xStart ?? 0}</text><text x="${W - R}" y="${H - 6}" class="ax" text-anchor="end">${opt.xText ? esc(opt.xText(xMax)) : num(xMax) + ' min'}</text>
 ${lines}</svg></section>`
 }
 
@@ -191,11 +228,23 @@ td{font-family:ui-monospace,Consolas,monospace}.ch{margin:14px 0}.ch svg{width:1
 .k::before{content:"";display:inline-block;width:14px;height:3px;margin-right:4px;vertical-align:middle;background:currentColor}
 path{stroke-width:1.6}.s0{color:var(--c0);stroke:var(--c0)}.s1{color:var(--c1);stroke:var(--c1)}.s2{color:var(--c2);stroke:var(--c2)}
 .ax{font:11px ui-monospace,Consolas,monospace;fill:var(--mut)}.zero{stroke:var(--mut);stroke-dasharray:3 3}.band{fill:var(--ok);opacity:.08}
-.note{font-size:14px;color:var(--mut)}a{color:var(--c0)}ul.dr{list-style:none;padding:0}ul.dr li{border-bottom:1px solid var(--line);padding:10px 0}`
+.note{font-size:14px;color:var(--mut)}.bad b{color:var(--bad)}.good b{color:var(--ok)}.nav{display:flex;gap:14px;flex-wrap:wrap;font-size:15px;margin:0 0 6px}a{color:var(--c0)}ul.dr{list-style:none;padding:0}ul.dr li{border-bottom:1px solid var(--line);padding:10px 0}`
 
 function when(id) {
   const m = id.match(/^(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)/)
   return m ? new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5]).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : id
+}
+
+/** Emissions readiness from the car's own monitor report (PID 01) at the end of the drive. */
+function readiness(s) {
+  if (!s.status) return ''
+  const st = s.status
+  const verdict = st.mil
+    ? '<p class="bad"><b>The check-engine light is on.</b> An emissions test fails while it is on.</p>'
+    : st.notReady.length > 1
+      ? `<p class="bad"><b>${st.notReady.length} monitors are not ready.</b> Drive normally for a few days before an emissions test.</p>`
+      : '<p class="good"><b>Light off and monitors ready.</b></p>'
+  return `<h2>Emissions readiness</h2>${verdict}<p class="note">${st.dtcs} stored code(s). Not ready: ${st.notReady.length ? esc(st.notReady.join(', ')) : 'none'}.${s.cycle && s.cycle.notReady.length ? ' Not yet run this drive: ' + esc(s.cycle.notReady.join(', ')) + '.' : ''}</p>`
 }
 
 function page(id, rows, s, summary) {
@@ -204,13 +253,14 @@ function page(id, rows, s, summary) {
   const card = (v, label) => `<div class="card"><b>${v}</b><span>${label}</span></div>`
   return `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Drive ${esc(when(id))}</title><style>${STYLE}</style><main>
-<p class="sub"><a href="/drives">All drives</a></p><h1>Drive, ${esc(when(id))}</h1><p class="sub">${s.n} readings from the engine computer through the OBD-II port.</p>
-<div class="cards">${card(num(s.minutes), 'minutes')}${card(num(s.miles, 1), 'miles')}${card(num(s.topMph), 'top mph')}${card(s.coolMax == null ? 'n/a' : num(s.coolMax) + '°', 'coolant peak °F')}${card(s.voltsMin == null ? 'n/a' : num(s.voltsMin, 1) + '–' + num(s.voltsMax, 1), 'volts')}${card(s.milMiles == null ? 'n/a' : num(s.milMiles), 'mi with the light on')}</div>
+${NAV}<h1>Drive, ${esc(when(id))}</h1><p class="sub">${s.n} readings from the engine computer through the OBD-II port.</p>
+<div class="cards">${card(num(s.minutes), 'minutes')}${card(num(s.miles, 1), 'miles')}${card(num(s.topMph), 'top mph')}${card(s.coolMax == null ? 'n/a' : num(s.coolMax) + '°', 'coolant peak °F')}${card(s.voltsMin == null ? 'n/a' : num(s.voltsMin, 1) + '–' + num(s.voltsMax, 1), 'volts')}${card(s.milMiles == null ? 'n/a' : num(s.milMiles), 'mi with the light on')}${card(s.mpg == null ? 'n/a' : num(s.mpg, 1), 'mpg (estimated from air flow)')}${card(s.warmupMin == null ? 'n/a' : num(s.warmupMin, 1), 'min to warm up (175 °F)')}</div>
+${readiness(s)}
 <h2>Fuel trims, engine warm</h2>
 <table><tr><th></th><th>readings</th><th>short</th><th>long</th><th>total</th><th>air g/s</th></tr>${row('Idle', t.idle)}${row('Cruise over 35 mph', t.cruise)}${row('Whole drive', t.all)}</table>
 <p class="note">Fuel trim is how much the engine computer adds (+) or removes (−) from its base fuel amount to hold the right air-fuel mix. The shaded band on the chart is ±10%. Claude reads these with you in the recap; it is not a diagnosis on its own.</p>
 <h2>Charts</h2>
-${chart(rows, 'Fuel trims', [{ k: 'stft', n: 'short-term %' }, { k: 'ltft', n: 'long-term %' }], { zero: true, band: 10, d: 0 })}
+${chart(rows, 'Fuel trims', [{ k: 'stft', n: 'short-term %' }, { k: 'ltft', n: 'long-term %' }], { zero: true, band: 10, min: -12, max: 12, d: 0 })}
 ${chart(rows, 'Speed and engine load', [{ k: 'mph', n: 'mph' }, { k: 'load', n: 'load %' }], { min: 0 })}
 ${chart(rows, 'RPM', [{ k: 'rpm', n: 'rpm' }], { min: 0 })}
 ${chart(rows, 'Air flow', [{ k: 'maf', n: 'g/s' }], { min: 0, d: 1 })}
@@ -237,13 +287,82 @@ export function list() {
   } catch { return [] }
 }
 
-/** GET /drives (list), /drives/latest, /drives/<id> (report). Returns true when it answered. */
+const NAV = '<p class="nav"><a href="/drives">All drives</a><a href="/drives/week">This week</a><a href="/drives/trends">Trends</a></p>'
+const shell = (title, body) => `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><style>${STYLE}</style><main>${NAV}${body}</main></html>`
+
+/** Alerts the iPhone app raised while driving ({k:"alert"} rows in the bridge log), newest last. */
+function alertsSince(ms) {
+  const dir = path.join(DATA, 'logs'), out = []
+  let files = []; try { files = fs.readdirSync(dir).filter((f) => f.endsWith('.jsonl')).sort().slice(-10) } catch {}
+  for (const f of files) for (const l of fs.readFileSync(path.join(dir, f), 'utf8').split('\n')) {
+    try { const r = JSON.parse(l); if (r.k === 'alert' && Date.parse(r.at) >= ms) out.push(r) } catch {}
+  }
+  return out
+}
+
+/** One drive's line for lists and the Garage feed. */
+function brief(d) {
+  const s = d.stats || {}, t = s.trims || {}
+  return { id: d.id, start: s.start || null, end: s.end || null, minutes: s.minutes ?? null, miles: s.miles ?? null, mpg: s.mpg ?? null,
+    idleTrim: t.idle && t.idle.n ? t.idle.total : null, cruiseTrim: t.cruise && t.cruise.n ? t.cruise.total : null, coolMax: s.coolMax ?? null,
+    warmupMin: s.warmupMin ?? null, voltsCharging: s.voltsCharging ?? null,
+    mil: s.status ? s.status.mil : null, dtcs: s.status ? s.status.dtcs : null, notReady: s.status ? s.status.notReady : null, url: reportUrl(d.id) }
+}
+
+function weekPage() {
+  const since = Date.now() - 7 * 86400000
+  const ds = list().map(brief).filter((d) => d.start && Date.parse(d.start) >= since)
+  const miles = ds.reduce((a, d) => a + (d.miles || 0), 0), mins = ds.reduce((a, d) => a + (d.minutes || 0), 0)
+  const mpgs = ds.filter((d) => d.mpg != null), mpg = mpgs.length ? mpgs.reduce((a, d) => a + d.mpg * d.miles, 0) / mpgs.reduce((a, d) => a + d.miles, 0) : null
+  const idle = ds.filter((d) => d.idleTrim != null).map((d) => d.idleTrim)
+  const alerts = alertsSince(since)
+  const newest = ds[0]
+  const card = (v, l) => `<div class="card"><b>${v}</b><span>${l}</span></div>`
+  return shell('This week', `<h1>This week</h1><p class="sub">The last 7 days of recorded drives.</p>
+<div class="cards">${card(ds.length, 'drives')}${card(num(miles, 1), 'miles (estimated)')}${card(num(mins), 'minutes driving')}${card(mpg == null ? 'n/a' : num(mpg, 1), 'mpg (estimated)')}${card(idle.length ? pct(mean(idle)) : 'n/a', 'average warm-idle fuel trim')}${card(alerts.length, 'alerts while driving')}</div>
+${newest && newest.mil != null ? `<h2>Emissions readiness, latest drive</h2><p class="${newest.mil || (newest.notReady || []).length > 1 ? 'bad' : 'good'}"><b>${newest.mil ? 'Check-engine light on: an emissions test fails while it is on.' : (newest.notReady || []).length > 1 ? (newest.notReady.length + ' monitors not ready.') : 'Light off and monitors ready.'}</b></p>` : ''}
+${alerts.length ? '<h2>Alerts</h2><ul class="dr">' + alerts.map((a) => `<li><b>${esc(new Date(a.at).toLocaleString('en-US', { weekday: 'short', hour: 'numeric', minute: '2-digit' }))}</b> ${esc(a.text || '')}</li>`).join('') + '</ul>' : ''}
+<h2>Drives</h2><ul class="dr">${ds.map((d) => `<li><a href="/drives/${d.id}"><b>${esc(when(d.id))}</b></a><br><span class="sub">${num(d.minutes)} min, ${num(d.miles, 1)} mi${d.mpg != null ? ', about ' + num(d.mpg, 1) + ' mpg' : ''}${d.idleTrim != null ? ', idle trim ' + pct(d.idleTrim) : ''}</span></li>`).join('') || '<li>No drives this week.</li>'}</ul>`)
+}
+
+function trendsPage() {
+  const ds = list().map(brief).reverse() // oldest first
+  if (ds.length < 2) return shell('Trends', '<h1>Trends</h1><p>Trends need at least two recorded drives.</p>')
+  const rows = ds.map((d, i) => {
+    const r = { t: i * 60000, _got: {} }
+    for (const k of ['idleTrim', 'cruiseTrim', 'mpg', 'warmupMin', 'voltsCharging', 'coolMax']) if (d[k] != null) { r[k] = d[k]; r._got[k] = true }
+    return r
+  })
+  const x = { xText: () => `latest (${ds.length} drives)`, xStart: 'first' }
+  return shell('Trends', `<h1>Trends</h1><p class="sub">One point per recorded drive, oldest on the left (${esc(when(ds[0].id))} to ${esc(when(ds.at(-1).id))}).</p>
+${chart(rows, 'Total fuel trim, engine warm', [{ k: 'idleTrim', n: 'idle %' }, { k: 'cruiseTrim', n: 'cruise %' }], { zero: true, band: 10, min: -12, max: 12, d: 0, ...x })}
+<p class="note">If a repair for P0171 works, the idle line should drop toward 0 over the following drives.</p>
+${chart(rows, 'Fuel economy (estimated)', [{ k: 'mpg', n: 'mpg' }], { d: 1, ...x })}
+${chart(rows, 'Warm-up to 175 °F (cold starts only)', [{ k: 'warmupMin', n: 'minutes' }], { min: 0, d: 1, ...x })}
+${chart(rows, 'Charging voltage, engine running', [{ k: 'voltsCharging', n: 'volts' }], { d: 1, ...x })}
+${chart(rows, 'Coolant peak', [{ k: 'coolMax', n: '°F' }], { ...x })}`)
+}
+
+/** GET /drives (list), /drives/latest, /drives/week, /drives/trends, /drives/summary.json (the Garage's feed),
+ *  /drives/<id> (report). Returns true when it answered. */
 export function route(req, res) {
   const u = new URL(req.url, 'http://x')
   if (!u.pathname.startsWith('/drives')) return false
-  const send = (code, body, type = 'text/html; charset=utf-8') => { res.writeHead(code, { 'content-type': type, 'cache-control': 'no-store' }); res.end(body) }
+  // The Garage (GitHub Pages) reads summary.json from this PC through Tailscale.
+  const cors = req.headers.origin === 'https://bmcdoorz94.github.io' ? { 'access-control-allow-origin': req.headers.origin, vary: 'Origin' } : {}
+  const send = (code, body, type = 'text/html; charset=utf-8') => { res.writeHead(code, { 'content-type': type, 'cache-control': 'no-store', ...cors }); res.end(body) }
+  if (req.method === 'OPTIONS') { res.writeHead(204, { ...cors, 'access-control-allow-methods': 'GET' }); res.end(); return true }
   const id = u.pathname.split('/')[2] || ''
   if (id === 'latest') { const d = list()[0]; res.writeHead(302, { location: d ? '/drives/' + d.id : '/drives' }); res.end(); return true }
+  if (id === 'week') { send(200, weekPage()); return true }
+  if (id === 'trends') { send(200, trendsPage()); return true }
+  if (id === 'summary.json') {
+    const ds = list().map(brief)
+    const base = baseUrl()
+    send(200, JSON.stringify({ updated: new Date().toISOString(), drives: ds, totals: { drives: ds.length, miles: +ds.reduce((a, d) => a + (d.miles || 0), 0).toFixed(1), first: ds.length ? ds.at(-1).start : null },
+      links: { all: base + '/drives', week: base + '/drives/week', trends: base + '/drives/trends' } }), 'application/json; charset=utf-8')
+    return true
+  }
   if (ID.test(id)) {
     const f = path.join(DIR, id + '.html')
     if (!fs.existsSync(f)) { send(404, 'No such drive.', 'text/plain'); return true }
@@ -252,6 +371,13 @@ export function route(req, res) {
     return true
   }
   const items = list().map((d) => `<li><a href="/drives/${d.id}"><b>${esc(when(d.id))}</b></a><br><span class="sub">${esc(d.summary.split('. ').slice(0, 2).join('. '))}</span></li>`).join('')
-  send(200, `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Drives</title><style>${STYLE}</style><main><h1>Drives</h1><p class="sub">Recorded by the V60 iPhone app.</p><ul class="dr">${items || '<li>No drives yet.</li>'}</ul></main></html>`)
+  send(200, shell('Drives', `<h1>Drives</h1><p class="sub">Recorded by the V60 iPhone app.</p><ul class="dr">${items || '<li>No drives yet.</li>'}</ul>`))
   return true
+}
+
+/** Rebuild every stored drive's numbers and page (after the analysis changes). */
+export function rebuildAll() {
+  let n = 0
+  try { for (const f of fs.readdirSync(DIR)) if (f.endsWith('.jsonl')) { build(f.replace(/\.jsonl$/, '')); n++ } } catch {}
+  return n
 }

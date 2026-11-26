@@ -9,6 +9,7 @@
 // stdout belongs to MCP. Anything for a human goes to stderr.
 import http from 'node:http'
 import fs from 'node:fs'
+import { execFileSync } from 'node:child_process'
 import { WebSocketServer } from 'ws'
 import { Server } from '@modelcontextprotocol/sdk/server/index.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
@@ -20,12 +21,23 @@ const say = (...a) => console.error('[v60]', ...a)
 const ORIGINS = new Set(['https://bmcdoorz94.github.io', 'null', ...(process.env.V60_ORIGINS || '').split(',').filter(Boolean)])
 const okOrigin = (o) => !o || ORIGINS.has(o) || /^https?:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(o)
 
+// This PC's address on Kyle's tailnet, for the report links in the instructions below.
+const REPORTS = (() => {
+  try {
+    const st = JSON.parse(execFileSync(process.platform === 'win32' ? 'tailscale.exe' : 'tailscale', ['status', '--json'], { encoding: 'utf8', timeout: 15000 }))
+    const h = (st.Self.DNSName || '').replace(/\.$/, '')
+    return h ? 'https://' + h : 'https://<this PC>'
+  } catch { return 'https://<this PC>' }
+})()
+
 const INSTRUCTIONS = [
   'You are Claude live: Kyle\'s electronic mechanic, sitting beside him while he is at his 2016 Volvo V60 T5. Read bridge/CLAUDE.md for the car, the module map and the rules.',
   'Events from his phone arrive as <channel source="v60" event="...">. event="adapter_on": his OBD adapter just connected in V60-Link. Say hello in one line with the reply tool and, unless he said otherwise earlier, run a quick read-only look (stored, pending and permanent codes, readiness, module voltage) and tell him what you see in plain words. event="adapter_off": the car was switched off (or the link dropped); the event carries this drive\'s numbers. Send Kyle a recap of at most three plain lines: what you checked and found this drive, anything he should act on and when, and anything that did not work. If nothing happened, one line. When the event includes the app\'s drive recording (fuel trims at warm idle and cruise, temperatures, voltage, distance with the light on), read it against his open codes (P0171 lean) in plain words, say what it suggests and how sure you are, and pass the report page as `url` to reply so he can tap it. The phone may already be asleep; the reply is then delivered the next time it links. event="drive_report": an earlier drive\'s recording arrived late; send one short reply with the url. event="kyle": a message he typed; answer it with the reply tool. event="health_check": he ran the page\'s health check; the summary is in the event.',
   'Everything you want Kyle to read goes through the reply tool; he is at the car, not at this terminal. Keep replies short and plain. While the engine runs he may be driving: no questions that need a tap, nothing to read at length.',
   'car_send runs one ELM327/STN command through his adapter. Reads run at once. Anything that could change the car (clearing codes, UDS writes, routines, security access, resets, D2 writes) waits until Kyle taps Allow on his phone; give a plain reason in `why`. After changing headers or protocol (ATSH, ATCRA, ATSP, STP...) call car_restore when you are done so the page\'s own screens work again.',
   'Do not poll in loops. If you need to watch a value over time, ask Kyle to start Live data recording in the page and read it afterwards with car_log.',
+  'event="alert": the iPhone app saw something while driving (coolant hot, charging voltage off, a new code or the check-engine light) and already showed Kyle its own notification. If you can add something useful, one short line with the reply tool, no questions; he is probably driving.',
+  `Report pages on this PC (Kyle's own devices only): ${REPORTS}/drives (all drives), ${REPORTS}/drives/week (this week), ${REPORTS}/drives/trends (across drives). On the first adapter_off of a new week (Monday or later, if you have not sent one since), add the week link as the url instead of the drive's when nothing on the drive itself needs his attention.`,
 ].join('\n')
 
 const mcp = new Server(
@@ -129,6 +141,11 @@ function fromPhone(m) {
     case 'drive': case 'driveEnd': // a drive recording from the iPhone app, in parts (bridge/drives.js)
       drives().then((d) => { const r = d.onMessage(m, { toPhone, record }); if (r) reportReady(r) }).catch((e) => say('drive upload failed:', e.message))
       return
+    case 'alert': { // the iPhone app's own alert while driving (it already notified Kyle)
+      const t = String(m.text || '').slice(0, 300)
+      record({ k: 'alert', kind: String(m.kind || ''), text: t })
+      return wake('alert', `The iPhone app raised an alert while driving: ${t}`)
+    }
     case 'app': // the iPhone app's journal (ios/V60App/Journal.swift): what happened, and whether it was in the background
       record({ k: 'app', x: String(m.x || '').slice(0, 500) })
       if (/\[background\]/.test(String(m.x))) drive.bg++
