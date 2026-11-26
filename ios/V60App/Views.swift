@@ -45,8 +45,10 @@ struct RootView: View {
     }
 }
 
-/// The Garage website, the same pages as in Bluefy. Its own Bluetooth (Web Bluetooth) does not exist here;
-/// the page sees window.V60_NATIVE and points to the car button instead.
+/// The Garage website, the same pages as in Bluefy. Web Bluetooth does not exist in an app's web view, so the page's
+/// Live link uses the app's own adapter link instead (tools/gen/live_native.js): it sends commands through
+/// window.webkit.messageHandlers.v60car, and the app tells it when the car is ready (V60_NATIVE.onLink) and hands it
+/// every reading the recorder takes (V60_NATIVE.onSample), so the gauges fill by themselves without a second poller.
 struct GarageWeb: UIViewRepresentable {
     static let home = URL(string: "https://bmcdoorz94.github.io/V60-Link/")!
 
@@ -55,21 +57,27 @@ struct GarageWeb: UIViewRepresentable {
     func makeUIView(context: Context) -> WKWebView {
         let config = WKWebViewConfiguration()
         config.websiteDataStore = .default()
-        config.userContentController.addUserScript(WKUserScript(
+        let content = config.userContentController
+        content.addUserScript(WKUserScript(
             source: "window.V60_NATIVE = { app: '\(ClaudeLink.version)' };",
             injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        content.addScriptMessageHandler(context.coordinator.bridge, contentWorld: .page, name: "v60car")
         let web = WKWebView(frame: .zero, configuration: config)
         web.navigationDelegate = context.coordinator
         web.uiDelegate = context.coordinator
         web.allowsBackForwardNavigationGestures = true
         if #available(iOS 16.4, *) { web.isInspectable = true }
+        context.coordinator.bridge.attach(web)
         web.load(URLRequest(url: Self.home))
         return web
     }
 
     func updateUIView(_ uiView: WKWebView, context: Context) {}
 
+    @MainActor
     final class Coordinator: NSObject, WKNavigationDelegate, WKUIDelegate {
+        let bridge = CarBridge()
+
         /// The Garage stays in the app; links anywhere else open in Safari.
         func webView(_ webView: WKWebView, decidePolicyFor action: WKNavigationAction,
                      decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
@@ -164,7 +172,7 @@ struct CarPanel: View {
                     }
                 }
             }
-            Toggle("Stay linked in the background (test)", isOn: Binding(get: { car.keepAliveOn }, set: { car.setKeepAlive($0) }))
+            Toggle("Record drives (also keeps the link alive in your pocket)", isOn: Binding(get: { car.keepAliveOn }, set: { car.setKeepAlive($0) }))
             if car.adapterName != nil {
                 Button("Forget this adapter", role: .destructive) { car.forget() }
             }
@@ -204,6 +212,9 @@ struct CarPanel: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     Text(l.text)
+                    if let u = l.url, let link = URL(string: u) {
+                        Link("Open the drive report", destination: link)
+                    }
                 }
             }
         } header: {

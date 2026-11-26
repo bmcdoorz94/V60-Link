@@ -55,7 +55,19 @@ final class Car: NSObject, ObservableObject {
     private var current: Job?
     private var timer: DispatchWorkItem?
     private var keepAlive: DispatchWorkItem?
-    private var polls = 0
+    private var supported = Set<Int>()
+    private var fastList: [Int] = []
+    private var slowList: [Int] = []
+    private var slowAt = 0
+    private var cycles = 0
+    private var drive: DriveFile?
+
+    /// Set while Claude has other modules addressed (ATSH...): the recorder waits until the adapter is set up again.
+    var holdRecording = false
+    /// Each reading cycle's values (PID in hex → data bytes), for the page's gauges.
+    var onSample: (([String: [Int]]) -> Void)?
+    /// A finished drive's id, for upload to the PC.
+    var onDriveDone: ((String) -> Void)?
 
     private static let idKey = "adapterId", nameKey = "adapterName", keepKey = "keepAlive"
     /// Serial channels: service, notify characteristic, write characteristic (the same list as the web page).
@@ -225,6 +237,7 @@ final class Car: NSObject, ObservableObject {
 
     private func dropLink() {
         keepAlive?.cancel()
+        endDrive()
         rx = nil
         tx = nil
         timer?.cancel()
@@ -273,7 +286,7 @@ final class Car: NSObject, ObservableObject {
                         Journal.shared.add("car answered through \(self.adapterName ?? "the adapter")")
                         self.onReady?(true)
                     }
-                    self.scheduleKeepAlive()
+                    self.startRecording(first: s)
                     done?(true, "adapter set up again; protocol " + (self.canBus ? "CAN" : "not CAN"))
                 }
             } else {
@@ -291,27 +304,150 @@ final class Car: NSObject, ObservableObject {
         }
     }
 
-    /// Test: a quiet battery-voltage read every 2 s while connected. Each reply is a Bluetooth event, and iOS lets
-    /// the app run a few seconds after each one, so this may keep the app (and Claude's link) alive in the
-    /// background for the whole drive. The journal notes every 30th read, so the test can see whether it held.
-    private func scheduleKeepAlive() {
+    // MARK: recording the drive
+
+    /// Read every cycle (about once a second): RPM, speed, load, throttle, both fuel trims, air flow, manifold pressure.
+    private static let fastWanted = [0x0C, 0x0D, 0x04, 0x11, 0x06, 0x07, 0x10, 0x0B]
+    /// Two of these per cycle, in turn: coolant, intake air, timing, module voltage, oil, outside air, fuel level,
+    /// barometric pressure, commanded air-fuel ratio, O2 sensors, run time, distance with the light on, warm-ups and
+    /// distance since codes were cleared, time with the light on and since clearing. Only those the car supports.
+    private static let slowWanted = [0x05, 0x0F, 0x0E, 0x42, 0x5C, 0x46, 0x2F, 0x33, 0x44, 0x14, 0x15, 0x24, 0x34,
+                                     0x1F, 0x21, 0x30, 0x31, 0x4D, 0x4E]
+
+    /// Learn which readings the car supports (mode 01 PIDs 00, 20, 40), then record until the adapter drops.
+    private func startRecording(first: String) {
+        supported = Self.bitmap(first, base: 0x00)
+        readMoreSupported(base: 0x20) { [weak self] in
+            guard let self else { return }
+            self.fastList = Self.fastWanted.filter { self.supported.contains($0) }
+            self.slowList = Self.slowWanted.filter { self.supported.contains($0) }
+            self.note("recording " + (self.fastList + self.slowList).map { String(format: "%02X", $0) }.joined(separator: " "))
+            if self.drive == nil {
+                let d = DriveFile()
+                self.drive = d
+                Journal.shared.add("recording drive \(d.id)")
+            }
+            self.scheduleKeepAlive(after: 0.2)
+        }
+    }
+
+    private func readMoreSupported(base: Int, then: @escaping () -> Void) {
+        guard base <= 0x40, supported.contains(base) else { then(); return }
+        send(String(format: "01%02X", base), timeout: 4, quiet: true) { [weak self] r in
+            guard let self else { return }
+            if case .success(let s) = r { self.supported.formUnion(Self.bitmap(s, base: base)) }
+            self.readMoreSupported(base: base + 0x20, then: then)
+        }
+    }
+
+    /// The PIDs a "supported PIDs" reply lists (SAE J1979: 4 bytes, one bit per PID, most significant first).
+    static func bitmap(_ raw: String, base: Int) -> Set<Int> {
+        guard let d = payload(raw, pid: base), d.count >= 4 else { return [] }
+        var out = Set<Int>()
+        for i in 0..<32 where d[i >> 3] & (0x80 >> (i & 7)) != 0 { out.insert(base + i + 1) }
+        return out
+    }
+
+    /// The data bytes of a mode 01 reply for one PID (headers on, spaces on: "7E8 04 41 0C 0E 4C"),
+    /// preferring the engine computer (7E8) when several modules answer.
+    static func payload(_ raw: String, pid: Int) -> [Int]? {
+        var best: [Int]?
+        for row in raw.split(whereSeparator: { $0 == "\r" || $0 == "\n" }) {
+            let t = row.split(separator: " ").map(String.init)
+            guard let i = t.firstIndex(of: "41"), i + 1 < t.count, Int(t[i + 1], radix: 16) == pid else { continue }
+            let data = t[(i + 2)...].compactMap { Int($0, radix: 16) }
+            if t.first == "7E8" { return data }
+            if best == nil { best = data }
+        }
+        return best
+    }
+
+    /// One reading cycle, again after a short pause. Each reply is a Bluetooth event and iOS lets the app run a few
+    /// seconds after each one, so the cycle also keeps the app (and Claude's link) alive in the background.
+    private func scheduleKeepAlive(after delay: TimeInterval = 1) {
         keepAlive?.cancel()
         guard keepAliveOn, phase == .ready else { return }
-        let w = DispatchWorkItem { [weak self] in
-            guard let self, self.phase == .ready else { return }
-            if self.current != nil || !self.jobs.isEmpty { self.scheduleKeepAlive(); return }
-            self.send("ATRV", timeout: 3, quiet: true) { [weak self] r in
-                guard let self else { return }
-                self.polls += 1
-                if self.polls % 30 == 1, case .success(let v) = r {
-                    Journal.shared.add("still linked, battery \(v.trimmingCharacters(in: .whitespacesAndNewlines))")
-                }
-                Awake.extend()
-                self.scheduleKeepAlive()
-            }
-        }
+        let w = DispatchWorkItem { [weak self] in self?.cycle() }
         keepAlive = w
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: w)
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: w)
+    }
+
+    private func cycle() {
+        guard phase == .ready else { return }
+        // Claude (other modules addressed) or the page is using the adapter: wait for the queue to empty.
+        if holdRecording || current != nil || !jobs.isEmpty { scheduleKeepAlive(after: 0.5); return }
+        var list = fastList
+        if !slowList.isEmpty {
+            for _ in 0..<min(2, slowList.count) { list.append(slowList[slowAt % slowList.count]); slowAt += 1 }
+        }
+        readList(list[...], into: [:]) { [weak self] sample in self?.finishCycle(sample) }
+    }
+
+    private func readList(_ rest: ArraySlice<Int>, into sample: [String: [Int]],
+                          done: @escaping ([String: [Int]]) -> Void) {
+        guard let pid = rest.first, phase == .ready, !holdRecording else { done(sample); return }
+        send(String(format: "01%02X", pid), timeout: 2, quiet: true) { [weak self] r in
+            guard let self else { return }
+            var next = sample
+            if case .success(let s) = r, let d = Car.payload(s, pid: pid), !d.isEmpty { next[String(format: "%02X", pid)] = d }
+            self.readList(rest.dropFirst(), into: next, done: done)
+        }
+    }
+
+    private func finishCycle(_ sample: [String: [Int]]) {
+        cycles += 1
+        if !sample.isEmpty {
+            drive?.append(ms: Int(Date().timeIntervalSince1970 * 1000), values: sample)
+            onSample?(sample)
+        }
+        if cycles % 60 == 1 { // about once a minute; check.js looks for "still linked" in the background
+            let v = sample["42"].flatMap { $0.count >= 2 ? Double($0[0] * 256 + $0[1]) / 1000 : nil }
+            Journal.shared.add("still linked, recording" + (v.map { String(format: ", battery %.1fV", $0) } ?? "")
+                               + " (\(drive?.count ?? 0) readings so far)")
+        }
+        Awake.extend()
+        if sample.isEmpty {
+            // Nothing to read (no supported PIDs, or the car went quiet): a voltage read keeps the link busy.
+            send("ATRV", timeout: 3, quiet: true) { [weak self] _ in self?.scheduleKeepAlive(after: 2) }
+        } else {
+            scheduleKeepAlive(after: 0.4)
+        }
+    }
+
+    /// The drive ends when the adapter drops. Drives under 30 readings (under about half a minute) are not kept.
+    private func endDrive() {
+        guard let d = drive else { return }
+        drive = nil
+        d.close()
+        if d.count < 30 {
+            try? FileManager.default.removeItem(at: d.url)
+            return
+        }
+        var pending = pendingDrives()
+        pending.append(d.id)
+        UserDefaults.standard.set(pending, forKey: Self.pendingKey)
+        Journal.shared.add("drive \(d.id) saved: \(d.count) readings over \(Int(Date().timeIntervalSince(d.started) / 60)) min")
+        onDriveDone?(d.id)
+    }
+
+    private static let pendingKey = "pendingDrives"
+
+    /// Drives recorded on the phone that the PC has not confirmed yet.
+    func pendingDrives() -> [String] { UserDefaults.standard.stringArray(forKey: Self.pendingKey) ?? [] }
+
+    func driveLines(_ id: String) -> [String] {
+        let url = DriveFile.dir.appendingPathComponent(id + ".jsonl")
+        guard let text = try? String(contentsOf: url, encoding: .utf8) else { return [] }
+        return text.split(separator: "\n").map(String.init)
+    }
+
+    /// The PC has the drive: stop offering it, and keep only the newest 30 drive files on the phone.
+    func markUploaded(_ id: String) {
+        UserDefaults.standard.set(pendingDrives().filter { $0 != id }, forKey: Self.pendingKey)
+        let files = (try? FileManager.default.contentsOfDirectory(at: DriveFile.dir, includingPropertiesForKeys: nil)) ?? []
+        for old in files.sorted(by: { $0.lastPathComponent > $1.lastPathComponent }).dropFirst(30) {
+            try? FileManager.default.removeItem(at: old)
+        }
     }
 
     private func line(_ dir: String, _ text: String) { onLine?(dir, text) }

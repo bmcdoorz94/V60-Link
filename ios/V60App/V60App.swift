@@ -46,9 +46,13 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         let action = response.actionIdentifier
         let ask = response.notification.request.content.userInfo["ask"] as? String
+        let link = (response.notification.request.content.userInfo["url"] as? String).flatMap { URL(string: $0) }
         DispatchQueue.main.async {
             if let ask, action == "ALLOW" || action == "NO" {
                 ClaudeLink.shared.answer(ask, yes: action == "ALLOW")
+            } else if let link {
+                // The drive report lives on Kyle's PC, reachable over Tailscale: Safari opens it.
+                UIApplication.shared.open(link)
             } else {
                 UIState.shared.showPanel = true
             }

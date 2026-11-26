@@ -8,13 +8,14 @@ import UserNotifications
 /// Anything that could change the car waits for Allow, which needs the phone unlocked (Face ID).
 final class ClaudeLink: NSObject, ObservableObject {
     static let shared = ClaudeLink()
-    static let version = "0.2"
+    static let version = "0.3"
 
     struct Line: Codable, Identifiable {
         var id = UUID()
         let who: String
         let text: String
         let at: Date
+        var url: String? = nil
     }
 
     struct Ask: Identifiable {
@@ -42,6 +43,7 @@ final class ClaudeLink: NSObject, ObservableObject {
     private var restoreWork: DispatchWorkItem?
     private var dirty = false
     private var replaced = false
+    private var uploading = Set<String>()
 
     private override init() {
         let d = UserDefaults.standard
@@ -56,6 +58,7 @@ final class ClaudeLink: NSObject, ObservableObject {
         Car.shared.onReady = { [weak self] on in self?.carChanged(on) }
         Car.shared.onLine = { [weak self] dir, text in self?.sendLine(dir, text) }
         Journal.shared.onAdd = { [weak self] line in self?.sendJournal(line) }
+        Car.shared.onDriveDone = { [weak self] _ in self?.uploadDrives() }
         if isOn { open() }
     }
 
@@ -143,6 +146,7 @@ final class ClaudeLink: NSObject, ObservableObject {
         linked = false
         let reason = given.isEmpty ? (s.closeReason.flatMap { String(data: $0, encoding: .utf8) } ?? "") : given
         s.cancel(with: .goingAway, reason: nil)
+        uploading.removeAll()
         for a in asks where !a.isPerm { a.no() }
         asks = []
         if wasLinked { Journal.shared.add("link to the PC closed" + (reason.isEmpty ? "" : " (\(reason))")) }
@@ -188,15 +192,23 @@ final class ClaudeLink: NSObject, ObservableObject {
             flushJournal()
             Journal.shared.add("linked to Claude live on the PC")
             if Car.shared.phase == .ready { sendLink(true) }
+            uploadDrives()
         case "msg":
             let text = o["text"] as? String ?? ""
-            addFeed("claude", text)
+            let url = (o["url"] as? String).flatMap { $0.hasPrefix("https://") ? $0 : nil }
+            addFeed("claude", text, url: url)
             Journal.shared.add("Claude: " + String(text.prefix(80)))
-            notify(title: "Claude", body: text, id: "msg-" + UUID().uuidString)
+            notify(title: "Claude", body: text + (url == nil ? "" : "\nTap to open the drive report."),
+                   id: "msg-" + UUID().uuidString, info: url.map { ["url": $0] } ?? [:])
+        case "driveAck":
+            uploading.remove(id)
+            Car.shared.markUploaded(id)
+            Journal.shared.add("the PC has drive \(id)")
         case "cmd":
             runCommand(o, id: id)
         case "restore":
             Car.shared.restore { [weak self] ok, info in
+                Car.shared.holdRecording = false
                 var r: [String: Any] = ["t": "res", "id": id, "ok": ok]
                 r[ok ? "raw" : "error"] = info
                 self?.send(r)
@@ -227,7 +239,10 @@ final class ClaudeLink: NSObject, ObservableObject {
             return
         }
         let go: () -> Void = { [weak self] in
-            if CarRules.dirties(c) { self?.dirty = true }
+            if CarRules.dirties(c) {
+                self?.dirty = true
+                Car.shared.holdRecording = true // the recorder's readings would go to the wrong module
+            }
             Car.shared.send(c, timeout: ms / 1000) { r in
                 switch r {
                 case .success(let raw): reply(["ok": true, "raw": raw])
@@ -249,7 +264,12 @@ final class ClaudeLink: NSObject, ObservableObject {
     private func scheduleRestore() {
         restoreWork?.cancel()
         guard dirty else { return }
-        let w = DispatchWorkItem { [weak self] in Car.shared.restore { _, _ in self?.dirty = false } }
+        let w = DispatchWorkItem { [weak self] in
+            Car.shared.restore { _, _ in
+                self?.dirty = false
+                Car.shared.holdRecording = false
+            }
+        }
         restoreWork = w
         DispatchQueue.main.asyncAfter(deadline: .now() + 30, execute: w)
     }
@@ -312,6 +332,25 @@ final class ClaudeLink: NSObject, ObservableObject {
         if let last = backlog.last { UserDefaults.standard.set(last, forKey: Self.sentKey) }
     }
 
+    /// Recorded drives go to the PC in parts of 300 readings, then "driveEnd"; the PC answers "driveAck" once it has
+    /// stored the drive and built its report (bridge/drives.js). Unconfirmed drives are offered again on the next link.
+    private func uploadDrives() {
+        guard linked else { return }
+        for id in Car.shared.pendingDrives() where !uploading.contains(id) {
+            let lines = Car.shared.driveLines(id)
+            if lines.isEmpty { Car.shared.markUploaded(id); continue }
+            uploading.insert(id)
+            Awake.extend()
+            let parts = (lines.count + 299) / 300
+            for p in 0..<parts {
+                let chunk = Array(lines[(p * 300)..<min(lines.count, (p + 1) * 300)])
+                send(["t": "drive", "id": id, "part": p, "parts": parts, "lines": chunk])
+            }
+            send(["t": "driveEnd", "id": id, "count": lines.count])
+            Journal.shared.add("sent drive \(id) to the PC (\(lines.count) readings)")
+        }
+    }
+
     private func sendLine(_ dir: String, _ text: String) {
         if linked { send(["t": "log", "d": dir, "x": text]) }
     }
@@ -323,9 +362,9 @@ final class ClaudeLink: NSObject, ObservableObject {
         addFeed("you", t)
     }
 
-    private func addFeed(_ who: String, _ text: String) {
+    private func addFeed(_ who: String, _ text: String, url: String? = nil) {
         guard !text.isEmpty else { return }
-        feed.append(Line(who: who, text: String(text.prefix(4000)), at: Date()))
+        feed.append(Line(who: who, text: String(text.prefix(4000)), at: Date(), url: url))
         if feed.count > 40 { feed.removeFirst(feed.count - 40) }
         if let data = try? JSONEncoder().encode(feed) { UserDefaults.standard.set(data, forKey: "claudeFeed") }
     }
