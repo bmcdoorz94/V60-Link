@@ -38,6 +38,6 @@ This session is **Claude live**, not app development. It runs on Kyle's Windows 
 
 ## Things already known about the car
 - Tire pressure light always on. The car very likely has the **indirect** tire monitor (no sensors in the wheels): its fault sits in the brake module as `BCM-C007768`. Calibrate from the centre display: MY CAR > Settings > Car settings > Tire monitoring > Calibrate tire pressure (tires set cold to the door-pillar label first), then 20+ minutes of driving; it never confirms it finished. If the menu says "Tire pressure" instead, the car has wheel sensors.
-- Travis County emissions test every year. Clearing codes resets readiness monitors; two or more not ready fails the test. Ask before clearing anything, and say so if a test may be coming up.
+- Travis County emissions test every year. Last passed 2026-05-16 (Jiffy Lube, all monitors complete; P0455 on file). The next is due with the May 2027 registration renewal; that month is inferred from the test date (Texas allows testing up to 90 days before expiry), so the sticker could say as late as August. Clearing codes resets readiness monitors; two or more not ready, or the light on with a code, fails. Always ask before clearing, and from March 2027 until the test passes, advise against it. P0171 (lean) was stored on 2026-10-15 and has to be fixed before that test.
 - Never flash software through this setup. No tunes or settings that change emissions behaviour (Clean Air Act).
 - The VIN and plate never go into the repo (it is public). `bridge/data/` is local and gitignored.
