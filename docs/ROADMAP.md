@@ -28,11 +28,9 @@ Saved data (nothing is lost)
 - Every record stays where it is in the saved state and in sync: service log, oil checks, codes, scans, photos, receipts and documents, fuel, Glovebox tools and prices, upgrade decisions, bulletin marks, the odometer, part ratings, the sync token and the photo hide list (both in localStorage).
 - The game's own state (`story`, `manual`, `track`, `guide`, path set-asides) is left in place untouched, apart from `story.all` set to true, so nothing has to be migrated and it could be shown again.
 
-Build order (small pushed commits, tests green before each push)
-1. Open everything and retire the game layer from view; new home; the bar; Know your car; Fix as a root.
-2. Maintain page.
-3. Settings page.
-4. Tests: retire `tests/path.js` and `tests/guide.js`, rewrite `tests/nav.js`, `tests/manual.js`, `tests/story.js` and `tests/track.js` for an all-open app; check the iPhone screenshots.
+Build (2026-11-26, commit eaaecf5): done. Home, the five-button bar, Know your car, Maintain, Settings, everything open. Tests: `path.js`, `story.js` and `guide.js` retired; `nav.js`, `manual.js`, `track.js`, `tools.js` and `portrait.js` rewritten for the open app; `regression.js` screenshots the new pages. 34 of 34 pass in Chromium and iPhone WebKit.
+- [ ] Kyle to look at it on his phone and say what to change.
+- [ ] Next candidates: a Fix hub page (warning lights, codes, symptoms on one page instead of the troubleshooter list); trim the header on the home (sync chip, version chip and the pulse strip repeat what the status board says); a tire-light row on the home when the light is known to be on (it is not in the saved data today).
 
 ## Next
 - [ ] **Claude live** (2026-11-26, Kyle: "as if you were side by side with me", plug and play, text only): built and tested against the simulated car (tests/claude.js, 27 checks). Kyle to do on the PC: bridge/SETUP.md with Claude Code there (Tailscale serve, pairing, desktop shortcut). Then the first session at the car with the CX: confirm 11-bit addressing (CEM 22402A on 726/72E), read the brake module's codes (760, 19 02 FF) for the tire light. Next hardware (research report "V60 electronic mechanic setup"): a vLinker FD+ or MC+ (BLE + MS-CAN) so Claude reaches the cluster, climate, doors and airbags; then an always-on box (AutoPi CAN-FD Pro) feeding the same bridge so the phone becomes optional.
