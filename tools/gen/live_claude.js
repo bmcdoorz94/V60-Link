@@ -56,7 +56,7 @@
     var ws;
     try { ws = new WebSocket(clUrl(c)); } catch (e) { clStatus("down", "That PC address does not look right."); return; }
     cl.ws = ws;
-    ws.onopen = function () { cl.tries = 0; clSend({ t: "hello", adapter: link ? link.name : null, connected: !!link, can: !!protoCAN, page: location.href.split("?")[0] }); };
+    ws.onopen = function () { cl.tries = 0; clSend({ t: "hello", adapter: link ? link.name : null, connected: !!link, can: !!protoCAN, page: location.href.split("?")[0], auto: auOn(), known: auKnown() }); };
     ws.onmessage = function (ev) { var m; try { m = JSON.parse(ev.data); } catch (e) { return; } clMsg(m); };
     ws.onclose = function (ev) {
       if (cl.ws !== ws) return;

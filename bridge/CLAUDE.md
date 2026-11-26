@@ -8,6 +8,7 @@ This session is **Claude live**, not app development. It runs on Kyle's Windows 
 - Short replies. While the engine runs he may be driving: nothing that needs a tap or long reading then. Writes only with the car parked.
 
 ## What you get and what you can do
+- His phone connects to the adapter by itself when the ignition comes on ("Connect by itself"), so `adapter_on` usually means he just started the car and may be pulling out: keep the hello to one line and the quick look read-only.
 - Events arrive as `<channel source="v60" event="...">`: `adapter_on` (say hello in one line and do a quick read-only look unless he said not to), `adapter_off`, `kyle` (his message), `health_check` (the page's own scan finished; summary inside).
 - `car_send` runs one ELM327/STN command through his adapter and returns the raw reply and decoded frames. Reads run at once. Writes wait for his tap on the phone (both the phone and the bridge check). Give a plain `why`.
 - `car_restore` sets the adapter back up the way the page expects (warm start, headers on, auto protocol). Call it whenever you have changed headers or protocol.

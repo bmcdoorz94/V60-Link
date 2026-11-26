@@ -71,6 +71,7 @@ function fromPhone(m) {
   switch (m.t) {
     case 'hello':
       car.page = m.page || null; car.lastSeen = new Date().toISOString()
+      record({ k: 'hello', auto: !!m.auto, known: !!m.known })
       toPhone({ t: 'welcome' })
       if (m.connected) linkOn({ adapter: m.adapter, can: m.can })
       return
@@ -79,6 +80,9 @@ function fromPhone(m) {
       return m.state === 'on' ? linkOn(m) : linkOff()
     case 'log':
       record({ k: 'log', d: m.d, x: m.x })
+      return
+    case 'auto': // Kyle switched "Connect by itself" on the phone; check.js reads it from the log
+      record({ k: 'auto', auto: !!m.on, known: !!m.known })
       return
     case 'report':
       record({ k: 'report', r: m.r })

@@ -20,6 +20,11 @@ For the Claude Code session on Kyle's Windows PC. Kyle pastes one line ("Read br
 9. On the iPhone: Tailscale app on; Bluefy, V60-Link, Link tab, Claude live, Pair with your PC: type the address and code, Save and connect. Status turns to "Claude is watching".
 10. Test without the car: on the phone tap "Try with a simulated car". The session should receive `event="adapter_on"` and say hello on the phone.
 
+## Always on when Kyle starts driving
+- PC: a copy of the "Claude live" shortcut is in the Startup folder (`shell:startup`), so it opens at sign-in; the development-channels warning still needs one keypress after each restart (never automate that). The PC must not sleep while plugged in (Kyle's desktop: never, checked 2026-11-26).
+- Phone: Link tab > Connect > **Connect by itself** (`tools/gen/live_auto.js`, localStorage `v60-link-auto`). With it on, the page connects to the adapter chosen last time with no tap whenever it is open and the ignition is on, keeps the screen on while connected, and reconnects to Claude live by itself. It needs one tap on Connect adapter the first time. iOS pauses web pages in the background, so Bluefy must be open on V60-Link; an iOS Shortcuts automation (Bluetooth: when the phone connects to the car, Open App Bluefy) can do that, if the phone uses the car's Bluetooth. Unverified on Kyle's phone: whether Bluefy connects without a tap, and whether Bluefy reopens on its last page.
+- `tests/auto.js` plays it against a mocked adapter: car off, ignition on, ignition off, a manual Disconnect, an adapter that never answers.
+
 ## Is it working?
 Run `node check.js` in `bridge` (or double-click `check.cmd`, desktop shortcut "Check Claude live"). It only reads; it changes nothing. It checks each link in order and says what to do at any `[!!]`:
 1. This PC: Tailscale on, HTTPS certificates on, `tailscale serve` publishing port 8788, the Claude live window running with the development flag and the bridge inside it, the bridge answering locally and at the secure address the phone uses. It shows the pairing code.

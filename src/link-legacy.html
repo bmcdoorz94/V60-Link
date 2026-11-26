@@ -219,8 +219,11 @@ details summary { cursor: pointer; font-weight: 600; }
   /* Full 128-bit UUIDs: Bluefy does not accept the 16-bit short forms. FFF0 is the OBDLink CX UART service (notify FFF1, write FFF2). */
   function u16(x) { return "0000" + x + "-0000-1000-8000-00805f9b34fb"; }
   var KNOWN_SERVICES = [u16("fff0"), u16("ffe0"), u16("18f0"), u16("ffe5"), "e7810a71-73ae-499d-8c15-faa9aef0c3f2"];
-  function BleTransport() {
+  /* opts.auto: connecting without a tap (Connect by itself). Never opens the picker, never forgets the adapter when it
+     does not answer (the car is off), and gives up waiting for it after 20 s so the next try can start. */
+  function BleTransport(opts) {
     var self = this, rx = "", waiter = null, dev = null, txChar = null, rxChar = null, useWWR = false;
+    var auto = self.auto = !!(opts && opts.auto);
     var enc = new TextEncoder(), dec = new TextDecoder();
     function onNotify(ev) {
       rx += dec.decode(ev.target.value);
@@ -274,18 +277,27 @@ details summary { cursor: pointer; font-weight: 600; }
       if (!name || !navigator.bluetooth.getDevices) return Promise.resolve(null);
       return navigator.bluetooth.getDevices().then(function (list) { var d = (list || []).filter(function (x) { return x.name === name; })[0]; if (d) log("..", "trying " + name + " from last time, no picker"); return d || null; }, function () { return null; });
     }
+    /* iOS waits for a known adapter indefinitely; when connecting by itself, stop after 20 s so the next try can start */
+    function gattConnect(d) {
+      if (!auto) return d.gatt.connect();
+      return new Promise(function (resolve, reject) {
+        var t = setTimeout(function () { try { d.gatt.disconnect(); } catch (x) {} var we = new Error("The adapter did not answer (asleep or out of range)."); we.name = "AutoWait"; reject(we); }, 20000);
+        d.gatt.connect().then(function (s) { clearTimeout(t); resolve(s); }, function (e) { clearTimeout(t); reject(e); });
+      });
+    }
     self.open = function () {
       return remembered().then(function (known) {
         if (known) return known;
+        if (auto) { var ne = new Error("No adapter chosen yet on this phone."); ne.name = "NotFoundError"; throw ne; }
         return navigator.bluetooth.requestDevice({ acceptAllDevices: true, optionalServices: KNOWN_SERVICES });
       }).then(function (d) {
         dev = d; self.name = d.name || "adapter"; log("..", "picked " + self.name);
         try { if (d.name) localStorage.setItem("v60-link-dev", d.name); } catch (e) {}
         d.addEventListener("gattserverdisconnected", function () { log("!!", "the adapter dropped the Bluetooth link" + (self.lastCmd ? " (last command sent: " + self.lastCmd + ")" : "")); if (waiter) { var w = waiter; waiter = null; var de = new Error("The adapter is not connected."); de.name = "NetworkError"; w.reject(de); } if (self.connecting) { self.dropped = true; return; } if (self.onclose) self.onclose(); });
-        return d.gatt.connect();
-      }).then(function (server) { log("..", "GATT connected"); return attach(server); }, function (e) { try { localStorage.removeItem("v60-link-dev"); } catch (x) {} throw e; });
+        return gattConnect(d);
+      }).then(function (server) { log("..", "GATT connected"); return attach(server); }, function (e) { if (!auto) try { localStorage.removeItem("v60-link-dev"); } catch (x) {} throw e; });
     };
-    self.reopen = function () { self.dropped = false; return dev.gatt.connect().then(function (server) { log("..", "GATT reconnected"); return attach(server); }); };
+    self.reopen = function () { self.dropped = false; return gattConnect(dev).then(function (server) { log("..", "GATT reconnected"); return attach(server); }); };
     self.send = function (cmd, timeoutMs) {
       rx = "";
       return new Promise(function (resolve, reject) {
@@ -512,6 +524,7 @@ details summary { cursor: pointer; font-weight: 600; }
       transport.connecting = false;
       try { transport.close(); } catch (x) {}
       link = null; enable(false);
+      if (transport.onAutoFail) { transport.onAutoFail(e); return; }
       var msg = e && e.name === "NotFoundError" ? "No adapter was chosen. If the list was empty, the adapter is probably still held by the phone or another app: unplug it, wait 10 seconds, plug it back in and try again." : (e && e.name === "SecurityError" ? "This page is not allowed to use Bluetooth here. Open it directly in Bluefy, Chrome or Edge, not inside another app's preview." : ((e && e.message) || ("Could not connect" + (e && e.name ? " (" + e.name + ")" : "") + ". The adapter log at the bottom says where it stopped.")));
       if (e && e.message === "timeout") msg = "The adapter stopped answering. Unplug it, plug it back in, and try again.";
       var em = String((e && e.message) || "") + " " + String((e && e.name) || "");

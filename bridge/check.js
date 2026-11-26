@@ -47,6 +47,18 @@ else if (liveClaude && bridgeProc) ok('The Claude live window is running, with t
 else if (liveClaude) bad('Claude live is open but its bridge is not running', 'In the Claude live window type /mcp: v60 should say connected. If not, close the window and start it again.')
 else bad('The Claude live window is not running', 'Double-click "Claude live" on the desktop.')
 
+// Always ready when he starts driving: opens at sign-in, and the PC does not sleep while plugged in
+if (process.platform === 'win32') {
+  const startup = path.join(process.env.APPDATA || '', 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Startup', 'Claude live.lnk')
+  if (fs.existsSync(startup)) ok('Claude live opens by itself when you sign in to Windows', 'It still needs one keypress for the development-channels warning.')
+  else note('Claude live does not open at sign-in', 'Copy the "Claude live" desktop shortcut into the folder that Win+R, shell:startup opens.')
+  const ac = (sub) => { const m = (run('powercfg', ['/query', 'SCHEME_CURRENT', 'SUB_SLEEP', sub]) || '').match(/Current AC Power Setting Index:\s*0x([0-9a-f]+)/i); return m ? parseInt(m[1], 16) : null }
+  const sleep = ac('STANDBYIDLE'), hib = ac('HIBERNATEIDLE')
+  if (sleep === 0 && hib === 0) ok('This PC never sleeps while plugged in')
+  else if (sleep === null) note('Could not read the sleep setting')
+  else bad(`This PC sleeps after ${Math.round(Math.min(...[sleep, hib].filter((x) => x > 0)) / 60)} minutes plugged in, and Claude live stops answering`, 'Settings > System > Power > Screen, sleep and hibernate timeouts: When plugged in, put my device to sleep after: Never.')
+}
+
 const local = await get(`http://127.0.0.1:${PORT}/`)
 if (local.ok) ok('The bridge answers on this PC', local.text)
 else bad(`Nothing answers on port ${PORT}`, 'Start Claude live. If it is open, close any older Claude live window and start it again.')
@@ -77,14 +89,24 @@ else if (linked) ok('V60-Link on the phone is linked to Claude')
 else note('V60-Link is not linked right now', 'Normal unless Bluefy is open on the Link tab with Claude live switched on.')
 if (local.ok && adapter && adapter !== 'not connected') ok('Adapter connected: ' + adapter)
 
-// 4. What actually happened: the log the bridge keeps of everything that crossed it
+// The bridge's log: everything that crossed it (the last few days' files)
+const files = (() => { try { return fs.readdirSync(path.join(DATA, 'logs')).filter((f) => f.endsWith('.jsonl')).sort().slice(-7) } catch { return [] } })()
+const all = []
+for (const f of files) for (const l of fs.readFileSync(path.join(DATA, 'logs', f), 'utf8').split('\n')) {
+  try { all.push(JSON.parse(l)) } catch {}
+}
+
+// "Connect by itself" on the phone, as it last reported when it linked or when the switch changed
+const sw = all.filter((r) => r.k === 'hello' || r.k === 'auto').at(-1)
+if (!sw) note('Connect by itself: not reported yet', 'The phone reports it when it links to Claude live.')
+else if (sw.auto && sw.known) ok('The phone connects to the adapter by itself', 'As of ' + new Date(sw.at).toLocaleString() + '.')
+else if (sw.auto) note('Connect by itself is on, but no adapter has been chosen on the phone yet', 'Tap Connect adapter once on the Link tab.')
+else note('Connect by itself is off on the phone', 'Link tab > Connect > Connect by itself.')
+
+// 4. What actually happened
 console.log(`\n  Activity in the last ${hours} hours (from bridge/data/logs)`)
 const since = Date.now() - hours * 3600e3
-const files = (() => { try { return fs.readdirSync(path.join(DATA, 'logs')).filter((f) => f.endsWith('.jsonl')).sort().slice(-3) } catch { return [] } })()
-const rows = []
-for (const f of files) for (const l of fs.readFileSync(path.join(DATA, 'logs', f), 'utf8').split('\n')) {
-  try { const r = JSON.parse(l); if (Date.parse(r.at) >= since) rows.push(r) } catch {}
-}
+const rows = all.filter((r) => Date.parse(r.at) >= since)
 const short = (s, n = 90) => { s = String(s ?? '').replace(/\s+/g, ' ').trim(); return s.length > n ? s.slice(0, n - 1) + '…' : s }
 const tell = (r) => {
   switch (r.k) {
@@ -95,6 +117,7 @@ const tell = (r) => {
     case 'res': return `  car answered ${r.c}: ${r.ok ? short(r.raw, 50) : 'error: ' + short(r.error, 50)}`
     case 'perm_request': return 'Claude asked permission for ' + r.tool_name
     case 'perm': return r.allow ? 'You tapped Allow' : 'You tapped No'
+    case 'auto': return 'You switched Connect by itself ' + (r.auto ? 'on' : 'off')
     default: return null
   }
 }
