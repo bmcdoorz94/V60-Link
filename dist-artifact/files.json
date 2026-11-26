@@ -12,6 +12,7 @@
  "js/data/track.js": "dist-artifact/js/data/track.js",
  "js/modules/today.js": "dist-artifact/js/modules/today.js",
  "js/modules/home.js": "dist-artifact/js/modules/home.js",
+ "js/modules/drives.js": "dist-artifact/js/modules/drives.js",
  "js/modules/kb.js": "dist-artifact/js/modules/kb.js",
  "js/modules/cards.js": "dist-artifact/js/modules/cards.js",
  "js/modules/story.js": "dist-artifact/js/modules/story.js",

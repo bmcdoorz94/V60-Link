@@ -18,13 +18,14 @@
   }
   /* one row per scheduled item: rank (lower = more urgent), pill class and label, a short line */
   function sched(api) {
+    var odo = api.odoEst ? api.odoEst().miles : api.state.odo;
     return api.ITEMS.filter(function (it) { return it.mi || it.mo; }).map(function (it) {
       var s = api.statusFor(it), last = api.lastFor(it.key), due = api.dueWithin ? api.dueWithin(it, 0, 0) : null, r;
       if (s.cls === "over") r = { rank: 0, pill: "bad", label: "Overdue", line: s.detail };
       else if (s.cls === "soon") r = { rank: 2, pill: "watch", label: "Due soon", line: s.detail };
       else if (s.cls === "ok") r = { rank: 4, pill: "ok", label: "On track", line: s.detail };
       else if (!last && due && it.key === "timingbelt") r = { rank: 1, pill: "bad", label: "Due", line: "No record. " + due.replace(/^No record, and /, "").replace(/^./, function (c) { return c.toUpperCase(); }) + "." };
-      else if (!last) r = { rank: 3, pill: "watch", label: "No record", line: "Not on your log." + (it.mi && api.state.odo != null && api.state.odo >= it.mi ? " The car is past " + fmt(it.mi) + " miles." : "") };
+      else if (!last) r = { rank: 3, pill: "watch", label: "No record", line: "Not on your log." + (it.mi && odo != null && odo >= it.mi ? " The car is past " + fmt(it.mi) + " miles" + (api.odoEst && api.odoEst().est ? " (estimated)" : "") + "." : "") };
       else r = { rank: 5, pill: "none", label: s.label, line: "" };
       r.it = it; r.last = last; r.interval = interval(it);
       return r;
@@ -65,6 +66,8 @@
     h += '<section class="hm-sec"><div class="mn-kick"><span>COMING DUE</span><span>VOLVO 2016 SCHEDULE</span></div>';
     if (api.state.odo == null) h += row("tab:maint", "Enter your odometer", "Type the miles in the box at the top so intervals can be checked.", "watch", "Needed");
     h += due.length ? due.map(function (r) { return row("tab:maint", r.it.name, r.interval + ". " + (r.last ? lastLine(api, r.last) + ". " : "") + r.line, r.pill, r.label); }).join("") : '<p class="hm-empty">Everything on Volvo\'s schedule is on track.</p>';
+    var oe = api.odoEst ? api.odoEst() : null;
+    if (oe && oe.est) h += '<p class="status hm-est">Miles: about <b class="mono">' + esc(fmt(oe.miles)) + "</b>, estimated from recorded drives since your last reading.</p>";
     h += '<button type="button" class="quiet hm-wide" data-jump="tab:maint">Full schedule and service log</button></section>';
     h += '<section class="hm-sec"><div class="mn-kick"><span>EVERYTHING</span></div><div class="hm-tiles">' +
       TILES.map(function (t) { return '<button type="button" class="hm-tile" data-jump="' + t[0] + '"><b>' + esc(t[1]) + "</b><span>" + esc(t[2]()) + "</span></button>"; }).join("") + "</div>" +
@@ -76,9 +79,10 @@
   /* ---------- Maintain ---------- */
   function renderMaint(api) {
     var el = api.$("mtBody"); if (!el) return;
-    var rows = sched(api), st = api.state, h = "";
-    h += '<p class="status">' + (st.odo != null ? "At <b class=\"mono\">" + fmt(st.odo) + " mi</b>. " : "No odometer reading yet. ") + "The car came with no service history, so anything not on your log shows as No record.</p>";
+    var rows = sched(api), st = api.state, oe = api.odoEst ? api.odoEst() : { est: false }, h = "";
+    h += '<p class="status">' + (st.odo != null ? (oe.est ? "At about <b class=\"mono\">" + fmt(oe.miles) + " mi</b>, estimated from recorded drives. " : "At <b class=\"mono\">" + fmt(st.odo) + " mi</b>. ") : "No odometer reading yet. ") + "The car came with no service history, so anything not on your log shows as No record.</p>";
     h += '<div class="row"><button type="button" data-jump="tab:records">Log a service</button><button type="button" class="quiet" data-jump="tab:glove">Add a receipt</button></div>';
+    if (window.V60_DRIVES) h += window.V60_DRIVES.html(api);
     h += '<section class="hm-sec"><div class="mn-kick"><span>REPLACE ON SCHEDULE</span></div>' + rows.map(function (r) {
       return '<div class="hm-row hm-static"><span class="hm-b"><span class="hm-t">' + esc(r.it.name) + (r.it.verify ? ' <span class="tag verify">verify</span>' : "") + '</span><span class="hm-i mono">' + esc(r.interval) + "</span>" +
         '<span class="hm-s">' + esc([lastLine(api, r.last), r.line].filter(Boolean).join(". ")) + "</span>" +
