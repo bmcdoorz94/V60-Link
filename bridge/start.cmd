@@ -9,5 +9,7 @@ node pair.js
 echo   Starting Claude. If it warns about development channels, choose
 echo   "I am using this for local development". Keep this window open.
 echo.
-claude --dangerously-load-development-channels server:v60
+set "CLAUDE_EXE=claude"
+where claude >nul 2>nul || if exist "%USERPROFILE%\.local\bin\claude.exe" set "CLAUDE_EXE=%USERPROFILE%\.local\bin\claude.exe"
+"%CLAUDE_EXE%" --dangerously-load-development-channels server:v60
 pause

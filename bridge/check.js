@@ -1,0 +1,117 @@
+// Is Claude live working? Checks each link in the chain, then tells the story of recent activity from the log.
+// Read-only: it changes nothing (no pairing code, no Tailscale settings, nothing sent to the car).
+// Run: `node check.js` in bridge/, or double-click check.cmd. Options: --hours N (activity window, default 12).
+// Exit code 1 if a link the phone needs is broken, so a Claude session can run it as a test.
+import { execFileSync } from 'node:child_process'
+import fs from 'node:fs'
+import path from 'node:path'
+import { PORT, DATA } from './lib.js'
+
+const args = process.argv.slice(2)
+const hours = Math.max(1, Number(args[args.indexOf('--hours') + 1]) || 12)
+const ts = process.platform === 'win32' ? 'tailscale.exe' : 'tailscale'
+const run = (cmd, a) => { try { return execFileSync(cmd, a, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 20000 }) } catch { return null } }
+const get = async (url) => { try { const r = await fetch(url, { signal: AbortSignal.timeout(8000) }); return { ok: r.ok, text: (await r.text()).trim() } } catch (e) { return { ok: false, text: e.cause?.code || e.message } } }
+
+let broken = 0
+const line = (mark, what, detail = '') => console.log(`  ${mark} ${what}${detail ? '\n        ' + detail : ''}`)
+const ok = (what, detail) => line('[ok]', what, detail)
+const bad = (what, fix) => { broken++; line('[!!]', what, fix) }
+const note = (what, detail) => line('[--]', what, detail)
+
+console.log('\n  Claude live check  ' + new Date().toLocaleString() + '\n')
+
+// 1. Tailscale on this PC
+console.log('  This PC')
+let st = null
+try { st = JSON.parse(run(ts, ['status', '--json']) || 'null') } catch {}
+const host = st?.Self?.DNSName?.replace(/\.$/, '') || null
+if (st?.BackendState === 'Running' && host) ok('Tailscale is on and signed in', host)
+else bad('Tailscale is off or signed out on this PC', 'Open Tailscale from the system tray and sign in.')
+if (st?.CertDomains?.length) ok('HTTPS certificates are on for your tailnet')
+else if (st) bad('HTTPS certificates are off', 'Tailscale admin console > DNS > Enable HTTPS.')
+const served = run(ts, ['serve', 'status']) || ''
+if (served.includes(':' + PORT)) ok('Tailscale publishes the bridge (your devices only)')
+else bad('Tailscale is not publishing the bridge', `Run: tailscale serve --bg ${PORT}`)
+
+// 2. The Claude live window: Claude started with the development flag, the bridge inside it
+let procs = []
+if (process.platform === 'win32') {
+  const out = run('powershell', ['-NoProfile', '-Command', "Get-CimInstance Win32_Process -Filter \"name='claude.exe' or name='node.exe'\" | ForEach-Object { $_.ProcessId.ToString() + '|' + $_.ParentProcessId + '|' + $_.Name + '|' + $_.CommandLine }"]) || ''
+  procs = out.split(/\r?\n/).filter(Boolean).map((l) => { const [pid, ppid, name, ...cmd] = l.split('|'); return { pid, ppid, name, cmd: cmd.join('|') } })
+}
+const liveClaude = procs.find((p) => p.name === 'claude.exe' && p.cmd.includes('development-channels') && p.cmd.includes('server:v60'))
+const bridgeProc = procs.find((p) => p.name === 'node.exe' && /server\.js\s*$/.test(p.cmd) && (!liveClaude || p.ppid === liveClaude.pid))
+if (process.platform !== 'win32') note('Window check skipped (not Windows)')
+else if (liveClaude && bridgeProc) ok('The Claude live window is running, with the bridge inside it')
+else if (liveClaude) bad('Claude live is open but its bridge is not running', 'In the Claude live window type /mcp: v60 should say connected. If not, close the window and start it again.')
+else bad('The Claude live window is not running', 'Double-click "Claude live" on the desktop.')
+
+const local = await get(`http://127.0.0.1:${PORT}/`)
+if (local.ok) ok('The bridge answers on this PC', local.text)
+else bad(`Nothing answers on port ${PORT}`, 'Start Claude live. If it is open, close any older Claude live window and start it again.')
+
+if (host) {
+  const remote = await get(`https://${host}/`)
+  if (remote.ok) ok('The secure address answers', `https://${host}/  (the same address the phone uses)`)
+  else bad('The secure address does not answer', `https://${host}/ said: ${remote.text}`)
+}
+
+let pair = null
+try { pair = JSON.parse(fs.readFileSync(path.join(DATA, 'pair.json'), 'utf8')) } catch {}
+if (pair?.code) note('Pairing code ' + pair.code, 'What the phone must have. Address: ' + (host || '?'))
+
+// 3. The phone side, as far as this PC can see it
+console.log('\n  The phone')
+const phones = Object.values(st?.Peer || {}).filter((p) => /ios/i.test(p.OS || ''))
+if (!phones.length) note('No iPhone found in your tailnet')
+for (const p of phones) {
+  const name = (p.DNSName || '').split('.')[0] || p.HostName
+  if (p.Online) ok(`iPhone on Tailscale: ${name}`)
+  else note(`iPhone not on Tailscale right now: ${name}`, 'Turn the Tailscale app on before pairing or going to the car.' + (p.LastSeen && !p.LastSeen.startsWith('0001') ? ' Last seen ' + new Date(p.LastSeen).toLocaleString() + '.' : ''))
+}
+const linked = /Phone linked: yes/.test(local.text)
+const adapter = (local.text.match(/Adapter: (.+?)\.?$/) || [])[1]
+if (!local.ok) note('Phone link unknown (the bridge is not running)')
+else if (linked) ok('V60-Link on the phone is linked to Claude')
+else note('V60-Link is not linked right now', 'Normal unless Bluefy is open on the Link tab with Claude live switched on.')
+if (local.ok && adapter && adapter !== 'not connected') ok('Adapter connected: ' + adapter)
+
+// 4. What actually happened: the log the bridge keeps of everything that crossed it
+console.log(`\n  Activity in the last ${hours} hours (from bridge/data/logs)`)
+const since = Date.now() - hours * 3600e3
+const files = (() => { try { return fs.readdirSync(path.join(DATA, 'logs')).filter((f) => f.endsWith('.jsonl')).sort().slice(-3) } catch { return [] } })()
+const rows = []
+for (const f of files) for (const l of fs.readFileSync(path.join(DATA, 'logs', f), 'utf8').split('\n')) {
+  try { const r = JSON.parse(l); if (Date.parse(r.at) >= since) rows.push(r) } catch {}
+}
+const short = (s, n = 90) => { s = String(s ?? '').replace(/\s+/g, ' ').trim(); return s.length > n ? s.slice(0, n - 1) + '…' : s }
+const tell = (r) => {
+  switch (r.k) {
+    case 'phone': return r.state === 'on' ? 'Phone linked' : 'Phone link closed'
+    case 'event': return { adapter_on: 'Claude was told: adapter connected', adapter_off: 'Claude was told: adapter dropped', kyle: 'Claude got your message: ' + short(r.content, 60), health_check: 'Claude got the health check: ' + short(r.content, 60) }[r.event] || 'Claude was told: ' + r.event
+    case 'claude': return 'Claude replied on the phone: ' + short(r.text, 60)
+    case 'cmd': return `Claude sent ${r.c} to the adapter${r.write ? ' (a write: needed your tap)' : ''}`
+    case 'res': return `  car answered ${r.c}: ${r.ok ? short(r.raw, 50) : 'error: ' + short(r.error, 50)}`
+    case 'perm_request': return 'Claude asked permission for ' + r.tool_name
+    case 'perm': return r.allow ? 'You tapped Allow' : 'You tapped No'
+    default: return null
+  }
+}
+const story = rows.filter((r) => r.k !== 'log' && r.k !== 'link' && r.k !== 'report' && r.k !== 'kyle').map((r) => [r.at, tell(r)]).filter((x) => x[1])
+const count = (k, ev) => rows.filter((r) => r.k === k && (!ev || r.event === ev)).length
+if (!rows.length) note('Nothing yet', 'Once the phone links, every event, reply and adapter command is listed here.')
+else {
+  const told = count('event'), replied = count('claude'), adapterLines = count('log')
+  note(`${told} event(s) sent to Claude, ${replied} reply(ies) from Claude, ${count('cmd')} command(s) Claude sent, ${adapterLines} adapter line(s) from the page`)
+  // The proof that the whole loop works: Claude was told something and answered on the phone afterwards.
+  const lastEvent = rows.filter((r) => r.k === 'event').at(-1)
+  const answered = lastEvent && rows.some((r) => r.k === 'claude' && r.at >= lastEvent.at)
+  if (lastEvent && answered) ok('Full loop works: Claude answered the latest event on the phone')
+  else if (lastEvent && Date.now() - Date.parse(lastEvent.at) > 120e3) bad('Claude did not answer the latest event', 'Look at the Claude live window: it may be waiting on a question in the terminal. Events not arriving at all means it was started without start.cmd.')
+  else if (lastEvent) note('Claude has not answered the latest event yet (under 2 minutes ago)')
+  for (const [at, t] of story.slice(-12)) console.log(`        ${new Date(at).toLocaleTimeString()}  ${t}`)
+}
+
+console.log('\n  ' + (broken ? `${broken} problem(s) above. Each [!!] line says what to do.` : 'Everything this PC can check is fine.') + '\n')
+process.exitCode = broken ? 1 : 0
