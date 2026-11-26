@@ -1,0 +1,8 @@
+# Generated on the build Mac
+V60.xcodeproj/
+V60App/Info.plist
+V60App/Assets.xcassets/AppIcon.appiconset/icon.png
+build/
+out/
+*.ipa
+build.log

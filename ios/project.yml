@@ -1,0 +1,39 @@
+# V60 for iPhone: the Garage site in a web view, plus a native car link that works in the background
+# (CoreBluetooth to the OBD adapter, and the Claude live link to Kyle's PC).
+# Generated into an Xcode project by XcodeGen on GitHub's Mac (.github/workflows/ios.yml). No Mac needed here.
+name: V60
+options:
+  bundleIdPrefix: com.kfitz
+  deploymentTarget:
+    iOS: "17.0"
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "0.1"
+    CURRENT_PROJECT_VERSION: "1"
+    TARGETED_DEVICE_FAMILY: "1"
+targets:
+  V60:
+    type: application
+    platform: iOS
+    sources:
+      - V60App
+    info:
+      path: V60App/Info.plist
+      properties:
+        CFBundleDisplayName: V60
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        # Lets iOS keep the adapter link and wake the app for it while the phone is in a pocket.
+        # A plain Info.plist setting, not an entitlement, so free signing (Sideloadly) keeps it.
+        UIBackgroundModes:
+          - bluetooth-central
+        NSBluetoothAlwaysUsageDescription: V60 connects to your OBD adapter to read the car, also while the phone is in your pocket.
+        ITSAppUsesNonExemptEncryption: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.kfitz.v60garage
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    scheme: {}

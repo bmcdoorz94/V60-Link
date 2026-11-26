@@ -89,6 +89,7 @@ s = s.replace('''id="tv' + p.pid''', '''id="lk-tv' + p.pid''')
 old_sup = s[s.index('  (function checkSupport() {'):s.index('  /* ---------------- health check')]
 new_sup = '''  (function checkSupport() {
     var n = $("noBt"), ua = navigator.userAgent || "", url = "https://bmcdoorz94.github.io/V60-Link/";
+    if (window.V60_NATIVE) { n.hidden = false; $("btnConnect").disabled = true; n.textContent = "In the V60 app, the adapter and Claude live are under the round car button at the bottom right. This page's health check and gauges still need Bluefy for now."; return; }
     if (api.inClaude()) { n.hidden = false; $("btnConnect").disabled = true; n.innerHTML = 'Bluetooth is blocked inside Claude. On your iPhone, open <a href="' + url + '" target="_blank" rel="noopener">' + url + '</a> in the free Bluefy browser to connect to the car. The simulated car works here.'; return; }
     if (navigator.bluetooth) { if (navigator.bluetooth.getAvailability) navigator.bluetooth.getAvailability().then(function (a) { if (!a) { n.hidden = false; n.textContent = "Bluetooth looks turned off or unavailable on this device."; } }).catch(function () {}); return; }
     n.hidden = false; $("btnConnect").disabled = true;

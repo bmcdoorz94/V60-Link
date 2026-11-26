@@ -1,0 +1,67 @@
+# Builds the V60 iPhone app's test .ipa on GitHub's Mac (free for this public repo). Kyle installs it with Sideloadly.
+name: Build iPhone app
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["ios/**", ".github/workflows/ios.yml"]
+
+concurrency:
+  group: ios-build
+  cancel-in-progress: true
+
+jobs:
+  test-ipa:
+    runs-on: macos-15
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: ios
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Tools
+        run: |
+          xcodebuild -version
+          brew install xcodegen
+
+      # The app icon is the web app's icon, enlarged to the 1024 px iOS wants.
+      - name: Icon
+        run: sips -z 1024 1024 ../icons/icon-512.png --out V60App/Assets.xcassets/AppIcon.appiconset/icon.png
+
+      - name: Generate the Xcode project
+        run: xcodegen generate
+
+      - name: Build (unsigned)
+        run: |
+          xcodebuild -project V60.xcodeproj -scheme V60 -configuration Release \
+            -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            build > build.log 2>&1 || { grep -E "error:" build.log | sort -u | head -80; tail -40 build.log; exit 1; }
+          grep -E "warning:" build.log | sort -u | head -40 || true
+
+      # Ad-hoc signed; Sideloadly re-signs it with Kyle's Apple ID.
+      - name: Package the test .ipa
+        run: |
+          APP=build/Build/Products/Release-iphoneos/V60.app
+          codesign --force --sign - "$APP"
+          mkdir -p out/Payload
+          cp -R "$APP" out/Payload/
+          (cd out && zip -qry ../V60-test.ipa Payload)
+          ls -la V60-test.ipa
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: V60-test
+          path: ios/V60-test.ipa
+          retention-days: 14
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-log
+          path: ios/build.log
+          retention-days: 7
