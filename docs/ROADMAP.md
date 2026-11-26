@@ -5,6 +5,35 @@ Living tracker. Update it at the end of every work session: move finished items 
 ## Status (2026-10-14)
 The car is the menu (manual shell), Live link works on the real car in Bluefy, Glovebox documents intake shipped. Work now also happens in Claude Code on Kyle's Windows PC (docs/LOCAL_SETUP.md). `npm test` runs all 12 test files in Chromium and in iPhone WebKit (Bluefy's engine): 24 of 24 pass.
 
+## Reference redesign (2026-11-26): a status board, not a game
+Kyle (2026-11-26): "not so gamified ... more of an informative thing", keeping "all the general functions ... maintenance and upgrades and all that self-care stuff". He hadn't opened the app in weeks. Three directions were mocked on the Design canvas https://claude.ai/artifact/FgGtaUHs7zq77Zm97YkTMe; he chose **A · Status board**.
+
+What the app becomes
+- **Home** (tab `car`): the car (year, trim, odometer, miles since purchase, warning lights), **On the car now** (Health's urgent items: active codes, the check-engine light at the last scan, failed parts, open recalls, the tire light), **Coming due** (Volvo's schedule against the service log, worst first, "No record" where nothing is logged), **Everything** (eight tiles: Maintenance, Know your car, Fix & diagnose, How-to jobs, Upgrades, Bulletins & recalls, Glovebox, Library), then the red "Something's wrong" list.
+- **Bar:** Home · Maintain · Fix · Glovebox · Link (side rail on desktop).
+  - **Maintain** (new tab `maint`): every scheduled item with its interval, last record and status; Log a service (the Service log, `records`), oil checks, fuel & costs, Health.
+  - **Fix** (`trouble` becomes a root): the troubleshooters, with Diagnose (codes), Bulletins and How-to jobs beside them.
+  - **Glovebox** and **Link** stay as they are. Live link, Connect by itself and Claude live are untouched (the native iPhone shell loads the same pages).
+- **Know your car** (new tab `know`): the side-view figure, the five views and every part page, as now, with nothing locked and no glow or "pick up here" markers. Part pages keep their Know / Check / Service / Diagnose / Upgrade sections and the articles, lessons, jobs and troubleshooters that open in place.
+- **Settings** (sync, backup, display) move out of the Cases page to their own page, reachable from the home and the Index.
+
+What goes (out of sight, not deleted)
+- The path: the Next card, the progress bar, "set aside", the whole-path page, locked steps.
+- The story: case board, Lars's scenes, the prologue, toasts; the Cases page leaves the Index.
+- The certification track: the readiness chip in the header, readiness meters, quiz gating. The G1 study and quizzes stay reachable from the Library as an optional shelf.
+- Achievements, Today's notes, the Unlocks page, glow and resume markers, pages hidden until reached.
+- How: the old "Show everything" switch is turned on for good (`story.all`), which opens every page, article, fact and Codebook label; the manual stops marking chapters new or locked.
+
+Saved data (nothing is lost)
+- Every record stays where it is in the saved state and in sync: service log, oil checks, codes, scans, photos, receipts and documents, fuel, Glovebox tools and prices, upgrade decisions, bulletin marks, the odometer, part ratings, the sync token and the photo hide list (both in localStorage).
+- The game's own state (`story`, `manual`, `track`, `guide`, path set-asides) is left in place untouched, apart from `story.all` set to true, so nothing has to be migrated and it could be shown again.
+
+Build order (small pushed commits, tests green before each push)
+1. Open everything and retire the game layer from view; new home; the bar; Know your car; Fix as a root.
+2. Maintain page.
+3. Settings page.
+4. Tests: retire `tests/path.js` and `tests/guide.js`, rewrite `tests/nav.js`, `tests/manual.js`, `tests/story.js` and `tests/track.js` for an all-open app; check the iPhone screenshots.
+
 ## Next
 - [ ] **Claude live** (2026-11-26, Kyle: "as if you were side by side with me", plug and play, text only): built and tested against the simulated car (tests/claude.js, 27 checks). Kyle to do on the PC: bridge/SETUP.md with Claude Code there (Tailscale serve, pairing, desktop shortcut). Then the first session at the car with the CX: confirm 11-bit addressing (CEM 22402A on 726/72E), read the brake module's codes (760, 19 02 FF) for the tire light. Next hardware (research report "V60 electronic mechanic setup"): a vLinker FD+ or MC+ (BLE + MS-CAN) so Claude reaches the cluster, climate, doors and airbags; then an always-on box (AutoPi CAN-FD Pro) feeding the same bridge so the phone becomes optional.
 - [ ] Auto-read uploads with privacy redaction (on-device OCR in Bluefy, black out VIN/plate/name/address/phone/card before saving or syncing). Full spec in docs/HANDOFF_STATE.md, step 2.
