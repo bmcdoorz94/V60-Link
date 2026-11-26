@@ -27,6 +27,7 @@
     ["seen", "closed", "manual", "beats", "avail", "revealed", "fresh", "known", "read", "cb", "quiz"].forEach(function (k) { if (!d[k] || typeof d[k] !== "object" || Array.isArray(d[k])) d[k] = {}; });
     if (!Array.isArray(d.pending)) d.pending = [];
     if (!d.depth) d.depth = "det";
+    d.all = true; /* 2026-11-26: the app is a reference now; every page, article, fact and Codebook label is open */
     return d;
   }
   function M(api, id) { var x = api.acad().done[id]; return !!(x && x.outcome !== "skip"); }
@@ -370,7 +371,7 @@
       return '<div class="qzq"><p><b>' + esc(f.q) + "</b></p>" + (ans ? '<p class="' + (ans === "r" ? "ok" : "bad") + '">' + (ans === "r" ? "Right. " : "Not quite. ") + esc(f.a) + "</p>" : '<div class="qzo">' + opts.map(function (o) { return '<button type="button" class="quiet" data-qz="' + c.id + "|" + f.id + "|" + (o === f.a ? "r" : "w") + '">' + esc(o) + "</button>"; }).join("") + "</div>") + "</div>";
     }).join("") + "</details>";
   }
-  function depthOf(api) { var dp = D(api).depth; return dp === "mech" && window.V60_PERK && !window.V60_PERK("mech") ? "det" : dp; }
+  function depthOf(api) { return D(api).depth; }
   function briefHTML(api, c, s) {
     var b = c.brief, d = D(api), esc = api.esc, deep = depthOf(api);
     if (deep === "short") return '<p class="bshort">' + esc(b.why.split(". ")[0].replace(/\.$/, "")) + ".</p>";
@@ -512,8 +513,7 @@
     var seenable = ["pro"].concat(Object.keys(d.beats).sort()).concat(CASES.filter(function (c) { return d.closed[c.id]; }).map(function (c) { return "case-" + c.id; })).concat(fin ? ["fin"] : []);
     var scenesH = '<section class="card"><details><summary>Scenes · ' + seenable.length + '</summary><ul class="joblist">' + seenable.map(function (id) { var s = sceneById(api, id); return s ? '<li><button type="button" class="mbtn" data-jump="story:' + id + '"><span class="mt">' + esc(s.t) + '</span><span class="status">' + (d.seen[id] ? "Watched" : "New") + "</span></button></li>" : ""; }).join("") + '</ul><p class="status">Lars is a made-up guide. Every fact he states comes from the sources used elsewhere in the app.</p></details></section>';
     var opts = '<section class="card"><details id="stOpts"' + (ui.opts ? " open" : "") + '><summary>Options: sync, backup, display</summary><div id="syncBox" class="syncbox"></div><div class="row"><button type="button" class="quiet" data-jump="backup:go">Back up or restore my progress</button></div><div class="field"><span class="flab">Detail level</span><div class="seg">' + DEPTH.map(function (x) { var lock = x[0] === "mech" && window.V60_PERK && !window.V60_PERK("mech"); return '<button type="button" data-depth="' + x[0] + '" aria-pressed="' + (depthOf(api) === x[0]) + '"' + (lock ? ' disabled title="Earn the Scholar skill"' : "") + ">" + x[1] + (lock ? " · Scholar skill" : "") + "</button>"; }).join("") + '</div></div><label class="inl"><input type="checkbox" id="stPlain"' + (d.plain ? " checked" : "") + '> Plain readings in Live link (skip decoding)</label><label class="inl"><input type="checkbox" id="stAll"' + (d.all ? " checked" : "") + '> Show everything (skip the reveal)</label><p class="status">Progress is saved on this device in this browser. Sync keeps every device on the same progress; a backup file is the offline safety net.</p></details></section>';
-    $("stV-cases").innerHTML = '<div class="stnext">' + nextHTML + "</div>" + acts + newC + sideH + scenesH + opts;
-    if (window.V60_SYNC) window.V60_SYNC.renderBox();
+    $("stV-cases").innerHTML = '<div class="stnext">' + nextHTML + "</div>" + acts + newC + sideH + scenesH; /* options moved to Settings (home.js), 2026-11-26 */
   }
 
   /* since 2026-10-15 the path (manual.js) is the one way forward: the case board points at it, and a case step that
@@ -589,7 +589,7 @@
           render(api);
         }).catch(function (e) { alertNote(api, (e && e.message) || "The photo could not be saved."); });
       });
-      if (!window.__V60_TEST) setTimeout(function () { var d = D(api); if (!d.seen.cold && !d.seen.pro && !Object.keys(api.acad().done || {}).length) { d.seen.cold = api.todayStr(); api.save(); play(api, "cold"); } }, 900);
+      if (false) setTimeout(function () { var d = D(api); if (!d.seen.cold && !d.seen.pro && !Object.keys(api.acad().done || {}).length) { d.seen.cold = api.todayStr(); api.save(); play(api, "cold"); } }, 900);
       api.$("p-story").addEventListener("change", function (e) {
         var d = D(api);
         if (e.target.id === "stPlain") { d.plain = e.target.checked; api.save(); return; }
@@ -606,7 +606,7 @@
     jump: function (api, kind, id) {
       if (kind === "story") { play(api, id); return true; }
       if (kind === "case") { ui.open = id; ui.view = "cases"; api.go("story"); return true; }
-      if (kind === "opts") { ui.view = "cases"; ui.opts = true; api.go("story"); var o = document.getElementById(id === "sync" ? "syncBox" : "stOpts") || document.getElementById("stOpts"); if (o && o.scrollIntoView) o.scrollIntoView({ block: "start" }); if (id === "sync") { var f = document.getElementById("syncTok"); if (f && f.focus) try { f.focus({ preventScroll: true }); } catch (e) {} } return true; }
+      if (kind === "opts") { api.go("settings"); var o = document.getElementById(id === "sync" ? "syncBox" : "setBody"); if (o && o.scrollIntoView) o.scrollIntoView({ block: "start" }); if (id === "sync") { var f = document.getElementById("syncTok"); if (f && f.focus) try { f.focus({ preventScroll: true }); } catch (e) {} } return true; }
       return false;
     },
     today: function (api) {

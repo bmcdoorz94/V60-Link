@@ -83,7 +83,7 @@
   }
   (window.V60_MODULES = window.V60_MODULES || []).push({
     id: "diy",
-    tabs: [{ id: "diy", section: "car", label: "DIY jobs", order: 35, html: '<section><h2>DIY jobs</h2><p class="lede">Step-by-step jobs for your car, sorted by difficulty. Each card names its source: Volvo\'s manual unless it says otherwise. Tick steps as you go. Marking a job done logs it and closes the matching chapter.</p></section><div id="djList"></div>' }],
+    tabs: [{ id: "diy", section: "maint", label: "DIY jobs", order: 35, html: '<section><h2>DIY jobs</h2><p class="lede">Step-by-step jobs for your car, sorted by difficulty. Each card names its source: Volvo\'s manual unless it says otherwise. Tick steps as you go. Marking a job done logs it and closes the matching chapter.</p></section><div id="djList"></div>' }],
     clean: function (v) { return v && typeof v === "object" ? { done: v.done || {} } : null; },
     render: function (api) { render(api); },
     init: function (api) {

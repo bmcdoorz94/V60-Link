@@ -146,7 +146,7 @@
   }
   (window.V60_MODULES = window.V60_MODULES || []).push({
     id: "tsb",
-    tabs: [{ id: "bulletins", section: "check", label: "Bulletins", order: 35, html:
+    tabs: [{ id: "bulletins", section: "trouble", label: "Bulletins", order: 35, html:
       '<section><h2>Service bulletins</h2><p class="lede">Volvo\'s repair instructions for known problems, read from the copies NHTSA publishes. In Volvo\'s tables your engine is code 40 and the V60 is type 155. A bulletin is not a recall: dealers apply it when the symptom shows, and you pay unless a warranty or program covers it.</p></section>' +
       '<section class="card"><h3>Your build date</h3><p class="status">Printed on the label on the driver\'s door pillar (month/year). Several bulletins only cover cars built before a certain week.</p><div class="row"><div class="field"><label for="tbBuild">Build month</label><input id="tbBuild" type="month" min="2013-01" max="2016-12"></div><div id="tbSum" class="row"></div></div><div class="row"><button class="btn" id="tbScan" type="button">Scan the label with the camera</button><input id="tbScanIn" type="file" accept="image/*" hidden></div><p class="status" id="tbScanMsg" aria-live="polite">The photo is read on this phone. Your VIN on the label is blacked out before anything is saved. The month it reads is unconfirmed until you check it against the label.</p></section>' +
       '<section class="card"><h3>Oil consumption program</h3><div id="tbOil"></div></section>' +

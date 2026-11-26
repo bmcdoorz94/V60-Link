@@ -2111,7 +2111,9 @@
     var cur = modByTab(ui.tab); if (cur && cur.render && !$("p-" + ui.tab).hidden) try { cur.render(API, ui.tab); } catch (e) { console.error(e); }
   }
   var ICON = {
-    car: '<path d="M3 15l2-6h10l4 6"/><path d="M2 15h20v3H2z"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>',
+    car: '<path d="M3 11l9-7 9 7v9h-6v-6H9v6H3z"/>',
+    maint: '<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/>',
+    trouble: '<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.5"/>',
     story: '<path d="M5 4h11l3 3v13H5z"/><path d="M8 11h8M8 15h8"/>',
     glove: '<path d="M3 8h18v11H3z"/><path d="M3 8l2-3h14l2 3"/><path d="M10 12h4"/>',
     live: '<path d="M4 12h4l2-5 4 10 2-5h4"/>'
@@ -2119,8 +2121,11 @@
   /* The bar: three roots (Cases moved into the Index with the path, 2026-10-15). Every other page is reached from the
      path, a chapter's Go button, or the Index,
      and lives under "car" as hidden-unless-active so the bar still shows where you are. tab entries: [id, label, order, hidden-unless-active] */
+  /* 2026-11-26 (Kyle chose the status board): five roots, Home · Maintain · Fix · Glovebox · Link. */
   var SECTIONS = [
-    { id: "car", n: "The car", tabs: [["engine", "Engine bay", 10, true], ["bay", "Whole car", 20, true], ["my", "My V60", 30, true], ["health", "Health", 40, true], ["records", "Service log", 50, true], ["diag", "Diagnose", 60, true], ["lab", "Data lab", 70, true], ["sim", "Simulator", 80, true], ["academy", "Training", 90, true], ["learn", "Reference", 95, true], ["unlocks", "Unlocks", 96, true]] },
+    { id: "car", n: "Home", tabs: [["engine", "Engine bay", 10, true], ["bay", "Whole car", 20, true], ["my", "My V60", 30, true], ["academy", "Training", 90, true], ["learn", "Reference", 95, true], ["unlocks", "Unlocks", 96, true]] },
+    { id: "maint", n: "Maintain", tabs: [["health", "Health", 40, true], ["records", "Service log", 50, true]] },
+    { id: "trouble", n: "Fix", tabs: [["diag", "Diagnose", 60, true], ["lab", "Data lab", 70, true], ["sim", "Simulator", 80, true]] },
     { id: "glove", n: "Glovebox", tabs: [] },
     { id: "live", n: "Link", tabs: [] }
   ];
@@ -2149,7 +2154,7 @@
     var sec = sectionOf(name); lastTab[sec.id] = name;
     /* the bar always shows its roots; a root the gate has not opened is drawn locked */
     $("rail").innerHTML = SECTIONS.map(function (x) {
-      var on = x.id === sec.id, ok = gateOk(x.id), nw = ok && (gateNew(x.id) || (x.id === "car" && window.V60_MANUAL && window.V60_MANUAL.newCount() > 0));
+      var on = x.id === sec.id, ok = gateOk(x.id), nw = false; /* no "new" dots since the reference redesign */
       return '<button type="button" ' + (ok ? 'data-tab="' + x.id + '"' : 'data-locked="' + esc(ROOT_LOCK[x.id] || "Not open yet.") + '" class="locked" aria-disabled="true"') + (on ? ' aria-current="page"' : "") + '><svg viewBox="0 0 24 24" aria-hidden="true">' + ICON[x.id] + "</svg><span>" + esc(x.n) + "</span>" + (nw ? '<i class="newdot" aria-label="new"></i>' : "") + "</button>";
     }).join("");
     $("rail").setAttribute("data-n", SECTIONS.length);
@@ -2211,6 +2216,7 @@
     acad: function () { return acad(); }, xp: function () { return xpTotal(); }, rankFor: rankFor, PARTS: PARTS, ITEMS: ITEMS, partById: partById, lastFor: lastFor, statusFor: statusFor, ratingOf: ratingOf,
     JOBS: JOBS, CHAPTERS: CHAPTERS, SPECS: SPECS, BAYITEMS: BAYITEMS, SCHEDULE: SCHEDULE, BUILD: BUILD, RECALLS: RECALLS, CODES: CODES, decodeCode: decodeCode, monthsSince: monthsSince,
     computeHealth: function () { return computeHealth(); }, loadDataset: function (ds, n) { loadDataset(ds, n); }, parseCSV: parseCSV, analyze: analyze, autoMap: autoMap,
+    dueWithin: function (it, m, y) { return dueWithin(it, m, y); },
     bumpOdo: function (m) { bumpOdo(m); }, updateHud: function () { hud(); },
     /* the part page mounts a Training lesson inside itself; reset puts Training back on its own page */
     trainInto: function (rootId, id) { var m = missionById(id); if (!m || !$(rootId)) return false; aui.view = "mission"; aui.id = id; aui.root = rootId; renderMission(m); return true; },
