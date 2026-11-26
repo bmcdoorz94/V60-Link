@@ -8,7 +8,7 @@ import UserNotifications
 /// Anything that could change the car waits for Allow, which needs the phone unlocked (Face ID).
 final class ClaudeLink: NSObject, ObservableObject {
     static let shared = ClaudeLink()
-    static let version = "0.1"
+    static let version = "0.2"
 
     struct Line: Codable, Identifiable {
         var id = UUID()
@@ -55,6 +55,7 @@ final class ClaudeLink: NSObject, ObservableObject {
         }
         Car.shared.onReady = { [weak self] on in self?.carChanged(on) }
         Car.shared.onLine = { [weak self] dir, text in self?.sendLine(dir, text) }
+        Journal.shared.onAdd = { [weak self] line in self?.sendJournal(line) }
         if isOn { open() }
     }
 
@@ -184,6 +185,7 @@ final class ClaudeLink: NSObject, ObservableObject {
             linked = true
             tries = 0
             state = "Claude is watching"
+            flushJournal()
             Journal.shared.add("linked to Claude live on the PC")
             if Car.shared.phase == .ready { sendLink(true) }
         case "msg":
@@ -289,6 +291,25 @@ final class ClaudeLink: NSObject, ObservableObject {
         guard linked else { return }
         let car = Car.shared
         send(["t": "link", "state": on ? "on" : "off", "adapter": car.adapterName ?? "adapter", "can": car.canBus, "sim": false])
+    }
+
+    /// The app's journal goes to the PC's log as {t:"app"} (bridge/server.js), so check.js and Claude can see what
+    /// happened in the background without Kyle copying anything. Lines written while unlinked are sent on the next link.
+    private static let sentKey = "journalSentUpTo"
+
+    private func sendJournal(_ line: String) {
+        guard linked else { return }
+        send(["t": "app", "x": line])
+        UserDefaults.standard.set(line, forKey: Self.sentKey)
+    }
+
+    private func flushJournal() {
+        let lines = Journal.shared.lines
+        var start = 0
+        if let last = UserDefaults.standard.string(forKey: Self.sentKey), let i = lines.lastIndex(of: last) { start = i + 1 }
+        let backlog = lines[start...].suffix(150)
+        for line in backlog { send(["t": "app", "x": line]) }
+        if let last = backlog.last { UserDefaults.standard.set(last, forKey: Self.sentKey) }
     }
 
     private func sendLine(_ dir: String, _ text: String) {

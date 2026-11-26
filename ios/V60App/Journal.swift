@@ -7,6 +7,8 @@ final class Journal: ObservableObject {
     static let shared = Journal()
 
     @Published private(set) var lines: [String] = []
+    /// Each new line, so the Claude live link can send it to the PC's log (check.js and Claude read it there).
+    var onAdd: ((String) -> Void)?
     private let file: URL
     private let stamp: DateFormatter
 
@@ -26,9 +28,11 @@ final class Journal: ObservableObject {
         case .background: place = "background"
         default: place = "opening"
         }
-        lines.append("\(stamp.string(from: Date())) [\(place)] \(text)")
+        let line = "\(stamp.string(from: Date())) [\(place)] \(text)"
+        lines.append(line)
         if lines.count > 400 { lines.removeFirst(lines.count - 400) }
         try? lines.joined(separator: "\n").write(to: file, atomically: true, encoding: .utf8)
+        onAdd?(line)
     }
 
     func clear() {

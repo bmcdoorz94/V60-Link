@@ -22,7 +22,7 @@ const okOrigin = (o) => !o || ORIGINS.has(o) || /^https?:\/\/(127\.0\.0\.1|local
 
 const INSTRUCTIONS = [
   'You are Claude live: Kyle\'s electronic mechanic, sitting beside him while he is at his 2016 Volvo V60 T5. Read bridge/CLAUDE.md for the car, the module map and the rules.',
-  'Events from his phone arrive as <channel source="v60" event="...">. event="adapter_on": his OBD adapter just connected in V60-Link. Say hello in one line with the reply tool and, unless he said otherwise earlier, run a quick read-only look (stored, pending and permanent codes, readiness, module voltage) and tell him what you see in plain words. event="adapter_off": it dropped or he unplugged; one short line at most, or nothing. event="kyle": a message he typed; answer it with the reply tool. event="health_check": he ran the page\'s health check; the summary is in the event.',
+  'Events from his phone arrive as <channel source="v60" event="...">. event="adapter_on": his OBD adapter just connected in V60-Link. Say hello in one line with the reply tool and, unless he said otherwise earlier, run a quick read-only look (stored, pending and permanent codes, readiness, module voltage) and tell him what you see in plain words. event="adapter_off": the car was switched off (or the link dropped); the event carries this drive\'s numbers. Send Kyle a recap of at most three plain lines: what you checked and found this drive, anything he should act on and when, and anything that did not work. If nothing happened, one line. The phone may already be asleep; the reply is then delivered the next time it links. event="kyle": a message he typed; answer it with the reply tool. event="health_check": he ran the page\'s health check; the summary is in the event.',
   'Everything you want Kyle to read goes through the reply tool; he is at the car, not at this terminal. Keep replies short and plain. While the engine runs he may be driving: no questions that need a tap, nothing to read at length.',
   'car_send runs one ELM327/STN command through his adapter. Reads run at once. Anything that could change the car (clearing codes, UDS writes, routines, security access, resets, D2 writes) waits until Kyle taps Allow on his phone; give a plain reason in `why`. After changing headers or protocol (ATSH, ATCRA, ATSP, STP...) call car_restore when you are done so the page\'s own screens work again.',
   'Do not poll in loops. If you need to watch a value over time, ask Kyle to start Live data recording in the page and read it afterwards with car_log.',
@@ -37,6 +37,9 @@ const mcp = new Server(
 const pair = pairing()
 let phone = null // the one V60-Link page currently linked
 const car = { adapter: null, connected: false, can: null, sim: false, since: null, page: null, lastSeen: null, announced: false }
+const fresh = () => ({ cmds: 0, replies: 0, kyle: 0, bg: 0 })
+let drive = fresh() // this drive's numbers, for the recap at adapter_off
+const later = [] // Claude's messages the phone missed; delivered when it links again
 const waiting = new Map() // id -> { resolve, timer }
 let seq = 1
 let offTimer = null
@@ -53,12 +56,19 @@ function linkOn(m) {
   Object.assign(car, { adapter: m.adapter || car.adapter, connected: true, can: m.can, sim: !!m.sim, since: car.since && wasOn ? car.since : new Date().toISOString() })
   if (car.announced) return // a quick drop and reconnect (the CX does this while iOS pairs) is not news
   car.announced = true
+  drive = fresh()
   wake('adapter_on', `Kyle's adapter connected in V60-Link: ${car.adapter || 'unknown adapter'}${car.sim ? ' (the page\'s simulated car, not the real V60)' : ''}${car.can === false ? ', non-CAN protocol' : ''}. ${new Date().toLocaleString()}.`, { adapter: String(car.adapter || '') })
 }
 function linkOff() {
   car.connected = false
   clearTimeout(offTimer)
-  offTimer = setTimeout(() => { offTimer = null; if (car.connected || !car.announced) return; car.announced = false; wake('adapter_off', `The adapter disconnected (${car.adapter || 'adapter'}).`) }, 20000)
+  offTimer = setTimeout(() => {
+    offTimer = null
+    if (car.connected || !car.announced) return
+    car.announced = false
+    const mins = car.since ? Math.round((Date.now() - Date.parse(car.since)) / 60000) : null
+    wake('adapter_off', `The adapter disconnected (${car.adapter || 'adapter'})${mins !== null ? ` after ${mins} min connected` : ''}. This drive: you sent ${drive.cmds} adapter command(s) and ${drive.replies} message(s); Kyle wrote ${drive.kyle}; the iPhone app logged ${drive.bg} entr${drive.bg === 1 ? 'y' : 'ies'} while in the background. Phone linked now: ${phone ? 'yes' : 'no'}.`)
+  }, 10000)
 }
 function summarize(r) {
   if (!r) return 'empty report'
@@ -73,6 +83,7 @@ function fromPhone(m) {
       car.page = m.page || null; car.lastSeen = new Date().toISOString()
       record({ k: 'hello', auto: !!m.auto, known: !!m.known })
       toPhone({ t: 'welcome' })
+      while (later.length && toPhone({ t: 'msg', text: later[0] })) record({ k: 'delivered', text: later.shift() })
       if (m.connected) linkOn({ adapter: m.adapter, can: m.can })
       return
     case 'link':
@@ -87,7 +98,12 @@ function fromPhone(m) {
     case 'report':
       record({ k: 'report', r: m.r })
       return wake('health_check', summarize(m.r))
+    case 'app': // the iPhone app's journal (ios/V60App/Journal.swift): what happened, and whether it was in the background
+      record({ k: 'app', x: String(m.x || '').slice(0, 500) })
+      if (/\[background\]/.test(String(m.x))) drive.bg++
+      return
     case 'say':
+      drive.kyle++
       record({ k: 'kyle', text: m.text })
       return wake('kyle', String(m.text || '').slice(0, 4000))
     case 'res': {
@@ -161,7 +177,10 @@ mcp.setRequestHandler(CallToolRequestSchema, async (req) => {
     case 'reply': {
       const t = String(a.text || '').trim(); if (!t) return text('Nothing to send.', true)
       record({ k: 'claude', text: t })
-      return toPhone({ t: 'msg', text: t }) ? text('Shown on Kyle\'s phone.') : text('Not delivered: V60-Link is not linked right now. It is saved in the log; repeat it when the phone is back.', true)
+      drive.replies++
+      if (toPhone({ t: 'msg', text: t })) return text('Shown on Kyle\'s phone.')
+      later.push(t); if (later.length > 10) later.shift()
+      return text('The phone is not linked right now (asleep or out of reach). Saved: it is delivered the next time the phone links. Do not repeat it.')
     }
     case 'car_status':
       return text(JSON.stringify({ phone_linked: !!phone, adapter_connected: car.connected, adapter: car.adapter, simulated: car.sim, can: car.can, connected_since: car.since, page: car.page, pending_answers: waiting.size }, null, 2))
@@ -170,6 +189,7 @@ mcp.setRequestHandler(CallToolRequestSchema, async (req) => {
       if (!c || c.length > 120 || /[\r\n]/.test(c)) return text('One command per call, no line breaks, up to 120 characters.', true)
       const write = carWrite(c)
       record({ k: 'cmd', c, write, why: a.why || '' })
+      drive.cmds++
       const r = await ask({ t: 'cmd', c, write, why: String(a.why || ''), timeout: a.timeout_ms }, write ? 180000 : Math.min(Math.max(+a.timeout_ms || 4000, 500), 30000) + 10000)
       record({ k: 'res', c, ok: r.ok, raw: r.raw, error: r.error })
       if (!r.ok) return text(`${c}: ${r.error || 'failed'}`, true)
@@ -184,7 +204,7 @@ mcp.setRequestHandler(CallToolRequestSchema, async (req) => {
       const n = Math.min(Math.max(+a.lines || 60, 1), 400), day = /^\d{4}-\d{2}-\d{2}$/.test(a.day || '') ? a.day : today()
       let rows = []
       try { rows = fs.readFileSync(logFile(day), 'utf8').trim().split('\n').map((l) => { try { return JSON.parse(l) } catch { return null } }).filter(Boolean) } catch { return text('No log for ' + day + '.') }
-      let lines = rows.map((r) => r.k === 'log' ? `${r.at.slice(11, 23)} ${r.d} ${r.x}` : r.k === 'cmd' ? `${r.at.slice(11, 23)} [claude] ${r.c}` : r.k === 'event' ? `${r.at.slice(11, 23)} [event ${r.event}] ${r.content}` : r.k === 'kyle' ? `${r.at.slice(11, 23)} [kyle] ${r.text}` : r.k === 'claude' ? `${r.at.slice(11, 23)} [you] ${r.text}` : null).filter(Boolean)
+      let lines = rows.map((r) => r.k === 'log' ? `${r.at.slice(11, 23)} ${r.d} ${r.x}` : r.k === 'cmd' ? `${r.at.slice(11, 23)} [claude] ${r.c}` : r.k === 'event' ? `${r.at.slice(11, 23)} [event ${r.event}] ${r.content}` : r.k === 'kyle' ? `${r.at.slice(11, 23)} [kyle] ${r.text}` : r.k === 'claude' ? `${r.at.slice(11, 23)} [you] ${r.text}` : r.k === 'app' ? `${r.at.slice(11, 23)} [app] ${r.x}` : null).filter(Boolean)
       if (a.match) lines = lines.filter((l) => l.includes(String(a.match)))
       return text(lines.slice(-n).join('\n') || 'Nothing matched.')
     }

@@ -25,10 +25,13 @@ For the Claude Code session on Kyle's Windows PC. Kyle pastes one line ("Read br
 - Phone: Link tab > Connect > **Connect by itself** (`tools/gen/live_auto.js`, localStorage `v60-link-auto`). With it on, the page connects to the adapter chosen last time with no tap whenever it is open and the ignition is on, keeps the screen on while connected, and reconnects to Claude live by itself. It needs one tap on Connect adapter the first time. iOS pauses web pages in the background, so Bluefy must be open on V60-Link; an iOS Shortcuts automation (Bluetooth: when the phone connects to the car, Open App Bluefy) can do that, if the phone uses the car's Bluetooth. Unverified on Kyle's phone: whether Bluefy connects without a tap, and whether Bluefy reopens on its last page.
 - `tests/auto.js` plays it against a mocked adapter: car off, ignition on, ignition off, a manual Disconnect, an adapter that never answers.
 
+## Updates without asking
+- After every drive (`adapter_off`) the live session sends Kyle a recap of at most three lines. If the phone is already asleep, the bridge keeps Claude's message and delivers it the next time the phone links.
+
 ## Is it working?
-Run `node check.js` in `bridge` (or double-click `check.cmd`, desktop shortcut "Check Claude live"). It only reads; it changes nothing. It checks each link in order and says what to do at any `[!!]`:
+Double-click the desktop shortcut "Check Claude live" (`check.cmd`): it opens the results as a page in the browser (`data/check.html`). `node check.js` prints the same in the terminal. It only reads; it changes nothing. It checks each link in order and says what to do at any `[!!]`:
 1. This PC: Tailscale on, HTTPS certificates on, `tailscale serve` publishing port 8788, the Claude live window running with the development flag and the bridge inside it, the bridge answering locally and at the secure address the phone uses. It shows the pairing code.
-2. The phone: whether the iPhone is on Tailscale, whether V60-Link is linked, which adapter is connected.
+2. The phone: whether the iPhone is on Tailscale, whether V60-Link is linked, which adapter is connected, and from the V60 iPhone app's own journal (it sends it to the bridge, kind `app`) whether the car answered and the link held with the app in the background.
 3. Activity (`--hours N`, default 12) from `data/logs/`: every event Claude was told, every reply it showed on the phone, every command it sent and the car's answer, in time order. "Full loop works" means Claude answered the latest event on the phone; that is the proof the whole chain works. A latest event left unanswered for over 2 minutes counts as a problem.
 It exits with code 1 on any problem, so a Claude session can run it as a test. After a change to the bridge's code, also run `node tests/run.js claude` from the repo (the real bridge against the simulated car); `check.js` checks this PC's setup and what happened, the test checks the code.
 

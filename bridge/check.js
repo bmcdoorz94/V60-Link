@@ -1,6 +1,7 @@
 // Is Claude live working? Checks each link in the chain, then tells the story of recent activity from the log.
 // Read-only: it changes nothing (no pairing code, no Tailscale settings, nothing sent to the car).
-// Run: `node check.js` in bridge/, or double-click check.cmd. Options: --hours N (activity window, default 12).
+// Run: `node check.js` in bridge/, or double-click check.cmd. Options: --hours N (activity window, default 12),
+// --html (also write data/check.html, a colour page of the same results, and open it; what check.cmd does).
 // Exit code 1 if a link the phone needs is broken, so a Claude session can run it as a test.
 import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
@@ -8,6 +9,9 @@ import path from 'node:path'
 import { PORT, DATA } from './lib.js'
 
 const args = process.argv.slice(2)
+const printed = [] // everything printed, for the --html page
+const print = console.log
+console.log = (...a) => { const t = a.join(' '); printed.push(...t.split(/\r?\n/)); print(t) }
 const hours = Math.max(1, Number(args[args.indexOf('--hours') + 1]) || 12)
 const ts = process.platform === 'win32' ? 'tailscale.exe' : 'tailscale'
 const run = (cmd, a) => { try { return execFileSync(cmd, a, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 20000 }) } catch { return null } }
@@ -86,7 +90,7 @@ const linked = /Phone linked: yes/.test(local.text)
 const adapter = (local.text.match(/Adapter: (.+?)\.?$/) || [])[1]
 if (!local.ok) note('Phone link unknown (the bridge is not running)')
 else if (linked) ok('V60-Link on the phone is linked to Claude')
-else note('V60-Link is not linked right now', 'Normal unless Bluefy is open on the Link tab with Claude live switched on.')
+else note('The phone is not linked right now', 'Normal while the car is off and the phone is asleep. It links when the car starts (iPhone app) or when V60-Link is open in Bluefy with Claude live on.')
 if (local.ok && adapter && adapter !== 'not connected') ok('Adapter connected: ' + adapter)
 
 // The bridge's log: everything that crossed it (the last few days' files)
@@ -103,6 +107,16 @@ else if (sw.auto && sw.known) ok('The phone connects to the adapter by itself', 
 else if (sw.auto) note('Connect by itself is on, but no adapter has been chosen on the phone yet', 'Tap Connect adapter once on the Link tab.')
 else note('Connect by itself is off on the phone', 'Link tab > Connect > Connect by itself.')
 
+// The V60 iPhone app's own journal (it sends it here): did the background link work?
+const appRows = all.filter((r) => r.k === 'app')
+if (appRows.length) {
+  const seen = (re) => appRows.filter((r) => /\[background\]/.test(r.x) && re.test(r.x)).at(-1)
+  const answered = seen(/car answered/), held = seen(/still linked/)
+  if (answered) ok('iPhone app: the car answered with the app in the background', answered.x)
+  else note('iPhone app: not yet seen working in the background', 'Lock the phone, start the car and leave the app closed.')
+  if (held) ok('iPhone app: stayed linked in the background during a drive', held.x)
+}
+
 // 4. What actually happened
 console.log(`\n  Activity in the last ${hours} hours (from bridge/data/logs)`)
 const since = Date.now() - hours * 3600e3
@@ -118,6 +132,8 @@ const tell = (r) => {
     case 'perm_request': return 'Claude asked permission for ' + r.tool_name
     case 'perm': return r.allow ? 'You tapped Allow' : 'You tapped No'
     case 'auto': return 'You switched Connect by itself ' + (r.auto ? 'on' : 'off')
+    case 'app': return 'iPhone app: ' + short(r.x.replace(/^\S+ \d+ [\d:]+ /, ''), 70)
+    case 'delivered': return 'Delivered a saved message: ' + short(r.text, 50)
     default: return null
   }
 }
@@ -138,3 +154,25 @@ else {
 
 console.log('\n  ' + (broken ? `${broken} problem(s) above. Each [!!] line says what to do.` : 'Everything this PC can check is fine.') + '\n')
 process.exitCode = broken ? 1 : 0
+
+// A page of the same results, easier to read than the terminal (check.cmd opens it).
+if (args.includes('--html')) {
+  const esc = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+  const body = printed.filter((l) => !/^\s*Claude live check\s/.test(l)).map((l) => {
+    const m = l.match(/^\s+\[(ok|!!|--)\] (.*)$/)
+    if (m) return `<p class="${{ ok: 'ok', '!!': 'bad', '--': 'note' }[m[1]]}"><b>${{ ok: '✓', '!!': '✗', '--': '·' }[m[1]]}</b> ${esc(m[2])}</p>`
+    if (/^\s{8}/.test(l)) return `<p class="sub">${esc(l.trim())}</p>`
+    if (/^\s{2}\S/.test(l) && !/problem|fine\.$/.test(l)) return `<h2>${esc(l.trim())}</h2>`
+    return ''
+  }).join('\n')
+  const head = broken ? `<div class="sum bad">${broken} problem${broken > 1 ? 's' : ''}. Each ✗ says what to do.</div>` : '<div class="sum ok">Everything this PC can check is fine.</div>'
+  const html = `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Claude live check</title>
+<style>:root{color-scheme:light dark;--ok:#1a7f37;--bad:#c62828;--mut:#6b6b6b}@media(prefers-color-scheme:dark){:root{--ok:#4cc26a;--bad:#ff6b6b;--mut:#9a9a9a}}
+body{font:16px/1.45 system-ui,sans-serif;max-width:720px;margin:24px auto;padding:0 16px}h1{font-size:22px;margin:0 0 4px}h2{font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);margin:26px 0 6px;border-bottom:1px solid #8884;padding-bottom:4px}
+p{margin:6px 0}.ok b{color:var(--ok)}.bad b{color:var(--bad)}.bad{font-weight:600}.note b{color:var(--mut)}.sub{margin:0 0 8px 22px;color:var(--mut);font-size:14px;font-family:ui-monospace,Consolas,monospace;white-space:pre-wrap}
+.sum{padding:12px 14px;border-radius:6px;font-weight:600;margin:14px 0}.sum.ok{background:#1a7f3722;color:var(--ok)}.sum.bad{background:#c6282822;color:var(--bad)}</style>
+<h1>Claude live check</h1><p class="sub" style="margin:0">${esc(new Date().toLocaleString())}</p>${head}${body}`
+  const file = path.join(DATA, 'check.html')
+  fs.writeFileSync(file, html)
+  if (process.platform === 'win32' && !process.env.V60_NOOPEN) run('cmd', ['/c', 'start', '', file])
+}

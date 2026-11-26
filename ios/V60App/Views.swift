@@ -246,7 +246,7 @@ struct CarPanel: View {
         } header: {
             Text("Test \(ClaudeLink.version)")
         } footer: {
-            Text("Connect once with the app open. Then lock the phone and put it away, and the next time you start the car, don't open the app. Claude should say hello in a notification within a minute. Afterwards, open this panel and copy the results.")
+            Text("Connect once with the app open. Then lock the phone and put it away, and the next time you start the car, don't open the app. Claude should say hello in a notification within a minute. This journal reaches your PC by itself; Check Claude live shows it there.")
         }
     }
 
