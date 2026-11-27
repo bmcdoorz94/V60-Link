@@ -27,8 +27,12 @@ them), 10 new app IDs a week, and each install stops opening 7 days after it was
   "no longer available", open SideStore with LocalDevVPN on and tap Refresh All. Nothing is lost.
 - Updates: SideStore shows them under Updates when a new build is published.
 
+## Done 2026-11-27
+- iloader installed SideStore (Stable) and its pairing file. It made its own certificate and left Sideloadly's in
+  place (iloader > Certificates lists both), so the copies Sideloadly installed keep opening.
+
 ## Not confirmed yet
-- Whether SideStore's signing makes the copies Sideloadly installed (V60, The Guide) stop opening. If they do,
-  install V60 again from the source, and The Guide from its .ipa (SideStore > My Apps > **+**, from Files).
+- Whether a later SideStore refresh replaces Sideloadly's certificate. If V60 or The Guide stop opening, install V60
+  again from the source, and The Guide from its .ipa (SideStore > My Apps > **+**, from Files).
 - Whether the V60 app's saved settings survive the switch. If it asks for the pairing code, the Check Claude live
   page on the PC shows it.
