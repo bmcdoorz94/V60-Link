@@ -21,6 +21,12 @@ function summary(newest) {
     await p.goto('file://' + ROOT + '/index.html'); await p.waitForTimeout(500);
     await p.evaluate(() => V60.jump('tab:maint')); await p.waitForTimeout(150);
     ok(!(await p.$('#mtBody #drives')), 'no PC address: no Recorded drives card');
+    /* Volvo's schedule PDF opens blank in some iPhone browsers: links to it open the printed rows in the app */
+    ok(await p.evaluate(() => /Volvo's schedule: .Timing belt tensioner & idler pulley, replace \(engines A2\/26\/40\/49: 4-cylinder only\).*150 000 miles\/240 000 kilometers or 10 years/.test(document.querySelector('#mtBody').textContent)), "Maintain quotes Volvo's timing belt row and footnote");
+    await p.evaluate(() => { const a = document.createElement('a'); a.href = V60_SOURCES.ms[1]; a.target = '_blank'; a.id = 'msLink'; a.textContent = 'x'; document.querySelector('#mtBody').appendChild(a); });
+    const before = ctx.pages().length; await p.click('#msLink'); await p.waitForTimeout(200);
+    ok(await p.evaluate(() => !document.querySelector('#p-vsched').hidden && /10 years, whichever comes first/.test(document.querySelector('#vs-timingbelt').textContent) && !!document.querySelector('#vsBody a[data-direct][href="' + V60_SOURCES.ms[1] + '"]')), 'a link to the schedule PDF opens the printed rows, with the PDF one tap further');
+    ok(ctx.pages().length === before, 'no blank window opened');
     ok(errs.length === 0, 'no errors without a PC ' + JSON.stringify(errs));
     await ctx.close();
   }
@@ -84,6 +90,11 @@ function summary(newest) {
   await ctx.unroute('https://pc.test/drives/summary.json'); await ctx.route('https://pc.test/**', (r) => r.abort());
   await p.reload(); await p.waitForTimeout(600); await p.evaluate(() => V60.jump('tab:maint')); await p.waitForTimeout(150);
   ok(!!(await p.$('#mtBody #drives')), 'PC off: the last summary still shows');
+  /* the PC has no drives yet (Kyle's real feed on 2026-11-27) */
+  await ctx.unroute('https://pc.test/**'); body = { updated: at(0), drives: [], totals: { drives: 0, miles: 0, first: null }, links: summary().links };
+  await ctx.route('https://pc.test/drives/summary.json', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(body) }));
+  await p.evaluate(() => V60_DRIVES.refresh()); await p.waitForTimeout(400); await p.evaluate(() => V60.jump('tab:maint')); await p.waitForTimeout(150);
+  ok(await p.evaluate(() => /No drives on your PC yet/.test(document.querySelector('#mtBody #drives').textContent) && !/This week:/.test(document.querySelector('#mtBody #drives').textContent)), 'no drives yet: says so plainly');
   ok(errs.length === 0, 'no errors ' + JSON.stringify(errs));
   await b.close();
 })();
