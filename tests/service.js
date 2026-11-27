@@ -74,6 +74,15 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     const feed = await (await fetch(`http://127.0.0.1:${port}/drives/summary.json`)).json();
     ok(feed.cases && feed.cases[0] && feed.cases[0].title === 'Clunk over bumps, front left', 'Claude\'s case file is in the Garage\'s feed');
 
+    // Plan & shop: a question about an item or a plan wakes Claude
+    const askUrl = `http://127.0.0.1:${port}/drives/ask`;
+    ok((await fetch(askUrl, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{"kind":"item","question":"x"}' })).status === 403, 'a question from anywhere but the Garage is refused');
+    ok((await fetch(askUrl, { method: 'POST', headers: G, body: JSON.stringify({ kind: 'item', item: 'Accessory belt, tensioner & idler', section: 'Engine bay', question: 'DIY or shop?', facts: 'No record.' }) })).status === 200, 'a question about one item is accepted');
+    ok((await fetch(askUrl, { method: 'POST', headers: G, body: JSON.stringify({ kind: 'plan', items: [{ t: 'Timing belt kit', how: 'shop', price: '$740-990' }], question: 'What order?' }) })).status === 200, 'a question about a plan is accepted');
+    ok((await fetch(askUrl, { method: 'POST', headers: G, body: JSON.stringify({ kind: 'plan', items: [], question: 'x' }) })).status === 400 && (await fetch(askUrl, { method: 'POST', headers: G, body: JSON.stringify({ kind: 'item', question: ' ' }) })).status === 400, 'an empty plan or question is refused');
+    const run3 = await until(() => log().filter((r) => r.k === 'claude_run').find((r) => r.events.includes('ask')), 6000);
+    ok(run3, 'Claude is woken for the questions: ' + (run3 && run3.events));
+
     // headless Claude's side: tools.js over MCP, the way `claude -p --mcp-config` starts it
     const client = new Client({ name: 'test-claude', version: '1.0.0' }, { capabilities: {} });
     await client.connect(new StdioClientTransport({ command: process.execPath, args: cfg.args, env: { ...process.env, ...cfg.env }, stderr: 'pipe' }));

@@ -496,6 +496,25 @@ async function takeCase(req, ctx) {
   if (ctx && ctx.wake) ctx.wake(R.kind === 'photo' ? 'photo' : 'symptom', text + ' Follow "Mechanical problems" in bridge/CLAUDE.md: update data/notes/cases.json and send Kyle a short reply.')
   return { id }
 }
+/* Plan & shop (2026-11-27): the Garage sends Claude a question about one item or a whole plan, with what the page shows
+   (Volvo's row, status, sourced prices). Claude answers Kyle the usual way (bridge/CLAUDE.md, "Questions from Plan & shop"). */
+async function takeAsk(req, ctx) {
+  const R = JSON.parse(await readBody(req, 64 * 1024))
+  if (!R || !['item', 'plan'].includes(R.kind)) throw new Error('not a question')
+  const q = ONE(R.question, 1500)
+  if (!q.trim()) throw new Error('no question')
+  let text
+  if (R.kind === 'item') {
+    text = `Kyle asked from the Garage's Plan & shop page about ${ONE(R.item, 120) || 'one item'}${R.section ? ` (${ONE(R.section, 60)})` : ''}: "${q}"${R.facts ? ` What the page shows him: ${ONE(R.facts, 2000)}` : ''}`
+  } else {
+    const items = (Array.isArray(R.items) ? R.items : []).slice(0, 40).map((x) => [ONE(x && x.t, 120), x && x.how ? ONE(x.how, 20) : '', x && x.price ? ONE(x.price, 80) : ''].filter(Boolean).join(', ')).filter(Boolean)
+    if (!items.length) throw new Error('the plan has no items')
+    text = `Kyle asked from the Garage's Plan & shop page about his plan (${items.length} item${items.length === 1 ? '' : 's'}: ${items.join('; ')}): "${q}"`
+  }
+  if (ctx && ctx.record) ctx.record({ k: 'ask', kind: R.kind, question: q.slice(0, 300) })
+  if (ctx && ctx.wake) ctx.wake('ask', text + ' Follow "Questions from Plan & shop" in bridge/CLAUDE.md.')
+  return { ok: true }
+}
 // Claude's recommendations (maintenance, repair, performance, cosmetic), data/notes/recommendations.json
 function recoFeed() {
   let r; try { r = JSON.parse(fs.readFileSync(path.join(DATA, 'notes', 'recommendations.json'), 'utf8')) } catch { return null }
@@ -546,6 +565,12 @@ export function route(req, res, ctx) {
     if (ctx && ctx.record) ctx.record({ k: 'review', by: 'kyle' })
     if (ctx && ctx.wake) ctx.wake('review', 'Kyle asked for fresh recommendations from the Garage. Follow "Recommendations" in bridge/CLAUDE.md.')
     send(200, JSON.stringify({ ok: true }), 'application/json')
+    return true
+  }
+  if (u.pathname === '/drives/ask' && req.method === 'POST') {
+    // a question about one item or a whole plan (the Garage's Plan & shop page)
+    if (!cors['access-control-allow-origin']) { send(403, 'Not allowed.', 'text/plain'); return true }
+    takeAsk(req, ctx).then((r) => send(200, JSON.stringify(r), 'application/json'), (e) => send(400, JSON.stringify({ error: e.message }), 'application/json'))
     return true
   }
   if (u.pathname === '/drives/case' && req.method === 'POST') {

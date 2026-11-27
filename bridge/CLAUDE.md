@@ -50,6 +50,9 @@ Event `review` (weekly from the service, or Kyle tapped "Ask for new recommendat
   Keep an item's `id` stable across reviews (Kyle's "done" and "not interested" marks are keyed by it).
 - Reply to Kyle only if a `now` item is new since the last review: one line and "Details in the Garage: Recommended".
 
+## Questions from Plan & shop
+Event `ask`: Kyle asked about one item (a part or job: its Volvo schedule row, status and sourced prices as the Garage shows them) or about his whole plan (items, DIY or shop, prices). Answer him with `reply`: plain words, short, what to do and why for this car, with sources (Volvo's manual, schedule or bulletins first). Never guess a price, part number or labour time: give one only with a source and the date you saw it, otherwise say it is unconfirmed and where he can get a quote. The page's facts are what Kyle sees; if your sources disagree with them, say so. Nothing that changes emissions. If the answer changes a recommendation, update `recommendations.json` too.
+
 ## The car's diagnostic networks (research 2026-11-26; verify on the car)
 - 2016 V60 T5 Drive-E, P3 platform. Two CAN buses reach the OBD plug: high speed 500 kbit/s on pins 6/14, medium speed 125 kbit/s on pins 3/11.
 - Kyle's adapter today is an **OBDLink CX**: BLE, high-speed CAN and K-line only. It cannot reach the medium-speed bus. A vLinker FD+ or MC+ (BLE + MS-CAN) is the planned upgrade; on STN-type adapters `STP 53` selects MS-CAN 11-bit 125k (OBDLink manual; unverified on vLinker).
