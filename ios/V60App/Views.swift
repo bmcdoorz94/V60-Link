@@ -68,7 +68,9 @@ struct GarageWeb: UIViewRepresentable {
         web.navigationDelegate = context.coordinator
         web.uiDelegate = context.coordinator
         web.allowsBackForwardNavigationGestures = true
-        if #available(iOS 16.4, *) { web.isInspectable = true }
+        #if DEBUG
+        if #available(iOS 16.4, *) { web.isInspectable = true }  // Safari's Web Inspector, for development builds only
+        #endif
         context.coordinator.bridge.attach(web)
         web.load(URLRequest(url: Self.home))
         return web
@@ -80,10 +82,13 @@ struct GarageWeb: UIViewRepresentable {
     final class Coordinator: NSObject, WKNavigationDelegate, WKUIDelegate {
         let bridge = CarBridge()
 
-        /// The Garage stays in the app; links anywhere else open in Safari.
+        /// The Garage stays in the app; anything else opens in Safari: links, and also redirects, scripts and forms that
+        /// would take the main page elsewhere, so no other site ever sits in this web view next to the car handler.
         func webView(_ webView: WKWebView, decidePolicyFor action: WKNavigationAction,
                      decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-            if let url = action.request.url, action.navigationType == .linkActivated,
+            let mainFrame = action.targetFrame?.isMainFrame ?? true
+            if let url = action.request.url, let scheme = url.scheme?.lowercased(), ["http", "https"].contains(scheme),
+               action.navigationType == .linkActivated || mainFrame,
                url.host?.lowercased() != GarageWeb.home.host {
                 UIApplication.shared.open(url)
                 decisionHandler(.cancel)

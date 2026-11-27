@@ -12,13 +12,21 @@
 
   /* Commands that only set up the adapter never reach the car. Reads are OBD modes 01-0A (not 04 clear or 08 control),
      UDS 22 / 19 / 3E / default session, KWP reads, and Volvo D2 reads. Everything else counts as a write. */
-  function carWrite(c) {
+  /* raw: CAN auto-formatting is off (ATCAF0 since the last set-up), so the first byte is a frame length and every
+     data command counts as a write. Same rule as bridge/lib.js (carWrite, rawAfter). */
+  function carWrite(c, raw) {
     var s = String(c || "").toUpperCase().replace(/\s+/g, "");
     if (!s) return false;
-    if (/^STPX/.test(s)) { var m = s.match(/D:([0-9A-F]+)/); return m ? payloadWrite(m[1]) : true; }
+    if (/^STPX/.test(s)) { var m = s.match(/D:([0-9A-F]+)/); return m ? raw || payloadWrite(m[1]) : true; }
     if (/^(AT|ST)/.test(s)) return false;
     if (!/^[0-9A-F]+$/.test(s) || s.length % 2) return true;
-    return payloadWrite(s);
+    return raw ? true : payloadWrite(s);
+  }
+  function rawAfter(c) {
+    var s = String(c || "").toUpperCase().replace(/\s+/g, "");
+    if (/^ATCAF0/.test(s)) return true;
+    if (/^(ATCAF1|ATZ|ATWS|ATD$|ATD0|STI$|STRSTNVM)/.test(s)) return false;
+    return null;
   }
   function payloadWrite(h) {
     var b = (h.match(/../g) || []).map(function (x) { return parseInt(x, 16); }), sid = b[0];
@@ -61,6 +69,9 @@
     ws.onclose = function (ev) {
       if (cl.ws !== ws) return;
       cl.ws = null;
+      /* the PC has already given up on anything this link asked (it answers "link closed"); an Allow card left up
+         could otherwise run a command on a later link without the PC knowing */
+      if (Object.keys(cl.asks).length) { cl.asks = {}; clDrawAsks(); }
       if (ev.code === 4001) { clStatus("denied"); return; }
       if (!clCfg().on) { clStatus("off"); return; }
       clStatus("down", cl.tries ? "Your PC is not answering. Is Claude live running there, and Tailscale on here?" : "Lost the PC. Trying again...");
@@ -85,10 +96,10 @@
     var go = function () {
       if (clDirties(c)) { if (live.on) { stopLive(); log("..", "recording stopped so Claude can address other modules"); } cl.dirty = true; }
       log("..", "Claude: " + c);
-      cmd(c, Math.min(Math.max(+m.timeout || 4000, 500), 30000)).then(function (raw) { reply({ ok: true, raw: raw }); }, function (e) { reply({ ok: false, error: (e && e.message) || String(e) }); })
+      cmd(c, Math.min(Math.max(+m.timeout || 4000, 500), 30000)).then(function (raw) { if (rawAfter(c) !== null) cl.raw = rawAfter(c); reply({ ok: true, raw: raw }); }, function (e) { reply({ ok: false, error: (e && e.message) || String(e) }); })
         .then(function () { clearTimeout(cl.idle); if (cl.dirty) cl.idle = setTimeout(function () { clRestore(); }, 30000); });
     };
-    if (carWrite(c) || m.write) {
+    if (carWrite(c, cl.raw) || m.write) {
       clAsk({ id: "c:" + id, title: "Claude wants to send a command that can change the car", body: m.why || "No reason given.", detail: c, cmd: true,
         yes: go, no: function () { reply({ ok: false, error: "Kyle said no." }); } });
     } else go();
@@ -97,7 +108,7 @@
     clearTimeout(cl.idle);
     if (!link) return Promise.resolve({ ok: false, error: "The adapter is not connected." });
     log("..", "setting the adapter back up for this page (warm start)");
-    return initElm(true).then(function () { cl.dirty = false; return { ok: true, raw: "adapter set up again; protocol " + (protoCAN ? "CAN" : "not CAN") }; }, function (e) { cl.dirty = false; return { ok: false, error: (e && e.message) || String(e) }; });
+    return initElm(true).then(function () { cl.dirty = false; cl.raw = false; return { ok: true, raw: "adapter set up again; protocol " + (protoCAN ? "CAN" : "not CAN") }; }, function (e) { cl.dirty = false; return { ok: false, error: (e && e.message) || String(e) }; });
   }
   function clAsk(a) {
     cl.asks[a.id] = a; $("clToast").hidden = true;

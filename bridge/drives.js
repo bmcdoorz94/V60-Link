@@ -256,7 +256,7 @@ function summaryOf(s) {
 
 /* ---------------- the page ---------------- */
 
-const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
 
 /** A tall, narrow line chart (phone first): one or more series against minutes into the drive. */
 function chart(rows, title, series, opt = {}) {
@@ -348,7 +348,7 @@ function motionSection(rows, mo) {
   let h = '<h2>Vibration, braking and cornering (phone sensors)</h2>'
   if (!mo.usable) return h + `<p>${esc(motionLine(mo))}</p>`
   h += `<div class="cards">${card(mo.seconds, 'usable seconds')}${card(mo.brakeG.toFixed(2), 'hardest braking, g')}${card(mo.cornerG.toFixed(2), 'hardest cornering, g')}${card(mo.brake ? mo.brake.ratio.toFixed(1) + '×' : 'n/a', 'vibration braking vs steady')}${card(mo.wheel ? Math.round(mo.wheel.once * 100) + '%' : 'n/a', 'shake at once per wheel turn, over 40 mph')}</div>`
-  if (mo.bands.length) h += `<table><tr><th>steady speed</th><th>seconds</th><th>vertical shake</th><th>side-to-side shake</th></tr>${mo.bands.map((b) => `<tr><td>${b.lo}-${b.hi} mph</td><td>${b.n}</td><td>${b.v} mg</td><td>${b.h} mg</td></tr>`).join('')}</table>`
+  if (mo.bands.length) h += `<table><tr><th>steady speed</th><th>seconds</th><th>vertical shake</th><th>side-to-side shake</th></tr>${mo.bands.map((b) => `<tr><td>${b.lo}-${b.hi} mph</td><td>${b.n}</td><td>${esc(b.v)} mg</td><td>${esc(b.h)} mg</td></tr>`).join('')}</table>`
   const mrows = (rows.motion || []).filter((m) => (m.mv ?? 0) <= 30).map((m) => ({ t: m.t, v: m.v, h: m.h, _got: { v: true, h: true } }))
   h += chart(mrows, 'Vibration (milli-g)', [{ k: 'v', n: 'vertical' }, { k: 'h', n: 'side-to-side' }], { min: 0 })
   return h + `<p class="note">From the phone's accelerometer and gyroscope, 100 times a second, summed up each second; seconds when the phone moved are left out. A phone in a mount or cupholder gives the cleanest readings; in a pocket the body damps them. Vibration that rises with speed and matches one wheel turn points to tires and wheels (balance, a bent rim, uneven wear) or a wheel bearing; vibration that jumps only while braking points to the brake rotors. Milli-g are this phone's own scale: compare drives with each other, not with numbers from elsewhere.</p>`
@@ -439,7 +439,7 @@ function deepPage(id, R) {
     const codes = (m.codes || []).map((c) => `<li><code>${esc(c.code)}</code>, ${esc(c.label)}${c.light ? ', asks for a warning light' : ''}</li>`).join('')
     return `<li><b>${esc(m.name)}</b> <span class="sub">${word}</span>${codes ? '<ul>' + codes + '</ul>' : ''}</li>`
   }).join('')
-  const tests = (R.tests || []).map((t) => `<tr><td>${esc(t.name)}<br><span class="sub">${esc(t.test)}</span></td><td>${t.uasid === 0x24 ? t.value + ' counts' : t.value}</td><td>${t.min} to ${t.max}</td><td class="${t.pass ? 'good' : 'bad'}"><b>${t.pass ? 'ok' : 'outside'}</b></td></tr>`).join('')
+  const tests = (R.tests || []).map((t) => `<tr><td>${esc(t.name)}<br><span class="sub">${esc(t.test)}</span></td><td>${esc(t.value)}${t.uasid === 0x24 ? ' counts' : ''}</td><td>${esc(t.min)} to ${esc(t.max)}</td><td class="${t.pass ? 'good' : 'bad'}"><b>${t.pass ? 'ok' : 'outside'}</b></td></tr>`).join('')
   return shell('Deep scan', `<h1>Deep scan, ${esc(when(id))}</h1><p class="sub">${esc(R.summary || '')}</p>
 <h2>Modules</h2><ul class="dr">${mods}</ul>
 <h2>Engine self-tests (OBD mode 06)</h2>${tests ? `<table><tr><th>Monitor</th><th>reading</th><th>limits</th><th></th></tr>${tests}</table>` : '<p>No results.</p>'}
@@ -464,8 +464,8 @@ async function takeDeep(req, ctx) {
   fs.writeFileSync(path.join(DEEP, id + '.json'), JSON.stringify(R))
   fs.writeFileSync(path.join(DEEP, id + '.html'), deepPage(id, R))
   const url = `${baseUrl()}/drives/deep/${id}`
-  if (ctx && ctx.record) ctx.record({ k: 'deep', id, summary: String(R.summary || '').slice(0, 1000) })
-  if (ctx && ctx.wake) ctx.wake('deep_scan', `Kyle ran a deep scan (every module's codes and the engine's mode 06 self-tests). ${R.summary || ''} Full results: ${url} (pass it as url to reply). Explain in plain words what matters, especially misfire counts per cylinder and anything outside limits, and say plainly where a Volvo code's meaning is your reading rather than Volvo's published text.`)
+  if (ctx && ctx.record) ctx.record({ k: 'deep', id, summary: ONE(R.summary, 1000) })
+  if (ctx && ctx.wake) ctx.wake('deep_scan', `Kyle ran a deep scan (every module's codes and the engine's mode 06 self-tests). ${ONE(R.summary, 2000)} Full results: ${url} (pass it as url to reply). Explain in plain words what matters, especially misfire counts per cylinder and anything outside limits, and say plainly where a Volvo code's meaning is your reading rather than Volvo's published text.`)
   return { id, url }
 }
 
@@ -545,6 +545,17 @@ function lastClaude() {
   return null
 }
 
+// The POST routes below each wake a paid Claude run. At most 12 an hour (V60_POSTS_PER_HOUR), whoever sends them.
+const posts = []
+function tooMany() {
+  const now = Date.now(), max = Number(process.env.V60_POSTS_PER_HOUR || 12)
+  while (posts.length && now - posts[0] > 3600000) posts.shift()
+  if (posts.length >= max) return true
+  posts.push(now); return false
+}
+// Errors sent back to the page: a fixed message, never a file path from the PC
+const fail = (e) => JSON.stringify({ error: e instanceof SyntaxError ? 'not valid JSON' : /^(not |no |the |too large)/.test(e.message) ? e.message : 'could not save it' })
+
 // Not async: a bridge started before 2026-11-26 15:34 calls route() without await and treats any Promise as handled.
 export function route(req, res, ctx) {
   const u = new URL(req.url, 'http://x')
@@ -556,12 +567,14 @@ export function route(req, res, ctx) {
   if (u.pathname === '/drives/deep' && req.method === 'POST') {
     // only the Garage page (or the app's web view showing it) may post; the bridge is reachable from Kyle's devices only
     if (!cors['access-control-allow-origin']) { send(403, 'Not allowed.', 'text/plain'); return true }
-    takeDeep(req, ctx).then((r) => send(200, JSON.stringify(r), 'application/json'), (e) => send(400, JSON.stringify({ error: e.message }), 'application/json'))
+    if (tooMany()) { send(429, JSON.stringify({ error: 'too many requests this hour' }), 'application/json'); return true }
+    takeDeep(req, ctx).then((r) => send(200, JSON.stringify(r), 'application/json'), (e) => send(400, fail(e), 'application/json'))
     return true
   }
   if (u.pathname === '/drives/review' && req.method === 'POST') {
     // "Ask for new recommendations" in the Garage: Claude reviews the car and rewrites data/notes/recommendations.json
     if (!cors['access-control-allow-origin']) { send(403, 'Not allowed.', 'text/plain'); return true }
+    if (tooMany()) { send(429, JSON.stringify({ error: 'too many requests this hour' }), 'application/json'); return true }
     if (ctx && ctx.record) ctx.record({ k: 'review', by: 'kyle' })
     if (ctx && ctx.wake) ctx.wake('review', 'Kyle asked for fresh recommendations from the Garage. Follow "Recommendations" in bridge/CLAUDE.md.')
     send(200, JSON.stringify({ ok: true }), 'application/json')
@@ -570,13 +583,15 @@ export function route(req, res, ctx) {
   if (u.pathname === '/drives/ask' && req.method === 'POST') {
     // a question about one item or a whole plan (the Garage's Plan & shop page)
     if (!cors['access-control-allow-origin']) { send(403, 'Not allowed.', 'text/plain'); return true }
-    takeAsk(req, ctx).then((r) => send(200, JSON.stringify(r), 'application/json'), (e) => send(400, JSON.stringify({ error: e.message }), 'application/json'))
+    if (tooMany()) { send(429, JSON.stringify({ error: 'too many requests this hour' }), 'application/json'); return true }
+    takeAsk(req, ctx).then((r) => send(200, JSON.stringify(r), 'application/json'), (e) => send(400, fail(e), 'application/json'))
     return true
   }
   if (u.pathname === '/drives/case' && req.method === 'POST') {
     // a problem Kyle described, or a photo for Claude to inspect (the Garage's Problem cases page)
     if (!cors['access-control-allow-origin']) { send(403, 'Not allowed.', 'text/plain'); return true }
-    takeCase(req, ctx).then((r) => send(200, JSON.stringify(r), 'application/json'), (e) => send(400, JSON.stringify({ error: e.message }), 'application/json'))
+    if (tooMany()) { send(429, JSON.stringify({ error: 'too many requests this hour' }), 'application/json'); return true }
+    takeCase(req, ctx).then((r) => send(200, JSON.stringify(r), 'application/json'), (e) => send(400, fail(e), 'application/json'))
     return true
   }
   if (u.pathname.startsWith('/drives/deep/')) {

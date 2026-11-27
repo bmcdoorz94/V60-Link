@@ -28,13 +28,22 @@ export function pairing() {
 // Same rule as the phone (tools/gen/live_claude.js): adapter settings never reach the car; reads are OBD modes
 // 01-0A except 04 (clear) and 08 (control), UDS 22 / 19 / 3E / default session, KWP reads and Volvo D2 reads.
 // Anything else counts as a write and waits for Kyle's tap on the phone.
-export function carWrite(c) {
+// raw: the adapter's CAN auto-formatting is off (ATCAF0 since the last set-up), so the first byte sent is a frame
+// length, not the service, and nothing can be judged from it: every data command then counts as a write.
+export function carWrite(c, raw) {
   const s = String(c || '').toUpperCase().replace(/\s+/g, '')
   if (!s) return false
-  if (/^STPX/.test(s)) { const m = s.match(/D:([0-9A-F]+)/); return m ? payloadWrite(m[1]) : true }
+  if (/^STPX/.test(s)) { const m = s.match(/D:([0-9A-F]+)/); return m ? raw || payloadWrite(m[1]) : true }
   if (/^(AT|ST)/.test(s)) return false
   if (!/^[0-9A-F]+$/.test(s) || s.length % 2) return true
-  return payloadWrite(s)
+  return raw ? true : payloadWrite(s)
+}
+// Does this command change the raw flag? true: auto-formatting off; false: back to normal; null: no change.
+export function rawAfter(c) {
+  const s = String(c || '').toUpperCase().replace(/\s+/g, '')
+  if (/^ATCAF0/.test(s)) return true
+  if (/^(ATCAF1|ATZ|ATWS|ATD$|ATD0|STI$|STRSTNVM)/.test(s)) return false
+  return null
 }
 function payloadWrite(h) {
   const b = (h.match(/../g) || []).map((x) => parseInt(x, 16)), sid = b[0]

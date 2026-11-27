@@ -21,17 +21,25 @@ def sh(*a):
     except Exception: return "unknown"
 
 def files():
-    out = []
+    """Only files git tracks: the handoff goes to another company's AI, so nothing that is not already in the public
+    repo (a stray photo, a copy of bridge/data) may ride along. Untracked files on disk are listed as a warning."""
+    walked = []
     for top in TEXT_TOP:
-        if os.path.isfile(os.path.join(ROOT, top)): out.append(top)
+        if os.path.isfile(os.path.join(ROOT, top)): walked.append(top)
     for d in TEXT_DIRS:
         for base, dirs, fs in os.walk(os.path.join(ROOT, d)):
             dirs[:] = sorted(x for x in dirs if x not in ("shots", "__pycache__", "node_modules"))
             for f in sorted(fs):
-                p = os.path.relpath(os.path.join(base, f), ROOT).replace(os.sep, "/")
-                if p == "docs/HANDOFF_STATE.md": continue  # already inlined as sections 1-3
-                out.append(p)
-    return out
+                walked.append(os.path.relpath(os.path.join(base, f), ROOT).replace(os.sep, "/"))
+    try:
+        tracked = set(subprocess.check_output(["git", "ls-files", "-z", "--", *TEXT_DIRS, *TEXT_TOP], cwd=ROOT).decode("utf-8").split("\0")) - {""}
+    except Exception:
+        raise SystemExit("git ls-files failed: run this inside the repository with git installed.")
+    left = [p for p in walked if p not in tracked]
+    if left:
+        print("Not in the handoff (not tracked by git; git add them first if they belong):", file=sys.stderr)
+        for p in left: print("  " + p, file=sys.stderr)
+    return [p for p in walked if p in tracked and p != "docs/HANDOFF_STATE.md"]  # HANDOFF_STATE is sections 1-3
 
 def fence_for(text):
     longest = max([len(m) for m in re.findall(r"`+", text)] + [2])

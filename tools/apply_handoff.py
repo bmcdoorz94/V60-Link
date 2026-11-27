@@ -8,12 +8,27 @@ Usage: python3 tools/apply_handoff.py HANDOFF.md [--dry-run]
 - Bullets under "## Deleted files" are removed.
 - "## 1/2/3" sections replace docs/HANDOFF_STATE.md.
 - "## Edits to apply" is printed for manual or Claude-applied find-and-replace; nothing there is applied automatically.
-Paths must stay inside the repo; build outputs (index.html at root, js/, dist-artifact/, sw.js, link.html) are refused because tools/build.py owns them.
+Paths must stay inside the repo; build outputs (index.html at root, js/, dist-artifact/, sw.js, link.html) are refused because tools/build.py owns them,
+and .git/, .github/, .claude/ and bridge/data/ are never written or deleted (hooks, CI with secrets, Claude settings, private data).
 """
 import base64, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REFUSE = re.compile(r"^(index\.html|version\.json|app\.css|sw\.js|link\.html|manifest\.webmanifest|js/|dist-artifact/)")
+# Never written or deleted from a handoff, whatever it says: git's own files and hooks, CI workflows (they run with the
+# repo's secrets), Claude Code's settings and hooks, and the PC's private data.
+PROTECT = re.compile(r"^(\.git(/|$)|\.github/|\.claude/|bridge/data(/|$)|bridge/\.claude/|ios/.*\.(p8|p12|mobileprovision)$)", re.I)
+
+def safe(path):
+    """The repo-relative path for a handoff entry, or None when it must be refused: absolute, rooted (/x, \\x),
+    drive-relative (C:x), outside the repo after resolving links, a build output, or protected."""
+    p = path.replace("\\", "/").strip()
+    if not p or p.startswith("/") or re.match(r"^[A-Za-z]:", p) or "\0" in p: return None
+    norm = os.path.normpath(p).replace(os.sep, "/")
+    if norm.startswith("..") or os.path.isabs(norm) or REFUSE.match(norm) or PROTECT.match(norm): return None
+    real = os.path.realpath(os.path.join(ROOT, norm))
+    if os.path.commonpath([real, os.path.realpath(ROOT)]) != os.path.realpath(ROOT): return None
+    return norm
 
 def scan(md):
     """Walk the file line by line. Returns (files, outside) where files are (path, is_base64, body) for every
@@ -51,8 +66,8 @@ def main():
     changed, same, refused = [], [], []
     found, outside = scan(md)
     for path, b64, body in found:
-        norm = os.path.normpath(path).replace(os.sep, "/")
-        if norm.startswith("..") or os.path.isabs(norm) or REFUSE.match(norm):
+        norm = safe(path)
+        if norm is None:
             refused.append(path); continue
         if norm == "docs/HANDOFF_STATE.md": continue
         data = base64.b64decode("".join(body.split())) if b64 else body.encode("utf-8")
@@ -67,9 +82,11 @@ def main():
     dsec = section(outside, "Deleted files")
     if dsec:
         for p in re.findall(r"^- `([^`]+)`", dsec, re.M):
-            fp = os.path.join(ROOT, os.path.normpath(p))
-            if os.path.isfile(fp) and not REFUSE.match(p):
-                deleted.append(p)
+            norm = safe(p)
+            if norm is None: refused.append(p + " (delete)"); continue
+            fp = os.path.join(ROOT, norm)
+            if os.path.isfile(fp):
+                deleted.append(norm)
                 if not dry: os.remove(fp)
     parts = [section(outside, t) for t in ("1. Current Active Objective", "2. Immediate Next Steps", "3. Pending Logic & Blockers")]
     if all(parts) and not dry:

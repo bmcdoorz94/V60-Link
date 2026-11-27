@@ -4,15 +4,27 @@
 // It owns the link to V60-Link / the iPhone app, the drive reports (drives.js, reloaded on change) and the car tools
 // (reply, car_status, car_send, car_restore, car_log). What wakes Claude is the caller's `wake(event, content)`.
 import http from 'node:http'
+import crypto from 'node:crypto'
+import { spawn } from 'node:child_process'
+import { fileURLToPath } from 'node:url'
 import fs from 'node:fs'
 import { execFileSync } from 'node:child_process'
 import { WebSocketServer } from 'ws'
-import { PORT, pairing, carWrite, describeReply, record, logFile, today, TOOLS } from './lib.js'
+import { PORT, pairing, carWrite, rawAfter, describeReply, record, logFile, today, TOOLS } from './lib.js'
 export { TOOLS }
 
 export const say = (...a) => console.error('[v60]', ...a)
 const ORIGINS = new Set(['https://bmcdoorz94.github.io', 'null', ...(process.env.V60_ORIGINS || '').split(',').filter(Boolean)])
 const okOrigin = (o) => !o || ORIGINS.has(o) || /^https?:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(o)
+// Host names this server answers to: itself, and its name on Kyle's tailnet (tailscale serve). Anything else is a web
+// page on this PC trying DNS rebinding (attacker.example pointed at 127.0.0.1) and gets nothing.
+const okHost = (h) => !h || /^(127\.0\.0\.1|localhost|\[::1\])(:\d+)?$/i.test(h) || /^[a-z0-9-]+\.[a-z0-9-]+\.ts\.net(:\d+)?$/i.test(h)
+// Links Claude may put on a message (the notification opens it): this PC's reports and the Garage, nothing else.
+export const okLink = (u) => { try { const x = new URL(u); return x.protocol === 'https:' && (/\.ts\.net$/i.test(x.hostname) || x.hostname === 'bmcdoorz94.github.io' || (x.hostname === 'github.com' && x.pathname.startsWith('/bmcdoorz94/'))) } catch { return false } }
+// Wrong pairing codes: after 5 within 10 minutes, no phone can link for 15 minutes (a 6-digit code would otherwise
+// fall to guessing within hours), and Kyle is told.
+const guesses = { times: [], until: 0, told: 0 }
+const sameCode = (a, b) => { const x = Buffer.from(String(a || '')), y = Buffer.from(String(b)); return x.length === y.length && crypto.timingSafeEqual(x, y) }
 
 // This PC's address on Kyle's tailnet, for report links.
 export const REPORTS = (() => {
@@ -169,6 +181,7 @@ export function startHub(opts) {
   }
 
   const httpServer = http.createServer(async (req, res) => {
+    if (!okHost(req.headers.host)) { res.writeHead(421); res.end(); return }
     // ctx lets drives.js (reloaded on change) wake Claude and reach the phone without a restart
     try { if (await (await drives()).route(req, res, { wake, toPhone, record })) return } catch (e) { say('drive page failed:', e.message) }
     try { if (opts.route && await opts.route(req, res)) return } catch (e) { say('route failed:', e.message); if (!res.headersSent) { res.writeHead(500); res.end('error') } return }
@@ -178,9 +191,25 @@ export function startHub(opts) {
   const wss = new WebSocketServer({ noServer: true, maxPayload: 1 << 20 })
   httpServer.on('upgrade', (req, socket, head) => {
     const url = new URL(req.url, 'http://x')
-    if (url.pathname !== '/link' || !okOrigin(req.headers.origin)) { socket.destroy(); return }
+    if (url.pathname !== '/link' || !okOrigin(req.headers.origin) || !okHost(req.headers.host)) { socket.destroy(); return }
     wss.handleUpgrade(req, socket, head, (ws) => {
-      if (url.searchParams.get('code') !== pair.code) { ws.close(4001, 'pairing code'); say('refused a phone with the wrong pairing code'); return }
+      const now = Date.now()
+      if (now < guesses.until) { ws.close(4002, 'too many wrong codes'); return }
+      if (!sameCode(url.searchParams.get('code'), pair.code)) {
+        guesses.times = guesses.times.filter((t) => now - t < 600000).concat(now)
+        ws.close(4001, 'pairing code'); say('refused a phone with the wrong pairing code')
+        record({ k: 'pair_refused', count: guesses.times.length })
+        if (guesses.times.length >= 5) {
+          guesses.until = now + 900000; guesses.times = []
+          say('5 wrong pairing codes in 10 minutes: no linking for 15 minutes')
+          record({ k: 'pair_locked', until: new Date(guesses.until).toISOString() })
+          if (now - guesses.told > 3600000 && !process.env.V60_NO_CLAUDE) {
+            guesses.told = now
+            try { spawn(process.execPath, [fileURLToPath(new URL('./notify.js', import.meta.url)), 'Five wrong pairing codes reached Claude live on your PC, so it stopped accepting phones for 15 minutes. If that was not you, tell Claude.'], { windowsHide: true, stdio: 'ignore' }).unref() } catch {}
+          }
+        }
+        return
+      }
       if (phone && phone !== ws) try { phone.close(4000, 'replaced') } catch {}
       phone = ws
       say('phone linked')
@@ -210,7 +239,8 @@ export function startHub(opts) {
     switch (name) {
       case 'reply': {
         const t = String(a.text || '').trim(); if (!t) return out('Nothing to send.', true)
-        const url = /^https:\/\/\S+$/.test(String(a.url || '')) ? String(a.url) : undefined
+        const url = a.url && okLink(String(a.url)) ? String(a.url) : undefined
+        if (a.url && !url) say('dropped a link that is not this PC or the Garage:', String(a.url).slice(0, 120))
         // notify.js marks its messages as notices (requests for Kyle's hands), which the Garage's "From your car" skips
         record({ k: a.notice ? 'notice' : 'claude', text: t, ...(url ? { url } : {}) })
         drive.replies++
@@ -223,17 +253,19 @@ export function startHub(opts) {
       case 'car_send': {
         const c = String(a.command || '').trim()
         if (!c || c.length > 120 || /[\r\n]/.test(c)) return out('One command per call, no line breaks, up to 120 characters.', true)
-        const write = carWrite(c)
+        const write = carWrite(c, car.raw)
         record({ k: 'cmd', c, write, why: a.why || '' })
         drive.cmds++
         const r = await ask({ t: 'cmd', c, write, why: String(a.why || ''), timeout: a.timeout_ms }, write ? 180000 : Math.min(Math.max(+a.timeout_ms || 4000, 500), 30000) + 10000)
         record({ k: 'res', c, ok: r.ok, raw: r.raw, error: r.error })
+        if (r.ok && rawAfter(c) !== null) car.raw = rawAfter(c)
         if (!r.ok) return out(`${c}: ${r.error || 'failed'}`, true)
         const d = describeReply(r.raw)
         return out(`sent ${c}${write ? ' (Kyle allowed it)' : ''}\nraw: ${String(r.raw).replace(/\r/g, '\\r').trim()}${d ? '\n' + d : ''}`)
       }
       case 'car_restore': {
         const r = await ask({ t: 'restore' }, 30000)
+        if (r.ok) car.raw = false
         return r.ok ? out(r.raw || 'done') : out(r.error || 'failed', true)
       }
       case 'car_log': {

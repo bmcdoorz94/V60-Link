@@ -31,6 +31,11 @@ final class CarBridge: NSObject, WKScriptMessageHandlerWithReply {
 
     func userContentController(_ userContentController: WKUserContentController,
                                didReceive message: WKScriptMessage) async -> (Any?, String?) {
+        // Only the Garage's own page may reach the adapter: the main frame, over https, on its host
+        let origin = message.frameInfo.securityOrigin
+        guard message.frameInfo.isMainFrame, origin.protocol == "https", origin.host.lowercased() == GarageWeb.home.host else {
+            return (nil, "not the Garage")
+        }
         guard let body = message.body as? [String: Any], let op = body["op"] as? String else { return (nil, "bad message") }
         let car = Car.shared
         switch op {

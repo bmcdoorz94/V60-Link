@@ -37,6 +37,11 @@ else if (st) bad('HTTPS certificates are off', 'Tailscale admin console > DNS > 
 const served = run(ts, ['serve', 'status']) || ''
 if (served.includes(':' + PORT)) ok('Tailscale publishes the bridge (your devices only)')
 else bad('Tailscale is not publishing the bridge', `Run: tailscale serve --bg ${PORT}`)
+// Funnel would put the bridge on the open internet instead of your own devices
+let sj = null
+try { sj = JSON.parse(run(ts, ['serve', 'status', '--json']) || 'null') } catch {}
+if (sj && sj.AllowFunnel && Object.values(sj.AllowFunnel).some(Boolean)) bad('Tailscale Funnel is on: the bridge is reachable from the whole internet', 'Run: tailscale funnel reset   (then: tailscale serve --bg ' + PORT + ')')
+else if (sj) ok('Funnel is off (not on the open internet)')
 
 // 2. Claude live's always-on service (run.js keeping service.js running; since 2026-11-27), or the older window
 let procs = []
