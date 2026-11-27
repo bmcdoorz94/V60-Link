@@ -386,7 +386,8 @@ async function takeDeep(req, ctx) {
   return { id, url }
 }
 
-export async function route(req, res, ctx) {
+// Not async: a bridge started before 2026-11-26 15:34 calls route() without await and treats any Promise as handled.
+export function route(req, res, ctx) {
   const u = new URL(req.url, 'http://x')
   if (!u.pathname.startsWith('/drives')) return false
   // The Garage (GitHub Pages) reads summary.json from this PC through Tailscale.
@@ -396,7 +397,7 @@ export async function route(req, res, ctx) {
   if (u.pathname === '/drives/deep' && req.method === 'POST') {
     // only the Garage page (or the app's web view showing it) may post; the bridge is reachable from Kyle's devices only
     if (!cors['access-control-allow-origin']) { send(403, 'Not allowed.', 'text/plain'); return true }
-    try { send(200, JSON.stringify(await takeDeep(req, ctx)), 'application/json') } catch (e) { send(400, JSON.stringify({ error: e.message }), 'application/json') }
+    takeDeep(req, ctx).then((r) => send(200, JSON.stringify(r), 'application/json'), (e) => send(400, JSON.stringify({ error: e.message }), 'application/json'))
     return true
   }
   if (u.pathname.startsWith('/drives/deep/')) {
