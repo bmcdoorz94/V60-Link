@@ -156,7 +156,8 @@
     else h += row('<span class="mono">' + esc(fmt(st.odo)) + " mi</span>", esc("Entered " + (st.odoAt ? day(st.odoAt) : "") + ". Drives recorded after that are added here as an estimate."), "none", "Entered");
     if (last) h += row("Last drive: " + esc(when(last.start)), esc([last.miles.toFixed(1) + " mi", last.minutes != null ? Math.round(last.minutes) + " min" : "", last.mpg ? last.mpg.toFixed(1) + " mpg estimated" : ""].filter(Boolean).join(" · ")), "none", last.url ? "Report" : "", last.url);
     var wm = wk.reduce(function (a, d) { return a + d.miles; }, 0), wmpg = mpgOf(wk);
-    h += row("This week: " + esc(wm.toFixed(1)) + " mi", esc(wk.length + " drive" + (wk.length === 1 ? "" : "s") + " in the last 7 days" + (wmpg ? ". About " + wmpg.toFixed(1) + " mpg, estimated" : "") + "."), "none", "", data.links.week);
+    if (!data.drives.length) h += row("No drives on your PC yet", "The iPhone app sends each drive to your PC when it ends. The first one shows here.", "none", "");
+    else h += row("This week: " + esc(wm.toFixed(1)) + " mi",esc(wk.length + " drive" + (wk.length === 1 ? "" : "s") + " in the last 7 days" + (wmpg ? ". About " + wmpg.toFixed(1) + " mpg, estimated" : "") + "."), "none", "", data.links.week);
     var r = readiness();
     if (r) h += row("Emissions readiness", esc(r.line + " " + r.when), r.pill, r.label);
     var links = link(data.links.all, "All drive reports") + link(data.links.week, "This week") + link(data.links.trends, "Trends");

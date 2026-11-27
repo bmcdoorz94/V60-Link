@@ -88,7 +88,7 @@
     h += '<section class="hm-sec"><div class="mn-kick"><span>REPLACE ON SCHEDULE</span></div>' + rows.map(function (r) {
       return '<div class="hm-row hm-static"><span class="hm-b"><span class="hm-t">' + esc(r.it.name) + (r.it.verify ? ' <span class="tag verify">verify</span>' : "") + '</span><span class="hm-i mono">' + esc(r.interval) + "</span>" +
         '<span class="hm-s">' + esc([lastLine(api, r.last), r.line].filter(Boolean).join(". ")) + "</span>" +
-        '<details class="hm-note"><summary>Volvo\'s note</summary><p>' + esc(r.it.note) + "</p></details></span>" + '<span class="pill ' + r.pill + '">' + esc(r.label) + "</span></div>";
+        '<details class="hm-note"><summary>Volvo\'s note</summary><p>' + esc(r.it.note) + "</p>" + (vrow(r.it.key) ? "<p>Volvo\'s schedule: " + esc(vquote(vrow(r.it.key))) + ' <button type="button" class="mn-link" data-jump="tab:vsched">See the rows</button></p>' : "") + "</details></span>" + '<span class="pill ' + r.pill + '">' + esc(r.label) + "</span></div>";
     }).join("") + "</section>";
     var trans = api.lastFor("trans"), cool = api.ITEMS.filter(function (i) { return !i.mi && !i.mo; });
     h += '<section class="hm-sec"><div class="mn-kick"><span>CHECK ONLY</span></div>' +
@@ -98,8 +98,48 @@
       "</section>";
     h += '<section class="hm-sec"><div class="mn-kick"><span>MORE</span></div><div class="mn-chips">' +
       [["tab:records", "Service log and oil checks"], ["tab:fuel", "Fuel & costs"], ["tab:health", "Health"], ["tab:diy", "How-to jobs"], ["tab:glove", "Receipts"]].map(function (c) { return '<button type="button" class="mn-chip" data-jump="' + c[0] + '">' + esc(c[1]) + "</button>"; }).join("") + "</div></section>";
-    h += '<p class="status">Source: Volvo 2016 US maintenance schedule; Volvo 2016 V60 owner\'s manual (coolant, transmission fluid).</p>';
+    h += '<p class="status">Source: <button type="button" class="mn-link" data-jump="tab:vsched">Volvo 2016 US maintenance schedule</button>; Volvo 2016 V60 owner\'s manual (coolant, transmission fluid).</p>';
     el.innerHTML = h;
+  }
+
+  /* ---------- Volvo's 2016 schedule, as printed (tab "vsched") ----------
+     The PDF (V60_SOURCES.ms) opens blank in some iPhone browsers, so every link to it lands here first: the rows that
+     apply to this car's engine (engine code 40, one of Volvo's "A2/26/40/49: 4-cylinder" engines), word for word, with the
+     printed page and footnote, then the PDF. Read from Volvo's PDF on 2026-11-27. */
+  var EVERY = "Every 10,000 mi, 10,000 to 150,000";
+  var VROWS = [
+    { key: "oil", row: "Engine oil and filter, replace", at: EVERY, page: 15 },
+    { key: "airfilter", row: "Engine Air cleaner (ACL), clean the air cleaner housing/replace filter (engines A2/26/40/49: 4-cylinder, engine 61: 5-cylinder)", at: "40,000 · 80,000 · 120,000 mi", page: 15, fn: "B" },
+    { key: "plugs", row: "Spark plugs, replace (engines A2/26/40/49: 4-cylinder)", at: "60,000 · 120,000 mi", page: 15 },
+    { key: "coolant", row: "Engine coolant check & adjust antifreeze rating & anti-corrosion agent", at: EVERY, page: 16 },
+    { key: "accbelt", row: "Accessory drive belt, belt tensioner & idler pulley, replace (engines A2/26/40/49: 4-cylinder, engines 90/A9: 6-cylinder)", at: "150,000 mi", page: 16, fn: "D" },
+    { key: "timingbelt", row: "Timing belt tensioner & idler pulley, replace (engines A2/26/40/49: 4-cylinder only)", at: "150,000 mi", page: 16, fn: "D" },
+    { key: "cabin", row: "Cabin air filter, replace", at: "20,000 · 40,000 · 60,000 · 80,000 · 100,000 · 120,000 · 140,000 mi", page: 18, fn: "H" },
+    { key: "brakefluid", row: "Brake fluid, replace", at: "40,000 · 80,000 · 120,000 mi", page: 18, fn: "I" },
+    { key: "brakes", row: "Brake pads/discs, check", at: EVERY, page: 18 },
+    { key: "trans", row: "Automatic transmission fluid level check/adjust", at: "", page: 17, fn: "F" }
+  ];
+  var VFN = {
+    B: "May be necessary to change more frequently when driving in dusty/dirty areas.",
+    D: "Replace at 150 000 miles/240 000 kilometers or 10 years, whichever comes first.",
+    F: "Check automatic transmission fluid level only if an external leak is identified. Volvo recommends changing transmission fluid every 50,000 miles/80,000 kilometers, only on vehicles used for towing, or when a message appears in the instrument panel text window.",
+    H: "Recommended to replace at least once a year or more often in heavy traffic or dirty/dusty areas.",
+    I: "Recommended to replace every 3 years or 40 000 miles (if driven in mountainous areas or humid climates \u2013 every one year) at owner's request."
+  };
+  function vrow(key) { return VROWS.filter(function (r) { return r.key === key; })[0] || null; }
+  function vquote(r) { return "\u201c" + r.row + "\u201d" + (r.fn ? ", footnote " + r.fn + ": \u201c" + VFN[r.fn] + "\u201d" : "") + " (page " + r.page + (r.fn ? ", footnote on page 19" : "") + ")"; }
+  function renderVsched(api) {
+    var el = api.$("vsBody"); if (!el) return;
+    var S = (window.V60_SOURCES || {}).ms;
+    el.innerHTML = '<p class="status">The rows of Volvo\'s 2016 US/Canada maintenance schedule that apply to this car. Its engine is code 40 in Volvo\'s bulletins, one of the schedule\'s \u201cA2/26/40/49: 4-cylinder\u201d engines. Wording as printed; page numbers are the booklet\'s own.</p>' +
+      '<section class="hm-sec"><div class="mn-kick"><span>SERVICE OPERATION</span><span>SCHEDULED AT</span></div>' + VROWS.map(function (r) {
+        return '<div class="hm-row hm-static" id="vs-' + r.key + '"><span class="hm-b"><span class="hm-t">' + esc(r.row) + "</span>" +
+          (r.at ? '<span class="hm-i mono">' + esc(r.at) + "</span>" : "") +
+          (r.fn ? '<span class="hm-s">' + esc(r.fn + ": " + VFN[r.fn]) + "</span>" : "") +
+          '<span class="hm-s">Page ' + r.page + (r.fn ? ", footnote on page 19" : "") + "</span></span></div>";
+      }).join("") + "</section>" +
+      '<p class="status">The schedule gives no time limit for the other rows; the months in Maintenance come from the owner\'s manual where it gives them.</p>' +
+      (S ? '<p class="status">Source: <a data-direct href="' + esc(S[1]) + '" target="_blank" rel="noopener">' + esc(S[0]) + "</a> (PDF, 5 pages). If it opens blank on the phone, open it on a computer.</p>" : "");
   }
 
   /* ---------- Settings: sync, backup, detail level (moved here from the Cases page) ---------- */
@@ -120,15 +160,22 @@
   (window.V60_MODULES = window.V60_MODULES || []).push({
     id: "home",
     tabs: [{ id: "maint", section: "maint", label: "Maintain", order: 1, html: '<section><h2>Maintenance</h2><p class="lede">Volvo\'s 2016 schedule against your service log.</p><div id="mtBody"></div></section>' },
+      { id: "vsched", section: "maint", label: "Volvo's 2016 schedule", order: 98, hidden: true, html: '<section><h2>Volvo\'s 2016 schedule</h2><p class="lede">The printed rows for this car, with page numbers.</p><div id="vsBody"></div></section>' },
       { id: "settings", section: "car", label: "Settings", order: 99, hidden: true, html: '<section><h2>Settings</h2><p class="lede">Sync, backup and how much detail the app shows.</p><div id="setBody"></div></section>' }],
     init: function (api) {
       API = api;
+      /* every link to Volvo's schedule PDF opens the in-app rows instead (the PDF opens blank in some iPhone browsers) */
+      document.addEventListener("click", function (e) {
+        var a = e.target.closest && e.target.closest("a[href]"), S = (window.V60_SOURCES || {}).ms;
+        if (!a || !S || a.hasAttribute("data-direct") || a.getAttribute("href") !== S[1]) return;
+        e.preventDefault(); api.jump("tab:vsched");
+      }, true);
       document.addEventListener("click", function (e) {
         var b = e.target.closest && e.target.closest("[data-sdepth]"); if (!b) return;
         var d = api.mod("story") || {}; d.depth = b.getAttribute("data-sdepth"); api.setMod("story", d); api.save(); renderSettings(api);
       });
     },
-    render: function (api, tab) { API = api; if (tab === "maint") renderMaint(api); else if (tab === "settings") renderSettings(api); },
+    render: function (api, tab) { API = api; if (tab === "maint") renderMaint(api); else if (tab === "settings") renderSettings(api); else if (tab === "vsched") renderVsched(api); },
     clean: function (v) { return v && typeof v === "object" ? v : null; }
   });
 })();
