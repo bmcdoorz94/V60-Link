@@ -49,18 +49,18 @@
   }
   var TILES = [
     ["tab:maint", "Maintenance", function () { return "Schedule, service log, fuel"; }],
+    ["tab:shop", "Plan & shop", function () { return "Everything by section, how-tos, upgrades"; }],
     ["tab:know", "Know your car", function () { return "Specs, fluids, every part"; }],
     ["tab:trouble", "Fix & diagnose", function () { return "Warning lights, sounds, codes"; }],
-    ["tab:diy", "How-to jobs", function () { var n = (window.V60_DIY || []).length; return (n ? n + " jobs" : "Jobs") + ", step by step"; }],
-    ["tab:upgrades", "Upgrades", function () { var n = (window.V60_UPGRADES || []).length; return (n ? n + " ideas" : "Ideas") + ", cost and benefit"; }],
     ["tab:bulletins", "Bulletins & recalls", function () { return "Volvo's known fixes for this car"; }],
     ["tab:glove", "Glovebox", function () { return "Papers, receipts, tools"; }],
+    ["tab:fuel", "Fuel & costs", function () { return "Fill-ups and mileage"; }],
     ["tab:kb", "Library", function () { return "Articles, with sources"; }]
   ];
   function homeHtml(api) {
     var now = nowList(api), due = sched(api).filter(function (r) { return r.rank < 4; }).slice(0, 4), h = '<div class="hm">';
     h += '<section class="hm-sec"><div class="mn-kick"><span>ON THE CAR NOW</span></div>';
-    if (now.length) h += now.slice(0, 5).map(function (a) { return row(a.jump || "tab:health", a.text, "", a.sev >= 80 ? "bad" : "watch", a.sev >= 80 ? "Look into" : "Watch"); }).join("") + (now.length > 5 ? '<button type="button" class="mn-link hm-more" data-jump="tab:health">' + (now.length - 5) + " more in Health</button>" : "");
+    if (now.length) h += now.map(function (a) { return row(a.jump || "tab:maint", a.text, "", a.sev >= 80 ? "bad" : "watch", a.sev >= 80 ? "Look into" : "Watch"); }).join("");
     else h += '<p class="hm-empty">Nothing urgent on record. A health check on Link reads the car\'s codes and warning lights.</p>';
     h += "</section>";
     if (window.V60_DRIVES && window.V60_DRIVES.homeHtml) h += window.V60_DRIVES.homeHtml(api);
@@ -97,7 +97,7 @@
       row("tab:records", "Oil level", (st.oil || []).length ? (st.oil.length + " check" + (st.oil.length === 1 ? "" : "s") + " logged. The level is read in the driver display; there is no dipstick.") : "No checks logged yet. The level is read in the driver display; there is no dipstick.", "none", "Log") +
       "</section>";
     h += '<section class="hm-sec"><div class="mn-kick"><span>MORE</span></div><div class="mn-chips">' +
-      [["tab:records", "Service log and oil checks"], ["tab:fuel", "Fuel & costs"], ["tab:health", "Health"], ["tab:diy", "How-to jobs"], ["tab:glove", "Receipts"]].map(function (c) { return '<button type="button" class="mn-chip" data-jump="' + c[0] + '">' + esc(c[1]) + "</button>"; }).join("") + "</div></section>";
+      [["tab:shop", "Plan & shop"], ["tab:fuel", "Fuel & costs"], ["tab:diy", "How-to jobs"], ["tab:glove", "Receipts"]].map(function (c) { return '<button type="button" class="mn-chip" data-jump="' + c[0] + '">' + esc(c[1]) + "</button>"; }).join("") + "</div></section>";
     h += '<p class="status">Source: <button type="button" class="mn-link" data-jump="tab:vsched">Volvo 2016 US maintenance schedule</button>; Volvo 2016 V60 owner\'s manual (coolant, transmission fluid).</p>';
     el.innerHTML = h;
   }
@@ -148,7 +148,6 @@
     var el = api.$("setBody"); if (!el) return;
     var dp = (api.mod("story") || {}).depth || "det";
     el.innerHTML = '<div id="syncBox" class="syncbox"></div>' +
-      '<section class="card"><h3>Backup</h3><p class="status">A backup file is the offline safety net: everything you have entered, in one file.</p><div class="row"><button type="button" class="quiet" data-jump="backup:go">Back up or restore</button></div></section>' +
       '<section class="card"><h3>Detail level</h3><p class="status">How much each Training lesson and explanation says.</p><div class="seg" role="group" aria-label="Detail level">' +
       DEPTH.map(function (x) { return '<button type="button" data-sdepth="' + x[0] + '" aria-pressed="' + (dp === x[0]) + '">' + x[1] + "</button>"; }).join("") + "</div></section>" +
       '<p class="status">Your data is saved on this device in this browser. Sync keeps every device the same.</p>';

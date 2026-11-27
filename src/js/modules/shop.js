@@ -272,7 +272,7 @@
         else if (b.hasAttribute("data-sp-back")) { ui.item = null; top = true; }
         else if (b.hasAttribute("data-sp-copy")) { copy(a("data-sp-copy"), a("data-sp-copy") === "spQ" ? "spAskMsg" : "plAskMsg"); return; }
         else if (b.hasAttribute("data-sp-share")) { var qt = document.getElementById("plQuote"); if (qt && window.V60_FILE) window.V60_FILE.save("v60-shop-quote.txt", qt.value, "text/plain"); return; }
-        else if (b.hasAttribute("data-sp-log")) { api.go("records"); var sel = document.getElementById("logItem"); if (sel) sel.value = a("data-sp-log"); var mi = document.getElementById("logMiles"); if (mi && mi.focus) mi.focus(); return; }
+        else if (b.hasAttribute("data-sp-log")) { api.go("maint"); var lg = document.getElementById("log"); if (lg && lg.scrollIntoView) lg.scrollIntoView({ block: "start" }); var sel = document.getElementById("logItem"); if (sel) sel.value = a("data-sp-log"); var mi = document.getElementById("logMiles"); if (mi && mi.focus) mi.focus(); return; }
         else if (b.hasAttribute("data-sp-ask")) {
           var all = build(api), xi = byId(all, a("data-sp-ask")), qa = document.getElementById("spQ"), msg = document.getElementById("spAskMsg");
           if (!xi || !qa) return;

@@ -83,7 +83,7 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
   askStatus = 200; await p.click('#plBody [data-sp-askplan]'); await p.waitForTimeout(300);
   ok(asks.some(a => a.kind === 'plan' && a.items.length === 3), 'Ask Claude to check this plan sends every job');
   await p.click('#plBody [data-sp-log="cabin"]'); await p.waitForTimeout(150);
-  ok(await p.evaluate(() => !document.querySelector('#p-records').hidden && document.getElementById('logItem').value === 'cabin'), 'Log it done opens the service log on that item');
+  ok(await p.evaluate(() => !document.querySelector('#p-maint').hidden && !!document.querySelector('#p-maint #logItem') && document.getElementById('logItem').value === 'cabin'), 'Log it done opens the service log on that item');
 
   /* the belt squeal troubleshooter leads to the item */
   await p.evaluate(() => V60.jump('tree:belt')); await p.waitForTimeout(150);

@@ -12,7 +12,7 @@ SRC = os.path.join(ROOT, "src")
 DATA = sorted(f for f in os.listdir(os.path.join(SRC, "js", "data")) if f.endswith(".js"))
 MODULES = [
     "today.js", "home.js", "drives.js", "shop.js", "kb.js", "cards.js", "story.js", "manual.js", "track.js", "fuel.js", "glovebox.js", "docs.js",
-    "diy.js", "trees.js", "cases.js", "reco.js", "bulletins.js", "upgrades.js", "live.js", "extras.js", "sync.js", "ui.js", "scan.js", "guide.js",
+    "diy.js", "trees.js", "cases.js", "reco.js", "bulletins.js", "upgrades.js", "live.js", "extras.js", "sync.js", "ui.js", "scan.js", "guide.js", "tidy.js",
 ]
 
 def read(*p):
