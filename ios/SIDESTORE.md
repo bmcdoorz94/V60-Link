@@ -39,8 +39,9 @@ them), 10 new app IDs a week, and each install stops opening 7 days after it was
   Reset to Defaults there (it brings back the `macOS;` header Apple now refuses), and never let it revoke
   certificates after a failed sign-in.
 
+- V60 0.4 installed from the source over the Sideloadly copy. Its saved settings carried over: at 08:36 it linked
+  to Claude live without re-pairing and still knew the adapter (bridge log: hello "V60 iPhone app 0.4", known: true).
+
 ## Not confirmed yet
 - Whether a later SideStore refresh replaces Sideloadly's certificate. If V60 or The Guide stop opening, install V60
   again from the source, and The Guide from its .ipa (SideStore > My Apps > **+**, from Files).
-- Whether the V60 app's saved settings survive the switch. If it asks for the pairing code, the Check Claude live
-  page on the PC shows it.
