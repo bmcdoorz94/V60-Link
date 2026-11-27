@@ -5,6 +5,7 @@
 // this mounts it again by itself. No administrator rights: pymobiledevice3 opens a user-space tunnel.
 //   node phone.js            screenshot to data/phone/<time>.png (local, gitignored) and print its path
 //   node phone.js --check    say whether the phone is reachable, nothing else
+//   node phone.js --items    the foreground app's labels as text (read-only)
 import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
@@ -36,6 +37,15 @@ if (!how) {
   }
 }
 if (process.argv.includes('--check')) { console.log('Reachable: ' + how); process.exit(0) }
+// --items: the foreground app's accessibility labels as text, top to bottom (read-only; Apple lets the inspector
+// read any app but not press: tried 2026-11-27, presses need an entitlement sideloaded apps cannot have)
+if (process.argv.includes('--items')) {
+  try {
+    const items = JSON.parse(run(['developer', 'accessibility', 'list-items', ...via], 120000))
+    for (const e of items) if (e.caption) console.log(e.caption)
+    process.exit(0)
+  } catch (e) { fail('Could not read the screen (is the phone unlocked?): ' + last(e)) }
+}
 
 try {
   if (!(images ?? run(['mounter', 'list', ...via])).includes('DeveloperDiskImage')) { console.log('Mounting the developer disk image...'); run(['mounter', 'auto-mount', ...via], 180000) }

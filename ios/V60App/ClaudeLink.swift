@@ -8,7 +8,7 @@ import UserNotifications
 /// Anything that could change the car waits for Allow, which needs the phone unlocked (Face ID).
 final class ClaudeLink: NSObject, ObservableObject {
     static let shared = ClaudeLink()
-    static let version = "0.4"
+    static let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?"
 
     struct Line: Codable, Identifiable {
         var id = UUID()
