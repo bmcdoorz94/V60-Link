@@ -63,6 +63,23 @@ function summary(newest) {
   /* an odometer saved before this feature (no time) is counted from now, never backwards */
   await p.evaluate(() => { delete V60.state.odoAt; V60.save(); V60.jump('tab:maint'); }); await p.waitForTimeout(150);
   ok(await p.evaluate(() => !!V60.state.odoAt && !V60.odoEst().est), 'an old reading with no time counts drives from now on');
+  /* the PC read the car when it started (bridge/auto.js) and Claude sent a recap: Home shows both; the car's own
+     odometer, newer than the typed one, becomes the base without changing the typed reading */
+  const carAt = new Date(Date.now() + 60000).toISOString();
+  body = summary();
+  body.car = { odometer: { miles: 91500, at: carAt }, odometerListed: true, at: carAt, mil: true, dtcCount: 1, milMiles: 62, clearedMiles: 186, codes: { stored: ['P0171'], pending: [], permanent: ['P0171'] } };
+  body.claude = { text: 'Trims high at idle, near normal at cruise: points to an air leak. A lead, not a diagnosis.', at: carAt, url: 'https://pc.test/drives/x' };
+  await p.evaluate(() => { V60_DRIVES.refresh(); }); await p.waitForTimeout(600); await p.evaluate(() => V60.jump('tab:car')); await p.waitForTimeout(200);
+  const home = await p.textContent('#mnHome');
+  ok(/FROM YOUR CAR/.test(home) && /Claude: Trims high at idle/.test(home), 'Home shows Claude\'s latest message under From your car');
+  ok(/Check-engine light on when the car last started/.test(home) && /P0171/.test(home) && /Driven 62 mi with it on/.test(home), 'Home lists the lit light with its code under On the car now');
+  ok(await p.evaluate(() => V60.computeHealth().score < 100), 'Health counts the light the PC read');
+  ok(/Odometer 91,500 mi/.test(home.replace(/\s+/g, ' ')), 'Home shows the odometer read from the car');
+  await p.locator('#fromcar').scrollIntoViewIfNeeded(); await p.screenshot({ path: path.join(ROOT, 'tests', 'shots', 'drives-fromcar.png') });
+  ok(await p.evaluate(() => { const o = V60.odoEst(); return o.car && o.miles === 91500 && V60.state.odo === 91400; }), 'the car\'s newer reading is the base; the typed 91,400 is kept');
+  await p.evaluate(() => V60.jump('tab:maint')); await p.waitForTimeout(150);
+  ok(/Read from the car/.test(await p.textContent('#mtBody #drives')), 'Maintain says the mileage was read from the car');
+  ok(await p.evaluate(() => document.documentElement.scrollWidth <= 390), 'no sideways scroll with the new section');
   /* the PC is off: the cached summary still shows, no errors */
   await ctx.unroute('https://pc.test/drives/summary.json'); await ctx.route('https://pc.test/**', (r) => r.abort());
   await p.reload(); await p.waitForTimeout(600); await p.evaluate(() => V60.jump('tab:maint')); await p.waitForTimeout(150);

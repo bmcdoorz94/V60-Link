@@ -82,8 +82,17 @@ async function pump() {
   busy = false
   pump()
 }
-function wake(event, content) {
-  queue.push({ event, content, at: new Date().toLocaleString() })
+async function wake(event, content) {
+  const at = new Date().toLocaleString()
+  // the car just started: read the basics first (auto.js), so Claude starts with them and the Garage's feed has them
+  if (event === 'adapter_on' && !/simulated car/.test(content)) {
+    try {
+      const { onStart } = await import(new URL('./auto.js', import.meta.url).href + '?v=' + fs.statSync(new URL('./auto.js', import.meta.url)).mtimeMs)
+      const got = await Promise.race([onStart(hub.callTool, (s) => say('auto:', s)), new Promise((r) => setTimeout(() => r(null), 60000))])
+      if (got) { content += '\n' + got; record({ k: 'carread', ok: true }) }
+    } catch (e) { say('scripted reads failed:', e.message); record({ k: 'carread', ok: false, error: e.message }) }
+  }
+  queue.push({ event, content, at })
   // a moment for events that arrive together (adapter_off and its drive report) to share one run
   setTimeout(pump, 1500)
 }

@@ -36,7 +36,12 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     // a pretend phone
     const ws = new WebSocket(`ws://127.0.0.1:${port}/link?code=${code}`);
     const got = [];
-    ws.on('message', (d) => { const m = JSON.parse(String(d)); got.push(m); if (m.t === 'cmd') ws.send(JSON.stringify({ t: 'res', id: m.id, ok: true, raw: '7E8 06 41 00 BE 3F A8 13 \r' })); });
+    // answers like the car would (headers on): supported-data blocks up to A0 with odometer A6, MIL on with one code,
+    // P0171 stored and permanent in the engine, a second module (7E9) answering 03 with nothing
+    const CAR = { '0100': '7E8 06 41 00 BE 3F A8 13', '0120': '7E8 06 41 20 80 00 80 01', '0140': '7E8 06 41 40 00 00 00 01', '0160': '7E8 06 41 60 00 00 00 01',
+      '0180': '7E8 06 41 80 00 00 00 01', '01A0': '7E8 06 41 A0 04 00 00 00', '01A6': '7E8 06 41 A6 00 16 72 1C', '0101': '7E8 06 41 01 81 07 E5 00',
+      '0121': '7E8 04 41 21 00 64', '0131': '7E8 04 41 31 01 2C', '03': '7E8 04 43 01 01 71 \r7E9 02 43 00', '07': 'NO DATA', '0A': '7E8 04 4A 01 01 71' };
+    ws.on('message', (d) => { const m = JSON.parse(String(d)); got.push(m); if (m.t === 'cmd') ws.send(JSON.stringify({ t: 'res', id: m.id, ok: true, raw: (CAR[m.c] || 'NO DATA') + ' \r' })); });
     await new Promise((r) => ws.once('open', r));
     ws.send(JSON.stringify({ t: 'hello', page: 'V60 iPhone app test', auto: true, known: true, connected: false }));
     ok(await until(() => got.some((m) => m.t === 'welcome')), 'phone linked and welcomed');
@@ -44,7 +49,13 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     ws.send(JSON.stringify({ t: 'say', text: 'hello from the test' }));
     const log = () => { try { return fs.readFileSync(path.join(data, 'logs', fs.readdirSync(path.join(data, 'logs'))[0]), 'utf8').trim().split('\n').map((l) => JSON.parse(l)); } catch { return []; } };
     const run = await until(() => log().find((r) => r.k === 'claude_run'), 6000);
-    ok(run && run.skipped && run.events.join(',') === 'adapter_on,kyle', 'adapter_on and Kyle\'s message go to Claude together in one run: ' + (run && run.events));
+    ok(run && run.skipped && [...run.events].sort().join(',') === 'adapter_on,kyle', 'adapter_on and Kyle\'s message go to Claude together in one run: ' + (run && run.events));
+    const car = JSON.parse(fs.readFileSync(path.join(data, 'car.json'), 'utf8'));
+    ok(car.pids && ['21', '31', 'A6'].every((x) => car.pids.list.includes(x)), 'supported data items read through every block: ' + (car.pids && car.pids.list.slice(-4).join(' ')));
+    ok(car.odometer && car.odometer.miles === 91404, 'odometer decoded from 01 A6: ' + (car.odometer && car.odometer.miles) + ' mi');
+    const L = car.latest || {};
+    ok(L.mil === true && L.dtcCount === 1 && L.milMiles === 62 && L.clearedMiles === 186, 'light on, 1 code, 62 mi with the light on, 186 mi since cleared');
+    ok(L.codes && L.codes.stored.join() === 'P0171' && L.codes.pending.length === 0 && L.codes.permanent.join() === 'P0171', 'codes: P0171 stored and permanent, none pending, the second module\'s empty answer ignored');
 
     // headless Claude's side: tools.js over MCP, the way `claude -p --mcp-config` starts it
     const client = new Client({ name: 'test-claude', version: '1.0.0' }, { capabilities: {} });

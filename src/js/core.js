@@ -291,8 +291,15 @@
   /* the odometer for interval maths: the last reading entered plus miles from drives the iPhone app recorded after it
      (drives.js, window.V60_DRIVES). Estimated, never saved over the entered reading. */
   function odoEst() {
+    var D = window.V60_DRIVES, C = D && D.carOdo ? D.carOdo() : null;
+    /* the car's own odometer (read by Kyle's PC when the car starts, when the car reports it) wins when it is newer */
+    if (C && (state.odo == null || !state.odoAt || C.at > state.odoAt)) {
+      var c = D.since(C.at);
+      if (!c || !(c.miles > 0)) return { miles: C.miles, est: false, added: 0, drives: 0, at: C.at, car: true };
+      return { miles: Math.round(C.miles + c.miles), est: true, added: c.miles, drives: c.drives, at: C.at, car: true };
+    }
     if (state.odo == null) return { miles: null, est: false, added: 0, drives: 0 };
-    var D = window.V60_DRIVES, a = D && state.odoAt ? D.since(state.odoAt) : null;
+    var a = D && state.odoAt ? D.since(state.odoAt) : null;
     if (!a || !(a.miles > 0)) return { miles: state.odo, est: false, added: 0, drives: 0, at: state.odoAt || null };
     return { miles: Math.round(state.odo + a.miles), est: true, added: a.miles, drives: a.drives, at: state.odoAt };
   }
@@ -995,6 +1002,14 @@
       var act = state.codes.filter(function (c) { return c.status === "active"; });
       comps.push({ k: "Trouble codes", w: 20, v: Math.max(0, 100 - act.length * 20), n: act.length + " active" });
       act.forEach(function (c) { var k = CODES[String(c.code).toUpperCase()]; actions.push({ sev: k && k.u === "now" ? 92 : 85, text: "Active code " + c.code + ": " + codeTitle(c.code), jump: "tab:diag" }); });
+    } else {
+      /* no codes on record here: use what Kyle's PC read from the car when it last started (drives.js feed); the
+         finding itself comes from that module's actions */
+      var DC = window.V60_DRIVES && window.V60_DRIVES.data && window.V60_DRIVES.data(), cc = DC && DC.car && DC.car.codes;
+      if (cc && cc.stored) {
+        var live = [].concat(cc.stored || [], cc.permanent || []).filter(function (x, i, a) { return a.indexOf(x) === i; });
+        comps.push({ k: "Trouble codes", w: 20, v: Math.max(0, 100 - live.length * 20), n: live.length + " stored, read from the car" });
+      }
     }
     var o = oilRate();
     if (o) {

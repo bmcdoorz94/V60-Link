@@ -386,6 +386,25 @@ async function takeDeep(req, ctx) {
   return { id, url }
 }
 
+// What the service read from the car when it last started (auto.js, data/car.json), for the Garage
+function carFeed() {
+  let c; try { c = JSON.parse(fs.readFileSync(path.join(DATA, 'car.json'), 'utf8')) } catch { return null }
+  const L = c.latest || {}
+  return { odometer: c.odometer ? { miles: c.odometer.miles, at: c.odometer.at } : null, odometerListed: !!(c.pids && c.pids.list.includes('A6')),
+    at: L.at || null, mil: L.mil ?? null, dtcCount: L.dtcCount ?? null, milMiles: L.milMiles ?? null, clearedMiles: L.clearedMiles ?? null, codes: L.codes || null }
+}
+// Claude's newest message to Kyle in the last week (logs rows k:'claude')
+function lastClaude() {
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(Date.now() - i * 864e5), f = path.join(DATA, 'logs', `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}.jsonl`)
+    let rows; try { rows = fs.readFileSync(f, 'utf8').trim().split('\n') } catch { continue }
+    for (let j = rows.length - 1; j >= 0; j--) {
+      try { const r = JSON.parse(rows[j]); if (r.k === 'claude' && r.text && !/^Test OK/.test(r.text)) return { text: String(r.text).slice(0, 1200), at: r.at, url: r.url || null } } catch {}
+    }
+  }
+  return null
+}
+
 // Not async: a bridge started before 2026-11-26 15:34 calls route() without await and treats any Promise as handled.
 export function route(req, res, ctx) {
   const u = new URL(req.url, 'http://x')
@@ -415,7 +434,7 @@ export function route(req, res, ctx) {
     const ds = list().map(brief)
     const base = baseUrl()
     send(200, JSON.stringify({ updated: new Date().toISOString(), drives: ds, totals: { drives: ds.length, miles: +ds.reduce((a, d) => a + (d.miles || 0), 0).toFixed(1), first: ds.length ? ds.at(-1).start : null },
-      links: { all: base + '/drives', week: base + '/drives/week', trends: base + '/drives/trends' } }), 'application/json; charset=utf-8')
+      links: { all: base + '/drives', week: base + '/drives/week', trends: base + '/drives/trends' }, car: carFeed(), claude: lastClaude() }), 'application/json; charset=utf-8')
     return true
   }
   if (ID.test(id)) {
