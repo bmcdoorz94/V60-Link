@@ -1,5 +1,5 @@
-/* V60 Garage service worker, version 2026.11.27-2116-244f4ec7 */
-var CACHE = "v60-garage-2026.11.27-2116-244f4ec7";
+/* V60 Garage service worker, version 2026.11.27-2116-db92e5a8 */
+var CACHE = "v60-garage-2026.11.27-2116-db92e5a8";
 var OCR = "v60-ocr-2"; /* CDN libraries, fetched with CORS so their integrity can be checked; older copies are dropped */
 var SHELL = ["./", "index.html", "app.css", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "icons/icon-180.png", "js/data/articles.js", "js/data/codebook.js", "js/data/facts.js", "js/data/g1entries.js", "js/data/g1tasks.js", "js/data/manual.js", "js/data/path.js", "js/data/quiz.js", "js/data/shop.js", "js/data/toolprices.js", "js/data/track.js", "js/modules/today.js", "js/modules/home.js", "js/modules/drives.js", "js/modules/shop.js", "js/modules/kb.js", "js/modules/cards.js", "js/modules/story.js", "js/modules/manual.js", "js/modules/track.js", "js/modules/fuel.js", "js/modules/glovebox.js", "js/modules/docs.js", "js/modules/diy.js", "js/modules/trees.js", "js/modules/cases.js", "js/modules/reco.js", "js/modules/bulletins.js", "js/modules/upgrades.js", "js/modules/live.js", "js/modules/extras.js", "js/modules/sync.js", "js/modules/ui.js", "js/modules/scan.js", "js/modules/guide.js", "js/modules/tidy.js", "js/core.js"];
 self.addEventListener("install", function (e) { e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(SHELL.map(function (u) { return new Request(u, { cache: "reload" }); })); })); });

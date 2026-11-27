@@ -242,8 +242,10 @@
     var h = window.V60_DRIVES && window.V60_DRIVES.host && window.V60_DRIVES.host();
     if (!h) return Promise.reject(new Error("no PC address"));
     return fetch("https://" + h + "/drives/ask", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) })
-      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); });
+      .then(function (r) { if (!r.ok) { var e = new Error("HTTP " + r.status); e.status = r.status; throw e; } return r.json(); });
   }
+  /* the PC allows 12 questions an hour (429 after that) */
+  function failText(e, what) { return e && e.status === 429 ? "Your PC has had its limit of questions for this hour. Try again later, or copy " + what + " and ask in Claude." : "Your PC didn't take it (it may be off). Copy " + what + " and ask in Claude."; }
   function copy(id, msgId) {
     var el = document.getElementById(id); if (!el) return;
     el.focus(); el.select(); try { el.setSelectionRange(0, el.value.length); } catch (e) {}
@@ -279,7 +281,7 @@
           b.disabled = true; if (msg) msg.textContent = "Sending…";
           post({ kind: "item", item: xi.t, section: viewName(xi.sec), question: qa.value.slice(0, 2000), facts: [xi.why, xi.price].filter(Boolean).join(" · ").slice(0, 600) })
             .then(function () { if (msg) msg.textContent = "Sent. Claude answers in a notification in a minute or two."; })
-            .catch(function () { if (msg) msg.textContent = "Your PC didn't take the question (it may be off, or not ready for questions yet). Copy it and ask in Claude."; })
+            .catch(function (e) { if (msg) msg.textContent = failText(e, "the question"); })
             .then(function () { b.disabled = false; });
           return;
         }
@@ -289,7 +291,7 @@
           b.disabled = true; if (m2) m2.textContent = "Sending…";
           post({ kind: "plan", items: items, question: "Look over this plan for my 2016 V60 T5: what should be done together, what first, and what the prices leave out. Please give sources." })
             .then(function () { if (m2) m2.textContent = "Sent. Claude answers in a notification in a minute or two."; })
-            .catch(function () { if (m2) m2.textContent = "Your PC didn't take it (it may be off, or not ready for questions yet). Copy the shop-quote text and ask in Claude."; })
+            .catch(function (e) { if (m2) m2.textContent = failText(e, "the shop-quote text"); })
             .then(function () { b.disabled = false; });
           return;
         }
