@@ -175,6 +175,7 @@ struct CarPanel: View {
                 }
             }
             Toggle("Record drives (also keeps the link alive in your pocket)", isOn: Binding(get: { car.keepAliveOn }, set: { car.setKeepAlive($0) }))
+            Toggle("Record vibration and braking (phone in a mount or cupholder)", isOn: Binding(get: { car.motionOn }, set: { car.setMotion($0) }))
             if car.adapterName != nil {
                 Button("Forget this adapter", role: .destructive) { car.forget() }
             }

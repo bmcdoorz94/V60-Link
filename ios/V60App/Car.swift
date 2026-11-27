@@ -140,6 +140,14 @@ final class Car: NSObject, ObservableObject {
         if phase == .noCar { checkCar(tries: 0, run: setupRun) } else { connectSaved() }
     }
 
+    /// Record the phone's motion sensors with each drive (Motion.swift): vibration, braking, cornering.
+    @Published private(set) var motionOn: Bool = UserDefaults.standard.object(forKey: "motionOn") as? Bool ?? true
+    func setMotion(_ on: Bool) {
+        motionOn = on
+        UserDefaults.standard.set(on, forKey: "motionOn")
+        if !on { Motion.shared.stop() }
+    }
+
     func setKeepAlive(_ on: Bool) {
         keepAliveOn = on
         UserDefaults.standard.set(on, forKey: Self.keepKey)
@@ -330,6 +338,9 @@ final class Car: NSObject, ObservableObject {
                 self.drive = d
                 self.watch = DriveWatch()
                 Journal.shared.add("recording drive \(d.id)")
+                if self.motionOn && Motion.shared.available {
+                    Motion.shared.start { [weak d] ms, row in d?.appendMotion(ms: ms, values: row) }
+                }
             }
             self.scheduleKeepAlive(after: 0.2)
         }
@@ -423,7 +434,10 @@ final class Car: NSObject, ObservableObject {
     private func endDrive() {
         guard let d = drive else { return }
         drive = nil
+        let ms = Motion.shared.seconds, moved = Motion.shared.moved
+        Motion.shared.stop()
         d.close()
+        if ms > 0 { Journal.shared.add("motion sensors: \(ms) s recorded, the phone moved in \(moved) of them") }
         if d.count < 30 {
             try? FileManager.default.removeItem(at: d.url)
             return

@@ -81,9 +81,11 @@ export function onMessage(m, ctx) {
 // The slow readings (coolant, voltage...) arrive every few cycles; each row carries the latest one forward for up
 // to 30 s, so every row can be judged warm or cold. Charts plot only the readings actually taken (row._got).
 function load(id) {
-  const rows = [], latest = {}
+  const rows = [], latest = {}, motion = []
   for (const l of fs.readFileSync(path.join(DIR, id + '.jsonl'), 'utf8').split('\n')) {
     let o; try { o = JSON.parse(l) } catch { continue }
+    // one second of the phone's motion sensors (ios/V60App/Motion.swift), kept apart from the engine readings
+    if (o && o.m && typeof o.m === 'object') { if (Number.isFinite(o.t)) motion.push({ t: o.t, ...o.m }); continue }
     const row = { t: o.t, _got: {} }
     for (const [k, v] of Object.entries(latest)) if (o.t - v.t <= 30000) row[k] = v.v
     for (const [k, b] of Object.entries(o.v || {})) {
@@ -94,7 +96,72 @@ function load(id) {
     }
     rows.push(row)
   }
-  return rows.sort((a, b) => a.t - b.t)
+  rows.sort((a, b) => a.t - b.t)
+  rows.motion = motion.sort((a, b) => a.t - b.t)
+  return rows
+}
+
+/* ---------------- the phone's motion sensors ----------------
+   Each second: v/h vibration (milli-g RMS), vf/va and hf/ha the strongest vertical/horizontal vibration 4-40 Hz
+   (0.1 Hz, milli-g), a1/a2/a3 steady push (milli-g; a1/a2 level axes fixed to the phone), yr turn rate (0.1 deg/s),
+   mv how far the phone tilted (0.1 deg). Speeds and speed changes come from the car (PID 0D). */
+const G = 9.80665, MPH = 0.44704
+export function motionOf(rows) {
+  const M = (rows.motion || []).filter((m) => (m.mv ?? 0) <= 30) // seconds the phone stayed put
+  const sp = rows.filter((r) => r._got && r._got.mph)
+  if (M.length < 30 || sp.length < 10) return M.length ? { seconds: M.length, moved: (rows.motion || []).length - M.length, usable: false } : null
+  // the car's speed and its change (milli-g) at a time, from the engine computer's speed readings
+  let j = 0
+  const at = (t) => {
+    while (j + 1 < sp.length && sp[j + 1].t <= t) j++
+    const a = sp[Math.max(0, j - 1)], b = sp[Math.min(sp.length - 1, j + 1)]
+    if (Math.abs(sp[j].t - t) > 3000) return null
+    const dt = (b.t - a.t) / 1000
+    return { mph: sp[j].mph, mg: dt > 0.5 && dt < 6 ? ((b.mph - a.mph) * MPH / dt / G) * 1000 : null }
+  }
+  const S = M.map((m) => ({ ...m, car: at(m.t) })).filter((m) => m.car)
+  // which level axis is forward: fit the car's own speed change to the phone's push (least squares, 2 unknowns)
+  let sxx = 0, sxy = 0, syy = 0, sxz = 0, syz = 0, n = 0
+  for (const m of S) if (m.car.mg != null && Math.abs(m.car.mg) > 30) { sxx += m.a1 * m.a1; sxy += m.a1 * m.a2; syy += m.a2 * m.a2; sxz += m.a1 * m.car.mg; syz += m.a2 * m.car.mg; n++ }
+  const det = sxx * syy - sxy * sxy
+  let fwd = null
+  if (n >= 8 && det > 0) {
+    const x = (sxz * syy - syz * sxy) / det, y = (syz * sxx - sxz * sxy) / det, l = Math.hypot(x, y)
+    if (l > 0.3 && l < 3) fwd = { x: x / l, y: y / l, gain: l } // gain near 1 means the phone's push matches the car's
+  }
+  const out = { seconds: M.length, moved: (rows.motion || []).length - M.length, usable: true, forward: !!fwd }
+  // hardest braking (the car's own speed) and hardest cornering (turn rate × speed: no phone axes needed)
+  out.brakeG = Math.max(0, ...S.map((m) => (m.car.mg != null ? -m.car.mg / 1000 : 0)))
+  out.cornerG = Math.max(0, ...S.filter((m) => m.car.mph > 10).map((m) => Math.abs((m.yr / 10) * Math.PI / 180 * m.car.mph * MPH / G)))
+  // vibration by speed band, steady driving only (speed change under 0.04 g)
+  const steady = S.filter((m) => m.car.mg != null && Math.abs(m.car.mg) < 40 && m.car.mph >= 5)
+  const med = (a) => { if (!a.length) return null; const s = [...a].sort((p, q) => p - q); return s[Math.floor(s.length / 2)] }
+  out.bands = []
+  for (let lo = 0; lo < 90; lo += 10) {
+    const b = steady.filter((m) => m.car.mph >= lo && m.car.mph < lo + 10)
+    if (b.length >= 5) out.bands.push({ lo, hi: lo + 10, n: b.length, v: med(b.map((m) => m.v)), h: med(b.map((m) => m.h)) })
+  }
+  // speed-linked vibration: the strongest vertical shake at once per wheel turn means a wheel/tire about 1.8-2.3 m
+  // around (a 16-19 inch car tire works out to about 2.0-2.1 m: diameter = rim + 2 × width × aspect); twice per turn, half that. Steady over 40 mph, a clear peak only.
+  const fast = steady.filter((m) => m.car.mph >= 40 && m.vf > 0 && m.va > 0)
+  const circ = (m) => (m.car.mph * MPH) / (m.vf / 10)
+  const wheel1 = fast.filter((m) => { const c = circ(m); return c >= 1.8 && c <= 2.3 }), wheel2 = fast.filter((m) => { const c = circ(m); return c >= 0.9 && c <= 1.15 })
+  out.wheel = fast.length >= 20 ? { n: fast.length, once: wheel1.length / fast.length, twice: wheel2.length / fast.length, size: med(wheel1.map((m) => m.va)), circ: med(wheel1.map(circ)) } : null
+  // brake shudder: horizontal vibration while braking (over 0.1 g, over 25 mph) against steady driving at like speeds
+  const braking = S.filter((m) => m.car.mg != null && m.car.mg < -100 && m.car.mph > 25)
+  if (braking.length >= 3) {
+    const ratios = braking.map((m) => { const like = steady.filter((x) => Math.abs(x.car.mph - m.car.mph) < 10); const base = med(like.map((x) => x.h)); return base ? m.h / base : null }).filter((r) => r != null)
+    out.brake = ratios.length >= 3 ? { n: ratios.length, ratio: med(ratios) } : null
+  } else out.brake = null
+  return out
+}
+function motionLine(mo) {
+  if (!mo) return ''
+  if (!mo.usable) return `Phone sensors: ${mo.seconds} s recorded${mo.moved ? `, the phone moved in ${mo.moved}` : ''}; not enough steady seconds with speed readings to analyse.`
+  const p = [`Phone sensors: ${mo.seconds} usable s${mo.moved ? ` (${mo.moved} dropped: the phone moved)` : ''}.`, `Hardest braking ${mo.brakeG.toFixed(2)} g, hardest cornering ${mo.cornerG.toFixed(2)} g.`]
+  if (mo.wheel) p.push(`Above 40 mph the strongest vertical shake matched once per wheel turn in ${Math.round(mo.wheel.once * 100)}% of steady seconds${mo.wheel.size != null ? ` (typical ${mo.wheel.size} milli-g, a wheel about ${mo.wheel.circ.toFixed(2)} m around)` : ''} and twice per turn in ${Math.round(mo.wheel.twice * 100)}%; compare with later drives and new tires, it is not a verdict on its own.`)
+  if (mo.brake) p.push(`Vibration while braking was ${mo.brake.ratio.toFixed(1)}× steady driving at like speeds (${mo.brake.n} s)${mo.brake.ratio >= 1.8 ? ': a sign of brake judder (rotor runout or uneven pad deposits)' : ''}.`)
+  return p.join(' ')
 }
 
 /* ---------------- numbers ---------------- */
@@ -163,6 +230,7 @@ function statsOf(rows) {
   s.voltsMin = volts.length ? Math.min(...volts) : null
   s.voltsMax = volts.length ? Math.max(...volts) : null
   s.trims = trims(rows)
+  s.motion = motionOf(rows)
   for (const k of ['milMiles', 'clearedMiles', 'warmups', 'fuel', 'ambient', 'milMinutes']) s[k] = last(rows, k)
   return s
 }
@@ -182,6 +250,7 @@ function summaryOf(s) {
   if (s.voltsMin != null) parts.push(`Voltage ${num(s.voltsMin, 1)}–${num(s.voltsMax, 1)} V.`)
   if (s.milMiles != null) parts.push(`Driven ${num(s.milMiles)} mi with the light on.`)
   if (s.warmups != null) parts.push(`${s.warmups} warm-ups and ${num(s.clearedMiles)} mi since codes were last cleared.`)
+  if (s.motion) parts.push(motionLine(s.motion))
   return parts.join(' ')
 }
 
@@ -267,9 +336,22 @@ ${chart(rows, 'Air flow', [{ k: 'maf', n: 'g/s' }], { min: 0, d: 1 })}
 ${chart(rows, 'Temperatures', [{ k: 'coolant', n: 'coolant °F' }, { k: 'iat', n: 'intake air °F' }, { k: 'oil', n: 'oil °F' }])}
 ${chart(rows, 'Voltage', [{ k: 'volts', n: 'module V' }], { d: 1 })}
 ${chart(rows, 'Oxygen sensors', [{ k: 'o2s1', n: 'sensor 1 V' }, { k: 'o2s2', n: 'sensor 2 V' }, { k: 'lambda1', n: 'sensor 1 lambda' }], { d: 2 })}
+${motionSection(rows, s.motion)}
 <h2>In words</h2><p>${esc(summary)}</p>
 <p class="note">Readings use the standard OBD-II (SAE J1979) scalings. Recorded by the V60 iPhone app; stored on this PC only (bridge/data/drives).</p>
 </main></html>`
+}
+
+function motionSection(rows, mo) {
+  if (!mo) return ''
+  const card = (v, label) => `<div class="card"><b>${v}</b><span>${label}</span></div>`
+  let h = '<h2>Vibration, braking and cornering (phone sensors)</h2>'
+  if (!mo.usable) return h + `<p>${esc(motionLine(mo))}</p>`
+  h += `<div class="cards">${card(mo.seconds, 'usable seconds')}${card(mo.brakeG.toFixed(2), 'hardest braking, g')}${card(mo.cornerG.toFixed(2), 'hardest cornering, g')}${card(mo.brake ? mo.brake.ratio.toFixed(1) + '×' : 'n/a', 'vibration braking vs steady')}${card(mo.wheel ? Math.round(mo.wheel.once * 100) + '%' : 'n/a', 'shake at once per wheel turn, over 40 mph')}</div>`
+  if (mo.bands.length) h += `<table><tr><th>steady speed</th><th>seconds</th><th>vertical shake</th><th>side-to-side shake</th></tr>${mo.bands.map((b) => `<tr><td>${b.lo}-${b.hi} mph</td><td>${b.n}</td><td>${b.v} mg</td><td>${b.h} mg</td></tr>`).join('')}</table>`
+  const mrows = (rows.motion || []).filter((m) => (m.mv ?? 0) <= 30).map((m) => ({ t: m.t, v: m.v, h: m.h, _got: { v: true, h: true } }))
+  h += chart(mrows, 'Vibration (milli-g)', [{ k: 'v', n: 'vertical' }, { k: 'h', n: 'side-to-side' }], { min: 0 })
+  return h + `<p class="note">From the phone's accelerometer and gyroscope, 100 times a second, summed up each second; seconds when the phone moved are left out. A phone in a mount or cupholder gives the cleanest readings; in a pocket the body damps them. Vibration that rises with speed and matches one wheel turn points to tires and wheels (balance, a bent rim, uneven wear) or a wheel bearing; vibration that jumps only while braking points to the brake rotors. Milli-g are this phone's own scale: compare drives with each other, not with numbers from elsewhere.</p>`
 }
 
 function build(id) {
@@ -306,6 +388,7 @@ function brief(d) {
   return { id: d.id, start: s.start || null, end: s.end || null, minutes: s.minutes ?? null, miles: s.miles ?? null, mpg: s.mpg ?? null,
     idleTrim: t.idle && t.idle.n ? t.idle.total : null, cruiseTrim: t.cruise && t.cruise.n ? t.cruise.total : null, coolMax: s.coolMax ?? null,
     warmupMin: s.warmupMin ?? null, voltsCharging: s.voltsCharging ?? null,
+    motion: s.motion && s.motion.usable ? { seconds: s.motion.seconds, brakeG: +s.motion.brakeG.toFixed(2), cornerG: +s.motion.cornerG.toFixed(2), brakeRatio: s.motion.brake ? +s.motion.brake.ratio.toFixed(2) : null, wheelOnce: s.motion.wheel ? +s.motion.wheel.once.toFixed(2) : null } : null,
     mil: s.status ? s.status.mil : null, dtcs: s.status ? s.status.dtcs : null, notReady: s.status ? s.status.notReady : null, url: reportUrl(d.id) }
 }
 
