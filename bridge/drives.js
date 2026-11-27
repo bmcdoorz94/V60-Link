@@ -496,6 +496,12 @@ async function takeCase(req, ctx) {
   if (ctx && ctx.wake) ctx.wake(R.kind === 'photo' ? 'photo' : 'symptom', text + ' Follow "Mechanical problems" in bridge/CLAUDE.md: update data/notes/cases.json and send Kyle a short reply.')
   return { id }
 }
+// Claude's recommendations (maintenance, repair, performance, cosmetic), data/notes/recommendations.json
+function recoFeed() {
+  let r; try { r = JSON.parse(fs.readFileSync(path.join(DATA, 'notes', 'recommendations.json'), 'utf8')) } catch { return null }
+  const items = Array.isArray(r) ? r : Array.isArray(r && r.items) ? r.items : []
+  return { updated: (r && r.updated) || null, items: items.slice(0, 40) }
+}
 function casesFeed() {
   let c; try { c = JSON.parse(fs.readFileSync(path.join(DATA, 'notes', 'cases.json'), 'utf8')) } catch { return [] }
   return (Array.isArray(c) ? c : Array.isArray(c && c.cases) ? c.cases : []).slice(0, 30)
@@ -534,6 +540,14 @@ export function route(req, res, ctx) {
     takeDeep(req, ctx).then((r) => send(200, JSON.stringify(r), 'application/json'), (e) => send(400, JSON.stringify({ error: e.message }), 'application/json'))
     return true
   }
+  if (u.pathname === '/drives/review' && req.method === 'POST') {
+    // "Ask for new recommendations" in the Garage: Claude reviews the car and rewrites data/notes/recommendations.json
+    if (!cors['access-control-allow-origin']) { send(403, 'Not allowed.', 'text/plain'); return true }
+    if (ctx && ctx.record) ctx.record({ k: 'review', by: 'kyle' })
+    if (ctx && ctx.wake) ctx.wake('review', 'Kyle asked for fresh recommendations from the Garage. Follow "Recommendations" in bridge/CLAUDE.md.')
+    send(200, JSON.stringify({ ok: true }), 'application/json')
+    return true
+  }
   if (u.pathname === '/drives/case' && req.method === 'POST') {
     // a problem Kyle described, or a photo for Claude to inspect (the Garage's Problem cases page)
     if (!cors['access-control-allow-origin']) { send(403, 'Not allowed.', 'text/plain'); return true }
@@ -555,7 +569,7 @@ export function route(req, res, ctx) {
     const ds = list().map(brief)
     const base = baseUrl()
     send(200, JSON.stringify({ updated: new Date().toISOString(), drives: ds, totals: { drives: ds.length, miles: +ds.reduce((a, d) => a + (d.miles || 0), 0).toFixed(1), first: ds.length ? ds.at(-1).start : null },
-      links: { all: base + '/drives', week: base + '/drives/week', trends: base + '/drives/trends' }, car: carFeed(), claude: lastClaude(), cases: casesFeed() }), 'application/json; charset=utf-8')
+      links: { all: base + '/drives', week: base + '/drives/week', trends: base + '/drives/trends' }, car: carFeed(), claude: lastClaude(), cases: casesFeed(), recommendations: recoFeed() }), 'application/json; charset=utf-8')
     return true
   }
   if (ID.test(id)) {

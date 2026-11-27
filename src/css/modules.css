@@ -596,3 +596,11 @@ a.hm-row { text-decoration: none; }
 .cs-head h3 { margin: 0; flex: 1 1 100%; }
 .cs-next { margin: 8px 0; }
 .cs-causes li { margin: 6px 0; }
+
+/* Recommended for your car (reco.js) */
+.rc-item { border-top: 1px solid var(--line); padding: 12px 0; }
+.rc-item:first-child { border-top: 0; padding-top: 0; }
+.rc-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
+.rc-kind { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--mut, var(--ink)); }
+.rc-item h3 { margin: 6px 0 4px; }
+#rcFilter { flex-wrap: wrap; margin: 8px 0; }

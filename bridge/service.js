@@ -113,3 +113,17 @@ async function route(req, res) {
 const hub = startHub({ wake, route })
 record({ k: 'service', state: 'start', pid: process.pid })
 say(`service started (pid ${process.pid}); Claude: ${process.env.V60_NO_CLAUDE ? 'off (test)' : CLAUDE}`)
+
+// Weekly recommendations (bridge/CLAUDE.md, "Recommendations"): every 6 hours, if Claude's list is missing or over a
+// week old, ask for a fresh review. Kyle can also ask from the Garage (POST /drives/review in drives.js).
+const RECO = path.join(NOTES, 'recommendations.json')
+function reviewDue() {
+  if (process.env.V60_NO_CLAUDE) return
+  let age = Infinity
+  try { age = Date.now() - fs.statSync(RECO).mtimeMs } catch {}
+  if (age < 7 * 864e5) return
+  record({ k: 'event', event: 'review', content: 'weekly' })
+  wake('review', `Weekly review: the recommendations are ${age === Infinity ? 'missing' : Math.round(age / 864e5) + ' days old'}. Follow "Recommendations" in bridge/CLAUDE.md. No reply to Kyle unless something is urgent.`)
+}
+setTimeout(reviewDue, 5 * 60000)
+setInterval(reviewDue, 6 * 3600000)
