@@ -62,7 +62,7 @@
       if (c && c.lo === 0 && c.hi === 0) price.push("Free");
       else {
         if (shopP) price.push(money(shopP[0], u && u.hi == null ? null : shopP[1]).replace(/^\$/, u && u.hi == null ? "From $" : "$") + " shop");
-        if (diyP && !noDiy) price.push((diyP[0] === 0 && diyP[1] === 0) ? "Free DIY" : money(diyP[0], diyP[1]) + (j ? " parts" : " DIY"));
+        if (diyP && !noDiy) price.push((diyP[0] === 0 && diyP[1] === 0) ? "Free DIY" : money(diyP[0], diyP[1]) + (j || e.diyP ? " parts" : " DIY"));
         else if (c && c.diy === "easy") price.push("easy DIY");
       }
       if (!price.length) price.push(u ? (u.costNote && u.costNote.length < 50 ? u.costNote.charAt(0).toUpperCase() + u.costNote.slice(1) : "Price not researched") : (e.sched || j ? "Price not researched" : "Free"));
