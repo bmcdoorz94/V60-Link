@@ -4,13 +4,16 @@ Once this is set up, every change to the iPhone app is built on GitHub's Mac, si
 TestFlight then installs it on the phone by itself, anywhere, with no PC, cable, Sideloadly or SideStore.
 The job is `testflight` in `.github/workflows/ios.yml`; it does nothing until step 6 is done.
 
-Why this works: Sideloadly's log (2026-11-27) says "Paid account detected" with a 365-day profile, so the Apple ID
-is in the Apple Developer Program, which includes TestFlight.
+**Needs the paid Apple Developer Program, which Kyle does not have** (as of 2026-11-27 his Apple ID is a free,
+individual team: Sideloadly's log says `Using team "..." (Individual, free)`, even though a later line of the same log
+says "Paid account detected"). TestFlight is part of the paid program only. Until he decides to join, this job stays
+off and updates go through Sideloadly or SideStore.
 
 ## One-time steps (about 15 minutes, on the PC)
 
-1. **Check the membership.** Sign in at https://developer.apple.com/account and open Membership details. It should
-   say Apple Developer Program with a renewal date. If it doesn't, stop here: TestFlight needs the program.
+1. **Join the Apple Developer Program** (paid, yearly) at https://developer.apple.com/programs/enroll/ with the same
+   Apple ID, and wait for Apple to confirm. Membership details at https://developer.apple.com/account then show a
+   renewal date.
 2. **Accept Apple's latest agreement** if App Store Connect (https://appstoreconnect.apple.com) shows a banner about
    one. Uploads are refused until it is accepted.
 3. **Create the app record.** App Store Connect > Apps > **+** > New App.

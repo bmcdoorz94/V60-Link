@@ -15,10 +15,10 @@ Claude live link working with the app in the background.
   Car link panel with the test checklist and "Copy the results for Claude".
 
 Build: `.github/workflows/ios.yml` on GitHub's Mac (XcodeGen, unsigned build, ad-hoc sign). The artifact
-`V60-test` holds `V60-test.ipa`; install it with Sideloadly (Kyle's Apple ID is a paid developer account, so the
-install lasts a year). Bundle id `com.kfitz.v60garage`.
+`V60-test` holds `V60-test.ipa`; install it with Sideloadly and Kyle's free Apple ID (free installs
+normally stop opening after 7 days; SideStore can refresh them). Bundle id `com.kfitz.v60garage`.
 
-Updates without a cable: the workflow's `testflight` job signs the app with Apple's cloud signing and uploads it to
+Updates without a cable, only if Kyle joins the paid Apple Developer Program: the workflow's `testflight` job signs the app with Apple's cloud signing and uploads it to
 TestFlight, which installs it by itself. One-time setup and the phone side: `TESTFLIGHT.md`. `asc.py` checks the
 App Store Connect side first and says plainly what is missing.
 
