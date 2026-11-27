@@ -22,7 +22,21 @@ them), 10 new app IDs a week, and each install stops opening 7 days after it was
 7. **SideStore:** Sources > **+** > paste the source address above > add. Then install **V60** from it.
 8. **Phone:** turn LocalDevVPN off and Tailscale back on, and open V60 once so it registers for the car again.
 
-## Every week or so
+## Automatic refresh (Shortcuts; community recipe, not yet tried on this phone)
+Shortcut "Refresh V60" in the Shortcuts app:
+1. Connect LocalDevVPN (LocalDevVPN's own Connect action if it has one, else the built-in **Set VPN** > LocalDevVPN > Connect).
+2. Wait 5 seconds.
+3. **Open URLs** `sidestore://` (one guide found Refresh fails with "You are not signed in" without this).
+4. SideStore > **Refresh All Apps**.
+5. Wait 60 seconds.
+6. Connect Tailscale (Tailscale's Connect action, or **Set VPN** > Tailscale > Connect), so Claude live works again.
+
+Run it once by hand and check SideStore shows 7 days left. Then Automation > **+** > Time of Day, a time the phone is
+usually at home and in use, every 2-3 days, **Run Immediately**. A missed run still leaves days of margin.
+Sources: https://ifixzone.net/fix-sidestore-auto-refresh-shortcut-sidestore-url/ ,
+https://browse.shortcuty.app/shortcut/b39b129b-c14a-4302-963d-5317fda84552
+
+## Every week or so (by hand, if the shortcut ever fails)
 - SideStore refreshes apps before they expire, but only while LocalDevVPN is connected. If V60 says it is
   "no longer available", open SideStore with LocalDevVPN on and tap Refresh All. Nothing is lost.
 - Updates: SideStore shows them under Updates when a new build is published.
