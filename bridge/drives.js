@@ -363,10 +363,10 @@ function deepPage(id, R) {
 <p class="note">Readings are in the engine computer's own units; only counts are labelled. "Outside" means the result fell outside the computer's own limits. Module addresses come from P3 sources and are unconfirmed on this car until they answer.</p>`)
 }
 
-function readBody(req) {
+function readBody(req, max = 512 * 1024) {
   return new Promise((resolve, reject) => {
     let n = 0; const parts = []
-    req.on('data', (c) => { n += c.length; if (n > 512 * 1024) { reject(new Error('too large')); req.destroy() } else parts.push(c) })
+    req.on('data', (c) => { n += c.length; if (n > max) { reject(new Error("too large")); req.destroy() } else parts.push(c) })
     req.on('end', () => resolve(Buffer.concat(parts).toString('utf8')))
     req.on('error', reject)
   })
@@ -384,6 +384,38 @@ async function takeDeep(req, ctx) {
   if (ctx && ctx.record) ctx.record({ k: 'deep', id, summary: String(R.summary || '').slice(0, 1000) })
   if (ctx && ctx.wake) ctx.wake('deep_scan', `Kyle ran a deep scan (every module's codes and the engine's mode 06 self-tests). ${R.summary || ''} Full results: ${url} (pass it as url to reply). Explain in plain words what matters, especially misfire counts per cylinder and anything outside limits, and say plainly where a Volvo code's meaning is your reading rather than Volvo's published text.`)
   return { id, url }
+}
+
+/* Problem cases (mechanical: noises, vibration, handling, brakes, tires, leaks). The Garage posts what Kyle noticed or a
+   photo; it is saved under data/cases/ and Claude is woken. Claude keeps the case files in data/notes/cases.json
+   (bridge/CLAUDE.md, "Mechanical problems"), which the Garage shows from summary.json. */
+const CASES = path.join(DATA, 'cases')
+const ONE = (s, n) => String(s == null ? '' : s).replace(/[\r\n]+/g, ' ').slice(0, n)
+async function takeCase(req, ctx) {
+  const R = JSON.parse(await readBody(req, 6 * 1024 * 1024))
+  if (!R || !['symptom', 'photo'].includes(R.kind)) throw new Error('not a problem report')
+  const d = new Date(), p = (n) => String(n).padStart(2, '0')
+  const id = `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}-${Math.random().toString(16).slice(2, 6)}`
+  fs.mkdirSync(CASES, { recursive: true })
+  let text
+  if (R.kind === 'photo') {
+    const m = /^data:image\/jpeg;base64,([A-Za-z0-9+/=]+)$/.exec(String(R.image || ''))
+    if (!m) throw new Error('the photo must be a JPEG')
+    const file = path.join(CASES, id + '.jpg')
+    fs.writeFileSync(file, Buffer.from(m[1], 'base64'))
+    text = `Kyle sent a photo for you to inspect: ${ONE(R.what, 80) || 'a part of the car'}${R.caseId ? ` (for case ${ONE(R.caseId, 40)})` : ''}. ${R.note ? 'His note: "' + ONE(R.note, 600) + '". ' : ''}Look at it with Read: ${file}`
+  } else {
+    const when = Array.isArray(R.when) ? R.when.map((x) => ONE(x, 40)).slice(0, 12).join(', ') : ''
+    text = `Kyle described a problem: ${ONE(R.what, 60) || 'something'}${when ? `; when: ${when}` : ''}${R.speed ? `; around ${ONE(R.speed, 20)} mph` : ''}${R.where ? `; where: ${ONE(R.where, 40)}` : ''}${R.since ? `; since: ${ONE(R.since, 60)}` : ''}. In his words: "${ONE(R.text, 1500)}"`
+  }
+  fs.writeFileSync(path.join(CASES, id + '.json'), JSON.stringify({ id, at: d.toISOString(), ...R, image: R.image ? '(saved as ' + id + '.jpg)' : undefined }, null, 1))
+  if (ctx && ctx.record) ctx.record({ k: 'case', id, kind: R.kind })
+  if (ctx && ctx.wake) ctx.wake(R.kind === 'photo' ? 'photo' : 'symptom', text + ' Follow "Mechanical problems" in bridge/CLAUDE.md: update data/notes/cases.json and send Kyle a short reply.')
+  return { id }
+}
+function casesFeed() {
+  let c; try { c = JSON.parse(fs.readFileSync(path.join(DATA, 'notes', 'cases.json'), 'utf8')) } catch { return [] }
+  return (Array.isArray(c) ? c : Array.isArray(c && c.cases) ? c.cases : []).slice(0, 30)
 }
 
 // What the service read from the car when it last started (auto.js, data/car.json), for the Garage
@@ -419,6 +451,12 @@ export function route(req, res, ctx) {
     takeDeep(req, ctx).then((r) => send(200, JSON.stringify(r), 'application/json'), (e) => send(400, JSON.stringify({ error: e.message }), 'application/json'))
     return true
   }
+  if (u.pathname === '/drives/case' && req.method === 'POST') {
+    // a problem Kyle described, or a photo for Claude to inspect (the Garage's Problem cases page)
+    if (!cors['access-control-allow-origin']) { send(403, 'Not allowed.', 'text/plain'); return true }
+    takeCase(req, ctx).then((r) => send(200, JSON.stringify(r), 'application/json'), (e) => send(400, JSON.stringify({ error: e.message }), 'application/json'))
+    return true
+  }
   if (u.pathname.startsWith('/drives/deep/')) {
     const did = u.pathname.split('/')[3] || ''
     const f = path.join(DEEP, did + '.html')
@@ -434,7 +472,7 @@ export function route(req, res, ctx) {
     const ds = list().map(brief)
     const base = baseUrl()
     send(200, JSON.stringify({ updated: new Date().toISOString(), drives: ds, totals: { drives: ds.length, miles: +ds.reduce((a, d) => a + (d.miles || 0), 0).toFixed(1), first: ds.length ? ds.at(-1).start : null },
-      links: { all: base + '/drives', week: base + '/drives/week', trends: base + '/drives/trends' }, car: carFeed(), claude: lastClaude() }), 'application/json; charset=utf-8')
+      links: { all: base + '/drives', week: base + '/drives/week', trends: base + '/drives/trends' }, car: carFeed(), claude: lastClaude(), cases: casesFeed() }), 'application/json; charset=utf-8')
     return true
   }
   if (ID.test(id)) {

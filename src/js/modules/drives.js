@@ -36,7 +36,22 @@
     var L = raw.links && typeof raw.links === "object" ? raw.links : {};
     var T = raw.totals && typeof raw.totals === "object" ? raw.totals : {};
     return { updated: iso(raw.updated), drives: drives, totals: { drives: num(T.drives, 0, 1e6), miles: num(T.miles, 0, 1e7), first: iso(T.first) },
-      links: { all: https(L.all), week: https(L.week), trends: https(L.trends) }, car: cleanCar(raw.car), claude: cleanClaude(raw.claude) };
+      links: { all: https(L.all), week: https(L.week), trends: https(L.trends) }, car: cleanCar(raw.car), claude: cleanClaude(raw.claude), cases: cleanCases(raw.cases) };
+  }
+  /* Claude's case files for mechanical problems (bridge/data/notes/cases.json; shown by cases.js) */
+  function str(x, n) { return typeof x === "string" ? x.slice(0, n) : ""; }
+  function pick(x, ok, d) { return ok.indexOf(x) >= 0 ? x : d; }
+  function cleanCases(list) {
+    if (!Array.isArray(list)) return [];
+    return list.slice(0, 30).map(function (c) {
+      if (!c || typeof c !== "object" || !str(c.title, 120)) return null;
+      return { id: str(c.id, 60), title: str(c.title, 120), status: pick(c.status, ["open", "watching", "fixed"], "open"), area: str(c.area, 30), safety: pick(c.safety, ["ok", "caution", "stop"], null),
+        opened: iso(c.opened) || iso(c.updated), updated: iso(c.updated), summary: str(c.summary, 600),
+        causes: (Array.isArray(c.causes) ? c.causes : []).slice(0, 8).map(function (x) { return x && str(x.cause, 120) ? { cause: str(x.cause, 120), likelihood: pick(x.likelihood, ["likely", "possible", "unlikely"], "possible"), why: str(x.why, 400) } : null; }).filter(Boolean),
+        next: c.next && typeof c.next === "object" && str(c.next.check, 300) ? { check: str(c.next.check, 300), how: str(c.next.how, 600) } : null,
+        evidence: (Array.isArray(c.evidence) ? c.evidence : []).slice(0, 20).map(function (e) { return e && str(e.text, 400) ? { at: iso(e.at) || "", kind: str(e.kind, 20) || "note", text: str(e.text, 400) } : null; }).filter(Boolean),
+        sources: (Array.isArray(c.sources) ? c.sources : []).slice(0, 10).map(function (s) { return Array.isArray(s) && str(s[0], 120) && https(s[1]) ? [str(s[0], 120), https(s[1])] : null; }).filter(Boolean) };
+    }).filter(Boolean);
   }
   /* what the PC read from the car when it last started (bridge/auto.js): odometer if the car reports it, light, codes */
   function codeList(x) { return Array.isArray(x) ? x.filter(function (c) { return typeof c === "string" && /^[PCBU][0-9A-F]{4}$/.test(c); }).slice(0, 20) : null; }

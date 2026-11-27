@@ -26,6 +26,18 @@ Since 2026-11-27 you normally run **headless**: the always-on service (`service.
 - `car_status` says whether the phone is linked and the adapter connected.
 - Don't poll in loops. To watch values over a drive, ask him to start Live data recording in the page and read the log afterwards.
 
+## Mechanical problems (cases)
+Events `symptom` (Kyle described something he noticed: a noise, vibration, pull, clunk, brake feel, leak, smell) and `photo` (a photo for you to inspect: open it with Read, you can see images) come from the Garage's Problem cases page. These are mostly things no computer reports: suspension, steering, brakes, tires, wheels, bearings, mounts, exhaust, leaks. Work like a careful mechanic:
+- **Safety first.** Anything pointing to brakes, steering, a loose wheel, a tire failing, or fluid on a hot exhaust: say plainly whether it is safe to drive, in the first line.
+- **Evidence, then the one check that splits the suspects.** List the likely causes ranked by what Kyle reported (when it happens: speed, braking, turning, bumps, cold; where: front/rear, left/right), not by what is common in general. Then the single check that best tells them apart, which Kyle can do himself (with how, and what each result would mean), or that a shop does.
+- **Sources.** Prefer Volvo's owner's manual and bulletins, NHTSA complaints and recalls for the 2016 V60 (`https://api.nhtsa.gov/complaints/complaintsByVehicle?make=volvo&model=v60&modelYear=2016`, `https://api.nhtsa.gov/recalls/recallsByVehicle?make=volvo&model=v60&modelYear=2016`) and reputable repair references. Say "common on this model" only with a source. Mark anything unconfirmed.
+- **Photos.** Say what you can see and what you cannot (lighting, angle). Tire edges: inner or outer wear points to alignment, center to over-inflation, both edges to under-inflation, cupping to worn shocks or balance. Never guess a measurement you cannot see.
+- Ask for one more piece of evidence when it would change the answer (a photo, when exactly it happens, a short test drive with something to notice).
+- **Keep the case file** `bridge/data/notes/cases.json`: a JSON array, newest first, one object per problem (merge a new report into its existing case):
+  `{"id":"c-YYYYMMDD-short","title":"Clunk over bumps, front left","status":"open|watching|fixed","opened":"ISO date","updated":"ISO date","area":"suspension|steering|brakes|tires|wheels|drivetrain|engine|exhaust|leak|body|other","safety":"ok|caution|stop","summary":"one or two plain sentences","causes":[{"cause":"Front sway bar end link","likelihood":"likely|possible|unlikely","why":"evidence for and against"}],"next":{"check":"what to do next","how":"how, and what each result means"},"evidence":[{"at":"ISO date","kind":"report|photo|drive","text":"what it showed"}],"sources":[["title","https://..."]]}`
+  Write the whole array back (valid JSON). The Garage shows it in Fix > Problem cases.
+- Reply to Kyle in at most four short lines: safe to drive or not, the most likely cause, the next check, "Details in Fix > Problem cases".
+
 ## The car's diagnostic networks (research 2026-11-26; verify on the car)
 - 2016 V60 T5 Drive-E, P3 platform. Two CAN buses reach the OBD plug: high speed 500 kbit/s on pins 6/14, medium speed 125 kbit/s on pins 3/11.
 - Kyle's adapter today is an **OBDLink CX**: BLE, high-speed CAN and K-line only. It cannot reach the medium-speed bus. A vLinker FD+ or MC+ (BLE + MS-CAN) is the planned upgrade; on STN-type adapters `STP 53` selects MS-CAN 11-bit 125k (OBDLink manual; unverified on vLinker).

@@ -57,6 +57,23 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     ok(L.mil === true && L.dtcCount === 1 && L.milMiles === 62 && L.clearedMiles === 186, 'light on, 1 code, 62 mi with the light on, 186 mi since cleared');
     ok(L.codes && L.codes.stored.join() === 'P0171' && L.codes.pending.length === 0 && L.codes.permanent.join() === 'P0171', 'codes: P0171 stored and permanent, none pending, the second module\'s empty answer ignored');
 
+    // Problem cases: a report and a photo from the Garage reach the PC and wake Claude; Claude's case file is in the feed
+    const G = { 'content-type': 'application/json', origin: 'https://bmcdoorz94.github.io' };
+    const caseUrl = `http://127.0.0.1:${port}/drives/case`;
+    ok((await fetch(caseUrl, { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{"kind":"symptom","text":"x"}' })).status === 403, 'a problem report from anywhere but the Garage is refused');
+    ok((await fetch(caseUrl, { method: 'POST', headers: G, body: JSON.stringify({ kind: 'symptom', what: 'Clunk over bumps', when: ['Over bumps'], where: 'Front, Left', text: 'Clunk from the front left.' }) })).status === 200, 'a problem report is accepted');
+    const jpg = 'data:image/jpeg;base64,' + Buffer.from([0xFF, 0xD8, 0xFF, 0xD9]).toString('base64');
+    ok((await fetch(caseUrl, { method: 'POST', headers: G, body: JSON.stringify({ kind: 'photo', what: 'Tire tread and edges', image: jpg }) })).status === 200, 'a photo is accepted');
+    ok((await fetch(caseUrl, { method: 'POST', headers: G, body: JSON.stringify({ kind: 'photo', image: 'data:image/png;base64,AAAA' }) })).status === 400, 'anything but a JPEG is refused');
+    const saved = fs.readdirSync(path.join(data, 'cases'));
+    ok(saved.filter((f) => f.endsWith('.json')).length === 2 && saved.some((f) => f.endsWith('.jpg')), 'the report and the photo are saved on the PC: ' + saved.length + ' files');
+    const run2 = await until(() => log().filter((r) => r.k === 'claude_run').find((r) => r.events.includes('symptom') || r.events.includes('photo')), 6000);
+    ok(run2, 'Claude is woken for them: ' + (run2 && run2.events));
+    fs.mkdirSync(path.join(data, 'notes'), { recursive: true });
+    fs.writeFileSync(path.join(data, 'notes', 'cases.json'), JSON.stringify([{ id: 'c-1', title: 'Clunk over bumps, front left', status: 'open', safety: 'caution' }]));
+    const feed = await (await fetch(`http://127.0.0.1:${port}/drives/summary.json`)).json();
+    ok(feed.cases && feed.cases[0] && feed.cases[0].title === 'Clunk over bumps, front left', 'Claude\'s case file is in the Garage\'s feed');
+
     // headless Claude's side: tools.js over MCP, the way `claude -p --mcp-config` starts it
     const client = new Client({ name: 'test-claude', version: '1.0.0' }, { capabilities: {} });
     await client.connect(new StdioClientTransport({ command: process.execPath, args: cfg.args, env: { ...process.env, ...cfg.env }, stderr: 'pipe' }));

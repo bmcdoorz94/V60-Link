@@ -584,3 +584,15 @@ a.hm-row { text-decoration: none; }
 .gb-ready { display: block; margin-top: 6px; }
 .gb-ready .pill { margin-right: 4px; }
 @media (min-width: 900px) { .hm-tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+/* Problem cases (cases.js) */
+.cs-l { display: block; margin: 12px 0 6px; font-size: 14px; color: var(--ink); }
+.cs-l select, .cs-l input, .cs-l textarea { display: block; width: 100%; margin-top: 4px; box-sizing: border-box; }
+.cs-seg { flex-wrap: wrap; }
+.cs-seg button { min-height: 36px; }
+.cs-case { border-top: 1px solid var(--line); padding: 12px 0; }
+.cs-case:first-child { border-top: 0; padding-top: 0; }
+.cs-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
+.cs-head h3 { margin: 0; flex: 1 1 100%; }
+.cs-next { margin: 8px 0; }
+.cs-causes li { margin: 6px 0; }
