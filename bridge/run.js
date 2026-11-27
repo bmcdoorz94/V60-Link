@@ -49,7 +49,7 @@ function restart(why) {
 let timer = null
 fs.watch(HERE, (ev, f) => {
   // drives.js reloads by itself (hub.js); check.js, phone.js and pair.js are not part of the service
-  if (!f || !/\.js$/.test(f) || ['check.js', 'phone.js', 'wda.js', 'pair.js', 'drives.js', 'run.js'].includes(f)) return
+  if (!f || !/\.js$/.test(f) || ['check.js', 'phone.js', 'wda.js', 'notify.js', 'pair.js', 'drives.js', 'run.js'].includes(f)) return
   clearTimeout(timer)
   timer = setTimeout(() => restart(`${f} changed`), 3000)
 })

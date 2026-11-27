@@ -60,3 +60,9 @@ Run the check first.
 2026-11-27; Wi-Fi uses a RemotePairing record made once with `pymobiledevice3 lockdown remotepairing --pair`,
 because this PC has no Bonjour). The phone has to be awake. It cannot tap or type. It needs Developer Mode on the phone and no administrator rights; it
 mounts Apple's developer disk image again by itself after the phone restarts.
+
+## Asking Kyle for something (any Claude session on this PC)
+`node notify.js "<text>" [https://link]` sends Kyle a notification through the service and the V60 iPhone app; iOS
+shows it on his Apple Watch when the phone is locked. Use it whenever a step needs his hands (a code, a password, a tap
+at the car) instead of waiting on a chat he may not be reading. If the phone is not linked, the message is delivered
+when it links again. Taps and typing on the phone itself: `node wda.js` (WebDriverAgent, home Wi-Fi only).
