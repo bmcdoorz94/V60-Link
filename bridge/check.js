@@ -50,8 +50,8 @@ const liveClaude = procs.find((p) => p.name === 'claude.exe' && p.cmd.includes('
 if (process.platform !== 'win32') note('Process check skipped (not Windows)')
 else if (supervisor && serviceProc) ok('Claude live is running in the background (no window needed)', 'It starts Claude by itself for each event and restarts itself after updates.')
 else if (supervisor) bad('Claude live is starting or keeps stopping', 'See bridge/data/service.log for why.')
-else if (liveClaude) note('Claude live is running in the older window instead of the background service', 'Close that window, then double-click "Claude live" on the desktop.')
-else bad('Claude live is not running', 'Double-click "Claude live" on the desktop (it starts in the background, no window).')
+else if (liveClaude) note('Claude live is running in the older window instead of the background service', 'Close that window, then double-click "Claude live" in the V60 tools folder on the desktop.')
+else bad('Claude live is not running', 'Double-click "Claude live" in the V60 tools folder on the desktop (it starts in the background, no window).')
 
 // Always ready when he starts driving: starts at sign-in, and the PC does not sleep while plugged in
 if (process.platform === 'win32') {
@@ -69,7 +69,7 @@ if (process.platform === 'win32') {
 
 const local = await get(`http://127.0.0.1:${PORT}/`)
 if (local.ok) ok('The bridge answers on this PC', local.text)
-else bad(`Nothing answers on port ${PORT}`, 'Double-click "Claude live" on the desktop. If an older Claude live window is open, close it first.')
+else bad(`Nothing answers on port ${PORT}`, 'Double-click "Claude live" in the V60 tools folder on the desktop. If an older Claude live window is open, close it first.')
 
 if (host) {
   const remote = await get(`https://${host}/`)

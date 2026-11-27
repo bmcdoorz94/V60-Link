@@ -14,12 +14,14 @@
 //     type:<text>            type into whatever has focus (never passwords, tokens or codes: Kyle types those)
 //     swipe:up|down|left|right
 //     drag:<x1>,<y1>,<x2>,<y2>  drag a finger between two points (drag:60,2,60,500 opens Notification Center)
+//     hold:<x>,<y>[,<s>]      touch and hold (a home-screen icon's menu)
 //     home                   go to the home screen
 //     wait:<seconds>
 //     labels                 print the visible labels (like phone.js --items, from WebDriverAgent's view)
 // Prints one line per step; exits 1 at the first step that fails. Install with Sideloadly over the USB cable
 // (SideStore cannot sign the test bundle inside). Tested 2026-11-27 over home Wi-Fi: launch, tap, labels.
 import { spawn, execFileSync } from 'node:child_process'
+import fs from 'node:fs'
 
 const PMD3 = process.env.PMD3 || 'C:\\Users\\kfitz\\Tools\\pmd3\\Scripts\\pymobiledevice3.exe'
 const steps = process.argv.slice(2)
@@ -46,7 +48,11 @@ async function start() {
   // on the line where WebDriverAgent announces it, so ask the network instead
   let ip = process.env.WDA_IP || null
   if (!ip) try { const l = JSON.parse(execFileSync(PMD3, ['bonjour', 'mobdev2', '--timeout', '4'], { encoding: 'utf8', timeout: 30000 })); const d = l.find((x) => x.DeviceClass === 'iPhone' && x.ip); ip = d && d.ip } catch {}
+  // discovery can miss a beat: fall back to the address that worked last time (data/phone/last-ip, local)
+  const lastFile = new URL('./data/phone/last-ip', import.meta.url)
+  if (!ip) try { ip = fs.readFileSync(lastFile, 'utf8').trim() } catch {}
   if (!ip) throw new Error('the phone is not on the home Wi-Fi (WebDriverAgent is reached over Wi-Fi)')
+  try { fs.mkdirSync(new URL('./data/phone/', import.meta.url), { recursive: true }); fs.writeFileSync(lastFile, ip) } catch {}
   base = `http://${ip}:8100`
   child = spawn(PMD3, ['developer', 'dvt', 'xcuitest', id, ...v], { windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] })
   let out = ''
@@ -108,6 +114,7 @@ async function main() {
         await call('POST', S('/wda/dragfromtoforduration'), { fromX: to[0], fromY: to[1], toX: to[2], toY: to[3], duration: 0.2 }); r = 'swiped ' + arg
       }
       else if (verb === 'drag') { const [a, b, c, d] = arg.split(',').map(Number); await call('POST', S('/wda/dragfromtoforduration'), { fromX: a, fromY: b, toX: c, toY: d, duration: 0.3 }); r = `dragged ${a},${b} to ${c},${d}` }
+      else if (verb === 'hold') { const [x, y, d] = arg.split(',').map(Number); await call('POST', S('/wda/touchAndHold'), { x, y, duration: d || 1.2 }); r = `held ${x},${y}` }
       else if (verb === 'home') { await call('POST', '/wda/homescreen'); r = 'home screen' }
       else if (verb === 'wait') { await sleep(Math.min(+arg || 1, 60) * 1000); r = `waited ${arg} s` }
       else if (verb === 'labels') r = await labels()
