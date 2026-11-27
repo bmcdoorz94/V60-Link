@@ -92,3 +92,12 @@ export function logFile(day = today()) { return path.join(DATA, 'logs', day + '.
 export function record(o) {
   try { fs.appendFileSync(logFile(), JSON.stringify({ at: new Date().toISOString(), ...o }) + '\n') } catch {}
 }
+
+// The car tools Claude gets (hub.js runs them; server.js and tools.js list them).
+export const TOOLS = [
+  { name: 'reply', description: 'Show a message to Kyle in V60-Link on his phone. Everything meant for him goes here; he is at the car, not at this terminal.', inputSchema: { type: 'object', properties: { text: { type: 'string', description: 'Plain words, short.' }, url: { type: 'string', description: 'Optional https link (a drive report page) that opens when Kyle taps the notification.' } }, required: ['text'] } },
+  { name: 'car_status', description: 'Whether V60-Link is linked, whether the adapter is connected, which adapter, since when.', inputSchema: { type: 'object', properties: {} } },
+  { name: 'car_send', description: 'Send one ELM327/STN command through Kyle\'s adapter (examples: "0101", "03", "ATSH726", "22402A", "1902FF") and get the raw reply plus decoded frames. Reads run at once. Writes (clearing codes, UDS 2E/31/27/11/14, non-default sessions, D2 writes) wait for Kyle to tap Allow on the phone, up to 3 minutes.', inputSchema: { type: 'object', properties: { command: { type: 'string' }, why: { type: 'string', description: 'Shown to Kyle when the command needs his OK.' }, timeout_ms: { type: 'number', description: 'Adapter timeout, 500-30000. Default 4000.' } }, required: ['command'] } },
+  { name: 'car_restore', description: 'Set the adapter back up the way V60-Link expects (warm start, headers on, auto protocol). Call after addressing other modules with ATSH/ATCRA/STP.', inputSchema: { type: 'object', properties: {} } },
+  { name: 'car_log', description: 'Recent lines of the adapter conversation (everything the page and you sent and every reply), from today\'s log on this PC.', inputSchema: { type: 'object', properties: { lines: { type: 'number', description: 'How many, default 60, max 400.' }, match: { type: 'string', description: 'Only lines containing this text.' }, day: { type: 'string', description: 'YYYY-MM-DD, default today.' } } } },
+]

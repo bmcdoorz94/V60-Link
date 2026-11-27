@@ -38,24 +38,28 @@ const served = run(ts, ['serve', 'status']) || ''
 if (served.includes(':' + PORT)) ok('Tailscale publishes the bridge (your devices only)')
 else bad('Tailscale is not publishing the bridge', `Run: tailscale serve --bg ${PORT}`)
 
-// 2. The Claude live window: Claude started with the development flag, the bridge inside it
+// 2. Claude live's always-on service (run.js keeping service.js running; since 2026-11-27), or the older window
 let procs = []
 if (process.platform === 'win32') {
   const out = run('powershell', ['-NoProfile', '-Command', "Get-CimInstance Win32_Process -Filter \"name='claude.exe' or name='node.exe'\" | ForEach-Object { $_.ProcessId.ToString() + '|' + $_.ParentProcessId + '|' + $_.Name + '|' + $_.CommandLine }"]) || ''
   procs = out.split(/\r?\n/).filter(Boolean).map((l) => { const [pid, ppid, name, ...cmd] = l.split('|'); return { pid, ppid, name, cmd: cmd.join('|') } })
 }
+const supervisor = procs.find((p) => p.name === 'node.exe' && /run\.js"?\s*$/.test(p.cmd))
+const serviceProc = procs.find((p) => p.name === 'node.exe' && /service\.js"?\s*$/.test(p.cmd))
 const liveClaude = procs.find((p) => p.name === 'claude.exe' && p.cmd.includes('development-channels') && p.cmd.includes('server:v60'))
-const bridgeProc = procs.find((p) => p.name === 'node.exe' && /server\.js\s*$/.test(p.cmd) && (!liveClaude || p.ppid === liveClaude.pid))
-if (process.platform !== 'win32') note('Window check skipped (not Windows)')
-else if (liveClaude && bridgeProc) ok('The Claude live window is running, with the bridge inside it')
-else if (liveClaude) bad('Claude live is open but its bridge is not running', 'In the Claude live window type /mcp: v60 should say connected. If not, close the window and start it again.')
-else bad('The Claude live window is not running', 'Double-click "Claude live" on the desktop.')
+if (process.platform !== 'win32') note('Process check skipped (not Windows)')
+else if (supervisor && serviceProc) ok('Claude live is running in the background (no window needed)', 'It starts Claude by itself for each event and restarts itself after updates.')
+else if (supervisor) bad('Claude live is starting or keeps stopping', 'See bridge/data/service.log for why.')
+else if (liveClaude) note('Claude live is running in the older window instead of the background service', 'Close that window, then double-click "Claude live" on the desktop.')
+else bad('Claude live is not running', 'Double-click "Claude live" on the desktop (it starts in the background, no window).')
 
-// Always ready when he starts driving: opens at sign-in, and the PC does not sleep while plugged in
+// Always ready when he starts driving: starts at sign-in, and the PC does not sleep while plugged in
 if (process.platform === 'win32') {
   const startup = path.join(process.env.APPDATA || '', 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Startup', 'Claude live.lnk')
-  if (fs.existsSync(startup)) ok('Claude live opens by itself when you sign in to Windows', 'It still needs one keypress for the development-channels warning.')
-  else note('Claude live does not open at sign-in', 'Copy the "Claude live" desktop shortcut into the folder that Win+R, shell:startup opens.')
+  const target = fs.existsSync(startup) ? run('powershell', ['-NoProfile', '-Command', `(New-Object -ComObject WScript.Shell).CreateShortcut('${startup.replace(/'/g, "''")}').Arguments`]) || '' : ''
+  if (/start-service\.vbs/.test(target)) ok('Claude live starts by itself when you sign in to Windows', 'Nothing to press.')
+  else if (fs.existsSync(startup)) bad('Claude live starts the older window at sign-in', 'Point the Startup shortcut at bridge\\start-service.vbs (SETUP.md).')
+  else note('Claude live does not start at sign-in', 'Copy the "Claude live" desktop shortcut into the folder that Win+R, shell:startup opens.')
   const ac = (sub) => { const m = (run('powercfg', ['/query', 'SCHEME_CURRENT', 'SUB_SLEEP', sub]) || '').match(/Current AC Power Setting Index:\s*0x([0-9a-f]+)/i); return m ? parseInt(m[1], 16) : null }
   const sleep = ac('STANDBYIDLE'), hib = ac('HIBERNATEIDLE')
   if (sleep === 0 && hib === 0) ok('This PC never sleeps while plugged in')
@@ -65,7 +69,7 @@ if (process.platform === 'win32') {
 
 const local = await get(`http://127.0.0.1:${PORT}/`)
 if (local.ok) ok('The bridge answers on this PC', local.text)
-else bad(`Nothing answers on port ${PORT}`, 'Start Claude live. If it is open, close any older Claude live window and start it again.')
+else bad(`Nothing answers on port ${PORT}`, 'Double-click "Claude live" on the desktop. If an older Claude live window is open, close it first.')
 
 if (host) {
   const remote = await get(`https://${host}/`)
@@ -141,6 +145,8 @@ const tell = (r) => {
     case 'auto': return 'You switched Connect by itself ' + (r.auto ? 'on' : 'off')
     case 'app': return 'iPhone app: ' + short(r.x.replace(/^\S+ \d+ [\d:]+ /, ''), 70)
     case 'delivered': return 'Delivered a saved message: ' + short(r.text, 50)
+    case 'claude_run': return r.skipped ? null : r.ok ? `Claude worked on it (${r.secs} s)` : 'Claude\'s run failed: ' + short(String(r.error || ''), 60)
+    case 'service': return 'Claude live service started'
     default: return null
   }
 }
@@ -153,9 +159,12 @@ else {
   // The proof that the whole loop works: Claude was told something and answered on the phone afterwards.
   const lastEvent = rows.filter((r) => r.k === 'event').at(-1)
   const answered = lastEvent && rows.some((r) => r.k === 'claude' && r.at >= lastEvent.at)
+  const runAfter = lastEvent && rows.filter((r) => r.k === 'claude_run' && r.at >= lastEvent.at).at(-1) // the service's headless run
   if (lastEvent && answered) ok('Full loop works: Claude answered the latest event on the phone')
-  else if (lastEvent && Date.now() - Date.parse(lastEvent.at) > 120e3) bad('Claude did not answer the latest event', 'Look at the Claude live window: it may be waiting on a question in the terminal. Events not arriving at all means it was started without start.cmd.')
-  else if (lastEvent) note('Claude has not answered the latest event yet (under 2 minutes ago)')
+  else if (runAfter && runAfter.ok) ok('Claude handled the latest event', `It ran in ${runAfter.secs} s and decided nothing needed a message.`)
+  else if (runAfter) bad('Claude\'s run for the latest event failed', short(String(runAfter.error || 'no detail'), 160) + ' (more in bridge/data/service.log)')
+  else if (lastEvent && Date.now() - Date.parse(lastEvent.at) > 15 * 60e3) bad('Claude did not handle the latest event', 'See bridge/data/service.log. If Claude live runs in the older window, it may be waiting on a question there.')
+  else if (lastEvent) note('Claude is still working on the latest event')
   for (const [at, t] of story.slice(-12)) console.log(`        ${new Date(at).toLocaleTimeString()}  ${t}`)
 }
 
