@@ -6,12 +6,14 @@
 //
 //   node wda.js <step> [<step> ...]
 //     launch:<bundle id>     open an app (e.g. launch:com.SideStore.SideStore.KBX29Y87AM)
+//     open:<url>             open a link (an App Store page, a deep link, a web page in Safari)
 //     press:<text>           tap the first visible element whose label or name contains the text (case-insensitive);
 //                            on a big page (the Garage's web view) the search can crash WebDriverAgent: use tap:
 //     press:<text>#2         ... the second match
 //     tap:<x>,<y>            tap a point, in screen points (the screenshot's pixels divided by 3)
 //     type:<text>            type into whatever has focus (never passwords, tokens or codes: Kyle types those)
 //     swipe:up|down|left|right
+//     drag:<x1>,<y1>,<x2>,<y2>  drag a finger between two points (drag:60,2,60,500 opens Notification Center)
 //     home                   go to the home screen
 //     wait:<seconds>
 //     labels                 print the visible labels (like phone.js --items, from WebDriverAgent's view)
@@ -94,7 +96,8 @@ async function main() {
     for (const st of steps) {
       const [verb, ...rest] = st.split(':'), arg = rest.join(':')
       let r
-      if (verb === 'launch') { await call('POST', S('/wda/apps/launch'), { bundleId: arg }); r = 'opened ' + arg }
+      if (verb === 'open') { await call('POST', S('/url'), { url: arg }); r = 'opened ' + arg }
+      else if (verb === 'launch') { await call('POST', S('/wda/apps/launch'), { bundleId: arg }); r = 'opened ' + arg }
       else if (verb === 'press') r = await press(arg)
       else if (verb === 'tap') { const [x, y] = arg.split(',').map(Number); await call('POST', S('/wda/tap'), { x, y }); r = `tapped ${x},${y}` }
       else if (verb === 'type') { await call('POST', S('/wda/keys'), { value: [...arg] }); r = `typed ${arg.length} characters` }
@@ -104,6 +107,7 @@ async function main() {
         if (!to) throw new Error('swipe:up, down, left or right')
         await call('POST', S('/wda/dragfromtoforduration'), { fromX: to[0], fromY: to[1], toX: to[2], toY: to[3], duration: 0.2 }); r = 'swiped ' + arg
       }
+      else if (verb === 'drag') { const [a, b, c, d] = arg.split(',').map(Number); await call('POST', S('/wda/dragfromtoforduration'), { fromX: a, fromY: b, toX: c, toY: d, duration: 0.3 }); r = `dragged ${a},${b} to ${c},${d}` }
       else if (verb === 'home') { await call('POST', '/wda/homescreen'); r = 'home screen' }
       else if (verb === 'wait') { await sleep(Math.min(+arg || 1, 60) * 1000); r = `waited ${arg} s` }
       else if (verb === 'labels') r = await labels()
