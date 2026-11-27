@@ -30,7 +30,7 @@ window.V60_MANUAL_DATA = (function () {
   var I = [
     /* ---------- view 1: engine bay ---------- */
     { id: "oil", view: "bay", num: "1.1", n: "Oil", d: "The level is read in the driver display on this engine; there is no dipstick.", bay: "oilcap", part: "oilfilter", record: "oil", tags: ["Fluids", "Engine", "Maintenance"], photo: ["fluid"], at: [122, 90],
-      spec: [["Spec", "ACEA A5/B5 5W-30, or Volvo 0W-20"], ["Capacity", "6.2 US qt with filter"], ["Level", "Driver display, no dipstick"], ["Hood label, your photo", "Castrol EDGE Professional, ACEA A5/B5, SAE 5W-30"]],
+      spec: [["Spec", "Manual: A5/B5 5W-30 · Volvo US bulletin: 0W-20 (they differ)"], ["Capacity", "6.2 US qt with filter"], ["Level", "Driver display, no dipstick"], ["Hood label, your photo", "Castrol EDGE Professional, ACEA A5/B5, SAE 5W-30"]],
       chapters: [
         { tier: "K", t: "Know it", d: "What the oil does, which oil this engine takes, and why some 2015–16 Drive-E engines use more of it than they should.", steps: [{ kb: "a-oil" }, { bay: "oilcap", t: "Find the filler cap on the map", why: "Yellow cap on top of the engine. Nothing to open." }] },
         { tier: "C", t: "Check it", d: "Read the level the way Volvo describes, then log it. Repeating this across 1,000 miles is what tells you whether the engine burns oil.", time: "5 minutes, engine warm then off", steps: [{ mission: "m-oil" }, { oil: 1, t: "Log one oil level reading", why: "Logged readings are the evidence The Thirst case needs.", go: "tab:records" }] },

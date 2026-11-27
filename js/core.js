@@ -4,7 +4,7 @@
 
   /* ---------- reference data ---------- */
   var ITEMS = [
-    { key: "oil", name: "Engine oil and filter", mi: 10000, mo: 12, verify: false, note: "Volvo's 2016 US schedule: every 10,000 miles or 12 months. Full synthetic ACEA A5/B5 5W-30, or Volvo's 0W-20 (VCC RBS0-2AE). 6.2 quarts with filter." },
+    { key: "oil", name: "Engine oil and filter", mi: 10000, mo: 12, verify: false, note: "Volvo's 2016 US schedule: every 10,000 miles or 12 months. Which oil: Volvo's documents differ. The manual and this car's hood label say full synthetic ACEA A5/B5 SAE 5W-30; Volvo's later US bulletin TJ 34740 (2019) says Castrol Edge Professional V 0W-20 at every service on US four-cylinder Drive-E engines. About 6.2 quarts with filter." },
     { key: "cabin", name: "Cabin air filter", mi: 20000, mo: 12, verify: false, note: "Every 20,000 miles, and Volvo suggests at least once a year." },
     { key: "airfilter", name: "Engine air filter", mi: 40000, mo: null, verify: false, note: "At 40k, 80k and 120k miles per Volvo's 2016 US schedule." },
     { key: "brakefluid", name: "Brake fluid", mi: 40000, mo: 36, verify: false, note: "Every 3 years or 40,000 miles. Volvo says yearly in humid or mountain climates if you want extra margin. DOT 4." },
@@ -1122,7 +1122,7 @@
         see: "Six of the seven landmarks found. It is fine to mark one you could not find." },
       { id: "m-oil", type: "field", title: "Check your oil level", xp: 60, min: 8, need: "Car on level ground", parts: ["oilfilter"], go: "tab:records",
         body: ["Your 2016 V60 T5 has no dipstick. A sensor measures the oil and the car shows it in the instrument cluster. This engine family is known to burn oil in some cars, so this is the most important habit in the whole campaign."],
-        steps: ["Park on level ground. The reading is most accurate after about 20 miles of driving, or after the car has sat parked on level ground for 5 minutes with the engine off.", "Put the ignition in mode II without starting the engine.", "Roll the thumb wheel on the left steering-wheel stalk until Oil level appears.", "Read the level. If oil is needed, add a little at a time: full synthetic 5W-30 ACEA A5/B5, or Volvo's 0W-20. Match what the last oil change used if you know it.", "Log it in Records under Oil watch, with the odometer and any quarts added. Over months that becomes your consumption rate."],
+        steps: ["Park on level ground. The reading is most accurate after about 20 miles of driving, or after the car has sat parked on level ground for 5 minutes with the engine off.", "Put the ignition in mode II without starting the engine.", "Roll the thumb wheel on the left steering-wheel stalk until Oil level appears.", "Read the level. If oil is needed, add a little at a time, of the same type and viscosity as already in the engine (Volvo's manual). Volvo's documents differ on which oil: the manual and the hood label say 5W-30 A5/B5, a later US bulletin says Castrol Edge Professional V 0W-20.", "Log it in Records under Oil watch, with the odometer and any quarts added. Over months that becomes your consumption rate."],
         see: "A level within range. 'Not available' is not a fault. It means the car needs to be level or settled longer. 'Oil service required' can also mean the oil is overfilled.",
         safety: "Do not overfill. Too much oil can foam and damage the engine. Add a little, wait, and check again." },
       { id: "m-fluids", type: "learn", title: "Name that fluid", xp: 30, min: 4,
@@ -2050,16 +2050,16 @@
   /* ================= 12-MONTH BUDGET ================= */
   /* Price ranges are national shop estimates (RepairPal, YourMechanic) and parts prices (FCP Euro, Volvo parts, Batteries Plus), researched Oct 2026. Austin quotes will differ. */
   var COSTS = [
-    { k: "timingbelt", n: "Timing belt kit", lo: 740, hi: 990, diy: null, note: "RepairPal's 2016 V60 range is for the belt alone. A full kit with tensioner and idler, which Volvo's schedule calls for, and dealer quotes run much higher. YourMechanic estimates $3,800 to $5,700 at a shop or dealer for a 2015 S60 2.0. Get two quotes.", hard: true },
+    { k: "timingbelt", n: "Timing belt kit", lo: 736, hi: 986, diy: null, note: "RepairPal's 2016 V60 range (updated Sep 3, 2026) is for the belt alone. A full kit with tensioner and idler, which Volvo's schedule calls for, and dealer quotes run much higher. YourMechanic estimates $3,800 to $5,700 at a shop or dealer for a 2015 S60 2.0. Get two quotes.", hard: true },
     { k: "plugs", n: "Spark plugs (4)", lo: 443, hi: 604, diy: 135, note: "Shop range from YourMechanic. The DIY figure is a Volvo four-plug set. Confirm the part fits your engine before buying." },
     { k: "brakefluid", n: "Brake fluid replacement", lo: 110, hi: 161, diy: null, note: "Needs bleeding at each wheel. A shop job for a beginner." },
     { k: "airfilter", n: "Engine air filter", lo: 82, hi: 99, diy: "easy", note: "Shop range from RepairPal. An easy first DIY job: the part is a fraction of that." },
     { k: "cabin", n: "Cabin air filter", lo: 84, hi: 133, diy: "easy", note: "Shop range from RepairPal. Another easy DIY job behind the glovebox area." },
     { k: "oil", n: "Oil and filter change", lo: 185, hi: 213, diy: 95, note: "Shop range from RepairPal. The DIY figure is an oil-and-filter kit, but it needs the car safely raised." },
-    { k: "padjob", n: "Brake pads, one axle", lo: 351, hi: 474, diy: null, note: "Only if an inspection finds them worn. A shop range for one axle. Rotors add cost." },
+    { k: "padjob", n: "Brake pads", lo: 399, hi: 456, diy: null, note: "Only if an inspection finds them worn. RepairPal's 2016 V60 range (updated Sep 3, 2026); it doesn't say front or rear. Rotors add cost." },
     { k: "battery", n: "12 V AGM battery", lo: 386, hi: 403, diy: 260, note: "Start/stop cars need an AGM battery. Only if a battery test says it is weak." },
     { k: "tires", n: "Set of 4 tires (215/50R17)", lo: 400, hi: 800, diy: null, note: "Tire prices only, before mounting, balancing and disposal. Only if your tires are worn or over about 6 years old." },
-    { k: "align", n: "Wheel alignment", lo: 122, hi: 234, diy: null, note: "Usually done with new tires, or if the car pulls or tires wear unevenly." },
+    { k: "align", n: "Wheel alignment", lo: 122, hi: 179, diy: null, note: "RepairPal's 2016 V60 range (updated Sep 3, 2026). Usually done with new tires, or if the car pulls or tires wear unevenly." },
     { k: "baseline", n: "Baseline inspection", lo: 220, hi: 322, diy: null, note: "A one-time inspection to learn what you bought as-is. RepairPal's range for a pre-purchase inspection. A Volvo specialist may differ." },
     { k: "tpms", n: "Tire monitor calibration", lo: 0, hi: 0, diy: 0, note: "Free. You do it yourself from the MY CAR menu." }
   ];
@@ -2111,7 +2111,7 @@
   /* ================= SPEC SHEET (Volvo 2016 V60 US owner's manual and maintenance schedule) ================= */
   var SPECS = [
     ["Engine", [["Code", "B4204T11, 1,969 cc four-cylinder turbo"], ["Bore and stroke", "82 x 93.2 mm"], ["Compression", "10.8:1"], ["Power", "240 hp at 5,600 rpm"], ["Torque", "258 lb-ft at 1,500 to 4,500 rpm"], ["Timing drive", "Belt"]]],
-    ["Engine oil", [["Volvo spec", "Full synthetic, ACEA A5/B5. SAE 5W-30 for normal driving; 0W-30 A5/B5 or Volvo's 0W-20 (VCC RBS0-2AE, four-cylinders only) for extreme driving"], ["Capacity with filter", "6.2 US qt (5.9 L)"], ["Level check", "Electronic, in the instrument cluster. There is no dipstick"]]],
+    ["Engine oil", [["Volvo spec", "Volvo's documents differ. Manual and hood label: full synthetic ACEA A5/B5, SAE 5W-30. Volvo US bulletin TJ 34740 (2019): Castrol Edge Professional V 0W-20 (VCC RBS0-2AE) at every service on US four-cylinder Drive-E engines"], ["Capacity with filter", "6.2 US qt (5.9 L)"], ["Level check", "Electronic, in the instrument cluster. There is no dipstick"]]],
     ["Fluids", [["Coolant", "Volvo coolant, 50/50 with water, 8.7 US qt"], ["Automatic transmission", "Volvo AW1 fluid, about 7 US qt. Volvo says no change is needed in normal use"], ["Brake fluid", "DOT 4, 0.63 US qt"], ["Washer fluid", "6.8 US qt (4.7 without headlight washers)"], ["A/C refrigerant", "R134a, PAG oil. Manual: 1.7 lb (770 g); the sticker under the hood: 800 g"]]],
     ["Wheels and tires", [["Standard tires", "215/50R17 on 17 x 7.5 in wheels"], ["Pressure, 215/50R17", "38 psi front and rear, cold"], ["Wheel bolt torque", "103 lb-ft (140 Nm), tightened in a crosswise pattern"], ["Tire monitor", "Indirect. Recalibrate after any pressure or tire change"]]],
     ["Electrical", [["Battery", "12 V AGM, 800 CCA, required on start/stop cars. In the engine bay under two covers"], ["Low beam", "H11 halogen, 55 W"], ["High beam", "H9 halogen, 65 W"], ["Turn signals", "PY24W front, PY21W rear"]]],
