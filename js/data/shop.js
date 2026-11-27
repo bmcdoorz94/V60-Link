@@ -130,6 +130,11 @@ window.V60_SHOP_DATA = (function () {
             steps: ["Pull the fuse straight out with the tool inside the engine-bay fusebox cover.", "Look at the wire from the side; if broken, fit a new one of the same color and amperage. Never higher, never metal.", "Engine bay box: fuses 16–33 and 35–41 are yours to change; 1–15, 34 and 42–44 are workshop only. Cold-zone box: only fuse 12.", "If it blows again, have the circuit checked."],
             src: [om(355), om(358), om(365)] },
           shop: { meta: "Recall check", ask: "a check of the circuit if a fuse keeps blowing", body: "Recall 15V-555 covers MY2016 front-drive Drive-E V60s with engine code 40 built April 8 to August 19, 2015: the starter fuse can blow in stop-and-go driving with start/stop. Recall repairs are free; check your VIN.", src: [R555, NHTSA_VIN], go: ["Bulletins and recalls", "tab:bulletins"] } } },
+      { id: "enginecover", sec: "bay", part: "oil", k: "opt", t: "Engine top cover", why: "Volvo's drawing of the 2016 four-cylinder bay shows a plastic cover over the top of the engine, with the oil filler cap through it. Your photos (2026-11-27) show the engine without it.",
+        tiers: {
+          check: { meta: "Free", body: "Compare the top of the engine with Volvo's drawing: the cover carries the Volvo badge and sits over the valve cover and ignition coils. Volvo notes the bay's appearance may vary by engine. What the cover does beyond covering the top of the engine isn't stated in Volvo's owner documents.", src: [om(334)] },
+          diy: { meta: "Not sourced", mk: "none", body: "No Volvo owner procedure, and the part number isn't researched.." },
+          shop: { meta: "Get a quote", ask: "the engine top cover for a 2016 V60 T5 Drive-E (B4204T11), by VIN", body: "A Volvo parts counter can look it up by VIN. Price not researched." } } },
       { id: "polestar", sec: "bay", part: "port", up: "polestar",
         tiers: {
           check: { meta: "Free", body: "Polestar lists this exact car (V60 T5 Drive-E FWD Automatic 2016): 242 to 250 hp, 258 to 295 lb-ft, 0–60 mph 6.4 to 6.3 s. Note Volvo's manual rates the stock engine at 240 hp. Article number 31459463.", src: [POLESTAR, om(382)] },

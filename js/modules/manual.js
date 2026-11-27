@@ -558,12 +558,17 @@
     e.preventDefault(); try { btn.setPointerCapture(e.pointerId); } catch (x) {}
     document.addEventListener("pointermove", mv); document.addEventListener("pointerup", up);
   }
+  /* starting points on a photo taken from the front bumper with the hood open (driver side on the right), as fractions
+     of the figure box; placed from the owner's own photo of this car (2026-11-27). Only a first guess: drag to adjust. */
+  var PHOTO_AT = { bay: { oil: [0.36, 0.27], coolant: [0.15, 0.27], battery: [0.685, 0.21], belts: [0.24, 0.40], filters: [0.74, 0.44],
+    bfluid: [0.57, 0.07], washer: [0.875, 0.37], fuses: [0.80, 0.25], plugs: [0.47, 0.17] } };
   function usePhoto(api, v, photoId) {
     var d = D(api), f = FIG[v.fig] || FIG.side, pins = {};
-    /* first guess: where each point sits on the drawing. The bay map's pins, if any, are better. */
-    var legacy = v.id === "bay" && api.state.bayMap && api.state.bayMap.pins ? api.state.bayMap.pins : {};
-    /* pins from the old engine-bay map were placed on the owner's own photo, so they carry over as they are */
-    v.items.forEach(function (it) { var lp = it.bay && legacy[it.bay]; pins[it.id] = lp ? [lp[0], lp[1]] : [it.at[0] / 358, it.at[1] / f.h]; });
+    /* first guess for a photo: PHOTO_AT where the view has it (a typical shot for that view), else where the point sits
+       on the drawing. The old engine-bay map's pins are not carried over: that map's drawing was flipped (bumper at
+       the top) until 2026-11, so its starting pins landed in the wrong places on a photo taken from the bumper. */
+    var pa = PHOTO_AT[v.id] || {};
+    v.items.forEach(function (it) { pins[it.id] = pa[it.id] ? pa[it.id].slice() : [it.at[0] / 358, it.at[1] / f.h]; });
     d.views[v.id] = { photo: photoId, pins: pins }; ui.arrange = true; ui.fm = null; api.save();
   }
   function wire(api) {
