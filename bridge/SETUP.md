@@ -46,3 +46,10 @@ Run the check first.
 - `server.js` (channel + WebSocket), `lib.js` (pairing, write check, reply parser, log), `pair.js` (address and code, sets up `tailscale serve`), `start.cmd`, `.mcp.json`, `.claude/settings.json` (lets the five `v60` tools run without a terminal prompt; the bridge and the phone still ask Kyle before any write to the car), `CLAUDE.md` (the live session's brief).
 - `data/` (gitignored, local only): `pair.json`, `logs/<date>.jsonl` (every adapter line, Claude's commands, events, messages).
 - The phone side is `tools/gen/live_claude.js` (built into `src/js/modules/live.js` by `tools/gen/mklive.py`). `tests/claude.js` runs the real bridge against the simulated car end to end.
+
+## Seeing the iPhone's screen (read-only)
+`node phone.js` saves a screenshot of the iPhone to `data/phone/` (kept on this PC, newest 50) and prints its path;
+`node phone.js --check` only says whether the phone is reachable. It uses pymobiledevice3 in
+`C:\Users\kfitz\Tools\pmd3` (installed 2026-11-27, version 11.66.1) over the USB cable, or over home Wi-Fi with
+iTunes' Wi-Fi sync on. It cannot tap or type. It needs Developer Mode on the phone and no administrator rights; it
+mounts Apple's developer disk image again by itself after the phone restarts.
