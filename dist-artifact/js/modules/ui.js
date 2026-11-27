@@ -70,6 +70,9 @@
     var el = document.getElementById("pulse"); if (!el) return;
     var st = api.state, items = [];
     var active = (st.codes || []).filter(function (c) { return c.status === "active"; }).length, ls = st.lastScan;
+    /* what Kyle's PC read when the car last started (drives.js feed) counts as a scan when it is as new or newer */
+    var DD = window.V60_DRIVES && window.V60_DRIVES.data && window.V60_DRIVES.data(), cf = DD && DD.car;
+    if (cf && cf.mil != null && cf.at && (!ls || !ls.date || cf.at.slice(0, 10) >= String(ls.date).slice(0, 10))) ls = { mil: cf.mil };
     items.push(active ? ["concern", "Codes", active + " active", "tab:diag"] : (ls ? (ls.mil ? ["concern", "Light", "On", "tab:live"] : ["ok", "Light", "No codes", "tab:live"]) : ["none", "Light", "Not scanned", "tab:live"]));
     var oil = (st.oil || []).slice().sort(function (a, b) { return a.date < b.date ? 1 : -1; })[0], od = oil ? daysSince(oil.date) : null;
     items.push(oil ? [od > 35 ? "watch" : "ok", "Oil", od === 0 ? "Checked today" : "Checked " + od + "d ago", "tab:records"] : ["none", "Oil", "No checks", "tab:records"]);

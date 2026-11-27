@@ -36,8 +36,23 @@
     var L = raw.links && typeof raw.links === "object" ? raw.links : {};
     var T = raw.totals && typeof raw.totals === "object" ? raw.totals : {};
     return { updated: iso(raw.updated), drives: drives, totals: { drives: num(T.drives, 0, 1e6), miles: num(T.miles, 0, 1e7), first: iso(T.first) },
-      links: { all: https(L.all), week: https(L.week), trends: https(L.trends) } };
+      links: { all: https(L.all), week: https(L.week), trends: https(L.trends) }, car: cleanCar(raw.car), claude: cleanClaude(raw.claude) };
   }
+  /* what the PC read from the car when it last started (bridge/auto.js): odometer if the car reports it, light, codes */
+  function codeList(x) { return Array.isArray(x) ? x.filter(function (c) { return typeof c === "string" && /^[PCBU][0-9A-F]{4}$/.test(c); }).slice(0, 20) : null; }
+  function cleanCar(c) {
+    if (!c || typeof c !== "object") return null;
+    var o = c.odometer && typeof c.odometer === "object" && num(c.odometer.miles, 1, 2e6) && iso(c.odometer.at) ? { miles: c.odometer.miles, at: iso(c.odometer.at) } : null;
+    var k = c.codes && typeof c.codes === "object" ? { stored: codeList(c.codes.stored), pending: codeList(c.codes.pending), permanent: codeList(c.codes.permanent) } : null;
+    return { odometer: o, odometerListed: c.odometerListed === true, at: iso(c.at), mil: typeof c.mil === "boolean" ? c.mil : null, dtcCount: num(c.dtcCount, 0, 127),
+      milMiles: num(c.milMiles, 0, 1e5), clearedMiles: num(c.clearedMiles, 0, 1e5), codes: k };
+  }
+  function cleanClaude(c) {
+    if (!c || typeof c !== "object" || typeof c.text !== "string" || !iso(c.at)) return null;
+    return { text: c.text.slice(0, 1200), at: iso(c.at), url: https(c.url) };
+  }
+  /* the car's own odometer reading (01 A6), when this car reports it */
+  function carOdo() { return data && data.car && data.car.odometer ? data.car.odometer : null; }
   function loadCache() { try { var c = JSON.parse(localStorage.getItem(KEY) || "null"); if (c && c.data) { data = clean(c.data); fetchedAt = +c.at || 0; } } catch (e) {} }
   function saveCache() { try { localStorage.setItem(KEY, JSON.stringify({ at: fetchedAt, data: data })); } catch (e) {} }
 
@@ -109,7 +124,8 @@
     stampOdo();
     var st = api.state, oe = api.odoEst ? api.odoEst() : { miles: st.odo, est: false }, last = data.drives[0], wk = lastDays(7), h = "";
     h += '<section class="hm-sec" id="drives"><div class="mn-kick"><span>RECORDED DRIVES</span><span>FROM THE IPHONE APP</span></div>';
-    if (st.odo == null) h += row("Enter your odometer", "Type the miles in the box at the top once. Recorded drives then keep the estimate current.", "watch", "Needed");
+    if (oe.car) h += row((oe.est ? "About " : "") + '<span class="mono">' + esc(fmt(oe.miles)) + " mi</span>", esc("Read from the car " + when(oe.at) + (oe.est ? ", plus " + fmt(oe.added) + " mi from " + oe.drives + " recorded drive" + (oe.drives === 1 ? "" : "s") + " since" : "") + "."), oe.est ? "info" : "none", oe.est ? "Estimate" : "Car");
+    else if (st.odo == null) h += row("Enter your odometer", "Type the miles in the box at the top once. Recorded drives then keep the estimate current.", "watch", "Needed");
     else if (oe.est) h += row('About <span class="mono">' + esc(fmt(oe.miles)) + " mi</span>", esc(fmt(st.odo) + " entered " + day(st.odoAt) + ", plus " + fmt(oe.added) + " mi from " + oe.drives + " recorded drive" + (oe.drives === 1 ? "" : "s") + ". Estimated from recorded drives; type a new reading any time."), "info", "Estimate");
     else h += row('<span class="mono">' + esc(fmt(st.odo)) + " mi</span>", esc("Entered " + (st.odoAt ? day(st.odoAt) : "") + ". Drives recorded after that are added here as an estimate."), "none", "Entered");
     if (last) h += row("Last drive: " + esc(when(last.start)), esc([last.miles.toFixed(1) + " mi", last.minutes != null ? Math.round(last.minutes) + " min" : "", last.mpg ? last.mpg.toFixed(1) + " mpg estimated" : ""].filter(Boolean).join(" · ")), "none", last.url ? "Report" : "", last.url);
@@ -127,7 +143,26 @@
   /* one line for the Glovebox, next to the inspection date */
   function readyLine() { var r = readiness(); return r ? { pill: r.pill, label: r.label, text: r.line + " " + r.when } : null; }
 
-  window.V60_DRIVES = { since: since, data: function () { return data; }, readiness: readiness, readyLine: readyLine, html: cardHtml, refresh: function () { refresh(true); }, host: host };
+  /* Home: what the PC learned from the last time the car ran, and Claude's latest message, so it is there after a drive */
+  function homeHtml(api) {
+    API = api;
+    if (!data || (!data.car && !data.claude)) return "";
+    var c = data.car, cl = data.claude, h = '<section class="hm-sec" id="fromcar"><div class="mn-kick"><span>FROM YOUR CAR</span><span>' + esc(c && c.at ? when(c.at) : cl ? when(cl.at) : "") + "</span></div>";
+    if (cl) h += row("Claude: " + esc(cl.text), "", "info", cl.url ? "Report" : "", cl.url);
+    if (c) {
+      var all = c.codes ? [].concat(c.codes.stored || [], c.codes.pending || [], c.codes.permanent || []).filter(function (x, i, a) { return a.indexOf(x) === i; }) : [];
+      var bits = [];
+      if (c.codes) bits.push(all.length ? all.length + " code" + (all.length === 1 ? "" : "s") + ": " + all.join(", ") : "No codes");
+      if (c.milMiles) bits.push(fmt(c.milMiles) + " mi driven with the light on");
+      if (c.clearedMiles != null) bits.push(fmt(c.clearedMiles) + " mi since codes were last cleared");
+      // a lit light is already listed under On the car now (Health, below); here only when it is off
+      if (!c.mil && (c.mil != null || c.codes)) h += row("Check-engine light off", esc(bits.join(". ") + "."), all.length ? "watch" : "ok", all.length ? "Codes" : "OK");
+      if (c.odometer) h += row('Odometer <span class="mono">' + esc(fmt(c.odometer.miles)) + " mi</span>", esc("Read from the car " + when(c.odometer.at) + "."), "none", "Car");
+    }
+    return h + "</section>";
+  }
+
+  window.V60_DRIVES = { since: since, data: function () { return data; }, readiness: readiness, readyLine: readyLine, html: cardHtml, homeHtml: homeHtml, carOdo: carOdo, refresh: function () { refresh(true); }, host: host };
 
   (window.V60_MODULES = window.V60_MODULES || []).push({
     id: "drives",
@@ -139,6 +174,13 @@
     },
     /* Health: the emissions test would fail now */
     actions: function (api, list) {
+      var c = data && data.car;
+      if (c && c.mil) {
+        var codes = c.codes ? [].concat(c.codes.stored || [], c.codes.permanent || [], c.codes.pending || []).filter(function (x, i, a) { return a.indexOf(x) === i; }) : [];
+        list.push({ sev: 85, text: "Check-engine light on when the car last started (" + when(c.at) + ")" + (codes.length ? ": " + codes.join(", ") : "") + "." +
+          (c.milMiles ? " Driven " + fmt(c.milMiles) + " mi with it on." : "") + " The emissions test fails with it lit.", jump: "tab:diag" });
+        return; // the drive-based light below would say the same
+      }
       var r = readiness(); if (!r) return;
       if (r.mil) list.push({ sev: 80, text: "Check-engine light on in the last drive that read it (" + day(r.drive.start) + "). The emissions test fails with it lit.", jump: "tab:diag" });
       else if (r.notReady.length > 1) list.push({ sev: 45, text: r.notReady.length + " emissions self-tests not ready (" + day(r.drive.start) + "). The test allows one.", jump: "tab:maint" });
