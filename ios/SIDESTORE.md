@@ -31,6 +31,14 @@ them), 10 new app IDs a week, and each install stops opening 7 days after it was
 - iloader installed SideStore (Stable) and its pairing file. It made its own certificate and left Sideloadly's in
   place (iloader > Certificates lists both), so the copies Sideloadly installed keep opening.
 
+- SideStore's own Apple ID sign-in first failed with `ADI native error (-45063) ... Pending ADI session`, a known
+  break since Apple's 2026-11-20 server change (SideStore issues #1745 and #1765), not the account. What worked,
+  with no manual header editing: Settings > User Customizations > On-Device Anisette off, force-quit; Reset adi.pb >
+  Reset & Sign Out; Anisette Servers > SideStore (New) `https://new.ani.sidestore.io`, Auto Rotation off;
+  Anisette Client Configuration > Remote Server Sync > Fetch > Save as Overrides; force-quit, sign in. Never tap
+  Reset to Defaults there (it brings back the `macOS;` header Apple now refuses), and never let it revoke
+  certificates after a failed sign-in.
+
 ## Not confirmed yet
 - Whether a later SideStore refresh replaces Sideloadly's certificate. If V60 or The Guide stop opening, install V60
   again from the source, and The Guide from its .ipa (SideStore > My Apps > **+**, from Files).
