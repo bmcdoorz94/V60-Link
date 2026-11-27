@@ -1,0 +1,58 @@
+# Builds WebDriverAgent (Appium's XCUITest runner, https://github.com/appium/WebDriverAgent) for a real iPhone, from
+# source at a pinned release, on GitHub's Mac, unsigned. Kyle installs the .ipa once (SideStore: My Apps > +, or
+# Sideloadly); bridge/phone.js then starts it from the PC (pymobiledevice3 developer dvt xcuitest) only while it taps
+# or types something, and stops it afterwards. Published on the release "wda". Run by hand (Actions > Run workflow).
+name: Build WebDriverAgent
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+
+jobs:
+  wda:
+    runs-on: macos-15
+    timeout-minutes: 40
+    env:
+      WDA_REF: v16.15.3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: appium/WebDriverAgent
+          ref: ${{ env.WDA_REF }}
+          path: wda
+
+      - name: Build for testing (unsigned)
+        working-directory: wda
+        run: |
+          xcodebuild -version
+          xcodebuild build-for-testing -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner \
+            -destination 'generic/platform=iOS' -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" > build.log 2>&1 \
+            || { grep -E "error:" build.log | sort -u | head -60; tail -40 build.log; exit 1; }
+          APP=$(ls -d build/Build/Products/*-iphoneos/WebDriverAgentRunner-Runner.app)
+          echo "built $APP"
+          /usr/libexec/PlistBuddy -c "Print CFBundleIdentifier" "$APP/Info.plist"
+          mkdir -p out/Payload
+          cp -R "$APP" out/Payload/
+          (cd out && zip -qry ../WebDriverAgentRunner.ipa Payload)
+          ls -la WebDriverAgentRunner.ipa
+
+      - name: Publish
+        working-directory: wda
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh release view wda >/dev/null 2>&1 || gh release create wda --prerelease --title "WebDriverAgent for Kyle's iPhone" \
+            --notes "Appium WebDriverAgent $WDA_REF, built from source unsigned by .github/workflows/wda.yml. Install once with SideStore (My Apps, +) or Sideloadly."
+          gh release upload wda WebDriverAgentRunner.ipa --clobber
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: wda-build-log
+          path: wda/build.log
+          retention-days: 7
+          if-no-files-found: ignore
