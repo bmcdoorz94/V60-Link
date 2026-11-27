@@ -22,13 +22,15 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
   ok(await p.evaluate(() => document.querySelectorAll('#spBody .sp-secrow').length === 5), 'the five sections of the car are listed');
   ok(await p.evaluate(() => ['Needed', 'Recommended', 'If needed', 'Upgrade'].every(t => document.querySelector('#spBody .sp-tot').textContent.includes(t))), 'totals for each group');
   await shot('menu');
+  ok(await p.evaluate(() => V60_SHOP_DATA.items.every(i => i.tiers && i.tiers.check && i.tiers.diy && (i.tiers.shop || i.up))), 'every item has hand-written check, DIY and shop steps');
+  ok(await p.evaluate(() => V60_SHOP_DATA.items.every(i => ['check', 'diy', 'shop'].every(k => !i.tiers[k] || !i.tiers[k].src || (typeof i.tiers[k].src[0] === 'string' ? [i.tiers[k].src] : i.tiers[k].src).every(x => /^https:\/\//.test(x[1]))))), 'every cited source is a link');
 
   /* a section */
   await p.click('#spBody [data-sp-sec="bay"]'); await p.waitForTimeout(150);
   const bay = await txt('#spBody');
   ok(/NEEDED/.test(bay) && /Accessory belt kit/.test(bay) && /Timing belt kit/.test(bay), 'Engine bay lists the timing and accessory belt kits as needed (10 years, no record)');
   ok(/RECOMMENDED/.test(bay) && /UPGRADES/.test(bay) && /Polestar/.test(bay), 'and recommended items and upgrades');
-  ok(/\$740–990 shop \(belt alone/.test(bay) && /Price not researched/.test(bay), 'prices only where a source gives one');
+  ok(/\$736–986 shop \(belt alone/.test(bay) && /\$488–639 shop/.test(bay), 'prices only where a source gives one');
   await p.click('#spBody [data-sp-filter="up"]'); await p.waitForTimeout(100);
   ok(!/NEEDED/.test(await txt('#spBody')) && /UPGRADES/.test(await txt('#spBody')), 'the Upgrades filter shows only upgrades');
   await p.click('#spBody [data-sp-filter="all"]'); await p.waitForTimeout(100);
@@ -39,11 +41,15 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
   const it = await txt('#spBody');
   ok(/FOUR WAYS/.test(it) && /Check it yourself/.test(it) && /Do it yourself/.test(it) && /Have a shop do it/.test(it) && /Ask Claude/.test(it), 'the item shows the four ways');
   ok(/page 16/.test(it) && /10 years/.test(it), "it quotes Volvo's schedule row and footnote");
-  ok(/No step-by-step for this engine/.test(it) && /VIDA/.test(it), 'DIY says plainly that no procedure is sourced');
+  ok(/No Volvo owner procedure for this engine/.test(it) && /VIDA/.test(it), 'DIY says plainly that no procedure is sourced');
   ok(/Ask for: .Accessory drive belt, belt tensioner & idler pulley, replace/.test(it), 'the shop step says exactly what to ask for');
   ok(await p.evaluate(() => !!document.querySelector('#spBody a[href*="gatestechzone"]')), 'the check cites Gates');
   ok(await p.evaluate(() => !document.querySelector('#spBody [data-sp-addas="abelt:diy"]')), 'no DIY option without a sourced procedure');
   await shot('item');
+  await p.evaluate(() => V60.jump('shop:tpms')); await p.waitForTimeout(150);
+  ok(/Calibrate tire pressure/.test(await txt('#spBody')) && /12–15 minutes/.test(await txt('#spBody')) && await p.evaluate(() => document.querySelectorAll('#spBody .sp-steps li').length >= 7), "the tire monitor item has Volvo's calibration steps");
+  await shot('tpms');
+  await p.evaluate(() => V60.jump('shop:abelt')); await p.waitForTimeout(150);
   await p.click('#spBody [data-sp-addas="abelt:shop"]'); await p.waitForTimeout(100);
   /* Ask Claude: sent to the PC, then the fallback when the PC refuses */
   await p.click('#spBody [data-sp-ask="abelt"]'); await p.waitForTimeout(300);
@@ -57,7 +63,7 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
   await p.click('#spBody [data-sp-add="cabinf"]'); await p.waitForTimeout(100);
   await p.click('#spBody [data-sp-add="tbelt"]'); await p.waitForTimeout(100);
   ok(await p.evaluate(() => { const pl = V60.mod('shop').plan; return pl.cabinf === 'diy' && pl.tbelt === 'shop' && pl.abelt === 'shop'; }), '+ Add picks DIY where there is a step-by-step, shop otherwise');
-  ok(/Your plan/.test(await txt('#spBody .sp-planbar')) && /\$750–1,020 priced · 1 to quote/.test(await txt('#spBody .sp-planbar')), 'the plan bar totals what is priced and counts what is not ' + await txt('#spBody .sp-planbar'));
+  ok(/Your plan/.test(await txt('#spBody .sp-planbar')) && /\$1,234–1,655 priced/.test(await txt('#spBody .sp-planbar')), 'the plan bar totals what is priced ' + await txt('#spBody .sp-planbar'));
 
   /* by need */
   await p.click('#spBody [data-sp-mode="need"]'); await p.waitForTimeout(100);

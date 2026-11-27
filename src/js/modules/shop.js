@@ -53,6 +53,8 @@
       var shopP = null, diyP = null;
       if (c) { if (!(c.lo === 0 && c.hi === 0)) shopP = [c.lo, c.hi]; if (typeof c.diy === "number") diyP = [c.diy, c.diy]; if (c.lo === 0 && c.hi === 0) diyP = [0, 0]; }
       else if (u && u.lo != null) shopP = [u.lo, u.hi != null ? u.hi : u.lo];
+      if (e.shopP) shopP = e.shopP;
+      if (e.diyP) diyP = e.diyP;
       if (j && !diyP) diyP = range(j.cost) || (/^Free/.test(j.cost) ? [0, 0] : null);
       var noDiy = tiers.diy && (tiers.diy.mk === "bad" || tiers.diy.mk === "none");
       var canDiy = !noDiy && (!!j || !!diyP || (c && c.diy === "easy"));
@@ -126,9 +128,22 @@
   }
 
   /* ---------- item view ---------- */
-  function tierHtml(n, title, meta, mk, body, src, go, extra) {
+  /* src: [title, url] or a list of them; steps: numbered steps after the body; note: a caveat in small print */
+  function srcHtml(src) {
+    if (!src || !src.length) return "";
+    var l = typeof src[0] === "string" ? [src] : src, out = [];
+    /* several pages of one document become one link: "owner's manual, pages 312, 313" */
+    l.forEach(function (x) {
+      var m = /^(.*), page (\d+)$/.exec(x[0]), prev = out[out.length - 1];
+      if (m && prev && prev.url === x[1] && prev.base === m[1]) prev.pages.push(m[2]);
+      else out.push({ url: x[1], base: m ? m[1] : x[0], pages: m ? [m[2]] : null });
+    });
+    return '<p class="status">Source' + (out.length > 1 ? "s" : "") + ": " + out.map(function (o) { return '<a href="' + esc(o.url) + '" target="_blank" rel="noopener">' + esc(o.base + (o.pages ? (o.pages.length > 1 ? ", pages " : ", page ") + o.pages.join(", ") : "")) + "</a>"; }).join(" · ") + "</p>";
+  }
+  function tierHtml(n, title, meta, mk, body, src, go, extra, steps, note) {
     return '<section class="sp-tier"><div class="sp-th"><span class="sp-tn mono">' + n + '</span><span class="hm-t">' + esc(title) + "</span>" + (meta ? '<span class="pill ' + (mk || "none") + '">' + esc(meta) + "</span>" : "") + "</div>" +
-      '<div class="sp-tb"><p>' + esc(body) + "</p>" + (src ? '<p class="status">Source: <a href="' + esc(src[1]) + '" target="_blank" rel="noopener">' + esc(src[0]) + "</a></p>" : "") +
+      '<div class="sp-tb">' + (body ? "<p>" + esc(body) + "</p>" : "") + (steps && steps.length ? '<ol class="sp-steps">' + steps.map(function (st) { return "<li>" + esc(st) + "</li>"; }).join("") + "</ol>" : "") +
+      (note ? '<p class="status sp-note">' + esc(note) + "</p>" : "") + srcHtml(src) +
       (go ? '<button type="button" class="quiet sp-go" data-jump="' + esc(go[1]) + '">' + esc(go[0]) + "</button>" : "") + (extra || "") + "</div></section>";
   }
   function question(api, x) {
@@ -146,23 +161,25 @@
     if (x.u) h += "<p>" + esc(x.u.what) + "</p><p>" + esc(x.u.why) + "</p>";
     /* 1 check */
     var ch = e.check ? chapter(e.check) : null;
-    var c1 = T.check ? tierHtml(1, "Check it yourself", T.check.meta, T.check.mk || "ok", T.check.body, T.check.src, ch ? ["Open the check in " + (p ? p.num : "the manual"), "ch:" + e.check] : null)
+    var c1 = T.check ? tierHtml(1, "Check it yourself", T.check.meta, T.check.mk || "ok", T.check.body, T.check.src, T.check.go || (ch ? ["Open the check in " + (p ? p.num : "the manual"), "ch:" + e.check] : null), null, T.check.steps, T.check.note)
       : ch ? tierHtml(1, "Check it yourself", "Free", "ok", ch.d, null, ["Open the check in " + (p ? p.num : "the manual"), "ch:" + e.check])
       : x.u ? tierHtml(1, "Check it yourself", "2 min", "ok", "Four quick questions on the Upgrades page say whether it is worth it for you.", null, ["Is it worth it?", "tab:upgrades"])
       : tierHtml(1, "Check it yourself", "", "none", x.it ? "Look through your receipts and the papers from the lot. If it was done, log it and the schedule updates." : "Nothing to check first.", null, x.it ? ["Log a past service", "tab:records"] : null);
     /* 2 do it yourself */
     var c2;
-    if (T.diy) c2 = tierHtml(2, "Do it yourself", T.diy.meta, T.diy.mk || "ok", T.diy.body, T.diy.src, T.diy.go);
+    if (T.diy) c2 = tierHtml(2, "Do it yourself", T.diy.meta, T.diy.mk || "ok", T.diy.body, T.diy.src, T.diy.go || (x.j ? ["Open the step-by-step", "diy:" + x.j.id] : null), null, T.diy.steps, T.diy.note);
     else if (x.j) c2 = tierHtml(2, "Do it yourself", x.j.min + " min", "ok", x.j.t + ". " + x.j.cost + "." + (x.j.pgLabel ? " " + x.j.pgLabel + "." : ""), null, ["Open the step-by-step", "diy:" + x.j.id]);
-    else if (x.c && typeof x.c.diy === "number") c2 = tierHtml(2, "Do it yourself", "Not sourced", "none", "Parts are about $" + fmt(x.c.diy) + " (the Garage's DIY figure). No step-by-step for this engine in the app yet.", null, null);
-    else if (x.c && x.c.diy === "easy") c2 = tierHtml(2, "Do it yourself", "Easy", "ok", x.c.note + " No step-by-step for this engine in the app yet.", null, null);
-    else c2 = tierHtml(2, "Do it yourself", "Not sourced", "none", x.u && x.u.diff ? x.u.diff + ". No step-by-step in the app." : "No step-by-step for this engine in the app yet.", null, null);
+    else if (x.c && typeof x.c.diy === "number") c2 = tierHtml(2, "Do it yourself", "Not sourced", "none", "Parts are about $" + fmt(x.c.diy) + " (the Garage's DIY figure). No step-by-step in the app yet.", null, null);
+    else if (x.c && x.c.diy === "easy") c2 = tierHtml(2, "Do it yourself", "Easy", "ok", x.c.note + " No step-by-step in the app yet.", null, null);
+    else c2 = tierHtml(2, "Do it yourself", "Not sourced", "none", x.u && x.u.diff ? x.u.diff + ". No step-by-step in the app." : "No step-by-step in the app yet.", null, null);
     /* 3 shop */
-    var ask = vr ? "“" + vr.row + "”" : x.t;
+    var ask = T.shop && T.shop.ask ? T.shop.ask : vr ? "“" + vr.row + "”" : x.t;
     var shopBody = "Ask for: " + ask + ". " + (x.c ? (x.shopP ? money(x.shopP[0], x.shopP[1]) + ". " : "") + x.c.note : x.u ? (x.u.costNote ? x.u.costNote.charAt(0).toUpperCase() + x.u.costNote.slice(1) + "." : "Price not researched.") : "Price not researched; get two quotes.");
     var add = '<button type="button" class="sp-go" data-sp-addas="' + esc(x.id) + ':shop">' + (inP === "shop" ? "In your plan as a shop job" : "Add as a shop job") + "</button>" +
       (x.canDiy ? '<button type="button" class="quiet sp-go" data-sp-addas="' + esc(x.id) + ':diy">' + (inP === "diy" ? "In your plan as DIY" : "Add as DIY") + "</button>" : "");
-    var c3 = tierHtml(3, "Have a shop do it", x.shopP ? money(x.shopP[0], x.u && x.u.hi == null ? null : x.shopP[1]) + (x.u && x.u.hi == null ? "+" : "") : "Get a quote", "watch", shopBody, x.u && x.u.src && x.u.src[0] ? x.u.src[0] : null, null, '<div class="row">' + add + "</div>");
+    var shopMeta = x.shopP ? money(x.shopP[0], x.u && x.u.hi == null ? null : x.shopP[1]) + (x.u && x.u.hi == null ? "+" : "") : "Get a quote";
+    var c3 = T.shop ? tierHtml(3, "Have a shop do it", T.shop.meta || shopMeta, T.shop.mk || "watch", "Ask for: " + ask + ". " + (T.shop.body || ""), T.shop.src, T.shop.go, '<div class="row">' + add + "</div>", T.shop.steps, T.shop.note)
+      : tierHtml(3, "Have a shop do it", shopMeta, "watch", shopBody, x.u && x.u.src && x.u.src[0] ? x.u.src[0] : null, null, '<div class="row">' + add + "</div>");
     /* 4 ask Claude */
     var q = ui.ask[x.id] != null ? ui.ask[x.id] : question(api, x);
     var hasPc = !!(window.V60_DRIVES && window.V60_DRIVES.host && window.V60_DRIVES.host());
