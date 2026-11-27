@@ -9,6 +9,9 @@ permissions:
 
 on:
   workflow_dispatch:
+  # TestFlight builds stop working after 90 days; a monthly build keeps a fresh one on the phone.
+  schedule:
+    - cron: "17 9 1 * *"
   push:
     branches: [main]
     paths: ["ios/**", ".github/workflows/ios.yml"]
@@ -89,3 +92,101 @@ jobs:
           name: build-log
           path: ios/build.log
           retention-days: 7
+
+  # TestFlight: an App Store-signed build, uploaded with Kyle's App Store Connect API key (secrets ASC_KEY_ID,
+  # ASC_ISSUER_ID, ASC_KEY_P8; one-time steps in ios/TESTFLIGHT.md). Signing is Apple's cloud signing
+  # (-allowProvisioningUpdates with the key), so no certificate file is kept anywhere. Skipped until the secrets exist.
+  # Apple accepts uploads built with Xcode 26 or later only (since April 2026), so the newest Xcode on the runner is used.
+  testflight:
+    runs-on: macos-15
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: ios
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: "1"
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Is TestFlight set up?
+        id: ready
+        run: |
+          if [ -n "$ASC_KEY_ID" ] && [ -n "$ASC_ISSUER_ID" ] && [ -n "$ASC_KEY_P8" ]; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "TestFlight is not set up yet (ios/TESTFLIGHT.md); nothing to do." | tee -a "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Newest Xcode
+        if: steps.ready.outputs.ok == 'true'
+        run: |
+          X=$(ls -d /Applications/Xcode_*.app | grep -E '/Xcode_[0-9.]+\.app$' | sort -V | tail -1)
+          MAJOR=$(basename "$X" | sed -E 's/Xcode_([0-9]+).*/\1/')
+          echo "Using $X"
+          [ "$MAJOR" -ge 26 ] || { echo "Apple needs Xcode 26 or later and this runner's newest is $X: change runs-on to macos-26."; exit 1; }
+          sudo xcode-select -s "$X"
+          xcodebuild -version
+          brew install xcodegen
+
+      - name: Check App Store Connect
+        if: steps.ready.outputs.ok == 'true'
+        run: |
+          python3 -m venv "$RUNNER_TEMP/asc"
+          "$RUNNER_TEMP/asc/bin/pip" install -q pyjwt cryptography
+          "$RUNNER_TEMP/asc/bin/python" asc.py | tee "$RUNNER_TEMP/asc.txt"
+          grep '^TEAM=' "$RUNNER_TEMP/asc.txt" >> "$GITHUB_ENV"
+          mkdir -p ~/.appstoreconnect/private_keys
+          KEY=~/.appstoreconnect/private_keys/AuthKey_$ASC_KEY_ID.p8
+          printf '%s\n' "$ASC_KEY_P8" > "$KEY"; chmod 600 "$KEY"
+          echo "KEYPATH=$KEY" >> "$GITHUB_ENV"
+
+      - name: Archive, sign and upload
+        if: steps.ready.outputs.ok == 'true'
+        run: |
+          sips -z 1024 1024 ../icons/icon-512.png --out V60App/Assets.xcassets/AppIcon.appiconset/icon.png
+          xcodegen generate
+          BUILD=$((100 + GITHUB_RUN_NUMBER))
+          AUTH=(-allowProvisioningUpdates -authenticationKeyPath "$KEYPATH" -authenticationKeyID "$ASC_KEY_ID" -authenticationKeyIssuerID "$ASC_ISSUER_ID")
+          cat > ExportOptions.plist <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0"><dict>
+            <key>method</key><string>app-store-connect</string>
+            <key>signingStyle</key><string>automatic</string>
+            <key>teamID</key><string>$TEAM</string>
+            <key>destination</key><string>export</string>
+            <key>manageAppVersionAndBuildNumber</key><false/>
+          </dict></plist>
+          EOF
+          show() { grep -E "error:|Error|failed" "$1" | sort -u | head -60; tail -30 "$1"; }
+          archive() { rm -rf build/V60.xcarchive; xcodebuild archive -project V60.xcodeproj -scheme V60 -configuration Release \
+            -destination 'generic/platform=iOS' -archivePath build/V60.xcarchive \
+            DEVELOPMENT_TEAM="$TEAM" CODE_SIGN_STYLE=Automatic CURRENT_PROJECT_VERSION=$BUILD "$@" > archive.log 2>&1 || { show archive.log; exit 1; }; }
+          export_ipa() { rm -rf build/export; xcodebuild -exportArchive -archivePath build/V60.xcarchive -exportPath build/export \
+            -exportOptionsPlist ExportOptions.plist "${AUTH[@]}" > export.log 2>&1; }
+          # First try: an unsigned archive, signed once at export by Apple's cloud distribution certificate.
+          # If that is refused, archive with automatic signing (this may add an "Apple Development" certificate).
+          archive CODE_SIGNING_ALLOWED=NO
+          if ! export_ipa; then
+            echo "Export of the unsigned archive failed; archiving with automatic signing."; show export.log
+            archive "${AUTH[@]}"
+            export_ipa || { show export.log; exit 1; }
+          fi
+          ls -la build/export
+          xcrun altool --upload-app -f build/export/V60.ipa -t ios --apiKey "$ASC_KEY_ID" --apiIssuer "$ASC_ISSUER_ID"
+          V=$(grep -E 'MARKETING_VERSION' project.yml | sed -E 's/.*"(.*)".*/\1/')
+          echo "### Sent to TestFlight: V60 $V (build $BUILD)" >> "$GITHUB_STEP_SUMMARY"
+          echo "Apple processes it for 5-30 minutes; then TestFlight installs it on the phone if automatic updates are on." >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.ready.outputs.ok == 'true'
+        with:
+          name: testflight-logs
+          path: |
+            ios/archive.log
+            ios/export.log
+          retention-days: 7
+          if-no-files-found: ignore
