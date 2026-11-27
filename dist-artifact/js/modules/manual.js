@@ -330,7 +330,7 @@
   function firstWhy(api, v) { var c = firstCh(v); return c ? why(api, c) : ""; }
   var BACK = [["kb", "Library"], ["cards", "Flashcards"], ["track", "G1 study and quizzes (optional)"], ["academy", "Training library"], ["health", "Health score"], ["records", "Service log"], ["fuel", "Fuel & costs"], ["lab", "Data lab"], ["sim", "Simulator"], ["diy", "All DIY jobs"], ["trouble", "Troubleshoot"], ["cases", "Problem cases"], ["bulletins", "Bulletins"], ["upgrades", "Upgrades"], ["reco", "Recommended"], ["my", "My V60 & photos"], ["bay", "Whole-car parts list"], ["engine", "Engine bay map"], ["achieve", "Achievements"], ["today", "Today's notes"], ["index", "Index"], ["path", "The path"], ["story", "Cases"]];
   /* every other page, grouped by what you want to do; only pages the story has opened are listed */
-  var INDEX = [["Your car", ["know", "engine", "bay", "my", "health", "bulletins"]], ["Maintain", ["maint", "vsched", "reco", "records", "fuel", "diy", "upgrades", "glove", "docs"]], ["Fix & diagnose", ["trouble", "cases", "diag", "live", "lab", "sim"]], ["Learn", ["kb", "learn", "academy", "cards", "track"]], ["Settings", ["settings"]]];
+  var INDEX = [["Your car", ["know", "engine", "bay", "my", "health", "bulletins"]], ["Maintain", ["maint", "shop", "plan", "vsched", "reco", "records", "fuel", "diy", "upgrades", "glove", "docs"]], ["Fix & diagnose", ["trouble", "cases", "diag", "live", "lab", "sim"]], ["Learn", ["kb", "learn", "academy", "cards", "track"]], ["Settings", ["settings"]]];
   /* "see also" on each view and on the other three roots */
   var ALSO = { bay: ["bay", "diy", "records"], wheel: ["diy", "records", "bulletins"], cabin: ["live", "diag", "trouble"], under: ["trouble", "diy"], body: ["upgrades", "diy", "bulletins"],
     glove: ["records", "fuel", "docs", "bulletins"], live: ["lab", "diag", "sim", "health"], trouble: ["cases", "diag", "bulletins", "diy", "live"], story: ["track", "academy", "kb", "cards", "achieve"] };
@@ -503,7 +503,7 @@
 
   /* ---------- crumb: "← Back to …" on every page that is not one of the four roots or the manual itself ----------
      trail holds where you came from, newest last. A root clears it; the manual's own pages keep their own back links. */
-  var NAMES = { car: "Home", know: "Know your car", maint: "Maintenance", vsched: "Volvo's 2016 schedule", trouble: "Fix & diagnose", settings: "Settings", story: "Cases", path: "The path", glove: "Glovebox", live: "Link", docs: "Documents", diag: "Diagnose", learn: "How it works", unlocks: "Unlocks: beyond the app", today: "Today" };
+  var NAMES = { car: "Home", know: "Know your car", maint: "Maintenance", vsched: "Volvo's 2016 schedule", shop: "Plan & shop", plan: "Your plan", trouble: "Fix & diagnose", settings: "Settings", story: "Cases", path: "The path", glove: "Glovebox", live: "Link", docs: "Documents", diag: "Diagnose", learn: "How it works", unlocks: "Unlocks: beyond the app", today: "Today" };
   var TAB_ROOT = { car: 1, maint: 1, trouble: 1, glove: 1, live: 1 }, trail = [], here = null, goingBack = false;
   function where(tab) {
     if (tab === "view") { var v = VIEWS.filter(function (q) { return q.id === ui.view; })[0]; return v && { tab: "view", id: v.id, label: v.n }; }

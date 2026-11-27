@@ -11,6 +11,7 @@
     { key: "plugs", name: "Spark plugs", mi: 60000, mo: null, verify: false, note: "At 60k and 120k miles per Volvo's 2016 US schedule." },
     { key: "brakes", name: "Brake pad and disc inspection", mi: 10000, mo: 12, verify: false, note: "Checked at every 10,000-mile service. Wear depends heavily on driving style." },
     { key: "timingbelt", name: "Timing belt kit", mi: 150000, mo: 120, verify: true, note: "Volvo's 2016 US schedule lists the timing belt tensioner and idler at 150,000 miles or 10 years. Independent sources replace the belt with them as a kit, and some UK owners cite 90,000 miles. This is an interference engine, so a broken belt usually wrecks it. A 2016 reaches the 10-year mark in 2026." },
+    { key: "accbelt", name: "Accessory belt kit", mi: 150000, mo: 120, note: "Volvo's 2016 US schedule: accessory drive belt, belt tensioner & idler pulley, replace at 150,000 miles (page 16), or 10 years, whichever comes first (footnote D, page 19). The same interval as the timing belt hardware. A 2016 reaches the 10-year mark in 2026." },
     { key: "coolant", name: "Coolant", mi: null, mo: null, verify: true, note: "Volvo's 2016 US schedule lists level checks only, with no replacement interval. Use Volvo coolant 50/50. Ask a shop to test its condition at a service." }
   ];
   var EXTRA = [
@@ -2242,7 +2243,7 @@
     acad: function () { return acad(); }, xp: function () { return xpTotal(); }, rankFor: rankFor, PARTS: PARTS, ITEMS: ITEMS, partById: partById, lastFor: lastFor, statusFor: statusFor, ratingOf: ratingOf,
     JOBS: JOBS, CHAPTERS: CHAPTERS, SPECS: SPECS, BAYITEMS: BAYITEMS, SCHEDULE: SCHEDULE, BUILD: BUILD, RECALLS: RECALLS, CODES: CODES, decodeCode: decodeCode, monthsSince: monthsSince,
     computeHealth: function () { return computeHealth(); }, loadDataset: function (ds, n) { loadDataset(ds, n); }, parseCSV: parseCSV, analyze: analyze, autoMap: autoMap,
-    dueWithin: function (it, m, y) { return dueWithin(it, m, y); }, odoEst: function () { return odoEst(); },
+    dueWithin: function (it, m, y) { return dueWithin(it, m, y); }, odoEst: function () { return odoEst(); }, COSTS: COSTS,
     bumpOdo: function (m) { bumpOdo(m); }, updateHud: function () { hud(); },
     /* the part page mounts a Training lesson inside itself; reset puts Training back on its own page */
     trainInto: function (rootId, id) { var m = missionById(id); if (!m || !$(rootId)) return false; aui.view = "mission"; aui.id = id; aui.root = rootId; renderMission(m); return true; },

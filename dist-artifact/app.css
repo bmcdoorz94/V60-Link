@@ -1396,6 +1396,48 @@ a.hm-row { text-decoration: none; }
 .rc-item h3 { margin: 6px 0 4px; }
 #rcFilter { flex-wrap: wrap; margin: 8px 0; }
 
+/* Plan & shop (shop.js) */
+.hm-two { margin-top: 12px; }
+.hm-two > button { flex: 1 1 140px; min-height: 44px; }
+.sp-mode { margin: 4px 0 12px; }
+.sp-planbar { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; min-height: 52px; padding: 8px 12px; margin-bottom: 10px; border: 1px solid var(--ink); border-radius: 0; background: var(--panel2); color: var(--ink); font: inherit; cursor: pointer; }
+.sp-n { flex: none; min-width: 26px; height: 26px; padding: 0 6px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; background: var(--ink); color: var(--bg); font-size: 13px; }
+.sp-tot { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); margin: 4px 0 6px; }
+.sp-tot2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.sp-tot > div { background: var(--panel); padding: 8px 6px; text-align: center; display: flex; flex-direction: column; gap: 2px; }
+.sp-tot b { font-size: 20px; font-weight: 500; }
+.sp-tot span { font-family: var(--font-data); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.sp-need { color: var(--bad); } .sp-rec { color: var(--warn); } .sp-up { color: var(--teal); }
+.sp-secrow { align-items: center; }
+.sp-num { flex: none; width: 30px; height: 30px; border: 1.5px solid var(--ink); display: flex; align-items: center; justify-content: center; font-size: 14px; }
+.sp-counts { display: flex; gap: 4px; flex: none; }
+.sp-row, .sp-prow { display: flex; gap: 10px; align-items: flex-start; padding: 11px 0; border-bottom: 1px solid var(--line); }
+.sp-prow { flex-direction: column; gap: 6px; }
+.sp-open { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; text-align: left; padding: 0; border: 0; border-radius: 0; background: none; color: var(--ink); font: inherit; cursor: pointer; }
+.sp-open .pill { margin-left: 4px; vertical-align: 1px; }
+.sp-sec { font-family: var(--font-data); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.sp-price { font-size: 12px; margin-top: 2px; }
+.sp-add { flex: none; min-width: 72px; min-height: 40px; padding: 0 8px; border: 1px solid var(--ink); border-radius: 0; background: none; color: var(--ink); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+.sp-add[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.sp-pact { gap: 6px; flex-wrap: wrap; }
+.sp-chips { margin: 4px 0 10px; }
+.sp-chips .mn-chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.sp-back { margin: 2px 0 6px; min-height: 36px; }
+.sp-h { margin: 4px 0 6px; font-family: var(--font-display); font-size: 26px; font-weight: 600; line-height: 1.1; }
+.sp-sym { display: flex; gap: 10px; align-items: center; padding: 10px 12px; margin: 6px 0 4px; border: 1px solid var(--line); background: var(--panel); }
+.sp-ok { margin-top: 14px; }
+.sp-ok summary { min-height: 40px; display: flex; align-items: center; color: var(--muted); cursor: pointer; font-family: var(--font-data); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
+.sp-four { margin-top: 16px; padding-bottom: 5px; border-bottom: 1px solid var(--ink); }
+.sp-tier { margin-top: 8px; border: 1px solid var(--line); background: var(--panel); }
+.sp-th { display: flex; gap: 10px; align-items: center; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+.sp-th .hm-t { flex: 1; min-width: 0; }
+.sp-tn { flex: none; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; background: var(--ink); color: var(--bg); font-size: 13px; }
+.sp-tb { padding: 10px 12px; }
+.sp-tb > p { margin: 0 0 6px; }
+.sp-go { margin-top: 6px; min-height: 44px; }
+.sp-ql { display: block; font-size: 13px; color: var(--muted); margin: 8px 0 4px; }
+.sp-q { width: 100%; box-sizing: border-box; font: inherit; font-size: 14px; padding: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); border-radius: 0; }
+
 /* Theme overrides, loaded last: the whole app in the manual's dress. Square corners, hairline borders, no shadows,
    ink buttons, mono numbers. Live link and the Data lab keep their instrument faces (teal traces, gauges). */
 body { font-size: 15px; line-height: 1.5; }

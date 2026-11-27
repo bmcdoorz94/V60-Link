@@ -43,6 +43,15 @@
       d: { q: "Does the steering wheel or pedal pulse when braking?", y: "pulse", n: "ok" },
       pulse: { r: "Usually uneven rotors. Not an emergency, but have them measured.", sev: "watch", cost: "Rotors with pads about $400–$900 per axle", go: [] },
       ok: { r: "Describe what you notice to a shop. Brake issues are never worth guessing on.", sev: "watch", cost: "Inspection often free with service", go: [] } } },
+    /* belt noise: Gates, "Diagnosing a noisy accessory belt drive" (gatestechzone.com), the source the G1 study notes cite */
+    belt: { t: "Belt squeal or chirp", start: "a", n: {
+      a: { q: "Is it a chirp whose pitch rises and falls with engine speed?", y: "align", n: "b" },
+      align: { r: "Gates names misaligned pulleys as the usual cause of a chirp that follows engine speed. A shop checks the pulleys' alignment and the tensioner. Belt dressing only hides the noise and can damage the belt. (Source: Gates, Diagnosing a noisy accessory belt drive.)", sev: "watch", cost: "Not priced in the app; get a quote", go: [["Accessory belt kit", "shop:abelt"]] },
+      b: { q: "Is it a high squeal at a cold start or when pulling away?", y: "loose", n: "c" },
+      loose: { r: "Gates ties a squeal at start-up or when pulling away to too little belt tension: a worn tensioner or a worn belt. Look at the belt for cracks or shiny sides. Volvo's schedule has the belt, tensioner and idler due at 10 years, which this car has reached. (Source: Gates; Volvo 2016 Maintenance Schedule, page 16.)", sev: "watch", cost: "Not priced in the app; get a quote", go: [["Accessory belt kit", "shop:abelt"]] },
+      c: { q: "Is it a steady grinding or rumble that rises with engine speed?", y: "bearing", n: "other" },
+      bearing: { r: "Gates points to a worn pulley bearing: the tensioner, an idler or the water pump. A shop takes the belt off and spins each pulley by hand to feel for roughness. (Source: Gates, Diagnosing a noisy accessory belt drive.)", sev: "act", cost: "Not priced in the app; get a quote", go: [["Accessory belt kit", "shop:abelt"], ["Describe it to Claude", "tab:cases"]] },
+      other: { r: "Gates has the noise checked with the drive loaded: A/C and blower on full, lights and defroster on, the steering turned most of the way to one side. Describe what you hear in Problem cases so Claude can narrow it down. (Source: Gates, Diagnosing a noisy accessory belt drive.)", sev: "watch", cost: "Free to describe", go: [["Problem cases", "tab:cases"]] } } },
     oil: { t: "Low oil message or using oil", start: "a", n: {
       a: { q: "Are there fresh oil spots under the car?", y: "leak", n: "b" },
       leak: { r: "An external leak. Common places on older engines: valve cover gasket, oil filter housing, oil pan. Clean, drive, and look again to find the source.", sev: "act", cost: "$150–$600 typical", go: [] },
