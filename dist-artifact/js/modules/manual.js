@@ -282,11 +282,12 @@
     var vi = VIEWS.map(function (v) { return { id: v.id, num: String(v.num), label: v.n, status: viewStatus(api, v), v: v }; });
     var at = function (it) { return { bay: [70, 74], wheel: [84, 156], cabin: [181, 76], under: [180, 174], body: [334, 116] }[it.id]; };
     var h = '<div class="mn-top"><div class="mn-kick"><button type="button" class="mn-link" data-jump="tab:car">← Home</button><span>KNOW YOUR CAR</span></div><h2 class="mn-h1">Know your car</h2>' +
-      "<p>Tap a number to look into that part of the car. Each part has its own pages: what it is, how to check it, service, diagnosis and upgrades.</p></div>";
+      "<p>Tap a number to look into that part of the car. Each part has its own pages: what it is, how to check it, service, diagnosis and upgrades.</p></div>" +
+      '<button type="button" class="hm-row mn-thiscar" data-jump="tab:my"><span class="hm-b"><span class="hm-t">This car</span><span class="hm-s">Facts decoded from your VIN, the spec sheet, your photos</span></span></button>';
     h += '<div class="mn-figwrap"><div class="mn-kick"><span>FIG. 0 · SIDE VIEW · SCHEMATIC</span></div>' + figure(api, { id: "home", n: "The car", fig: "side" }, vi, null, at) + "</div>";
     h += '<section class="mn-list"><div class="mn-kick"><span>THE FIVE VIEWS</span></div><button type="button" class="mn-ix open" data-ch="0"><span class="n">0</span><span>' + esc(PREFACE.n) + '</span><span class="st"></span></button>' +
       VIEWS.map(function (v) { return '<button type="button" class="mn-ix open" data-view="' + v.id + '"><span class="n">' + v.num + "</span><span>" + esc(v.n) + '</span><span class="st">' + v.items.length + " parts</span></button>"; }).join("") + "</section>";
-    h += alsoHtml(["engine", "bay", "my", "kb", "learn"]);
+    h += alsoHtml(["my", "shop", "kb", "learn"]);
     $("mnKnow").innerHTML = h;
   }
   /* ---------- the whole path: done units folded, the current unit open, later units by name only ---------- */
@@ -328,12 +329,12 @@
   function firstCh(v) { var best = null; v.items.forEach(function (it) { it.chapters.forEach(function (c) { var s = STAGE_OF_CH[c.id]; if (s && (!best || s.n < STAGE_OF_CH[best.id].n)) best = c; }); }); return best; }
   function firstGate(api, v) { var c = firstCh(v); return c ? "step " + STAGE_OF_CH[c.id].n : "later"; }
   function firstWhy(api, v) { var c = firstCh(v); return c ? why(api, c) : ""; }
-  var BACK = [["kb", "Library"], ["cards", "Flashcards"], ["track", "G1 study and quizzes (optional)"], ["academy", "Training library"], ["health", "Health score"], ["records", "Service log"], ["fuel", "Fuel & costs"], ["lab", "Data lab"], ["sim", "Simulator"], ["diy", "All DIY jobs"], ["trouble", "Troubleshoot"], ["cases", "Problem cases"], ["bulletins", "Bulletins"], ["upgrades", "Upgrades"], ["reco", "Recommended"], ["my", "My V60 & photos"], ["bay", "Whole-car parts list"], ["engine", "Engine bay map"], ["achieve", "Achievements"], ["today", "Today's notes"], ["index", "Index"], ["path", "The path"], ["story", "Cases"]];
+  var BACK = [["kb", "Library"], ["cards", "Flashcards"], ["track", "G1 study and quizzes (optional)"], ["academy", "Training library"], ["health", "Home"], ["records", "Maintenance"], ["fuel", "Fuel & costs"], ["lab", "Data lab"], ["sim", "Simulator"], ["diy", "All DIY jobs"], ["trouble", "Troubleshoot"], ["cases", "Problem cases"], ["bulletins", "Bulletins"], ["upgrades", "Upgrades"], ["reco", "Recommended"], ["my", "My V60 & photos"], ["bay", "Whole-car parts list"], ["engine", "Engine bay map"], ["achieve", "Achievements"], ["today", "Today's notes"], ["index", "Index"], ["path", "The path"], ["story", "Cases"]];
   /* every other page, grouped by what you want to do; only pages the story has opened are listed */
-  var INDEX = [["Your car", ["know", "engine", "bay", "my", "health", "bulletins"]], ["Maintain", ["maint", "shop", "plan", "vsched", "reco", "records", "fuel", "diy", "upgrades", "glove", "docs"]], ["Fix & diagnose", ["trouble", "cases", "diag", "live", "lab", "sim"]], ["Learn", ["kb", "learn", "academy", "cards", "track"]], ["Settings", ["settings"]]];
+  var INDEX = [["Your car", ["know", "my", "bulletins"]], ["Maintain", ["maint", "shop", "plan", "vsched", "reco", "fuel", "diy", "upgrades", "glove", "docs"]], ["Fix & diagnose", ["trouble", "cases", "live"]], ["Learn", ["kb", "learn"]], ["Tools (optional)", ["lab", "track"]], ["Settings", ["settings"]]];
   /* "see also" on each view and on the other three roots */
-  var ALSO = { bay: ["bay", "diy", "records"], wheel: ["diy", "records", "bulletins"], cabin: ["live", "diag", "trouble"], under: ["trouble", "diy"], body: ["upgrades", "diy", "bulletins"],
-    glove: ["records", "fuel", "docs", "bulletins"], live: ["lab", "diag", "sim", "health"], trouble: ["cases", "diag", "bulletins", "diy", "live"], story: ["track", "academy", "kb", "cards", "achieve"] };
+  var ALSO = { bay: ["shop", "diy", "maint"], wheel: ["shop", "diy", "bulletins"], cabin: ["live", "trouble", "my"], under: ["trouble", "shop"], body: ["shop", "upgrades", "bulletins"],
+    glove: ["maint", "fuel", "docs", "bulletins"], live: ["trouble", "cases", "lab"], trouble: ["cases", "bulletins", "shop", "live"], story: ["track", "academy", "kb", "cards", "achieve"] };
   function seen(tab) { return !!($("p-" + tab) && (!window.V60_GATE || window.V60_GATE.visible(tab))); }
   function pageName(tab) { var b = BACK.filter(function (x) { return x[0] === tab; })[0]; return NAMES[tab] || (b && b[1]) || tab; }
   function alsoHtml(tabs, kick) {
@@ -364,7 +365,6 @@
       '<div class="mn-title"><h2>' + esc(v.n) + '</h2><div class="mn-seg" role="group" aria-label="Figure"><button type="button" data-fm="draw" aria-pressed="' + !photo + '">Drawing</button><button type="button" data-fm="photo" aria-pressed="' + !!photo + '">Your photo</button></div></div></div>' + toastHtml();
     h += '<div class="mn-figwrap"><div class="mn-kick"><span>FIG. ' + v.num + "-1 · " + esc(photo ? "YOUR PHOTO, " + photo.date : (FIG[v.fig] || FIG.side).cap.toUpperCase() + " · SCHEMATIC") + "</span>" + (photo ? '<button type="button" class="mn-link" data-arrange="1" aria-pressed="' + ui.arrange + '">' + (ui.arrange ? "Done moving" : "Move points") + "</button>" : "") + "</div>" + figure(api, v, items, sel, function (it) { return it.it.at; }) +
       (ui.arrange ? '<p class="status">Drag a number to where that part really is on your photo. Positions are saved as you go.</p>' : "") + "</div>";
-    if (v.id === "bay" && seen("engine")) h += '<button type="button" class="mn-cta mn-mapbtn" data-jump="tab:engine">Engine bay map: every part, labelled <span aria-hidden="true">→</span></button>';
     if (ui.fm === "photo" && !photo) h += photoPicker(api, v);
     var si = items.filter(function (q) { return q.id === sel; })[0];
     if (si) {
@@ -445,6 +445,14 @@
     if (s.mission && api.trainInto) api.trainInto(kid(ui.openStep), s.mission);
     if (s.kb && window.V60_KNOW && window.V60_KNOW.discover && !window.V60_KNOW.read(s.kb)) { window.V60_KNOW.discover("a", s.kb); api.save(); }
   }
+  /* your condition rating for this part (moved here from The bay page, 2026-11-27): core's rating buttons work anywhere */
+  function rateHtml(api, it) {
+    var pid = it.part, part = pid && api.partById ? api.partById(pid) : null; if (!part) return "";
+    var r = api.ratingOf(pid), rec = api.state.rate && api.state.rate[pid], L = ["Unrated", "Failed", "Poor", "Fair", "Good", "New"];
+    return '<details class="mn-fold mn-rate"><summary><span class="mn-kick"><span>YOUR RATING · ' + esc(part.name).toUpperCase() + '</span><span>' + L[r].toUpperCase() + (rec && rec.d ? " · " + esc(rec.d) : "") + "</span></span></summary>" +
+      '<p class="status">Rate it after you look. Ratings feed the home page\'s findings.</p><div class="seg mn-rateseg" role="group" aria-label="Rating">' +
+      [0, 1, 2, 3, 4, 5].map(function (n) { return '<button type="button" data-rate="' + esc(pid) + ":" + n + '" aria-pressed="' + (r === n) + '">' + (n ? n + " " + L[n] : L[0]) + "</button>"; }).join("") + "</div></details>";
+  }
   function renderItem(api) {
     sweep(api);
     var d = D(api), x = compute(api), it = ui.item === "0" ? null : ITEMS.filter(function (q) { return q.id === ui.item; })[0];
@@ -459,6 +467,7 @@
     if (it) {
       h += "<p>" + esc(it.d) + "</p>";
       var spec = (it.spec || []).slice(), dot = lastDot(api, it); if (dot) spec.push(["DOT read from your photo", dot + " (unconfirmed)"]);
+      h += rateHtml(api, it);
       if (spec.length) h += '<details class="mn-fold"' + (spec.length <= 3 ? " open" : "") + '><summary><span class="mn-kick"><span>YOUR CAR · ' + spec.length + " FACTS</span>" + (dot ? '<span class="mn-amber">UNCONFIRMED WHERE SAID</span>' : "") + '</span></summary><dl class="mn-spec">' + spec.map(function (s) { return "<div><dt>" + esc(s[0]) + "</dt><dd>" + esc(s[1]) + "</dd></div>"; }).join("") + "</dl></details>";
     }
     h += chapters.map(function (c) { return chapterHtml(api, c, d, x); }).join("");
@@ -503,7 +512,7 @@
 
   /* ---------- crumb: "← Back to …" on every page that is not one of the four roots or the manual itself ----------
      trail holds where you came from, newest last. A root clears it; the manual's own pages keep their own back links. */
-  var NAMES = { car: "Home", know: "Know your car", maint: "Maintenance", vsched: "Volvo's 2016 schedule", shop: "Plan & shop", plan: "Your plan", trouble: "Fix & diagnose", settings: "Settings", story: "Cases", path: "The path", glove: "Glovebox", live: "Link", docs: "Documents", diag: "Diagnose", learn: "How it works", unlocks: "Unlocks: beyond the app", today: "Today" };
+  var NAMES = { car: "Home", my: "This car", know: "Know your car", maint: "Maintenance", vsched: "Volvo's 2016 schedule", shop: "Plan & shop", plan: "Your plan", trouble: "Fix & diagnose", settings: "Settings", story: "Cases", path: "The path", glove: "Glovebox", live: "Link", docs: "Documents", diag: "Diagnose", learn: "How it works", unlocks: "Unlocks: beyond the app", today: "Today" };
   var TAB_ROOT = { car: 1, maint: 1, trouble: 1, glove: 1, live: 1 }, trail = [], here = null, goingBack = false;
   function where(tab) {
     if (tab === "view") { var v = VIEWS.filter(function (q) { return q.id === ui.view; })[0]; return v && { tab: "view", id: v.id, label: v.n }; }
@@ -635,7 +644,11 @@
       { id: "index", section: "car", label: "Index", order: 4, hidden: true, html: '<div id="mnIndex" class="mn"></div>' },
       { id: "path", section: "car", label: "The path", order: 5, hidden: true, html: '<div id="mnPath" class="mn"></div>' }
     ],
-    init: function (api) { API = api; installGate(); wire(api); },
+    init: function (api) {
+      API = api; installGate(); wire(api);
+      /* a rating tapped on a part page: core saves it; redraw the part so the choice shows */
+      document.addEventListener("click", function (e) { var b = e.target.closest && e.target.closest("#mnItem button[data-rate]"); if (b) setTimeout(function () { renderItem(api); }, 0); });
+    },
     render: function (api, tab) { bust(); if (tab === "car") renderHome(api); else if (tab === "know") renderKnow(api); else if (tab === "view") renderView(api); else if (tab === "item") renderItem(api); else if (tab === "index") renderIndex(api); else if (tab === "path") renderPath(api); },
     refresh: function (api) { bust(); },
     shown: function (api, tab) { crumb(api, tab); rootAlso(tab); if (tab !== "item" && api.trainReset) api.trainReset(); },

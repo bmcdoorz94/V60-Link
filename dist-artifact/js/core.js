@@ -469,7 +469,7 @@
   function renderCodes() {
     renderLastScan();
     var list = state.codes.slice().sort(function (a, b) { return a.date < b.date ? 1 : -1; });
-    if (!list.length) { $("codeBody").innerHTML = '<tr><td colspan="6" class="empty">No codes logged. When a scanner shows one, add it here so the Health tab counts it while it is active.</td></tr>'; return; }
+    if (!list.length) { $("codeBody").innerHTML = '<tr><td colspan="6" class="empty">No codes logged. When a scanner shows one, add it here so the home page lists it while it is active.</td></tr>'; return; }
     var lab = { active: "Active", cleared: "Cleared", resolved: "Fixed" };
     var cl = { active: "bad", cleared: "soon", resolved: "ok" };
     $("codeBody").innerHTML = list.map(function (e) {
@@ -2189,6 +2189,9 @@
     document.body.classList.toggle("gate-nohealth", !gateOk("health"));
   }
   function showTab(name) {
+    /* retired pages send you to their new place (tidy.js, window.V60_ALIAS) */
+    var al = window.V60_ALIAS && window.V60_ALIAS[name];
+    if (al) { if (al.go && al.go(API)) return; name = al.tab; }
     ui.tab = name;
     if (!$("p-" + name)) name = "car";
     ui.tab = name;
@@ -2205,6 +2208,7 @@
     if (name === "my") { renderMy(); renderSpecs(); }
     if (name === "engine") renderEngine();
     if (name === "health") renderBudget();
+    if (al && al.at && $(al.at)) try { $(al.at).scrollIntoView({ block: "start" }); } catch (e) {}
   }
   function jump(spec) {
     var p = spec.split(":"), kind = p[0], id = p.slice(1).join(":");
@@ -2334,7 +2338,7 @@
       state.runs.push({ id: uid(), date: todayStr(), miles: state.odo, dur: s.dur, coolMax: s.coolMax, warmMin: s.warmMin, ltft: s.ltft, stft: s.stft, volt: s.volt, idleRpm: s.idleRpm, mapPeak: s.mapPeak, coolMid: s.coolMid, mafIdle: s.mafIdle, idleSd: s.idleSd, voltLowShare: s.voltLowShare, flags: s.flags, concerns: s.concerns, watches: s.watches,
         titles: lab.res.finds.filter(function (f) { return f.level === "concern" || f.level === "watch"; }).map(function (f) { return { level: f.level, title: f.title }; }).slice(0, 8) });
       if (state.runs.length > 40) state.runs = state.runs.slice(-40);
-      $("runStatus").textContent = "Saved. It now feeds the Health tab.";
+      $("runStatus").textContent = "Saved. It now feeds the home page's findings.";
       renderRuns(); renderHealth(); save();
     });
     $("charts").addEventListener("pointermove", function (ev) { var c = ev.target.closest ? ev.target.closest(".chart") : null; if (c) cursorAt(ev.clientX, c); });

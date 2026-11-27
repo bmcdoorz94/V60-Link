@@ -35,5 +35,6 @@
  "js/modules/ui.js": "dist-artifact/js/modules/ui.js",
  "js/modules/scan.js": "dist-artifact/js/modules/scan.js",
  "js/modules/guide.js": "dist-artifact/js/modules/guide.js",
+ "js/modules/tidy.js": "dist-artifact/js/modules/tidy.js",
  "js/core.js": "dist-artifact/js/core.js"
 }

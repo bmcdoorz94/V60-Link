@@ -89,7 +89,7 @@
   }
   (window.V60_MODULES = window.V60_MODULES || []).push({
     id: "trees",
-    tabs: [{ id: "trouble", section: "check", label: "Troubleshoot", order: 25, html: '<section><h2>Troubleshoot</h2><p class="lede">Pick what is happening. Answer yes or no and the guide narrows it down to a likely cause, how urgent it is, and what it usually costs. A guide is not a diagnosis.</p></section><div id="trBox"></div>' }],
+    tabs: [{ id: "trouble", section: "check", label: "Troubleshoot", order: 25, html: '<section><h2>Fix &amp; diagnose</h2><p class="lede">Pick what is happening. Answer yes or no and the guide narrows it down to a likely cause, how urgent it is, and what it usually costs. A guide is not a diagnosis.</p></section><div id="trBox"></div>' }],
     render: function (api) { render(api); },
     init: function (api) {
       api.$("trBox").addEventListener("click", function (e) {

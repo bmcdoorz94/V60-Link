@@ -1441,6 +1441,12 @@ a.hm-row { text-decoration: none; }
 .sp-steps li { margin: 3px 0; }
 .sp-note { margin: 4px 0; }
 
+/* page cleanup (tidy.js): moved sections, This car row, part rating */
+.tidy-host > section { margin-top: 18px; }
+.mn-thiscar { margin: 4px 0 10px; border-top: 1px solid var(--line); }
+.mn-rateseg { flex-wrap: wrap; }
+.mn-rateseg button { min-height: 40px; }
+
 /* Theme overrides, loaded last: the whole app in the manual's dress. Square corners, hairline borders, no shadows,
    ink buttons, mono numbers. Live link and the Data lab keep their instrument faces (teal traces, gauges). */
 body { font-size: 15px; line-height: 1.5; }
