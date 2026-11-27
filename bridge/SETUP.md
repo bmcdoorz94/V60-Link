@@ -50,6 +50,7 @@ Run the check first.
 ## Seeing the iPhone's screen (read-only)
 `node phone.js` saves a screenshot of the iPhone to `data/phone/` (kept on this PC, newest 50) and prints its path;
 `node phone.js --check` only says whether the phone is reachable. It uses pymobiledevice3 in
-`C:\Users\kfitz\Tools\pmd3` (installed 2026-11-27, version 11.66.1) over the USB cable, or over home Wi-Fi with
-iTunes' Wi-Fi sync on. It cannot tap or type. It needs Developer Mode on the phone and no administrator rights; it
+`C:\Users\kfitz\Tools\pmd3` (installed 2026-11-27, version 11.66.1) over the USB cable, or over home Wi-Fi (both tested
+2026-11-27; Wi-Fi uses a RemotePairing record made once with `pymobiledevice3 lockdown remotepairing --pair`,
+because this PC has no Bonjour). The phone has to be awake. It cannot tap or type. It needs Developer Mode on the phone and no administrator rights; it
 mounts Apple's developer disk image again by itself after the phone restarts.
