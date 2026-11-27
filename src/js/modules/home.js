@@ -24,7 +24,7 @@
       if (s.cls === "over") r = { rank: 0, pill: "bad", label: "Overdue", line: s.detail };
       else if (s.cls === "soon") r = { rank: 2, pill: "watch", label: "Due soon", line: s.detail };
       else if (s.cls === "ok") r = { rank: 4, pill: "ok", label: "On track", line: s.detail };
-      else if (!last && due && it.key === "timingbelt") r = { rank: 1, pill: "bad", label: "Due", line: "No record. " + due.replace(/^No record, and /, "").replace(/^./, function (c) { return c.toUpperCase(); }) + "." };
+      else if (!last && due && (it.key === "timingbelt" || it.key === "accbelt")) r = { rank: 1, pill: "bad", label: "Due", line: "No record. " + due.replace(/^No record, and /, "").replace(/^./, function (c) { return c.toUpperCase(); }) + "." };
       else if (!last) r = { rank: 3, pill: "watch", label: "No record", line: "Not on your log." + (it.mi && odo != null && odo >= it.mi ? " The car is past " + fmt(it.mi) + " miles" + (api.odoEst && api.odoEst().est ? " (estimated)" : "") + "." : "") };
       else r = { rank: 5, pill: "none", label: s.label, line: "" };
       r.it = it; r.last = last; r.interval = interval(it);
@@ -70,7 +70,7 @@
     h += due.length ? due.map(function (r) { return row("tab:maint", r.it.name, r.interval + ". " + (r.last ? lastLine(api, r.last) + ". " : "") + r.line, r.pill, r.label); }).join("") : '<p class="hm-empty">Everything on Volvo\'s schedule is on track.</p>';
     var oe = api.odoEst ? api.odoEst() : null;
     if (oe && oe.est) h += '<p class="status hm-est">Miles: about <b class="mono">' + esc(fmt(oe.miles)) + "</b>, estimated from recorded drives since your last reading.</p>";
-    h += '<button type="button" class="quiet hm-wide" data-jump="tab:maint">Full schedule and service log</button></section>';
+    h += '<div class="row hm-two"><button type="button" class="quiet" data-jump="tab:maint">Schedule and service log</button><button type="button" class="quiet" data-jump="tab:shop">Plan &amp; shop by section</button></div></section>';
     h += '<section class="hm-sec"><div class="mn-kick"><span>EVERYTHING</span></div><div class="hm-tiles">' +
       TILES.map(function (t) { return '<button type="button" class="hm-tile" data-jump="' + t[0] + '"><b>' + esc(t[1]) + "</b><span>" + esc(t[2]()) + "</span></button>"; }).join("") + "</div>" +
       '<div class="row hm-foot"><button type="button" class="quiet" data-jump="tab:index">Index: every page</button><button type="button" class="quiet" data-jump="tab:settings">Settings and backup</button></div>' +
@@ -83,7 +83,7 @@
     var el = api.$("mtBody"); if (!el) return;
     var rows = sched(api), st = api.state, oe = api.odoEst ? api.odoEst() : { est: false }, h = "";
     h += '<p class="status">' + (st.odo != null ? (oe.est ? "At about <b class=\"mono\">" + fmt(oe.miles) + " mi</b>, estimated from recorded drives. " : "At <b class=\"mono\">" + fmt(st.odo) + " mi</b>. ") : "No odometer reading yet. ") + "The car came with no service history, so anything not on your log shows as No record.</p>";
-    h += '<div class="row"><button type="button" data-jump="tab:records">Log a service</button><button type="button" class="quiet" data-jump="tab:glove">Add a receipt</button></div>';
+    h += '<div class="row"><button type="button" data-jump="tab:records">Log a service</button><button type="button" class="quiet" data-jump="tab:glove">Add a receipt</button><button type="button" class="quiet" data-jump="tab:shop">Plan &amp; shop</button></div>';
     if (window.V60_DRIVES) h += window.V60_DRIVES.html(api);
     h += '<section class="hm-sec"><div class="mn-kick"><span>REPLACE ON SCHEDULE</span></div>' + rows.map(function (r) {
       return '<div class="hm-row hm-static"><span class="hm-b"><span class="hm-t">' + esc(r.it.name) + (r.it.verify ? ' <span class="tag verify">verify</span>' : "") + '</span><span class="hm-i mono">' + esc(r.interval) + "</span>" +
@@ -155,7 +155,7 @@
     if (window.V60_SYNC && window.V60_SYNC.renderBox) window.V60_SYNC.renderBox();
   }
 
-  window.V60_HOME = { html: function (api) { API = api; return homeHtml(api); }, schedule: function (api) { return sched(api); } };
+  window.V60_HOME = { html: function (api) { API = api; return homeHtml(api); }, schedule: function (api) { return sched(api); }, vrow: function (k) { var r = vrow(k); return r ? { row: r.row, at: r.at, page: r.page, fn: r.fn ? VFN[r.fn] : null, quote: vquote(r) } : null; } };
 
   (window.V60_MODULES = window.V60_MODULES || []).push({
     id: "home",

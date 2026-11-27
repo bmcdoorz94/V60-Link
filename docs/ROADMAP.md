@@ -5,6 +5,16 @@ Living tracker. Update it at the end of every work session: move finished items 
 ## Status (2026-10-14)
 The car is the menu (manual shell), Live link works on the real car in Bluefy, Glovebox documents intake shipped. Work now also happens in Claude Code on Kyle's Windows PC (docs/LOCAL_SETUP.md). `npm test` runs all 12 test files in Chromium and in iPhone WebKit (Bluefy's engine): 24 of 24 pass.
 
+## Plan & shop (2026-11-27, Kyle chose A + the by-need switch)
+Kyle: everything recommended or optional, upgrades included, "sections of the vehicle in a list like if I were shopping", with what to do about each. Mock-ups: https://claude.ai/artifact/MPp5kSV6sckB5tmLhZpS52 (A parts counter, B car map, C by need). He chose A with C's whole-car list as a switch.
+- Page `shop` (Maintain): the five sections of the car (the manual's views) with Needed / Recommended counts; a switch "By section · By need". A section lists its items in four groups: Needed (overdue or due on Volvo's schedule), Recommended (no record yet), Only if needed (after a check), Upgrades; on-track items fold away.
+- Items are built from data the app already has, nothing new invented: Volvo's schedule (core ITEMS + the printed rows), shop prices (core COSTS), upgrades (V60_UPGRADES), how-to jobs (V60_DIY), the manual's Check chapters, troubleshooters. Catalog in `src/js/data/shop.js` says which section and part each belongs to.
+- Item page (`shopi`): Volvo's row or the reason, then four ways: 1 Check it yourself, 2 Do it yourself (only with a sourced procedure; otherwise it says none is sourced), 3 Have a shop do it (what to ask for; price only from a source), 4 Ask Claude (POST https://<pc>/drives/ask, asked of the PC session; until it exists, the question is shown to copy).
+- Plan (`plan`): items added as DIY or shop; priced-so-far total from the low/high estimates, count still to quote, a shop-quote text to copy or share, "Ask Claude to check this plan", a Log it button per job (service log). Saved in mod "shop" (synced).
+- Something wrong now: belt squeal (new troubleshooter from Gates' noisy-belt guide), brake noise, vibration, warning light, anything else (Problem cases).
+- Also: accessory belt, tensioner & idler added to the schedule (Volvo page 16, footnote D: 150,000 mi or 10 years).
+- Later: show Claude's weekly picks (reco) as a mark on matching items; more hand-written tier text per item.
+
 ## Recorded drives in the Garage (2026-11-26, built)
 Kyle said "Do it all" to mileage and service tracking from the iPhone app's recorded drives, fuel economy, trends and emissions-test readiness. The PC side (`bridge/drives.js`) publishes `drives/summary.json` over Tailscale; the Garage side (`src/js/modules/drives.js`) reads it.
 - Miles since the last odometer reading are added to it as an **estimate** (speed integrated once a second), used for every due-by-miles figure and marked "(estimated)". Kyle's typed reading is never changed; typing a new one restarts the count.
