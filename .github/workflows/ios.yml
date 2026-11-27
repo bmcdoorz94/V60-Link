@@ -98,7 +98,7 @@ jobs:
   # (-allowProvisioningUpdates with the key), so no certificate file is kept anywhere. Skipped until the secrets exist.
   # Apple accepts uploads built with Xcode 26 or later only (since April 2026), so the newest Xcode on the runner is used.
   testflight:
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 45
     defaults:
       run:
@@ -126,7 +126,7 @@ jobs:
           X=$(ls -d /Applications/Xcode_*.app | grep -E '/Xcode_[0-9.]+\.app$' | sort -V | tail -1)
           MAJOR=$(basename "$X" | sed -E 's/Xcode_([0-9]+).*/\1/')
           echo "Using $X"
-          [ "$MAJOR" -ge 26 ] || { echo "Apple needs Xcode 26 or later and this runner's newest is $X: change runs-on to macos-26."; exit 1; }
+          [ "$MAJOR" -ge 26 ] || { echo "Apple needs Xcode 26 or later and this runner's newest is $X."; exit 1; }
           sudo xcode-select -s "$X"
           xcodebuild -version
           brew install xcodegen
