@@ -36,7 +36,18 @@
     var L = raw.links && typeof raw.links === "object" ? raw.links : {};
     var T = raw.totals && typeof raw.totals === "object" ? raw.totals : {};
     return { updated: iso(raw.updated), drives: drives, totals: { drives: num(T.drives, 0, 1e6), miles: num(T.miles, 0, 1e7), first: iso(T.first) },
-      links: { all: https(L.all), week: https(L.week), trends: https(L.trends) }, car: cleanCar(raw.car), claude: cleanClaude(raw.claude), cases: cleanCases(raw.cases) };
+      links: { all: https(L.all), week: https(L.week), trends: https(L.trends) }, car: cleanCar(raw.car), claude: cleanClaude(raw.claude), cases: cleanCases(raw.cases), recommendations: cleanReco(raw.recommendations) };
+  }
+  /* Claude's recommendations (bridge/data/notes/recommendations.json; shown by reco.js) */
+  function cleanReco(r) {
+    if (!r || typeof r !== "object" || !Array.isArray(r.items)) return null;
+    var items = r.items.slice(0, 40).map(function (x) {
+      if (!x || typeof x !== "object" || !str(x.title, 120) || !/^[\w.-]{1,60}$/.test(String(x.id || ""))) return null;
+      return { id: String(x.id), kind: pick(x.kind, ["maintenance", "repair", "performance", "cosmetic"], "maintenance"), title: str(x.title, 120), when: pick(x.when, ["now", "soon", "later"], "later"),
+        why: str(x.why, 500), evidence: str(x.evidence, 600), effort: pick(x.effort, ["diy", "shop", "either"], ""), cost: str(x.cost, 160), confidence: pick(x.confidence, ["confirmed", "likely", "unconfirmed"], "likely"),
+        sources: (Array.isArray(x.sources) ? x.sources : []).slice(0, 8).map(function (s) { return Array.isArray(s) && str(s[0], 120) && https(s[1]) ? [str(s[0], 120), https(s[1])] : null; }).filter(Boolean) };
+    }).filter(Boolean);
+    return { updated: iso(r.updated), items: items };
   }
   /* Claude's case files for mechanical problems (bridge/data/notes/cases.json; shown by cases.js) */
   function str(x, n) { return typeof x === "string" ? x.slice(0, n) : ""; }

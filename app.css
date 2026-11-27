@@ -1388,6 +1388,14 @@ a.hm-row { text-decoration: none; }
 .cs-next { margin: 8px 0; }
 .cs-causes li { margin: 6px 0; }
 
+/* Recommended for your car (reco.js) */
+.rc-item { border-top: 1px solid var(--line); padding: 12px 0; }
+.rc-item:first-child { border-top: 0; padding-top: 0; }
+.rc-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
+.rc-kind { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--mut, var(--ink)); }
+.rc-item h3 { margin: 6px 0 4px; }
+#rcFilter { flex-wrap: wrap; margin: 8px 0; }
+
 /* Theme overrides, loaded last: the whole app in the manual's dress. Square corners, hairline borders, no shadows,
    ink buttons, mono numbers. Live link and the Data lab keep their instrument faces (teal traces, gauges). */
 body { font-size: 15px; line-height: 1.5; }

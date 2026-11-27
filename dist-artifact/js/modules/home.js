@@ -64,6 +64,7 @@
     else h += '<p class="hm-empty">Nothing urgent on record. A health check on Link reads the car\'s codes and warning lights.</p>';
     h += "</section>";
     if (window.V60_DRIVES && window.V60_DRIVES.homeHtml) h += window.V60_DRIVES.homeHtml(api);
+    if (window.V60_RECO) h += window.V60_RECO.homeHtml(api);
     h += '<section class="hm-sec"><div class="mn-kick"><span>COMING DUE</span><span>VOLVO 2016 SCHEDULE</span></div>';
     if (api.state.odo == null) h += row("tab:maint", "Enter your odometer", "Type the miles in the box at the top so intervals can be checked.", "watch", "Needed");
     h += due.length ? due.map(function (r) { return row("tab:maint", r.it.name, r.interval + ". " + (r.last ? lastLine(api, r.last) + ". " : "") + r.line, r.pill, r.label); }).join("") : '<p class="hm-empty">Everything on Volvo\'s schedule is on track.</p>';

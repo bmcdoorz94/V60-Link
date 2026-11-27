@@ -59,7 +59,7 @@
     var body = { kind: "symptom", what: $("csWhat").value, when: picked("when"), where: picked("where").join(", "), speed: ($("csSpeed").value || "").trim(), since: ($("csSince").value || "").trim(), text: text };
     $("csSend").disabled = true; $("csMsg").textContent = "Sending…";
     post(body).then(function () {
-      var d = API.mod("cases") || {}; d.last = { at: new Date().toISOString(), what: body.what }; API.setMod("cases", d);
+      var d = API.mod("cases") || {}; d.last = { at: new Date().toISOString(), what: body.what }; API.setMod("cases", d); API.save();
       $("csText").value = ""; $("csMsg").textContent = "Sent. Claude answers in a notification in a minute or two, and the case appears above.";
       setTimeout(function () { if (window.V60_DRIVES) window.V60_DRIVES.refresh(); }, 90000);
     }).catch(function () { $("csMsg").textContent = "Your PC did not answer. Is it on, and Tailscale on here?"; })

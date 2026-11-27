@@ -24,6 +24,7 @@
  "js/modules/diy.js": "dist-artifact/js/modules/diy.js",
  "js/modules/trees.js": "dist-artifact/js/modules/trees.js",
  "js/modules/cases.js": "dist-artifact/js/modules/cases.js",
+ "js/modules/reco.js": "dist-artifact/js/modules/reco.js",
  "js/modules/bulletins.js": "dist-artifact/js/modules/bulletins.js",
  "js/modules/upgrades.js": "dist-artifact/js/modules/upgrades.js",
  "js/modules/live.js": "dist-artifact/js/modules/live.js",
