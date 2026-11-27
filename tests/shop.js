@@ -11,7 +11,7 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
   let asks = [], askStatus = 200;
   await ctx.route('https://pc.test/drives/summary.json', (r) => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ updated: new Date().toISOString(), drives: [], totals: { drives: 0, miles: 0, first: null }, links: {} }) }));
   await ctx.route('https://pc.test/drives/ask', (r) => { asks.push(JSON.parse(r.request().postData() || '{}')); r.fulfill({ status: askStatus, contentType: 'application/json', body: askStatus === 200 ? '{"ok":true}' : 'no' }); });
-  const p = await ctx.newPage(); const errs = []; p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error' && !/pc\.test|status of 404/.test(m.text())) errs.push(m.text()); }); /* the 404 is the test's own PC refusing a question */
+  const p = await ctx.newPage(); const errs = []; p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error' && !/pc\.test|status of 40[4]|status of 429/.test(m.text())) errs.push(m.text()); }); /* the 404 is the test's own PC refusing a question */
   await p.goto('file://' + ROOT + '/index.html'); await p.waitForTimeout(700);
   const shot = (n) => p.screenshot({ path: path.join(ROOT, 'tests', 'shots', 'shop-' + n + '.png'), fullPage: true });
   const txt = (sel) => p.evaluate((s) => (document.querySelector(s) || {}).textContent || '', sel);
@@ -56,7 +56,9 @@ function ok(c, m) { if (!c) { console.log('FAIL', m); process.exitCode = 1; } el
   ok(asks.length === 1 && asks[0].kind === 'item' && /Accessory belt/.test(asks[0].item) && /B4204T11/.test(asks[0].question), 'Ask Claude sends the item and the car to the PC');
   ok(/Sent/.test(await txt('#spAskMsg')), 'and says it was sent');
   askStatus = 404; await p.click('#spBody [data-sp-ask="abelt"]'); await p.waitForTimeout(300);
-  ok(/Copy it/.test(await txt('#spAskMsg')), 'a PC without the route gets the copy fallback');
+  ok(/Copy the question/.test(await txt('#spAskMsg')), 'a PC that refuses gets the copy fallback');
+  askStatus = 429; await p.click('#spBody [data-sp-ask="abelt"]'); await p.waitForTimeout(300);
+  ok(/limit of questions for this hour/.test(await txt('#spAskMsg')), "the PC's hourly limit gets its own message");
   await p.click('#spBody [data-sp-back]'); await p.waitForTimeout(100);
 
   /* add a DIY item from the list, and a shop item */
