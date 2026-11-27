@@ -120,7 +120,15 @@
     if (!tok) { status("Paste the token."); return; }
     var m = meta(); m.repo = repo; m.token = tok; m.at = null; m.dirty = false; setMeta(m);
     status("Connecting…");
-    getRemote().then(function (rem) {
+    /* the whole record and its photos go to this repository: refuse one anybody can read */
+    fetch("https://api.github.com/repos/" + repo, { cache: "no-store", headers: { Authorization: "Bearer " + tok, Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28" } })
+      .then(function (r) {
+        if (r.status === 401) throw new Error("GitHub rejected that token.");
+        if (!r.ok) throw new Error("GitHub could not find that repository with this token.");
+        return r.json();
+      })
+      .then(function (info) { if (!info || info.private !== true) throw new Error("That repository is public, so anyone could read your records. Make it private on github.com (Settings, Danger Zone, Change visibility), then try again."); return getRemote(); })
+      .then(function (rem) {
       if (!rem) { var mm = meta(); mm.dirty = true; setMeta(mm); return push(true); }
       var local = API.snapshot(), hasLocal = (local.log || []).length || (local.oil || []).length || Object.keys((local.academy || {}).done || {}).length;
       if (hasLocal) { showConflict(rem); return; }

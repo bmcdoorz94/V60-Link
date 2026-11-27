@@ -28,6 +28,8 @@
     libProm = new Promise(function (res, rej) {
       if (window.Tesseract) { res(window.Tesseract); return; }
       var s = document.createElement("script"); s.src = TESS_URL; s.async = true;
+      /* the file is pinned: if the CDN ever serves anything else, the browser refuses to run it */
+      s.integrity = "sha384-GJqSu7vueQ9qN0E9yLPb3Wtpd7OrgK8KmYzC8T1IysG1bcvxvIO4qtYR/D3A991F"; s.crossOrigin = "anonymous";
       s.onload = function () { window.Tesseract ? res(window.Tesseract) : rej(new Error("The text reader did not load.")); };
       s.onerror = function () { libProm = null; rej(new Error("The text reader could not be downloaded. Check the connection and try again.")); };
       document.head.appendChild(s);

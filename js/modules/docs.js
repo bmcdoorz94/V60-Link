@@ -26,6 +26,7 @@
     if (pdfProm) return pdfProm;
     pdfProm = new Promise(function (res, rej) {
       var sc = document.createElement("script"); sc.src = PDF_URL; sc.async = true;
+      sc.integrity = "sha384-OemFRmhjDZwhIKuUld0HJozkF2YErsgDaCL41trxGQZt4/WgnopJQqQl2DvDZ07Z"; sc.crossOrigin = "anonymous"; /* pinned: anything else is refused */
       sc.onload = function () { if (!window.pdfjsLib) { rej(new Error("The PDF reader did not load.")); return; } window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDF_WORKER; res(window.pdfjsLib); };
       sc.onerror = function () { pdfProm = null; rej(new Error("The PDF reader could not be downloaded. Check the connection and try again.")); };
       document.head.appendChild(sc);
