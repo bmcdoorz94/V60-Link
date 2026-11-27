@@ -5,6 +5,15 @@ Living tracker. Update it at the end of every work session: move finished items 
 ## Status (2026-10-14)
 The car is the menu (manual shell), Live link works on the real car in Bluefy, Glovebox documents intake shipped. Work now also happens in Claude Code on Kyle's Windows PC (docs/LOCAL_SETUP.md). `npm test` runs all 12 test files in Chromium and in iPhone WebKit (Bluefy's engine): 24 of 24 pass.
 
+## Page cleanup (proposed 2026-11-27, waiting for Kyle's yes/no per line)
+Kyle: leftover pages "like the engine pictures"; one page per job. Canvas: https://claude.ai/artifact/QtDuvWWwRPnwHXBTm2VSCw (inventory board + after screens for Home, Maintain, Engine bay, Fix). 29 pages in the Index now, 19 after plus 2 on a tools shelf; no saved data deleted (merged pages bring their data, retired pages keep theirs in storage).
+- Merge: Engine bay map (`engine`) into Know your car > 1 Engine bay (photo and pins; find-the-part game retired). The bay (`bay`) ratings onto each part page (heat map retired). Health (`health`) into Home (findings already there; 12-month list = Plan & shop > By need; Backup already in Settings). Service log (`records`: log, oil watch, calendar reminders) into Maintenance (its duplicate What's due goes). Diagnose (`diag`: code lookup, code log) into Fix (symptom list retired).
+- Rename: My V60 (`my`) becomes "This car" at the top of Know your car.
+- Shelf (Index > Tools only): Data lab, G1 study.
+- Retire: fault simulator, Training library page (lessons stay in part pages), flashcards.
+- Home tiles: Plan & shop replaces How-to jobs and Upgrades; Fuel & costs gets a tile.
+- Later: Recommended becomes a mark on Plan & shop items.
+
 ## Plan & shop (2026-11-27, Kyle chose A + the by-need switch)
 Kyle: everything recommended or optional, upgrades included, "sections of the vehicle in a list like if I were shopping", with what to do about each. Mock-ups: https://claude.ai/artifact/MPp5kSV6sckB5tmLhZpS52 (A parts counter, B car map, C by need). He chose A with C's whole-car list as a switch.
 - Page `shop` (Maintain): the five sections of the car (the manual's views) with Needed / Recommended counts; a switch "By section · By need". A section lists its items in four groups: Needed (overdue or due on Volvo's schedule), Recommended (no record yet), Only if needed (after a check), Upgrades; on-track items fold away.
