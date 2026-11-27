@@ -29,13 +29,15 @@ jobs:
           xcodebuild -version
           xcodebuild build-for-testing -project WebDriverAgent.xcodeproj -scheme WebDriverAgentRunner \
             -destination 'generic/platform=iOS' -derivedDataPath build \
-            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" > build.log 2>&1 \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" DEBUG_INFORMATION_FORMAT=dwarf > build.log 2>&1 \
             || { grep -E "error:" build.log | sort -u | head -60; tail -40 build.log; exit 1; }
           APP=$(ls -d build/Build/Products/*-iphoneos/WebDriverAgentRunner-Runner.app)
           echo "built $APP"
           /usr/libexec/PlistBuddy -c "Print CFBundleIdentifier" "$APP/Info.plist"
           mkdir -p out/Payload
           cp -R "$APP" out/Payload/
+          # debug symbols inside the app make Sideloadly fail (it tries to sign them) and may trip SideStore
+          find out/Payload -name "*.dSYM" -prune -exec rm -rf {} +
           (cd out && zip -qry ../WebDriverAgentRunner.ipa Payload)
           ls -la WebDriverAgentRunner.ipa
 

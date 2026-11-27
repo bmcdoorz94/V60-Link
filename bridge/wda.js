@@ -6,7 +6,8 @@
 //
 //   node wda.js <step> [<step> ...]
 //     launch:<bundle id>     open an app (e.g. launch:com.SideStore.SideStore.KBX29Y87AM)
-//     press:<text>           tap the first visible element whose label or name contains the text (case-insensitive)
+//     press:<text>           tap the first visible element whose label or name contains the text (case-insensitive);
+//                            on a big page (the Garage's web view) the search can crash WebDriverAgent: use tap:
 //     press:<text>#2         ... the second match
 //     tap:<x>,<y>            tap a point, in screen points (the screenshot's pixels divided by 3)
 //     type:<text>            type into whatever has focus (never passwords, tokens or codes: Kyle types those)
@@ -14,7 +15,8 @@
 //     home                   go to the home screen
 //     wait:<seconds>
 //     labels                 print the visible labels (like phone.js --items, from WebDriverAgent's view)
-// Prints one line per step; exits 1 at the first step that fails.
+// Prints one line per step; exits 1 at the first step that fails. Install with Sideloadly over the USB cable
+// (SideStore cannot sign the test bundle inside). Tested 2026-11-27 over home Wi-Fi: launch, tap, labels.
 import { spawn, execFileSync } from 'node:child_process'
 
 const PMD3 = process.env.PMD3 || 'C:\\Users\\kfitz\\Tools\\pmd3\\Scripts\\pymobiledevice3.exe'
@@ -38,14 +40,23 @@ async function start() {
   const v = via()
   const id = runnerId(v)
   if (!id) throw new Error('WebDriverAgent is not installed on the phone (release "wda" on GitHub; install it with SideStore or Sideloadly)')
+  // the phone's address on the home Wi-Fi (WebDriverAgent listens there on port 8100); pymobiledevice3 does not pass
+  // on the line where WebDriverAgent announces it, so ask the network instead
+  let ip = process.env.WDA_IP || null
+  if (!ip) try { const l = JSON.parse(execFileSync(PMD3, ['bonjour', 'mobdev2', '--timeout', '4'], { encoding: 'utf8', timeout: 30000 })); const d = l.find((x) => x.DeviceClass === 'iPhone' && x.ip); ip = d && d.ip } catch {}
+  if (!ip) throw new Error('the phone is not on the home Wi-Fi (WebDriverAgent is reached over Wi-Fi)')
+  base = `http://${ip}:8100`
   child = spawn(PMD3, ['developer', 'dvt', 'xcuitest', id, ...v], { windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] })
   let out = ''
-  const grab = (d) => { out += d; const m = out.match(/ServerURLHere->(http:\/\/[^<\s]+)<-ServerURLHere/); if (m && !base) base = m[1].replace(/\/$/, '') }
+  const grab = (d) => { out += d; if (out.length > 20000) out = out.slice(-10000) }
   child.stdout.on('data', grab); child.stderr.on('data', grab)
-  for (let i = 0; i < 90 && !base; i++) { if (child.exitCode != null) break; await sleep(500) }
-  if (!base) throw new Error('WebDriverAgent did not start (is the phone unlocked and the app trusted?): ' + out.split('\n').filter(Boolean).slice(-2).join(' '))
-  // its own address can be one this PC cannot reach (cellular): wait for /status
-  for (let i = 0; i < 20; i++) { try { if ((await fetch(base + '/status', { signal: AbortSignal.timeout(2000) })).ok) break } catch {} await sleep(500) }
+  let up = false
+  for (let i = 0; i < 60 && !up; i++) {
+    if (child.exitCode != null) break
+    try { up = (await fetch(base + '/status', { signal: AbortSignal.timeout(1500) })).ok } catch {}
+    if (!up) await sleep(1000)
+  }
+  if (!up) throw new Error('WebDriverAgent did not answer (is the phone unlocked?): ' + out.split(String.fromCharCode(10)).filter((l) => /ERROR|rror|failed/i.test(l)).slice(-2).join(' '))
   const s = await call('POST', '/session', { capabilities: { alwaysMatch: {}, firstMatch: [{}] } })
   sid = s.sessionId || (s.value && s.value.sessionId)
   if (!sid) throw new Error('no WebDriverAgent session')
