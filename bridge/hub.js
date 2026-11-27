@@ -211,7 +211,8 @@ export function startHub(opts) {
       case 'reply': {
         const t = String(a.text || '').trim(); if (!t) return out('Nothing to send.', true)
         const url = /^https:\/\/\S+$/.test(String(a.url || '')) ? String(a.url) : undefined
-        record({ k: 'claude', text: t, ...(url ? { url } : {}) })
+        // notify.js marks its messages as notices (requests for Kyle's hands), which the Garage's "From your car" skips
+        record({ k: a.notice ? 'notice' : 'claude', text: t, ...(url ? { url } : {}) })
         drive.replies++
         if (toPhone({ t: 'msg', text: t, url })) return out('Shown on Kyle\'s phone.')
         later.push({ text: t, url }); if (later.length > 10) later.shift()

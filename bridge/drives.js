@@ -520,7 +520,7 @@ function lastClaude() {
     const d = new Date(Date.now() - i * 864e5), f = path.join(DATA, 'logs', `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}.jsonl`)
     let rows; try { rows = fs.readFileSync(f, 'utf8').trim().split('\n') } catch { continue }
     for (let j = rows.length - 1; j >= 0; j--) {
-      try { const r = JSON.parse(rows[j]); if (r.k === 'claude' && r.text && !/^Test OK/.test(r.text)) return { text: String(r.text).slice(0, 1200), at: r.at, url: r.url || null } } catch {}
+      try { const r = JSON.parse(rows[j]); if (r.k === 'claude' && r.text && !/^Test OK|test from Claude on your PC/i.test(r.text)) return { text: String(r.text).slice(0, 1200), at: r.at, url: r.url || null } } catch {}
     }
   }
   return null

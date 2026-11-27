@@ -34,7 +34,7 @@ try {
   const r = await fetch(`http://127.0.0.1:${PORT}/api/tool`, {
     method: 'POST',
     headers: { 'content-type': 'application/json', 'x-v60-token': token },
-    body: JSON.stringify({ name: 'reply', args: { text, ...(url ? { url } : {}) } }),
+    body: JSON.stringify({ name: 'reply', args: { text, notice: true, ...(url ? { url } : {}) } }),
     signal: AbortSignal.timeout(15000),
   })
   const j = await r.json()
