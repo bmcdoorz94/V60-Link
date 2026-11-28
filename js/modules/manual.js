@@ -422,10 +422,7 @@
       var o = info(api, c, i), k = stepKey(c, i), open = ui.openStep === k;
       return '<details class="mn-stepx' + (o.done ? " done" : "") + '" data-k="' + esc(k) + '"' + (open ? " open" : "") + '><summary><span class="n">' + (i + 1) + '</span><span class="b"><span class="t">' + esc(o.t) + '</span><span class="kind">' + esc(o.kind.toUpperCase()) + (o.optional ? " · OPTIONAL" : "") + "</span></span><span class=\"mn-tick\" aria-label=\"" + (o.done ? "done" : "not yet") + '">' + (o.done ? "✓" : "") + "</span></summary><div class=\"mn-stepb\">" + (open ? stepBody(api, c, i, o, k) : "") + "</div></details>";
     }).join("") + "</div>";
-    var cs = caseStepsFor(api, c), ps = STAGE_OF_CH[c.id], lines = [];
-    if (ps) lines.push("<b>Path:</b> step " + ps.n + " of " + STAGES.length + ", " + esc(ps.unit.t));
-    cs.forEach(function (q) { lines.push("<b>Case:</b> step " + (q.k + 1) + " of " + q.c.steps.length + " in <b>" + esc(q.c.t) + "</b>"); });
-    if (lines.length) h += '<p class="status mn-chnote">' + lines.join("<br>") + "</p>";
+    /* the path and story-case positions ("Path: step 49 of 113", "Case: step 2 of 5") were retired with the game layer (2026-11-28) */
     return h + "</section>";
   }
   /* after something inside an open step changes (a quiz graded, a job ticked), update the ticks without redrawing the page */
@@ -471,14 +468,15 @@
       if (spec.length) h += '<details class="mn-fold"' + (spec.length <= 3 ? " open" : "") + '><summary><span class="mn-kick"><span>YOUR CAR · ' + spec.length + " FACTS</span>" + (dot ? '<span class="mn-amber">UNCONFIRMED WHERE SAID</span>' : "") + '</span></summary><dl class="mn-spec">' + spec.map(function (s) { return "<div><dt>" + esc(s[0]) + "</dt><dd>" + esc(s[1]) + "</dd></div>"; }).join("") + "</dl></details>";
     }
     h += chapters.map(function (c) { return chapterHtml(api, c, d, x); }).join("");
-    if (it && window.V60_TRACK && window.V60_TRACK.tasksFor) {
+    /* the G1 task box left the part page with the game layer (2026-11-28); the G1 shelf stays in the Index */
+    if (false && it && window.V60_TRACK && window.V60_TRACK.tasksFor) {
       var g1 = window.V60_TRACK.tasksFor(it.id);
       if (g1.length) h += '<details class="mn-fold"><summary><span class="mn-kick"><span>ON THE G1 · ' + g1.length + (g1.length === 1 ? " TASK" : " TASKS") + '</span></span></summary><div class="mn-list">' + g1.map(function (t) { return '<button type="button" class="mn-ix" data-jump="task:' + esc(t.id) + '"><span class="n">' + esc(t.id) + "</span><span>" + esc(t.t) + "</span></button>"; }).join("") + "</div></details>";
     }
     if (it) {
       var facts = glossary(it), known = facts.filter(function (f) { return !window.V60_KNOW || window.V60_KNOW.fact(f); });
       var ph = (api.state.photos || []).filter(function (p) { return (it.photo || []).indexOf(p.kind) >= 0 || (it.part && p.part === it.part); }).slice(-4).reverse();
-      h += '<details class="mn-fold"><summary><span class="mn-kick"><span>GLOSSARY · ' + known.length + " OF " + facts.length + "</span><span>EVIDENCE · " + ph.length + " PHOTO" + (ph.length === 1 ? "" : "S") + "</span></span></summary>" +
+      h += '<details class="mn-fold"><summary><span class="mn-kick"><span>GLOSSARY · ' + known.length + "</span><span>EVIDENCE · " + ph.length + " PHOTO" + (ph.length === 1 ? "" : "S") + "</span></span></summary>" +
         (facts.length ? '<div class="mn-chips">' + facts.map(function (f) { var k = known.indexOf(f) >= 0; return k ? '<button type="button" class="mn-chip" data-jump="ask:' + esc(f.q) + '">' + esc(f.q.replace(/\?$/, "")) + "</button>" : '<span class="mn-chip locked" aria-label="locked term">' + "■".repeat(Math.max(4, Math.min(10, Math.round(f.q.length / 4)))) + "</span>"; }).join("") + "</div>" + (known.length < facts.length ? '<p class="status">Locked terms open with the chapters.</p>' : "") : "") +
         (ph.length ? '<div class="mn-thumbs">' + ph.map(function (p) { return '<button type="button" data-jump="tab:my"><img src="' + esc(api.photoUrl(p)) + '" alt="' + esc(p.kind) + " photo from " + esc(p.date) + '"><span>' + esc(p.date) + "</span></button>"; }).join("") + "</div>" : '<p class="status">No photos of this part yet.</p>') + '<button type="button" class="quiet" data-jump="tab:my">Photos</button></details>';
     }
